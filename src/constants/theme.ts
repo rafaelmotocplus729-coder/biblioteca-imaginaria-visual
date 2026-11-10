@@ -108,3 +108,67 @@ export const ESTIMATIVAS_HORAS = {
   MAPA: { min: 8, max: 15, media: 11.5 },
   PORTA: { min: 4, max: 8, media: 6.0 }
 };
+
+export const PAGINAS_LIVROS: Record<number, number> = {
+  1: 432, 2: 380, 3: 336, 4: 176, 5: 184,
+  6: 112, 7: 520, 8: 160, 9: 96, 10: 224,
+  11: 240, 12: 68, 13: 160, 14: 80, 15: 96,
+  16: 224, 17: 256, 18: 440, 19: 160, 20: 608,
+  21: 440, 22: 144, 23: 368, 24: 832, 25: 480,
+  26: 288, 27: 464, 28: 560, 29: 512, 30: 112,
+  31: 480, 32: 600, 33: 160, 34: 720, 35: 512,
+  36: 96, 37: 400, 38: 960, 39: 280, 40: 64,
+  41: 860, 42: 320, 43: 400, 44: 360, 45: 336,
+  46: 288, 47: 280, 48: 352, 49: 624, 50: 128,
+  51: 192, 52: 208, 53: 720, 54: 760, 55: 890,
+  56: 336, 57: 256, 58: 912, 59: 600, 60: 688
+};
+
+export function obterPaginasLivro(id: number, fallbackClasse: string = 'OBRA'): number {
+  if (PAGINAS_LIVROS[id]) return PAGINAS_LIVROS[id];
+  if (fallbackClasse === 'PORTA') return 160;
+  if (fallbackClasse === 'MAPA') return 480;
+  return 320;
+}
+
+export function calcularLarguraLombada(paginas: number): number {
+  const minWidth = 44; // px para livros breves (~60 a 100 págs)
+  const maxWidth = 84; // px para tomos volumosos (~900+ págs)
+  const t = Math.min(1, Math.max(0, (paginas - 60) / 880));
+  return Math.round(minWidth + t * (maxWidth - minWidth));
+}
+
+export function calcularAlturaLombada(id: number): number {
+  // Variação sutil e elegante de altura (250px a 274px) típica de bibliotecas históricas
+  const alturas = [252, 260, 256, 268, 264, 258, 272, 254];
+  return alturas[id % alturas.length];
+}
+
+export const EX_LIBRIS_NIVEIS: Record<number, { titulo: string; lema: string; icon: string }> = {
+  1: {
+    titulo: 'Ex-Libris Propaedeutica',
+    lema: 'Ad Discendum et Discernendum',
+    icon: '🏛️'
+  },
+  2: {
+    titulo: 'Ex-Libris Conscientia',
+    lema: 'In Absurdo Lux et Veritas',
+    icon: '⚖️'
+  },
+  3: {
+    titulo: 'Ex-Libris Fundamenta',
+    lema: 'Radices Sapientiae Antiquae',
+    icon: '📜'
+  },
+  4: {
+    titulo: 'Ex-Libris Dialectica',
+    lema: 'Per Confligentes Ad Libertatem',
+    icon: '⚔️'
+  },
+  5: {
+    titulo: 'Ex-Libris Culmen Magnum',
+    lema: 'In Altissimis Animae Transeunt',
+    icon: '👑'
+  }
+};
+

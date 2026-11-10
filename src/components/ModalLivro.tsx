@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Livro, Progresso, Relacao } from '../types';
-import { CORES_AREAS, LEGENDA_RESUMO } from '../constants/theme';
+import { CORES_AREAS, LEGENDA_RESUMO, obterPaginasLivro } from '../constants/theme';
 import {
   X,
   Star,
@@ -11,7 +11,8 @@ import {
   ShieldAlert,
   FileText,
   Bookmark,
-  Share2
+  Share2,
+  Scale
 } from 'lucide-react';
 
 interface ModalLivroProps {
@@ -25,6 +26,7 @@ interface ModalLivroProps {
   onAtualizarNotas: (livroId: number, notas: string) => void;
   onAtualizarGuia: (livroId: number, guia: string) => void;
   onEscolherEdicao: (livroId: number, edicao: string) => void;
+  onAbrirComparador?: (livroAId: number, livroBId: number) => void;
 }
 
 export const ModalLivro: React.FC<ModalLivroProps> = ({
@@ -37,7 +39,8 @@ export const ModalLivro: React.FC<ModalLivroProps> = ({
   onAtualizarEstado,
   onAtualizarNotas,
   onAtualizarGuia,
-  onEscolherEdicao
+  onEscolherEdicao,
+  onAbrirComparador
 }) => {
   const [imagemErro, setImagemErro] = useState(false);
 
@@ -178,6 +181,9 @@ export const ModalLivro: React.FC<ModalLivroProps> = ({
                 </span>
                 <span className="px-2.5 py-0.5 text-xs font-cinzel font-bold uppercase rounded bg-stone-200 dark:bg-stone-800 text-stone-800 dark:text-stone-200 border border-stone-300 dark:border-stone-700">
                   {livro.classe}
+                </span>
+                <span className="text-xs text-stone-600 dark:text-stone-400 font-cinzel font-semibold px-2 py-0.5 rounded bg-stone-100 dark:bg-stone-800/80 border border-stone-200 dark:border-stone-700">
+                  {livro.paginas || obterPaginasLivro(livro.id, livro.classe)} págs
                 </span>
                 <span className="text-sm text-stone-600 dark:text-stone-400 font-cinzel font-semibold">
                   Publicado em {livro.ano}
@@ -360,6 +366,18 @@ export const ModalLivro: React.FC<ModalLivroProps> = ({
                       <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 italic line-clamp-2">
                         "{r.nota}"
                       </p>
+                      {r.tipo === 'contraponto' && onAbrirComparador && (
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onAbrirComparador(livro.id, destino.id);
+                          }}
+                          className="mt-2 text-[11px] font-cinzel font-bold text-rose-700 dark:text-rose-400 hover:text-rose-900 flex items-center gap-1 self-start"
+                        >
+                          <Scale className="w-3 h-3" /> Confrontar Obras Lado a Lado
+                        </button>
+                      )}
                     </div>
                   );
                 })}
@@ -390,6 +408,18 @@ export const ModalLivro: React.FC<ModalLivroProps> = ({
                       <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 italic line-clamp-2">
                         "{r.nota}"
                       </p>
+                      {r.tipo === 'contraponto' && onAbrirComparador && (
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onAbrirComparador(origem.id, livro.id);
+                          }}
+                          className="mt-2 text-[11px] font-cinzel font-bold text-rose-700 dark:text-rose-400 hover:text-rose-900 flex items-center gap-1 self-start"
+                        >
+                          <Scale className="w-3 h-3" /> Confrontar Obras Lado a Lado
+                        </button>
+                      )}
                     </div>
                   );
                 })}

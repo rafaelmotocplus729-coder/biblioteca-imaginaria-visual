@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useBibliotecaStore } from './store/useBibliotecaStore';
 import { Navbar } from './components/Navbar';
 import { PainelAgora } from './components/PainelAgora';
@@ -8,6 +8,9 @@ import { GrafoVisualizacao } from './components/GrafoVisualizacao';
 import { ModalLivro } from './components/ModalLivro';
 import { ModalRevisaoSemestral } from './components/ModalRevisaoSemestral';
 import { ModalBackup } from './components/ModalBackup';
+import { CommandPalette } from './components/CommandPalette';
+import { ComparadorDialetico } from './components/ComparadorDialetico';
+import { CadernoNotasModal } from './components/CadernoNotasModal';
 
 export const App: React.FC = () => {
   const {
@@ -46,6 +49,55 @@ export const App: React.FC = () => {
   const [visaoAtiva, setVisaoAtiva] = useState<'estante' | 'grafo'>('estante');
   const [modalRevisaoAberto, setModalRevisaoAberto] = useState(false);
   const [modalBackupAberto, setModalBackupAberto] = useState(false);
+  const [modalBuscaAberto, setModalBuscaAberto] = useState(false);
+  const [modalComparadorAberto, setModalComparadorAberto] = useState(false);
+  const [comparadorLivroAId, setComparadorLivroAId] = useState<number>(42); // Hayek
+  const [comparadorLivroBId, setComparadorLivroBId] = useState<number>(43); // Polanyi
+  const [modalCadernoAberto, setModalCadernoAberto] = useState(false);
+
+  // Manipulador de abertura de comparador dialético
+  const handleAbrirComparador = (livroA?: number, livroB?: number) => {
+    if (livroA) setComparadorLivroAId(livroA);
+    if (livroB) setComparadorLivroBId(livroB);
+    setModalComparadorAberto(true);
+  };
+
+  // Atalhos Globais de Teclado (Cmd+K, E, G, C, D, 1-5)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement;
+      const isInput = target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable);
+
+      // Cmd+K ou Ctrl+K abre a paleta de comandos
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setModalBuscaAberto((prev) => !prev);
+        return;
+      }
+
+      if (isInput) return;
+
+      // Tecla / para busca rápida
+      if (e.key === '/') {
+        e.preventDefault();
+        setModalBuscaAberto(true);
+      } else if (e.key === 'e' || e.key === 'E') {
+        setVisaoAtiva('estante');
+      } else if (e.key === 'g' || e.key === 'G') {
+        setVisaoAtiva('grafo');
+      } else if (e.key === 'c' || e.key === 'C') {
+        setModoVisualizacao(modoVisualizacao === 'capa' ? 'lombada' : 'capa');
+      } else if (e.key === 'd' || e.key === 'D') {
+        toggleModoEscuro();
+      } else if (['1', '2', '3', '4', '5'].includes(e.key)) {
+        const nivelNum = Number(e.key);
+        setFiltros({ nivel: filtros.nivel === nivelNum ? undefined : nivelNum });
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [modoVisualizacao, setModoVisualizacao, toggleModoEscuro, setFiltros, filtros.nivel]);
 
   // Lista única de todas as áreas
   const todasAreas = useMemo(() => {
@@ -116,6 +168,9 @@ export const App: React.FC = () => {
         onToggleModoEscuro={toggleModoEscuro}
         onAbrirRevisao={() => setModalRevisaoAberto(true)}
         onAbrirBackup={() => setModalBackupAberto(true)}
+        onAbrirBusca={() => setModalBuscaAberto(true)}
+        onAbrirComparador={() => handleAbrirComparador()}
+        onAbrirCaderno={() => setModalCadernoAberto(true)}
       />
 
       {/* Conteúdo Principal */}
@@ -193,6 +248,7 @@ export const App: React.FC = () => {
           onAtualizarNotas={setNotas}
           onAtualizarGuia={setGuiaLeitura}
           onEscolherEdicao={setEdicaoEscolhida}
+          onAbrirComparador={handleAbrirComparador}
         />
       )}
 
@@ -217,6 +273,49 @@ export const App: React.FC = () => {
           onClose={() => setModalBackupAberto(false)}
         />
       )}
+
+      {/* Paleta de Comandos Global Cmd+K / Ctrl+K */}
+      <CommandPalette
+        isOpen={modalBuscaAberto}
+        onClose={() => setModalBuscaAberto(false)}
+        livros={livros}
+        progressos={progressos}
+        onSelecionarLivro={selecionarLivro}
+        visaoAtiva={visaoAtiva}
+        onMudarVisao={setVisaoAtiva}
+        modoVisualizacao={modoVisualizacao}
+        onMudarModoVisualizacao={setModoVisualizacao}
+        modoEscuro={modoEscuro}
+        onToggleModoEscuro={toggleModoEscuro}
+        onAbrirRevisao={() => setModalRevisaoAberto(true)}
+        onAbrirBackup={() => setModalBackupAberto(true)}
+        onAbrirComparador={handleAbrirComparador}
+        onAbrirCaderno={() => setModalCadernoAberto(true)}
+        onFiltrarNivel={(lvl) => setFiltros({ nivel: lvl })}
+      />
+
+      {/* Comparador Dialético Lado a Lado (Confronto de Obras) */}
+      <ComparadorDialetico
+        isOpen={modalComparadorAberto}
+        onClose={() => setModalComparadorAberto(false)}
+        livros={livros}
+        relacoes={relacoes}
+        progressos={progressos}
+        livroInicialAId={comparadorLivroAId}
+        livroInicialBId={comparadorLivroBId}
+        onAtualizarNotas={setNotas}
+        onSelecionarLivro={selecionarLivro}
+      />
+
+      {/* Caderno Geral de Notas e Citações */}
+      <CadernoNotasModal
+        isOpen={modalCadernoAberto}
+        onClose={() => setModalCadernoAberto(false)}
+        livros={livros}
+        progressos={progressos}
+        onSelecionarLivro={selecionarLivro}
+        onAtualizarNotas={setNotas}
+      />
     </div>
   );
 };

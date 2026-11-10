@@ -8,7 +8,10 @@ import {
   Sun,
   RotateCw,
   Download,
-  BookMarked
+  BookMarked,
+  Search,
+  Scale,
+  NotebookPen
 } from 'lucide-react';
 
 interface NavbarProps {
@@ -20,6 +23,9 @@ interface NavbarProps {
   onToggleModoEscuro: () => void;
   onAbrirRevisao: () => void;
   onAbrirBackup: () => void;
+  onAbrirBusca: () => void;
+  onAbrirComparador: () => void;
+  onAbrirCaderno: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -30,7 +36,10 @@ export const Navbar: React.FC<NavbarProps> = ({
   modoEscuro,
   onToggleModoEscuro,
   onAbrirRevisao,
-  onAbrirBackup
+  onAbrirBackup,
+  onAbrirBusca,
+  onAbrirComparador,
+  onAbrirCaderno
 }) => {
   return (
     <header className="sticky top-0 z-30 w-full bg-library-paper/90 dark:bg-library-darkPaper/90 backdrop-blur border-b border-slate-200 dark:border-library-darkBorder shadow-sm transition-colors">
@@ -78,32 +87,65 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         {/* Ações Secundárias à Direita */}
         <div className="flex items-center gap-1.5 sm:gap-2">
+          {/* Botão de Busca Rápida / Command Palette */}
+          <button
+            onClick={onAbrirBusca}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-serif font-medium text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 border border-stone-200 dark:border-stone-700 transition-colors bg-white/70 dark:bg-stone-900/60"
+            title="Buscar Obras e Comandos (Pressione ⌘K ou Ctrl+K)"
+          >
+            <Search className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
+            <span className="hidden lg:inline text-stone-500">Buscar</span>
+            <kbd className="hidden sm:inline-block px-1.5 py-0.2 text-[9px] font-mono bg-stone-100 dark:bg-stone-800 rounded border border-stone-300 dark:border-stone-700 text-stone-500">
+              ⌘K
+            </kbd>
+          </button>
+
+          {/* Confronto Dialético */}
+          <button
+            onClick={onAbrirComparador}
+            className="p-2 sm:px-2.5 sm:py-1.5 rounded-lg text-xs font-serif font-medium text-stone-700 dark:text-stone-300 hover:bg-rose-50 dark:hover:bg-rose-950/40 border border-stone-200 dark:border-stone-700 hover:border-rose-400 flex items-center gap-1.5 transition-colors"
+            title="Confrontar Obras e Contrapontos Lado a Lado"
+          >
+            <Scale className="w-3.5 h-3.5 text-rose-600" />
+            <span className="hidden md:inline">Confronto</span>
+          </button>
+
+          {/* Caderno de Notas & Citações */}
+          <button
+            onClick={onAbrirCaderno}
+            className="p-2 sm:px-2.5 sm:py-1.5 rounded-lg text-xs font-serif font-medium text-stone-700 dark:text-stone-300 hover:bg-amber-50 dark:hover:bg-amber-950/40 border border-stone-200 dark:border-stone-700 hover:border-amber-400 flex items-center gap-1.5 transition-colors"
+            title="Ver Todas as Anotações e Citações Pessoais"
+          >
+            <NotebookPen className="w-3.5 h-3.5 text-amber-600" />
+            <span className="hidden md:inline">Caderno</span>
+          </button>
+
           {/* Alternar Lombada / Capa (apenas na visão estante) */}
           {visaoAtiva === 'estante' && (
-            <div className="hidden sm:flex items-center bg-slate-100 dark:bg-slate-800 p-0.5 rounded-lg border border-slate-200 dark:border-slate-700 text-xs">
+            <div className="hidden sm:flex items-center bg-stone-100 dark:bg-stone-800 p-0.5 rounded-lg border border-stone-200 dark:border-stone-700 text-xs">
               <button
                 onClick={() => onMudarModoVisualizacao('capa')}
                 className={`p-1.5 rounded text-xs font-medium flex items-center gap-1 ${
                   modoVisualizacao === 'capa'
-                    ? 'bg-white dark:bg-slate-700 text-amber-800 dark:text-amber-300 shadow-xs'
-                    : 'text-slate-500'
+                    ? 'bg-white dark:bg-stone-700 text-amber-800 dark:text-amber-300 shadow-xs'
+                    : 'text-stone-500'
                 }`}
                 title="Exibir Capas"
               >
                 <ImageIcon className="w-3.5 h-3.5" />
-                <span className="hidden md:inline">Capa</span>
+                <span className="hidden xl:inline">Capa</span>
               </button>
               <button
                 onClick={() => onMudarModoVisualizacao('lombada')}
                 className={`p-1.5 rounded text-xs font-medium flex items-center gap-1 ${
                   modoVisualizacao === 'lombada'
-                    ? 'bg-white dark:bg-slate-700 text-amber-800 dark:text-amber-300 shadow-xs'
-                    : 'text-slate-500'
+                    ? 'bg-white dark:bg-stone-700 text-amber-800 dark:text-amber-300 shadow-xs'
+                    : 'text-stone-500'
                 }`}
                 title="Exibir Lombadas"
               >
                 <Columns className="w-3.5 h-3.5" />
-                <span className="hidden md:inline">Lombada</span>
+                <span className="hidden xl:inline">Lombada</span>
               </button>
             </div>
           )}
@@ -111,31 +153,31 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Revisão Semestral */}
           <button
             onClick={onAbrirRevisao}
-            className="p-2 sm:px-3 sm:py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center gap-1.5 transition-colors"
+            className="p-2 sm:px-2.5 sm:py-1.5 rounded-lg text-xs font-medium text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 border border-stone-200 dark:border-stone-700 flex items-center gap-1.5 transition-colors"
             title="Revisão Semestral (A cada 6 meses)"
           >
             <RotateCw className="w-3.5 h-3.5 text-amber-600" />
-            <span className="hidden sm:inline">Revisão</span>
+            <span className="hidden xl:inline">Revisão</span>
           </button>
 
           {/* Backup & Exportação */}
           <button
             onClick={onAbrirBackup}
-            className="p-2 sm:px-3 sm:py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center gap-1.5 transition-colors"
+            className="p-2 sm:px-2.5 sm:py-1.5 rounded-lg text-xs font-medium text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 border border-stone-200 dark:border-stone-700 flex items-center gap-1.5 transition-colors"
             title="Exportar / Importar Dados"
           >
-            <Download className="w-3.5 h-3.5 text-slate-600" />
-            <span className="hidden sm:inline">Backup</span>
+            <Download className="w-3.5 h-3.5 text-stone-600" />
+            <span className="hidden xl:inline">Backup</span>
           </button>
 
           {/* Alternar Modo Escuro */}
           <button
             onClick={onToggleModoEscuro}
-            className="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 transition-colors"
+            className="p-2 rounded-lg text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 border border-stone-200 dark:border-stone-700 transition-colors"
             title={modoEscuro ? 'Mudar para Modo Claro' : 'Mudar para Modo Escuro'}
             aria-label="Alternar tema"
           >
-            {modoEscuro ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-600" />}
+            {modoEscuro ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-stone-600" />}
           </button>
         </div>
       </div>

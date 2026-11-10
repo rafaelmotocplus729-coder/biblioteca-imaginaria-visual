@@ -33,6 +33,7 @@ export interface Livro {
   edicoes_pt?: EdicaoPT[];
   sinopse_editorial?: string;
   status_busca?: StatusBusca;
+  paginas?: number;
 }
 
 export type EstadoLeitura = 'nao_iniciado' | 'lendo' | 'lido' | 'abandonado' | 'reler_5_anos';
