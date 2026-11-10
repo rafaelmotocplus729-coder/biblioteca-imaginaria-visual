@@ -1,0 +1,159 @@
+{
+  "description": "This satirical novella tells the story of the life and early death of a high court judge. Ivan Ilych is proud of his achievements and his status in society, despite his poor relations with his wife which renders his home life bleak and joyless. When he becomes hopelessly ill he begins to realize that he has not after all lived the good life he had supposed he was enjoying.",
+  "title": "Смерть Ивана Ильича",
+  "covers": [
+    419697,
+    10411632,
+    7771412,
+    8899487,
+    10196897,
+    10431983,
+    10443136,
+    5260392,
+    11380299,
+    12390966,
+    3062858,
+    6428034,
+    8939341,
+    11189125,
+    11362161,
+    11516490,
+    12026865,
+    2009421,
+    1825485,
+    13315519,
+    13627729
+  ],
+  "subject_places": [
+    "Russia"
+  ],
+  "first_publish_date": "June 1927",
+  "key": "/works/OL267174W",
+  "authors": [
+    {
+      "author": {
+        "key": "/authors/OL26783A"
+      },
+      "type": {
+        "key": "/type/author_role"
+      }
+    },
+    {
+      "author": {
+        "key": "/authors/OL2734499A"
+      },
+      "type": {
+        "key": "/type/author_role"
+      }
+    },
+    {
+      "author": {
+        "key": "/authors/OL2964952A"
+      },
+      "type": {
+        "key": "/type/author_role"
+      }
+    },
+    {
+      "author": {
+        "key": "/authors/OL12583619A"
+      },
+      "type": {
+        "key": "/type/author_role"
+      }
+    }
+  ],
+  "subject_times": [
+    "19th century"
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subjects": [
+    "Literature",
+    "Manners and customs in fiction",
+    "Novellas",
+    "Fiction",
+    "Death in fiction",
+    "Russian",
+    "Russian fiction",
+    "Continental european fiction (fictional works by one author)",
+    "Russian language",
+    "Readers",
+    "Death",
+    "Sick",
+    "Russian Short stories",
+    "open_syllabus_project",
+    "Diseases",
+    "Judges",
+    "Slavic philology",
+    "Tolstoy, leo, graf, 1828-1910",
+    "Russian literature, history and criticism",
+    "Fiction, general",
+    "Ingles (lingua)",
+    "Romance ingles",
+    "Literatura inglesa",
+    "Death, fiction",
+    "Literature and fiction (general)",
+    "Literature and fiction, short stories and essays",
+    "Russian literature",
+    "Smertʹ Ivana Ilʹicha (Tolstoy, Leo, graf)",
+    "Literature--russian",
+    "Fiction in russian, 1800-1917 - english texts",
+    "Pg3366.s6 s6 1981",
+    "Pg 3366.s6 t654d 1981",
+    "891.73/3",
+    "Fictional Works",
+    "Sick--fiction",
+    "Death--fiction",
+    "Pg3366.s6 d74 2008",
+    "Classic Literature",
+    "Drama",
+    "Historical Fiction",
+    "Fiction, historical, general",
+    "Fiction, psychological",
+    "Fiction, classics",
+    "Modern Literature",
+    "Attitude to Death",
+    "Popular Works",
+    "Terminally Ill",
+    "Translations into English",
+    "English Short stories",
+    "Translations from Russian",
+    "Psychological aspects"
+  ],
+  "subject_people": [
+    "Leo Tolstoy graf (1828-1910)"
+  ],
+  "links": [
+    {
+      "title": "Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/The_Death_of_Ivan_Ilyich",
+      "type": {
+        "key": "/type/link"
+      }
+    },
+    {
+      "title": "Encyclopædia Britannica",
+      "url": "https://www.britannica.com/topic/The-Death-of-Ivan-Ilyich",
+      "type": {
+        "key": "/type/link"
+      }
+    }
+  ],
+  "genres": [
+    "/tags/OL174T",
+    "/tags/OL167T",
+    "/tags/OL170T"
+  ],
+  "latest_revision": 33,
+  "revision": 33,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-10-24T16:39:18.816364"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2026-08-19T04:02:35.086489"
+  }
+}

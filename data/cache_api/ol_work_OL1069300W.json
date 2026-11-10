@@ -1,0 +1,62 @@
+{
+  "title": "Die Traumdeutung",
+  "covers": [
+    234730,
+    5728970,
+    116951,
+    6604974,
+    6073555,
+    108102,
+    95501,
+    11668823,
+    8866125,
+    12179720,
+    10928527,
+    11504983,
+    13214289,
+    12929918,
+    13113341
+  ],
+  "subjects": [
+    "Psychoanalysis",
+    "Dreams",
+    "Dream interpretation",
+    "Neurasthenia",
+    "Psychology",
+    "Psychoanalytic Theory",
+    "Psychoanalytic Interpretation",
+    "Nonfiction",
+    "Interprétation",
+    "Psychanalyse",
+    "Rêves",
+    "Interprétation (psychanalyse)",
+    "Rêve",
+    "PSYCHOLOGY / Movements / Psychoanalysis",
+    "Long Now Manual for Civilization",
+    "Freudian Theory"
+  ],
+  "key": "/works/OL1069300W",
+  "authors": [
+    {
+      "author": {
+        "key": "/authors/OL108452A"
+      },
+      "type": {
+        "key": "/type/author_role"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "latest_revision": 31,
+  "revision": 31,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-09T20:21:46.475522"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2026-09-16T13:16:23.064043"
+  }
+}

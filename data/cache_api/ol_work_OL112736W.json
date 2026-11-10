@@ -1,0 +1,94 @@
+{
+  "description": {
+    "type": "/type/text",
+    "value": "*Frygt og Bæven* er et filosofisk værk af Søren Kierkegaard, udgivet 16. oktober 1843 under pseudonymet Johannes de Silentio. Værket er en udvidet meditation over Mosebog 22, også kendt som Isaks binding. Kierkegaard forsøger at forstå Abrahams indre psykologiske tilstand under hans tre og en halv dag lange rejse til Moriah. Teksten forsøger at vise, hvordan det ikke er let at forstå Abrahams handlinger gennem etiske kategorier som Sittlichkeit eller det universelle. I stedet hævder Silentio, at Abraham kun kan forstås gennem en ny kategori kaldet tro."
+  },
+  "title": "Frygt og Bæven",
+  "covers": [
+    104000,
+    3325210,
+    6927024,
+    9059675,
+    9219405,
+    10708508,
+    10861888,
+    9324382
+  ],
+  "subjects": [
+    "Abnégation de soi",
+    "Abnégation de soi.",
+    "Bible",
+    "Christelijke ethiek",
+    "Christianity",
+    "Criticism, interpretation",
+    "Danish Sermons",
+    "Faith and reason",
+    "Foi",
+    "Gehoorzaamheid",
+    "Jewish ethics",
+    "Modern Philosophy",
+    "Morale",
+    "Philosophy",
+    "Sacrifice",
+    "Sin",
+    "Filosofía Danesa",
+    "Teología Natural",
+    "Offer van Isaak",
+    "Pecado",
+    "Geloof",
+    "Wanhoop",
+    "TEOLOGIA NATURAL",
+    "Zonde",
+    "Het Lot",
+    "FILOSOFIA CRISTIANA",
+    "FILOSOFIA DANESA",
+    "Filosofía Cristiana",
+    "Christliche Ethik",
+    "Sacrifice of Isaac",
+    "Gehorsam",
+    "Kierkegaard, soren, 1813-1855",
+    "Christianity, philosophy",
+    "Literary collections",
+    "Apologetics",
+    "Abraham (biblical patriarch)",
+    "Bible, criticism, interpretation, etc., o. t. pentateuch",
+    "Existentialism",
+    "Philosophy and religion",
+    "Ethics",
+    "Despair",
+    "Religious aspects",
+    "Religion and Psychology"
+  ],
+  "subject_people": [
+    "Abraham (Biblical patriarch)",
+    "Abraham (Patriarche biblique)",
+    "Isaac (Biblical patriarch)"
+  ],
+  "key": "/works/OL112736W",
+  "authors": [
+    {
+      "author": {
+        "key": "/authors/OL20509A"
+      },
+      "type": {
+        "key": "/type/author_role"
+      }
+    }
+  ],
+  "subject_times": [
+    "19th century"
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "latest_revision": 31,
+  "revision": 31,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-10-18T01:44:38.856654"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2026-05-01T21:13:03.235418"
+  }
+}

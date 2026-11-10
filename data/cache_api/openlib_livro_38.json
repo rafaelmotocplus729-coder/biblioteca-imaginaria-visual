@@ -1,0 +1,187 @@
+{
+  "numFound": 3,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 3,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "Os Irmãos Karamázov Fiódor Dostoiévski",
+  "offset": null,
+  "docs": [
+    {
+      "author_key": [
+        "OL22242A"
+      ],
+      "author_name": [
+        "Fiódor Dostoievski"
+      ],
+      "cover_edition_key": "OL24646215M",
+      "cover_height": 500,
+      "cover_i": 8272336,
+      "cover_width": 336,
+      "ebook_access": "public",
+      "edition_count": 394,
+      "first_publish_year": 1880,
+      "has_fulltext": true,
+      "ia": [
+        "polnoesobranesoc12unse",
+        "diebruderkarama00dost",
+        "lesfrreskaramazo00dost",
+        "thebrotherskaram28054gut",
+        "brotherskaramazov2_1606_librivox",
+        "B-001-002-434",
+        "in.ernet.dli.2015.154654",
+        "in.ernet.dli.2015.261491",
+        "in.ernet.dli.2015.460874",
+        "nybc203776",
+        "bratiakaramazov00dost",
+        "bratiakaramazovy02dost",
+        "brotherskaramaz00dost",
+        "brotherskaramazo00dost",
+        "brotherskaramazo0000fyod_m4d6",
+        "brotherskaramazo0000fyod_o3b1",
+        "brotherskaramazo0000fyod_t7e8",
+        "brotherskaramazo0000fyod_f3x2",
+        "bwb_S0-AJY-654",
+        "brotherskaramazo0000fyod_w1s2",
+        "brotherskaramazo0000unse",
+        "brotherskaramazo0000dost_a2v5",
+        "bratiakaramazovy0001dost",
+        "brotherskaramazo52dost",
+        "brotherskaramazo0000dost_p7v4",
+        "unset0000unse_q5z8",
+        "loshermanoskaram0000dost_u4v7",
+        "grandinquisitor0000dost",
+        "brotherskaramazo0000unse_c3k9",
+        "karamzofunokydai0000dost",
+        "brotherskaramazo0000dost_i1g0",
+        "brotherskaramaz000dost",
+        "karamazovbrother0000dost",
+        "karamazovbrother00dost_0",
+        "brotherskaramazodost",
+        "liang.brotherskaramazo0000fyod_f8g1",
+        "isbn_0553141996",
+        "brotherskarama00dost",
+        "brotherskaramazo00dost_2",
+        "brotherskaramazo00fyod_1",
+        "brotherskaramaz100dost",
+        "brotherskaramazo00fyod",
+        "brotherskmazo00dost",
+        "brotherskaramazo00dost_1",
+        "brotherskaramazo0000dost_j2o7",
+        "brotherskaramazo00dost_0"
+      ],
+      "ia_collection": [
+        "JaiGyan",
+        "ServantsOfKnowledge-Print",
+        "americana",
+        "audio_bookspoetry",
+        "binghamton-ol",
+        "claremont_school_of_theology",
+        "cnusd-ol",
+        "dartmouthlibrary-ol",
+        "digitallibraryindia",
+        "drakeuniversity-ol",
+        "gutenberg",
+        "gwulibraries-ol",
+        "hamiltonpubliclibrary-ol",
+        "inlibrary",
+        "internetarchivebooks",
+        "johnshopkins-ol",
+        "librivoxaudio",
+        "nationalyiddishbookcenter",
+        "nicolai-woodenko-library",
+        "openlibrary-d-ol",
+        "patron-library-collection",
+        "printdisabled",
+        "prscr",
+        "randolph-macon-college-ol",
+        "robarts",
+        "stmaryscountylibrary",
+        "the-claremont-colleges-ol",
+        "toronto",
+        "tulsacc-ol",
+        "unclibraries",
+        "univ_florida_smathers",
+        "university_of_toronto",
+        "universityofarizona-ol",
+        "uoftpreservation",
+        "worksintranslation"
+      ],
+      "key": "/works/OL10432709W",
+      "language": [
+        "und",
+        "ger",
+        "pol",
+        "fin",
+        "ita",
+        "rus",
+        "spa",
+        "gre",
+        "tur",
+        "jpn",
+        "yid",
+        "por",
+        "fre",
+        "bul",
+        "dan",
+        "vie",
+        "swe",
+        "eng"
+      ],
+      "lending_edition_s": "OL28118234M",
+      "lending_identifier_s": "polnoesobranesoc12unse",
+      "public_scan_b": true,
+      "title": "Братья Карамазовы",
+      "id_standard_ebooks": [
+        "fyodor-dostoevsky/the-brothers-karamazov/constance-garnett",
+        "fyodor-dostoevsky/the-brothers-karamazov/constance-garnett"
+      ],
+      "id_project_gutenberg": [
+        "28054"
+      ],
+      "id_librivox": [
+        "10890"
+      ]
+    },
+    {
+      "author_key": [
+        "OL22242A",
+        "OL16613897A"
+      ],
+      "author_name": [
+        "Fiódor Dostoievski",
+        "Maria Franco"
+      ],
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 1958,
+      "has_fulltext": false,
+      "key": "/works/OL46062129W",
+      "language": [
+        "por"
+      ],
+      "public_scan_b": false,
+      "title": "Os irmãos Karamazovs"
+    },
+    {
+      "author_key": [
+        "OL22242A",
+        "OL16616396A"
+      ],
+      "author_name": [
+        "Fiódor Dostoievski",
+        "A. Augusto dos Santos"
+      ],
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 1959,
+      "has_fulltext": false,
+      "key": "/works/OL46069089W",
+      "language": [
+        "por"
+      ],
+      "public_scan_b": false,
+      "title": "Os irmãos Karamazov"
+    }
+  ]
+}

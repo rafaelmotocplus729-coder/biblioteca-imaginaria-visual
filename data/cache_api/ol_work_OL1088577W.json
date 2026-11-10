@@ -1,0 +1,56 @@
+{
+  "description": "In the following pages I have confined myself in the main to those problems of philosophy in regard to which I thought it possible to say something positive and constructive, since merely negative criticism seemed out of place. For this reason, theory of knowledge occupies a larger space than metaphysics in the present volume, and some topics much discussed by philosophers are treated very briefly, if at all.",
+  "covers": [
+    6947403,
+    -1,
+    14900471,
+    2007246,
+    8800146,
+    10879757,
+    12196956
+  ],
+  "key": "/works/OL1088577W",
+  "authors": [
+    {
+      "author": {
+        "key": "/authors/OL112912A"
+      },
+      "type": {
+        "key": "/type/author_role"
+      }
+    }
+  ],
+  "title": "The Problems of Philosophy",
+  "subjects": [
+    "Philosophy",
+    "Introductions",
+    "Theory of Knowledge",
+    "Metaphysics",
+    "Nonfiction",
+    "Métaphysique",
+    "Philosophie",
+    "open_syllabus_project",
+    "Philosophy, modern, 20th century",
+    "Philosophy, introductions",
+    "Knowledge, theory of",
+    "Philosophy, british",
+    "Conocimiento, Teoría del",
+    "Metafísica",
+    "Political science",
+    "General",
+    "Psychology"
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "latest_revision": 25,
+  "revision": 25,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-09T20:28:43.478794"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-09-28T02:09:20.273830"
+  }
+}

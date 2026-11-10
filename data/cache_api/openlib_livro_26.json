@@ -1,0 +1,109 @@
+{
+  "numFound": 40,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 40,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "Ética a Nicômaco Aristóteles",
+  "offset": null,
+  "docs": [
+    {
+      "author_key": [
+        "OL3203154A",
+        "OL9081564A",
+        "OL9081565A"
+      ],
+      "author_name": [
+        "Aristóteles",
+        "Julio Pallí Bonet",
+        "Teresa Martinez Manzano"
+      ],
+      "cover_edition_key": "OL31848753M",
+      "cover_i": 10540191,
+      "ebook_access": "no_ebook",
+      "edition_count": 7,
+      "first_publish_year": 2012,
+      "has_fulltext": false,
+      "key": "/works/OL24142517W",
+      "language": [
+        "spa"
+      ],
+      "public_scan_b": false,
+      "title": "Ética a Nicómaco"
+    },
+    {
+      "author_key": [
+        "OL9945436A"
+      ],
+      "author_name": [
+        "ARISTOTELES"
+      ],
+      "cover_edition_key": "OL35637661M",
+      "cover_i": 12344591,
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 2008,
+      "has_fulltext": false,
+      "key": "/works/OL26396980W",
+      "public_scan_b": false,
+      "title": "ETICA A NICOMACO"
+    },
+    {
+      "author_key": [
+        "OL12552699A"
+      ],
+      "author_name": [
+        "Aristóteles -"
+      ],
+      "cover_edition_key": "OL47132560M",
+      "cover_i": 13526456,
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 2021,
+      "has_fulltext": false,
+      "key": "/works/OL34781486W",
+      "public_scan_b": false,
+      "title": "Ética a Nicómaco"
+    },
+    {
+      "author_key": [
+        "OL3203154A",
+        "OL9661984A"
+      ],
+      "author_name": [
+        "Aristóteles",
+        "Patricio de Azcárate"
+      ],
+      "ebook_access": "no_ebook",
+      "edition_count": 6,
+      "first_publish_year": 2016,
+      "has_fulltext": false,
+      "key": "/works/OL40179232W",
+      "language": [
+        "spa"
+      ],
+      "public_scan_b": false,
+      "title": "Ética a Nicómaco"
+    },
+    {
+      "author_key": [
+        "OL11106072A"
+      ],
+      "author_name": [
+        "Aristóteles &#7944;&rho;&iota;&sigma;&tau;&omicron;&tau;&#941;&lambda;&eta;&sigmaf;"
+      ],
+      "cover_edition_key": "OL41557568M",
+      "cover_i": 13705487,
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 2019,
+      "has_fulltext": false,
+      "key": "/works/OL30232225W",
+      "language": [
+        "spa"
+      ],
+      "public_scan_b": false,
+      "title": "Ética a Nicómaco"
+    }
+  ]
+}

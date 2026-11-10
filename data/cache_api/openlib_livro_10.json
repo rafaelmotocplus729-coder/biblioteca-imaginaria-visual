@@ -1,0 +1,92 @@
+{
+  "numFound": 2,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 2,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "Ortodoxia G. K. Chesterton",
+  "offset": null,
+  "docs": [
+    {
+      "author_key": [
+        "OL18524A"
+      ],
+      "author_name": [
+        "Gilbert Keith Chesterton"
+      ],
+      "cover_edition_key": "OL6474423M",
+      "cover_height": 2105,
+      "cover_i": 6268135,
+      "cover_width": 1263,
+      "ebook_access": "public",
+      "edition_count": 551,
+      "first_publish_year": 1874,
+      "has_fulltext": true,
+      "ia": [
+        "orthodoxy0000gilb_y5p2",
+        "bwb_W9-ADD-051",
+        "orthodoxy0000ches_t0w5",
+        "orthodox00ches",
+        "orthodoxy1909ches",
+        "orthodoxy00chesuoft",
+        "cu31924029192478",
+        "cu31924029192486",
+        "orthodoxy00ches",
+        "orthodoxy0000gkch_i4t8",
+        "ortodoxia00ches"
+      ],
+      "ia_collection": [
+        "americana",
+        "brigham_young_university",
+        "claremont_school_of_theology",
+        "cornell",
+        "emmanuelcollege",
+        "inlibrary",
+        "internetarchivebooks",
+        "pimslibrary",
+        "printdisabled",
+        "toronto",
+        "university_of_toronto"
+      ],
+      "key": "/works/OL76350W",
+      "language": [
+        "pol",
+        "spa",
+        "eng",
+        "fre",
+        "cze",
+        "rum",
+        "ger",
+        "jpn",
+        "por"
+      ],
+      "lending_edition_s": "OL58974066M",
+      "lending_identifier_s": "orthodoxy0000gilb_y5p2",
+      "public_scan_b": true,
+      "title": "Orthodoxy",
+      "id_standard_ebooks": [
+        "g-k-chesterton/orthodoxy"
+      ]
+    },
+    {
+      "author_key": [
+        "OL18524A"
+      ],
+      "author_name": [
+        "Gilbert Keith Chesterton"
+      ],
+      "cover_edition_key": "OL47289227M",
+      "cover_i": 13749424,
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 2014,
+      "has_fulltext": false,
+      "key": "/works/OL34930365W",
+      "language": [
+        "spa"
+      ],
+      "public_scan_b": false,
+      "title": "ORTODOXIA y EL HOMBRE ETERNO 490"
+    }
+  ]
+}

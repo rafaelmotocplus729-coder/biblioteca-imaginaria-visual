@@ -1,0 +1,39 @@
+{
+  "subtitle": "The Shortest and Surest Way to Understand Basic Economics",
+  "description": {
+    "type": "/type/text",
+    "value": "An introduction to free-market economics."
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2020-02-14T09:13:48.781998"
+  },
+  "title": "Economics in One Lesson",
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-08T04:50:59.654586"
+  },
+  "covers": [
+    4437768
+  ],
+  "subjects": [
+    "Economics",
+    "Économie politique"
+  ],
+  "latest_revision": 12,
+  "key": "/works/OL541970W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL38374A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "revision": 12
+}

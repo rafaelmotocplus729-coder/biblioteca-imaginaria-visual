@@ -1,0 +1,112 @@
+{
+  "numFound": 8,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 8,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "Apologia de Sócrates Platão",
+  "offset": null,
+  "docs": [
+    {
+      "author_key": [
+        "OL6001146A"
+      ],
+      "author_name": [
+        "Platão"
+      ],
+      "cover_edition_key": "OL59751487M",
+      "cover_i": 15111082,
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 1972,
+      "has_fulltext": false,
+      "key": "/works/OL43830743W",
+      "public_scan_b": false,
+      "subtitle": "Êutifron, Crìton",
+      "title": "Apologia de Sócrates"
+    },
+    {
+      "author_key": [
+        "OL302426A"
+      ],
+      "author_name": [
+        "Miguel Real"
+      ],
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 1998,
+      "has_fulltext": false,
+      "key": "/works/OL2296181W",
+      "language": [
+        "por"
+      ],
+      "public_scan_b": false,
+      "subtitle": "narrada por Platão",
+      "title": "A verdadeira apologia de Sócrates"
+    },
+    {
+      "author_key": [
+        "OL10895185A",
+        "OL6001146A"
+      ],
+      "author_name": [
+        "Maria Lacerda de Souza",
+        "Platão"
+      ],
+      "cover_edition_key": "OL40585167M",
+      "cover_i": 13519721,
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 2017,
+      "has_fulltext": false,
+      "key": "/works/OL29484103W",
+      "language": [
+        "por"
+      ],
+      "public_scan_b": false,
+      "title": "Apologia de Sócrates / o Banquete"
+    },
+    {
+      "author_key": [
+        "OL12948413A",
+        "OL6001146A"
+      ],
+      "author_name": [
+        "Fernando Magalhaes",
+        "Platão"
+      ],
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 2020,
+      "has_fulltext": false,
+      "key": "/works/OL35839902W",
+      "language": [
+        "por"
+      ],
+      "public_scan_b": false,
+      "title": "Apologia de Sócrates"
+    },
+    {
+      "author_key": [
+        "OL16621169A",
+        "OL16613484A",
+        "OL16621791A"
+      ],
+      "author_name": [
+        "Platão",
+        "António Monteiro",
+        "Real, Miguel pseud"
+      ],
+      "ebook_access": "no_ebook",
+      "edition_count": 3,
+      "first_publish_year": 1961,
+      "has_fulltext": false,
+      "key": "/works/OL46050290W",
+      "language": [
+        "por"
+      ],
+      "public_scan_b": false,
+      "title": "Apologia de Sócrates"
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "numFound": 2,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 2,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "Ciência e Política: Duas Vocações Max Weber",
+  "offset": null,
+  "docs": [
+    {
+      "author_key": [
+        "OL139548A"
+      ],
+      "author_name": [
+        "Max Weber"
+      ],
+      "cover_edition_key": "OL13407508M",
+      "cover_i": 13085171,
+      "ebook_access": "borrowable",
+      "edition_count": 1,
+      "first_publish_year": 2002,
+      "has_fulltext": true,
+      "ia": [
+        "cienciaepolitica0000webe_s4j1"
+      ],
+      "ia_collection": [
+        "inlibrary",
+        "internetarchivebooks",
+        "printdisabled"
+      ],
+      "key": "/works/OL33747127W",
+      "language": [
+        "por"
+      ],
+      "lending_edition_s": "OL13407508M",
+      "lending_identifier_s": "cienciaepolitica0000webe_s4j1",
+      "public_scan_b": false,
+      "title": "Ciencia e Politica-Duas Vocaçoes"
+    },
+    {
+      "author_key": [
+        "OL139548A"
+      ],
+      "author_name": [
+        "Max Weber"
+      ],
+      "cover_edition_key": "OL13398286M",
+      "cover_i": 5280332,
+      "ebook_access": "borrowable",
+      "edition_count": 1,
+      "first_publish_year": 2002,
+      "has_fulltext": true,
+      "ia": [
+        "cienciaepolitica0000webe"
+      ],
+      "ia_collection": [
+        "inlibrary",
+        "internetarchivebooks",
+        "printdisabled"
+      ],
+      "key": "/works/OL27683117W",
+      "language": [
+        "por"
+      ],
+      "lending_edition_s": "OL13398286M",
+      "lending_identifier_s": "cienciaepolitica0000webe",
+      "public_scan_b": false,
+      "title": "Ciência e política"
+    }
+  ]
+}

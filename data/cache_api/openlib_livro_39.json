@@ -1,0 +1,108 @@
+{
+  "numFound": 7,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 7,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "Silêncio Shūsaku Endō",
+  "offset": null,
+  "docs": [
+    {
+      "author_key": [
+        "OL4282449A"
+      ],
+      "author_name": [
+        "Shūsaku Endō"
+      ],
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 1990,
+      "has_fulltext": false,
+      "key": "/works/OL21013347M",
+      "language": [
+        "por"
+      ],
+      "public_scan_b": false,
+      "title": "Silêncio"
+    },
+    {
+      "author_key": [
+        "OL4282449A"
+      ],
+      "author_name": [
+        "Shūsaku Endō"
+      ],
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 1973,
+      "has_fulltext": false,
+      "key": "/works/OL38926311W",
+      "language": [
+        "spa"
+      ],
+      "public_scan_b": false,
+      "title": "Silencio"
+    },
+    {
+      "author_key": [
+        "OL4282449A",
+        "OL6266674A",
+        "OL9123181A",
+        "OL6088135A"
+      ],
+      "author_name": [
+        "Shūsaku Endō",
+        "Jaime Fernández",
+        "José Vara",
+        "José Fernández"
+      ],
+      "cover_edition_key": "OL32064508M",
+      "cover_i": 10721156,
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 2009,
+      "has_fulltext": false,
+      "key": "/works/OL24242094W",
+      "public_scan_b": false,
+      "title": "Silencio"
+    },
+    {
+      "author_key": [
+        "OL3678457A",
+        "OL12609010A"
+      ],
+      "author_name": [
+        "Tiziano Tosolini",
+        "M. M. Leonetti"
+      ],
+      "cover_edition_key": "OL47642036M",
+      "cover_i": 14267613,
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 2017,
+      "has_fulltext": false,
+      "key": "/works/OL35240265W",
+      "public_scan_b": false,
+      "title": "Buscar a Dios en el silencio"
+    },
+    {
+      "author_key": [
+        "OL3678457A",
+        "OL12609010A"
+      ],
+      "author_name": [
+        "Tiziano Tosolini",
+        "M. M. Leonetti"
+      ],
+      "cover_edition_key": "OL47642035M",
+      "cover_i": 14267614,
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 2017,
+      "has_fulltext": false,
+      "key": "/works/OL35240266W",
+      "public_scan_b": false,
+      "title": "Buscar a Dios en el silencio"
+    }
+  ]
+}

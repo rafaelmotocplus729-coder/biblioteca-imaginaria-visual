@@ -1,0 +1,128 @@
+{
+  "numFound": 18,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 18,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "Silence Shusaku Endo",
+  "offset": null,
+  "docs": [
+    {
+      "author_name": [
+        "Shūsaku Endō"
+      ],
+      "cover_i": 6601656,
+      "isbn": [
+        "0800871863",
+        "9780800871864"
+      ],
+      "key": "/works/OL15391655W",
+      "language": [
+        "eng"
+      ],
+      "publish_year": [
+        1980
+      ],
+      "publisher": [
+        "Taplinger Pub. Co."
+      ],
+      "title": "Silence"
+    },
+    {
+      "author_name": [
+        "Shūsaku Endō"
+      ],
+      "cover_i": 8967949,
+      "isbn": [
+        "9780140249521",
+        "0720614481",
+        "9781910674277",
+        "9781447299851",
+        "0804807205",
+        "9781250082275",
+        "9780804807203",
+        "1910674273",
+        "1598597418",
+        "9781455591091",
+        "0704331896",
+        "9781455591107",
+        "9781455591213",
+        "1455591092",
+        "9780720614480",
+        "0140249524",
+        "1250082277",
+        "1455591106",
+        "9780704331891",
+        "9784770010148",
+        "0316238600",
+        "9781598597417",
+        "1455591211",
+        "9780316238601",
+        "4770010141",
+        "144729985X"
+      ],
+      "key": "/works/OL20307791W",
+      "language": [
+        "jpn",
+        "eng"
+      ],
+      "publish_year": [
+        2016,
+        2010,
+        2018,
+        2017,
+        1996,
+        1977,
+        1978,
+        1979,
+        1982,
+        2015
+      ],
+      "publisher": [
+        "PETER OWEN",
+        "PICADOR",
+        "Marylebone House",
+        "Picador Paper",
+        "Quartet Books, Limited",
+        "imusti",
+        "Little Brown & Company",
+        "Sophia Univ in assoc with Charles E Tuttle",
+        "Grand Central Publishing",
+        "Penguin Books, Limited",
+        "Picador",
+        "Kodansha Europe Limited",
+        "Oasis Audio"
+      ],
+      "title": "Silence"
+    },
+    {
+      "author_name": [
+        "Shūsaku Endō"
+      ],
+      "cover_i": 8213784,
+      "isbn": [
+        "1250082242",
+        "9781250082244",
+        "9780720612868",
+        "0140166068",
+        "0720612861",
+        "9780140166064"
+      ],
+      "key": "/works/OL17898793W",
+      "language": [
+        "eng"
+      ],
+      "publish_year": [
+        2016,
+        1993,
+        2007
+      ],
+      "publisher": [
+        "Penguin",
+        "Peter Owen",
+        "Picador"
+      ],
+      "title": "Silence"
+    }
+  ]
+}

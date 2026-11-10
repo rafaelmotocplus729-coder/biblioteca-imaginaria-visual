@@ -1,0 +1,108 @@
+{
+  "numFound": 112,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 112,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "English Grammar in Use Raymond Murphy",
+  "offset": null,
+  "docs": [
+    {
+      "author_name": [
+        "Raymond Murphy"
+      ],
+      "cover_i": 8454904,
+      "isbn": [
+        "052118939X",
+        "9780521189392"
+      ],
+      "key": "/works/OL19341462W",
+      "language": [
+        "eng"
+      ],
+      "publish_year": [
+        2012
+      ],
+      "publisher": [
+        "Cambridge University Press"
+      ],
+      "title": "English Grammar in Use"
+    },
+    {
+      "author_name": [
+        "Raymond Murphy",
+        "Lelio Pallini",
+        "Helen Naylor"
+      ],
+      "cover_i": 8092263,
+      "isbn": [
+        "052167543X",
+        "0521538262",
+        "9780521559287",
+        "9620715535",
+        "0521447054",
+        "9789620715532",
+        "9781107480537",
+        "1107480531",
+        "0521559286",
+        "9780521559270",
+        "0521559278",
+        "9780521538268",
+        "9780521675437",
+        "9780521447058"
+      ],
+      "key": "/works/OL1645784W",
+      "language": [
+        "mul",
+        "chi",
+        "eng"
+      ],
+      "publish_year": [
+        2016,
+        1994,
+        1996,
+        1997,
+        2002,
+        2003,
+        2007,
+        2015
+      ],
+      "publisher": [
+        "Cambridge",
+        "Cambridge University Press",
+        "Shang wu yin shu guan (Xianggang) you xian gong si",
+        "Cambridge University",
+        "CUP",
+        "cambridge",
+        "Bản Trẻ"
+      ],
+      "title": "Essential Grammar in Use"
+    },
+    {
+      "author_name": [
+        "Raymond Murphy"
+      ],
+      "cover_i": 334681,
+      "isbn": [
+        "0521348439",
+        "9780521625982",
+        "9780521348430",
+        "9780521357012",
+        "0521357012",
+        "052162598X"
+      ],
+      "key": "/works/OL1645781W",
+      "language": [
+        "eng"
+      ],
+      "publish_year": [
+        2000,
+        1989
+      ],
+      "publisher": [
+        "Cambridge University Press"
+      ],
+      "title": "Grammar in use"
+    }
+  ]
+}

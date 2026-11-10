@@ -1,0 +1,80 @@
+{
+  "description": "Adam Smith's The Wealth of Nations was recognized as a landmark of human thought upon its publication in 1776. As the first scientific argument for the principles of political economy, it is the point of departure for all subsequent economic thought. Smith's theories of capital accumulation, growth, and secular change, among others, continue to be influential in modern economics. This reprint of Edwin Cannan's definitive 1904 edition of The Wealth of Nations includes Cannan's famous introduction, notes, and a full index, as well as a new preface written especially for this edition by the distinguished economist George J. Stigler. Mr. Stigler's preface will be of value for anyone wishing to see the contemporary relevance of Adam Smith's thought.",
+  "title": "The Wealth of Nations",
+  "covers": [
+    12816911,
+    6517992,
+    8231545,
+    7897680,
+    5700260,
+    3938706,
+    143053,
+    6398906,
+    417791,
+    5615420,
+    1859483
+  ],
+  "subject_places": [
+    "Germany"
+  ],
+  "subjects": [
+    "Economische filosofie",
+    "Communism",
+    "Finance",
+    "Business",
+    "Open Library Staff Picks",
+    "Economics",
+    "Wealth",
+    "Colonization",
+    "Économie politique",
+    "Early works to 1800",
+    "Classical school of economics",
+    "Nonfiction",
+    "Colonies",
+    "History",
+    "Economics, philosophy",
+    "Politics and government",
+    "Social conditions",
+    "Democracy",
+    "BUSINESS & ECONOMICS",
+    "General",
+    "Reference",
+    "United states, politics and government",
+    "United states, social conditions",
+    "Communism, germany",
+    "Literature",
+    "Collections",
+    "Long Now Manual for Civilization",
+    "Economia Politica",
+    "Geografia Economica",
+    "Industrial productivity",
+    "Work"
+  ],
+  "key": "/works/OL76827W",
+  "authors": [
+    {
+      "author": {
+        "key": "/authors/OL39302A"
+      },
+      "type": {
+        "key": "/type/author_role"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "genres": [
+    "/tags/OL174T"
+  ],
+  "latest_revision": 42,
+  "revision": 42,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-10-16T10:23:53.515424"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2026-09-09T09:29:28.134078"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "first_publish_date": "1995",
+  "subtitle": "a formação e o sentido do Brasil",
+  "title": "O povo brasileiro",
+  "covers": [
+    3842030,
+    -1
+  ],
+  "subject_places": [
+    "Brazil"
+  ],
+  "lc_classifications": [
+    "F2510 .R477 1995"
+  ],
+  "key": "/works/OL1755883W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL203955A"
+      }
+    }
+  ],
+  "dewey_number": [
+    "981"
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subjects": [
+    "Social conditions",
+    "Ethnology",
+    "Civilization",
+    "Race relations",
+    "Brazilian National characteristics"
+  ],
+  "latest_revision": 6,
+  "revision": 6,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-09T22:16:49.002838"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2026-05-21T09:50:51.068025"
+  }
+}

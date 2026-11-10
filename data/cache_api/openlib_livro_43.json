@@ -1,0 +1,60 @@
+{
+  "numFound": 1,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 1,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "A Grande Transformação Karl Polanyi",
+  "offset": null,
+  "docs": [
+    {
+      "author_key": [
+        "OL615334A"
+      ],
+      "author_name": [
+        "Karl Polanyi"
+      ],
+      "cover_edition_key": "OL8837144M",
+      "cover_height": 475,
+      "cover_i": 966056,
+      "cover_width": 290,
+      "ebook_access": "borrowable",
+      "edition_count": 33,
+      "first_publish_year": 1944,
+      "has_fulltext": true,
+      "ia": [
+        "greattransformat00pola",
+        "greattransformat00pola",
+        "greattransformat0000pola",
+        "greattransformat0000pola_o9l4",
+        "greattransformat00karl",
+        "lagrandetransfor0000unse_a3h0"
+      ],
+      "ia_collection": [
+        "americana",
+        "belmont-ol",
+        "binghamton-ol",
+        "claremont_school_of_theology",
+        "inlibrary",
+        "internetarchivebooks",
+        "johnshopkins-ol",
+        "kalamazoocollege-ol",
+        "printdisabled",
+        "universityofarizona-ol"
+      ],
+      "key": "/works/OL3617884W",
+      "language": [
+        "fre",
+        "spa",
+        "kor",
+        "chi",
+        "eng",
+        "por"
+      ],
+      "lending_edition_s": "OL24208715M",
+      "lending_identifier_s": "greattransformat00pola",
+      "public_scan_b": false,
+      "title": "The Great Transformation"
+    }
+  ]
+}

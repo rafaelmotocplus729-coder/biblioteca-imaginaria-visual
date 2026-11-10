@@ -1,0 +1,40 @@
+{
+  "subjects": [
+    "Textbooks for foreign speakers",
+    "Problems, exercises",
+    "Grammar",
+    "English language",
+    "Computer-assisted instruction for foreign speakers",
+    "English language, textbooks for foreign speakers",
+    "English language, grammar",
+    "English language, composition and exercises"
+  ],
+  "key": "/works/OL19341462W",
+  "title": "English Grammar in Use",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL382738A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "covers": [
+    8454904
+  ],
+  "latest_revision": 5,
+  "revision": 5,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2019-03-21T04:48:24.568509"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2021-10-04T23:54:24.888373"
+  }
+}

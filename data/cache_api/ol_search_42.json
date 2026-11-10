@@ -1,0 +1,155 @@
+{
+  "numFound": 27,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 27,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "The Road to Serfdom Friedrich Hayek",
+  "offset": null,
+  "docs": [
+    {
+      "author_name": [
+        "Friedrich A. von Hayek"
+      ],
+      "cover_i": 6991871,
+      "isbn": [
+        "9780226320779",
+        "9780255365765",
+        "9732804149",
+        "9780786100507",
+        "0255365306",
+        "0226320618",
+        "0736651063",
+        "0226320553",
+        "0786100508",
+        "9780226320786",
+        "9780226320595",
+        "0226320545",
+        "9780710069856",
+        "9780226320618",
+        "9780226320540",
+        "0710069855",
+        "0415065607",
+        "9780415065603",
+        "9780255365307",
+        "0255365764",
+        "9780744800449",
+        "9780226320557",
+        "9780736651066",
+        "9575510917",
+        "9789732804148",
+        "9780710084859",
+        "0226320774",
+        "0226320782",
+        "9789575510916",
+        "0710046227",
+        "0226320596",
+        "0744800447",
+        "0710084854",
+        "9780710046222"
+      ],
+      "key": "/works/OL1165001W",
+      "language": [
+        "pol",
+        "chi",
+        "eng"
+      ],
+      "publish_year": [
+        1944,
+        1945,
+        1946,
+        1956,
+        1961,
+        1962,
+        1969,
+        1971,
+        1976,
+        1980,
+        1986,
+        1989,
+        1990,
+        1991,
+        1993,
+        1994,
+        1997,
+        2000,
+        2001,
+        2005,
+        2007
+      ],
+      "publisher": [
+        "Inst of Economic Affairs",
+        "Books on Tape, Inc.",
+        "The University of Chicago Press",
+        "Routledge & K. Paul",
+        "Blackstone Audio, Inc.",
+        "G. Routledge & sons",
+        "IEA",
+        "Institute of Economic Affairs",
+        "Routledge",
+        "University Of Chicago Press",
+        "Humanitas",
+        "Gui guan tu shu gu fen yu xian gong si",
+        "Routledge & Kegan Paul PLC",
+        "University of Chicago Press",
+        "Ark Paperbacks",
+        "Wektor",
+        "Blackstone Audiobooks",
+        "London Publishing Partnership",
+        "Routledge and Kegan Paul",
+        "Routledge & Kegan Paul",
+        "Univ. of Chicago Press"
+      ],
+      "title": "The Road to Serfdom"
+    },
+    {
+      "author_name": [
+        "Friedrich A. von Hayek"
+      ],
+      "cover_i": 266491,
+      "isbn": [
+        "9780415255431",
+        "0415255430",
+        "0415253896",
+        "9780415253895"
+      ],
+      "key": "/works/OL8090309W",
+      "language": [
+        "eng"
+      ],
+      "publish_year": [
+        2001,
+        2006
+      ],
+      "publisher": [
+        "Routledge"
+      ],
+      "title": "The Road to Serfdom"
+    },
+    {
+      "author_name": [
+        "Friedrich A. von Hayek"
+      ],
+      "cover_i": 14559714,
+      "isbn": [
+        "9786177863884",
+        "6177863884"
+      ],
+      "key": "/works/OL37499731W",
+      "language": [
+        "ukr",
+        "eng"
+      ],
+      "publish_year": [
+        1962,
+        1950,
+        2022
+      ],
+      "publisher": [
+        "University of Chicago Press",
+        "Наш Формат"
+      ],
+      "title": "Road to Serfdom"
+    }
+  ]
+}

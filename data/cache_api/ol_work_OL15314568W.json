@@ -1,0 +1,145 @@
+{
+  "description": "Thomas's magnum opus, comprising a systematic integration of Aristotelian philosophy with Christianity. Covers topics such as the nature and existence of God, human nature, law and morality and the relationship of God, world and humans.",
+  "title": "Summa Theologica",
+  "covers": [
+    8236222,
+    330135,
+    5891634,
+    6099868
+  ],
+  "subjects": [
+    "Anthropology",
+    "Attributes",
+    "Catholic Church",
+    "Catholic Theology",
+    "Catholic authors",
+    "Christian ethics",
+    "Christianity",
+    "Christianity and law",
+    "Christianity and law.",
+    "Collected works",
+    "Controversial literature",
+    "Creation",
+    "Doctrinal Theology",
+    "Doctrinal and controversial works",
+    "Doctrines",
+    "Dominicans",
+    "Dominicans. English Province",
+    "Early works to 1800",
+    "Early works to 1900",
+    "Earlyworks to 1800",
+    "Ethics",
+    "Faith and reason",
+    "God",
+    "Happiness",
+    "History of doctrines",
+    "Incunabula",
+    "Knowableness",
+    "Knowledge, Theory of (Religion)",
+    "Law",
+    "Law (Philosophy)",
+    "Law and ethics",
+    "Law and politics",
+    "Man (Theology)",
+    "Moral and ethical aspects of Happiness",
+    "Natural law",
+    "Natural law.",
+    "Natural theology",
+    "Omnipresence",
+    "Philosophy",
+    "Political science",
+    "Proof",
+    "Soul",
+    "Specimens",
+    "Theological anthropology",
+    "Theology",
+    "Theory of Knowledge",
+    "Théologie dogmatique",
+    "Truth",
+    "Doctrinal works",
+    "The ologie",
+    "Jüdische Kunst",
+    "Bible",
+    "Bibel",
+    "Christian art and symbolism",
+    "Illustrations",
+    "Arts in the Bible",
+    "Kunst",
+    "Jewish art and symbolism",
+    "Dominicains",
+    "Église catholique",
+    "Political aspects",
+    "Jurisprudence",
+    "Politics",
+    "Law, philosophy",
+    "Theology, doctrinal",
+    "Nature, religious aspects",
+    "Catholic church, doctrines",
+    "Religion and law",
+    "Philosophy, history",
+    "Thomas, aquinas, saint, 1225?-1274",
+    "Théologie",
+    "Law, political aspects",
+    "Sociale filosofie",
+    "Politieke filosofie",
+    "Moral and ethical aspects",
+    "Happiness--moral and ethical aspects--early works to 1800",
+    "Christian ethics--early works to 1800",
+    "Christian ethics--catholic authors",
+    "Bj1480 .t4813 1983",
+    "171/.2",
+    "General & miscellaneous law",
+    "Philosophy of",
+    "Professional responsibility & legal ethics",
+    "Ethics & moral philosophy - theoretical",
+    "Legal theory & philosophy - general & miscellaneous",
+    "Law--philosophy",
+    "K447.t45 s85213 2000",
+    "340/.1",
+    "Law--political aspects",
+    "K447.t45 a2 2002",
+    "340/.11",
+    "K230.t54 s8513 1996",
+    "God (Christianity)"
+  ],
+  "subject_people": [
+    "Aquinas, Saint, 1225-1274 Thomas",
+    "Thomas Aquinas, Saint (1225-1274)"
+  ],
+  "key": "/works/OL15314568W",
+  "authors": [
+    {
+      "author": {
+        "key": "/authors/OL38887A"
+      },
+      "type": {
+        "key": "/type/author_role"
+      }
+    },
+    {
+      "author": {
+        "key": "/authors/OL7277254A"
+      },
+      "type": {
+        "key": "/type/author_role"
+      }
+    }
+  ],
+  "subject_times": [
+    "Middle Ages",
+    "Middle Ages 600-1500"
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "latest_revision": 39,
+  "revision": 39,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2010-08-13T09:14:39.440416"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-02-05T17:22:54.697861"
+  }
+}

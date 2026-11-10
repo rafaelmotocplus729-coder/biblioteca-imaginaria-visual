@@ -1,0 +1,105 @@
+{
+  "numFound": 28,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 28,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "Grande Sertao Veredas Joao Guimaraes Rosa",
+  "offset": null,
+  "docs": [
+    {
+      "author_name": [
+        "João Guimarães Rosa"
+      ],
+      "cover_i": 13909068,
+      "isbn": [
+        "8535931988",
+        "9788520912096",
+        "9783462018097",
+        "9788520920169",
+        "8520918859",
+        "9788535931983",
+        "8520918875",
+        "655921057X",
+        "9788432204456",
+        "8520920160",
+        "9788520903872",
+        "9788520918876",
+        "8520903878",
+        "3462018094",
+        "9788520918852",
+        "9786559210572",
+        "8520912095",
+        "8432204455"
+      ],
+      "key": "/works/OL1756937W",
+      "language": [
+        "ger",
+        "spa",
+        "por"
+      ],
+      "publish_year": [
+        2019,
+        1988,
+        1956,
+        1987,
+        1963,
+        1965,
+        1968,
+        2001,
+        1972,
+        2006,
+        2007,
+        1974,
+        1982
+      ],
+      "publisher": [
+        "M. Ohno-M.L. Pires e Albuquerque Editores",
+        "Seix Barral",
+        "Rio de Janeiro : Editora Nova Fronteira",
+        "Kiepenheuer & Witsch",
+        "Companhia das Letras",
+        "Editora Nova Fronteira",
+        "Livraria José Olympio editora",
+        "Livraria J. Olympio Editora",
+        "Companhia de Bolso",
+        "Nova Fronteira",
+        "J. Olympio"
+      ],
+      "title": "Grande sertão"
+    },
+    {
+      "author_name": [
+        "João Guimarães Rosa"
+      ],
+      "key": "/works/OL8997211W",
+      "language": [
+        "eng"
+      ],
+      "publish_year": [
+        1963
+      ],
+      "publisher": [
+        "A.A. Knopf"
+      ],
+      "title": "The devil to pay in the backlands"
+    },
+    {
+      "author_name": [
+        "João Guimarães Rosa"
+      ],
+      "isbn": [
+        "9786559210046",
+        "6559210049"
+      ],
+      "key": "/works/OL28769034W",
+      "publish_year": [
+        2019
+      ],
+      "publisher": [
+        "Quadrinhos na Cia"
+      ],
+      "title": "Grande sertao veredas - Edicao em quadrinhos"
+    }
+  ]
+}

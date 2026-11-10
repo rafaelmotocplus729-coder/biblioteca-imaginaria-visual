@@ -1,0 +1,133 @@
+{
+  "numFound": 43,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 43,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "Memórias Póstumas de Brás Cubas Machado de Assis",
+  "offset": null,
+  "docs": [
+    {
+      "author_key": [
+        "OL93286A"
+      ],
+      "author_name": [
+        "Machado de Assis"
+      ],
+      "cover_edition_key": "OL1004410M",
+      "cover_height": 500,
+      "cover_i": 123152,
+      "cover_width": 333,
+      "ebook_access": "public",
+      "edition_count": 149,
+      "first_publish_year": 1881,
+      "has_fulltext": true,
+      "ia": [
+        "memoriasPostumasBrasCubas",
+        "memoriaspostumas0000mach",
+        "memriaspstumasde0000mach",
+        "epitaphofsmallwi00mach",
+        "architetturamedi01arat"
+      ],
+      "ia_collection": [
+        "americana",
+        "clean_list",
+        "duke_libraries",
+        "folkscanomy",
+        "folkscanomy_philosophy",
+        "inlibrary",
+        "internetarchivebooks",
+        "machado-de-assis",
+        "printdisabled",
+        "trent_university"
+      ],
+      "key": "/works/OL1003017W",
+      "language": [
+        "por",
+        "eng",
+        "cat",
+        "ger",
+        "epo",
+        "fre",
+        "spa"
+      ],
+      "lending_edition_s": "OL28418913M",
+      "lending_identifier_s": "memoriasPostumasBrasCubas",
+      "public_scan_b": true,
+      "title": "Memórias póstumas de Brás Cubas",
+      "id_project_gutenberg": [
+        "54829"
+      ]
+    },
+    {
+      "author_key": [
+        "OL12954588A",
+        "OL12954589A",
+        "OL93286A"
+      ],
+      "author_name": [
+        "Machado DE ASSIS",
+        "Lucas Kauan SANTOS",
+        "Machado de Assis"
+      ],
+      "ebook_access": "no_ebook",
+      "edition_count": 13,
+      "first_publish_year": 2020,
+      "has_fulltext": false,
+      "key": "/works/OL35865716W",
+      "language": [
+        "por"
+      ],
+      "public_scan_b": false,
+      "title": "Memórias Póstumas de Brás Cubas"
+    },
+    {
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "has_fulltext": false,
+      "key": "/works/OL44180238W",
+      "public_scan_b": false,
+      "title": "2022 livro memorias postumas de bras cubas machado de assis"
+    },
+    {
+      "author_key": [
+        "OL93286A"
+      ],
+      "author_name": [
+        "Machado de Assis"
+      ],
+      "ebook_access": "no_ebook",
+      "edition_count": 7,
+      "first_publish_year": 2020,
+      "has_fulltext": false,
+      "key": "/works/OL34369144W",
+      "language": [
+        "por"
+      ],
+      "public_scan_b": false,
+      "title": "Memórias Póstumas de Brás Cubas"
+    },
+    {
+      "author_key": [
+        "OL93286A"
+      ],
+      "author_name": [
+        "Machado de Assis"
+      ],
+      "cover_edition_key": "OL35665290M",
+      "cover_height": 500,
+      "cover_i": 12370894,
+      "cover_width": 324,
+      "ebook_access": "no_ebook",
+      "edition_count": 3,
+      "first_publish_year": 1957,
+      "has_fulltext": false,
+      "key": "/works/OL26416127W",
+      "language": [
+        "por"
+      ],
+      "public_scan_b": false,
+      "title": "Memórias Póstumas de Brás Cubas"
+    }
+  ]
+}

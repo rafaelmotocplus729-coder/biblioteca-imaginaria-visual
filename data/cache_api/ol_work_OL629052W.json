@@ -1,0 +1,143 @@
+{
+  "description": "Available under a Creative Commons Attribution-ShareAlike License:\r\nhttp://www.marxists.org/archive/marx/works/1848/communist-manifesto/\r\n\r\nOne of the most influential political tracts ever published this short book succinctly explains the aims and purpose of the Communist League of the 19th century, giving the author’s theories of the class struggle which they assumed would inevitably lead to world wide communism.  \r\n\r\nFull text available at Project Gutenberg too:\r\nhttp://www.gutenberg.org/files/61/61.txt",
+  "links": [
+    {
+      "title": "Wikipedia",
+      "url": "http://en.wikipedia.org/wiki/The_Communist_Manifesto",
+      "type": {
+        "key": "/type/link"
+      }
+    },
+    {
+      "url": "https://www.wikidata.org/wiki/Q40591",
+      "title": "Wikidata",
+      "type": {
+        "key": "/type/link"
+      }
+    },
+    {
+      "title": "VIAF ID: 174280547",
+      "url": "https://viaf.org/viaf/174280547",
+      "type": {
+        "key": "/type/link"
+      }
+    },
+    {
+      "title": "BookBrainz",
+      "url": "https://bookbrainz.org/work/7bc30fc1-8048-4ce9-84ca-6191a603fbf7",
+      "type": {
+        "key": "/type/link"
+      }
+    },
+    {
+      "title": "inventaire.io",
+      "url": "https://inventaire.io/entity/wd:Q40591",
+      "type": {
+        "key": "/type/link"
+      }
+    }
+  ],
+  "title": "Manifest der Kommunistischen Partei",
+  "covers": [
+    11048623,
+    -1
+  ],
+  "subject_places": [
+    "Germany",
+    "France"
+  ],
+  "subjects": [
+    "Communism",
+    "Sources",
+    "Capitalism",
+    "Socialism",
+    "Social conflict",
+    "Marxism",
+    "History",
+    "Long Now Manual for Civilization",
+    "Social justice",
+    "Prolétariat",
+    "Nonfiction",
+    "Politics",
+    "Classic Literature",
+    "Social contract",
+    "Political science",
+    "Economics",
+    "Capital",
+    "Philosophy and ethics",
+    "Communisme",
+    "Socialisme",
+    "Communism.",
+    "Marxisme",
+    "Histoire",
+    "Mouvement ouvrier",
+    "Marx, karl, 1818-1883",
+    "Communism, germany",
+    "France, history, february revolution, 1848",
+    "Politics and Social Sciences",
+    "Ideologies and Doctrines",
+    "Communism and Socialism",
+    "Politics and government",
+    "Biography",
+    "Engels, friedrich, 1820-1895",
+    "Political and diplomatic history",
+    "Political parties",
+    "Socialism. Communism. Anarchism",
+    "Political Ideologies",
+    "Communism & Socialism",
+    "Communistisch manifest (Marx)",
+    "Manifest der Kommunistischen Partei (Marx, Karl)",
+    "Literary collections",
+    "Hx39.5.a523 m364 2011",
+    "335.4/22",
+    "General",
+    "Hx276 .m3 1948a",
+    "World history",
+    "Communist parties",
+    "Communism, history",
+    "Congresses",
+    "Comunismo",
+    "Socialismo",
+    "Capitalismo",
+    "Filosofía marxista"
+  ],
+  "key": "/works/OL629052W",
+  "authors": [
+    {
+      "author": {
+        "key": "/authors/OL48230A"
+      },
+      "type": {
+        "key": "/type/author_role"
+      }
+    },
+    {
+      "author": {
+        "key": "/authors/OL1368A"
+      },
+      "type": {
+        "key": "/type/author_role"
+      }
+    }
+  ],
+  "subject_times": [
+    "February Revolution, 1848",
+    "19th century"
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "genres": [
+    "/tags/OL174T"
+  ],
+  "latest_revision": 73,
+  "revision": 73,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-08T06:46:27.109356"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2026-09-09T10:03:52.866265"
+  }
+}

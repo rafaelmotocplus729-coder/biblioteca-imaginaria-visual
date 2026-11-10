@@ -1,0 +1,131 @@
+{
+  "numFound": 3,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 3,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "Leviatã Thomas Hobbes",
+  "offset": null,
+  "docs": [
+    {
+      "author_key": [
+        "OL50870A"
+      ],
+      "author_name": [
+        "Thomas Hobbes"
+      ],
+      "cover_edition_key": "OL24212395M",
+      "cover_height": 3886,
+      "cover_i": 6525465,
+      "cover_width": 2549,
+      "ebook_access": "public",
+      "edition_count": 99,
+      "first_publish_year": 1651,
+      "has_fulltext": true,
+      "ia": [
+        "hobbessleviathan00hobbuoft",
+        "thematterformean00hobbuoft",
+        "cu31924030436533",
+        "leviathanorthem00hobbuoft",
+        "b24880383",
+        "leviathan00hobbgoog",
+        "leviathan00hobb",
+        "leviathanormatte00hobbrich",
+        "leviathanauthori00hobb",
+        "leviathan00hobb_1",
+        "leviathanwithsel0000hobb",
+        "leviathan000hobb",
+        "leviathanthepeli00thom",
+        "leviathan100hobb",
+        "leviathanpenguin00thom"
+      ],
+      "ia_collection": [
+        "americana",
+        "americanuniversity-ol",
+        "belmont-ol",
+        "binghamton-ol",
+        "cornell",
+        "cua-ol",
+        "dartmouthlibrary-ol",
+        "europeanlibraries",
+        "harvardclassicssingles",
+        "inlibrary",
+        "internetarchivebooks",
+        "johnshopkins-ol",
+        "kalamazoocollege-ol",
+        "kellylibrary",
+        "medicalheritagelibrary",
+        "medicallibrary",
+        "miltonpubliclibrary-ol",
+        "occidentalcollegelibrary-ol",
+        "printdisabled",
+        "robarts",
+        "rochester-ol",
+        "swarthmore-ol",
+        "the-claremont-colleges-ol",
+        "toronto",
+        "ukmhl",
+        "unb-ol",
+        "university_of_toronto",
+        "universityofcoloradoboulder-ol",
+        "universityofthewest-ol",
+        "wellcomelibrary",
+        "wilsoncollege-ol",
+        "wrlc-ol"
+      ],
+      "key": "/works/OL653987W",
+      "language": [
+        "heb",
+        "dut",
+        "lat",
+        "por",
+        "eng",
+        "fre",
+        "ger",
+        "chi",
+        "spa",
+        "und"
+      ],
+      "lending_edition_s": "OL7185492M",
+      "lending_identifier_s": "hobbessleviathan00hobbuoft",
+      "public_scan_b": true,
+      "subtitle": "Or the Matter, Form, and Power of a Commonwealth Ecclesiastical and Civil",
+      "title": "Leviathan"
+    },
+    {
+      "author_key": [
+        "OL7993044A"
+      ],
+      "author_name": [
+        "Thomas Hobbes"
+      ],
+      "cover_edition_key": "OL35725088M",
+      "cover_i": 12462470,
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 2014,
+      "has_fulltext": false,
+      "key": "/works/OL26440305W",
+      "public_scan_b": false,
+      "title": "Leviata"
+    },
+    {
+      "author_key": [
+        "OL563841A"
+      ],
+      "author_name": [
+        "Renato Janine Ribeiro"
+      ],
+      "ebook_access": "no_ebook",
+      "edition_count": 2,
+      "first_publish_year": 1978,
+      "has_fulltext": false,
+      "key": "/works/OL3423855W",
+      "language": [
+        "por"
+      ],
+      "public_scan_b": false,
+      "title": "A marca do Leviatã"
+    }
+  ]
+}

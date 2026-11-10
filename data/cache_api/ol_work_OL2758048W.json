@@ -1,0 +1,57 @@
+{
+  "subtitle": "a history of the Popes",
+  "title": "Saints & sinners",
+  "covers": [
+    160635,
+    10774309
+  ],
+  "first_publish_date": "1997",
+  "key": "/works/OL2758048W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL404953A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subjects": [
+    "History",
+    "Catholic Church",
+    "Papacy",
+    "Papacy -- History",
+    "Popes",
+    "Biography",
+    "Pausdom",
+    "Histoire",
+    "Papas",
+    "Historia",
+    "Papauté",
+    "Pausen",
+    "Papacy, history",
+    "Catholic church, history",
+    "Papi",
+    "Storia",
+    "Papato",
+    "Holy See"
+  ],
+  "description": {
+    "type": "/type/text",
+    "value": "This engrossing book encompasses the extraordinary history of the papacy, from its beginnings to the present day. This new edition covers the unprecedented resignation of Benedict XVI and the election of the first Argentinian pope."
+  },
+  "latest_revision": 12,
+  "revision": 12,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-10T00:21:42.242048"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-07-30T05:30:32.104489"
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "description": {
+    "type": "/type/text",
+    "value": "Immanuel Kant: 1724-1804\r\nGrundlegung Zur Metaphysik Der Sitten was originally published in 1785"
+  },
+  "title": "Grundlegung zur Metaphysik der Sitten",
+  "covers": [
+    6360245,
+    5258892,
+    11509696,
+    12076031,
+    13480284,
+    13729209,
+    13980268
+  ],
+  "subjects": [
+    "Ethics",
+    "Early works to 1800",
+    "Metafysica",
+    "Moraal",
+    "Morale",
+    "Ouvrages avant 1800",
+    "B2766.e6 b4 1990",
+    "170"
+  ],
+  "subject_people": [
+    "Immanuel Kant (1724-1804)"
+  ],
+  "key": "/works/OL99843W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL18074A"
+      }
+    },
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL9247445A"
+      }
+    },
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL10117594A"
+      }
+    },
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL12572950A"
+      }
+    },
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL9338079A"
+      }
+    }
+  ],
+  "subject_times": [
+    "Early works to 1800"
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "latest_revision": 16,
+  "revision": 16,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-10-17T17:55:04.517093"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-01-30T20:45:05.539918"
+  }
+}

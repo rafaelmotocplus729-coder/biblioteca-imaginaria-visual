@@ -1,0 +1,33 @@
+{
+  "title": "Contemporary European ethics",
+  "subjects": [
+    "Ethics"
+  ],
+  "key": "/works/OL3902056W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL709696A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "covers": [
+    14936445
+  ],
+  "latest_revision": 3,
+  "revision": 3,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-10T04:49:42.369279"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-04-29T11:53:21.260332"
+  }
+}

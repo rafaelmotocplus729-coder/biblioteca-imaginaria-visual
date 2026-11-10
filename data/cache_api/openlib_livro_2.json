@@ -1,0 +1,142 @@
+{
+  "numFound": 112,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 112,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "English Grammar in Use Raymond Murphy",
+  "offset": null,
+  "docs": [
+    {
+      "author_key": [
+        "OL382738A"
+      ],
+      "author_name": [
+        "Raymond Murphy"
+      ],
+      "cover_edition_key": "OL26798836M",
+      "cover_height": 500,
+      "cover_i": 8454904,
+      "cover_width": 370,
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 2012,
+      "has_fulltext": false,
+      "key": "/works/OL19341462W",
+      "language": [
+        "eng"
+      ],
+      "public_scan_b": false,
+      "title": "English Grammar in Use"
+    },
+    {
+      "author_key": [
+        "OL382738A",
+        "OL2766697A",
+        "OL2766235A"
+      ],
+      "author_name": [
+        "Raymond Murphy",
+        "Lelio Pallini",
+        "Helen Naylor"
+      ],
+      "cover_height": 265,
+      "cover_i": 8092263,
+      "cover_width": 210,
+      "ebook_access": "no_ebook",
+      "edition_count": 12,
+      "first_publish_year": 1994,
+      "has_fulltext": false,
+      "key": "/works/OL1645784W",
+      "language": [
+        "mul",
+        "chi",
+        "eng"
+      ],
+      "public_scan_b": false,
+      "title": "Essential Grammar in Use"
+    },
+    {
+      "author_key": [
+        "OL382738A"
+      ],
+      "author_name": [
+        "Raymond Murphy"
+      ],
+      "cover_edition_key": "OL2052164M",
+      "cover_i": 334681,
+      "ebook_access": "borrowable",
+      "edition_count": 2,
+      "first_publish_year": 1989,
+      "has_fulltext": true,
+      "ia": [
+        "grammarinuserefe00murp",
+        "grammaruseinterm00murp"
+      ],
+      "ia_collection": [
+        "inlibrary",
+        "internetarchivebooks",
+        "printdisabled"
+      ],
+      "key": "/works/OL1645781W",
+      "language": [
+        "eng"
+      ],
+      "lending_edition_s": "OL2052164M",
+      "lending_identifier_s": "grammarinuserefe00murp",
+      "public_scan_b": false,
+      "title": "Grammar in use"
+    },
+    {
+      "author_key": [
+        "OL382738A"
+      ],
+      "author_name": [
+        "Raymond Murphy"
+      ],
+      "cover_edition_key": "OL7744752M",
+      "cover_i": 343806,
+      "ebook_access": "borrowable",
+      "edition_count": 3,
+      "first_publish_year": 2002,
+      "has_fulltext": true,
+      "ia": [
+        "englishgrammarin00raym_0"
+      ],
+      "ia_collection": [
+        "inlibrary",
+        "internetarchivebooks",
+        "printdisabled",
+        "tulsacc-ol"
+      ],
+      "key": "/works/OL2626972W",
+      "language": [
+        "eng"
+      ],
+      "lending_edition_s": "OL7745288M",
+      "lending_identifier_s": "englishgrammarin00raym_0",
+      "public_scan_b": false,
+      "title": "English Grammar In Use with Answers and CD ROM"
+    },
+    {
+      "author_key": [
+        "OL7826444A"
+      ],
+      "author_name": [
+        "Raymond Murphy"
+      ],
+      "cover_edition_key": "OL28161757M",
+      "cover_i": 10101222,
+      "ebook_access": "no_ebook",
+      "edition_count": 3,
+      "first_publish_year": 2012,
+      "has_fulltext": false,
+      "key": "/works/OL20803366W",
+      "language": [
+        "eng"
+      ],
+      "public_scan_b": false,
+      "title": "English Grammar in Use"
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "numFound": 1,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 1,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "O Homem e seus Símbolos Carl Gustav Jung",
+  "offset": null,
+  "docs": [
+    {
+      "author_key": [
+        "OL17370A"
+      ],
+      "author_name": [
+        "Carl Gustav Jung"
+      ],
+      "cover_edition_key": "OL5915904M",
+      "cover_i": 6534585,
+      "ebook_access": "printdisabled",
+      "edition_count": 18,
+      "first_publish_year": 1964,
+      "has_fulltext": true,
+      "ia": [
+        "manhissymbols00carl",
+        "manhissymbols0000jung",
+        "manhissymbols00jung",
+        "manhissymbols0000jung_r8y0",
+        "manhissymbols000jung",
+        "manhissymbols1976jung",
+        "elhombreysussimb00jung"
+      ],
+      "ia_collection": [
+        "americana",
+        "internetarchivebooks",
+        "printdisabled"
+      ],
+      "key": "/works/OL95157W",
+      "language": [
+        "spa",
+        "fre",
+        "por",
+        "eng",
+        "ger"
+      ],
+      "public_scan_b": false,
+      "title": "Man and His Symbols"
+    }
+  ]
+}

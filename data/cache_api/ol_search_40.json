@@ -1,0 +1,62 @@
+{
+  "numFound": 466,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 466,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "Rerum Novarum Leo XIII",
+  "offset": null,
+  "docs": [
+    {
+      "author_name": [
+        "Rerum Novarum"
+      ],
+      "cover_i": 15051629,
+      "key": "/works/OL34597732W",
+      "language": [
+        "eng"
+      ],
+      "publish_year": [
+        1942
+      ],
+      "publisher": [
+        "St. Paul"
+      ],
+      "title": "Rerum Novarum"
+    },
+    {
+      "author_name": [
+        "Pope Leo XIII"
+      ],
+      "cover_i": 9319148,
+      "key": "/works/OL20658038W",
+      "language": [
+        "eng"
+      ],
+      "publish_year": [
+        1965
+      ],
+      "publisher": [
+        "Our Sunday Visitor"
+      ],
+      "title": "On the condition of workers (Rerum novarum)"
+    },
+    {
+      "author_name": [
+        "Pope Leo XIII"
+      ],
+      "cover_i": 11866922,
+      "key": "/works/OL24947291W",
+      "language": [
+        "fre"
+      ],
+      "publish_year": [
+        1920
+      ],
+      "publisher": [
+        "Association Catholique de la Jeunesse Candienne-Francaise"
+      ],
+      "title": "Encyclique Rerum Novarum, \"Sur la condition des ouvriers\""
+    }
+  ]
+}

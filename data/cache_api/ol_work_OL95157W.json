@@ -1,0 +1,48 @@
+{
+  "description": "Excerpt from back cover:\r\n\r\n\"This book, which was the last piece of work undertaken by Jung before his death in 1961, provides a unique opportunity to assess his contribution to the life and thought of our time, for it was also his first attempt to present his life-work in psychology to a non-technical public...What emerges with great clarity from the book is that Jung has done immense service both to psychology as a science and to our general understanding of man in society, by insisting that imaginative life must be taken seriously in its own right, as the most distinctive characteristic of human beings.\" \r\n-Guardian-",
+  "covers": [
+    6534585
+  ],
+  "key": "/works/OL95157W",
+  "authors": [
+    {
+      "author": {
+        "key": "/authors/OL17370A"
+      },
+      "type": {
+        "key": "/type/author_role"
+      }
+    }
+  ],
+  "title": "Man and His Symbols",
+  "subjects": [
+    "Symbolism (Psychology)",
+    "Psychanalyse",
+    "Rêves",
+    "Simbolismo (Psicología)",
+    "Psicoanálisis",
+    "Symbolism",
+    "Symboliek",
+    "Subconsciousness",
+    "Signs and symbols",
+    "Psychology",
+    "Dream interpretation",
+    "Psychological aspects",
+    "Dreams",
+    "Consciousness",
+    "Individuality"
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "latest_revision": 17,
+  "revision": 17,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-10-17T15:27:47.369522"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2023-02-24T22:15:53.446877"
+  }
+}

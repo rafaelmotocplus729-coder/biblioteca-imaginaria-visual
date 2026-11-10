@@ -1,0 +1,140 @@
+{
+  "numFound": 19,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 19,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "How to Read a Book Mortimer Adler",
+  "offset": null,
+  "docs": [
+    {
+      "author_name": [
+        "Mortimer J. Adler"
+      ],
+      "cover_i": 405381,
+      "isbn": [
+        "9781476790152",
+        "8474449820",
+        "9788588062894",
+        "0671212095",
+        "9789506200091",
+        "9781441741202",
+        "9780671212803",
+        "1476790159",
+        "067121280X",
+        "9788474449822",
+        "8588062895",
+        "9780786112869",
+        "0786112867",
+        "9506200092",
+        "1441741208",
+        "1567310109",
+        "9783963181313",
+        "3963181311",
+        "1439144834",
+        "9780786110483",
+        "9780671212094",
+        "1441741216",
+        "0786110481",
+        "9781441741219",
+        "9781567310108",
+        "9781439144831"
+      ],
+      "key": "/works/OL487444W",
+      "language": [
+        "chi",
+        "por",
+        "spa",
+        "eng"
+      ],
+      "publish_year": [
+        1984,
+        2022,
+        1992,
+        1963,
+        1964,
+        1998,
+        1967,
+        2000,
+        1940,
+        1972,
+        2010,
+        2011,
+        2012,
+        2014,
+        1983
+      ],
+      "publisher": [
+        "Touchstone",
+        "Claridad",
+        "Blackstone Audiobooks",
+        "Touchstone Books",
+        "Debate",
+        "A Touchstone Book",
+        "MJF Books",
+        "Brand: Blackstone Audio, Inc.",
+        "Gui guan tu shu gu fen you xian gong si",
+        "Simon and Shuster",
+        "Jarrolds",
+        "Blackstone Audio, Inc.",
+        "Zweitausendeins",
+        "É Realizações",
+        "Simon and Schuster"
+      ],
+      "title": "How to Read a Book"
+    },
+    {
+      "author_name": [
+        "Mortimer J. Adler",
+        "Charles Lincoln Van Doren"
+      ],
+      "cover_i": 13239536,
+      "isbn": [
+        "1476790159",
+        "9781797139852",
+        "1797139851",
+        "1439510261",
+        "9781476790152",
+        "9781439510261"
+      ],
+      "key": "/works/OL27739278W",
+      "language": [
+        "eng"
+      ],
+      "publish_year": [
+        2008,
+        1966,
+        2021,
+        2014
+      ],
+      "publisher": [
+        "Simon & Schuster Audio and Blackstone Publishing",
+        "Simon and Schuster",
+        "Paw Prints",
+        "Touchstone Books"
+      ],
+      "title": "How to Read a Book"
+    },
+    {
+      "author_name": [
+        "Mortimer J. Adler",
+        "Charles Lincoln Van Doren",
+        "Edward Holland"
+      ],
+      "isbn": [
+        "1470832143",
+        "9781470832148"
+      ],
+      "key": "/works/OL28961735W",
+      "publish_year": [
+        1940
+      ],
+      "publisher": [
+        "Simon and Schuster",
+        "Simon & Schuster",
+        "Blackstone Pub"
+      ],
+      "title": "How to Read a Book"
+    }
+  ]
+}

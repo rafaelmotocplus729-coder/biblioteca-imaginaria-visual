@@ -1,0 +1,40 @@
+{
+  "subject_places": [
+    "America",
+    "Brazil",
+    "Portugal"
+  ],
+  "subjects": [
+    "Administration",
+    "Colonies",
+    "Politics and government"
+  ],
+  "key": "/works/OL3709959W",
+  "title": "Os donos do poder",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL645669A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "covers": [
+    6390023
+  ],
+  "latest_revision": 3,
+  "revision": 3,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-10T04:16:03.768575"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2020-12-04T14:06:30.440643"
+  }
+}

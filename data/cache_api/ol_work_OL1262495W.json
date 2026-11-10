@@ -1,0 +1,199 @@
+{
+  "title": "Pensées",
+  "covers": [
+    6550324,
+    5676770,
+    2891690,
+    5896851,
+    1848581,
+    5809789,
+    6043045,
+    3082563,
+    14174683,
+    971232,
+    9038272,
+    9081497,
+    10419333,
+    10496587,
+    11693615,
+    11908610,
+    13444188,
+    13454062
+  ],
+  "subject_places": [
+    "Annapolis Royal (N.S.)",
+    "Jansenists.\u001e 0"
+  ],
+  "first_publish_date": "October 1, 1977",
+  "subject_people": [
+    "Blaise Pascal (1623-1662)",
+    "Blaise Pascal"
+  ],
+  "key": "/works/OL1262495W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL127510A"
+      }
+    },
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL500848A"
+      }
+    },
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL2348908A"
+      }
+    },
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL116256A"
+      }
+    },
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL10553442A"
+      }
+    },
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL10680476A"
+      }
+    },
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL12183820A"
+      }
+    }
+  ],
+  "subject_times": [
+    "17th century",
+    "Early works to 1800",
+    "17e siècle",
+    "Ouvrages avant 1800"
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subjects": [
+    "Apologetic works",
+    "Apologetics",
+    "Apologétique",
+    "Auteurs catholiques",
+    "Catholic Church",
+    "Catholic Church - Apologetic works",
+    "Catholic Church - Doctrinal and controversial works",
+    "Catholic Church - Doctrines",
+    "Catholic authors",
+    "Christianity",
+    "Controversial literature",
+    "Controversial works",
+    "Crypts",
+    "Doctrinal and controversial works",
+    "Doctrines",
+    "Early works to 1800",
+    "Grace (Theology)",
+    "History",
+    "Human beings",
+    "Jansenists",
+    "Jansénisme",
+    "Jesuits",
+    "Jesuits.\u001e00",
+    "Meditations",
+    "Ouvrages avant 1800",
+    "Ouvrages de contreverse",
+    "Ouvrages de controverse",
+    "Pascal, Blaise, 1623-1662",
+    "Pensées",
+    "Philosophy",
+    "Port Royal",
+    "Port-Royal des Champs (Abbey)",
+    "Predestination",
+    "Translations into Irish",
+    "Église catholique",
+    "Autores católicos",
+    "Doctrina y controversia",
+    "Iglesia católica",
+    "Correspondence",
+    "Philosophers",
+    "Philosophy and religion",
+    "Doctrinal Theology",
+    "Catholic church, controversial literature",
+    "Apologetics, history, 17th century",
+    "Anthropologie théologique",
+    "Croyance et doute",
+    "Religion",
+    "Christianisme",
+    "Grâce (Théologie)",
+    "Doctrine, apologies, controverses",
+    "Christliche Philosophie",
+    "Theology",
+    "Conversion",
+    "Philosophy, collected works",
+    "Catholic church, doctrines",
+    "Catholic church, apologetic works",
+    "Apologetic workscatholic church",
+    "Apologetics--early works to 1800",
+    "Grace (theology)--early works to 1800",
+    "Predestination--early works to 1800",
+    "B1901 .p413 1995",
+    "230.2",
+    "Jansenistas",
+    "Histoire",
+    "Ouvrages contreversés",
+    "Méthodologie",
+    "Sciences",
+    "Philosophie française",
+    "Pensées (Pascal)",
+    "Pensées (Pascal, Blaise)",
+    "French language materials",
+    "Literature, collections",
+    "17th century",
+    "Port Royal (Firm)",
+    "Religious Philosophies",
+    "Catholicism"
+  ],
+  "lc_classifications": [
+    "B1901 .P4 1852"
+  ],
+  "dewey_number": [
+    "194.9",
+    "239/.7"
+  ],
+  "description": {
+    "type": "/type/text",
+    "value": "\"Blaise Pascal, the precociously brilliant contemporary of Descartes, was a gifted mathematician and physicist, but it is his unfinished apologia for the Christian religion upon which his reputation now rests. The Pensees is a collection of philosophical fragments, notes and essays in which he explores the contradictions of human nature in psychological, social, metaphysical and, above all, theological terms. Mankind emerges from Pascal's analysis as a wretched and desolate creature within an impersonal universe, but also as a being whose existence can be transformed through faith in God's grace. This masterly translation conveys Pascal's disarmingly personal tone and captures all the fire and passion of the original. Also contained in this volume are a comparison between different editions, appendices and a bibliography.\". - Back Cover."
+  },
+  "latest_revision": 28,
+  "revision": 28,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-09T20:53:41.416920"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-09-19T16:59:21.584250"
+  }
+}

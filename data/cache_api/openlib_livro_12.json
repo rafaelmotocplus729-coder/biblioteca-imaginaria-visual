@@ -1,0 +1,299 @@
+{
+  "numFound": 7,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 7,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "Manifesto Comunista Marx & Engels",
+  "offset": null,
+  "docs": [
+    {
+      "author_key": [
+        "OL48230A",
+        "OL1368A"
+      ],
+      "author_name": [
+        "Karl Marx",
+        "Friedrich Engels"
+      ],
+      "cover_height": 1051,
+      "cover_i": 11048623,
+      "cover_width": 754,
+      "ebook_access": "public",
+      "edition_count": 459,
+      "first_publish_year": 1848,
+      "has_fulltext": true,
+      "ia": [
+        "communistmanifes00marx_490",
+        "thecommunistmani00061gut",
+        "manifestooftheco31193gut",
+        "manifestkommunis00marx",
+        "nybc209731",
+        "nybc208450",
+        "daskommunistisch00marx",
+        "nybc209732",
+        "nybc212110",
+        "manifestoofcommu1910marx",
+        "manifestoofcommu00marx_1",
+        "manifestoofcommu00marx_0",
+        "manifestoofcommu00marxrich",
+        "nybc202851",
+        "manifestocommun00engegoog",
+        "manifestocommun00moorgoog",
+        "manifestderkommu0000marx",
+        "communistmanifes0000marx_p2i3",
+        "communistmanifes0000unse_j8z2",
+        "communistmanifes0000unse_c5a8",
+        "communistmanifes0000unse_r6h2",
+        "communistmanifes1949marx",
+        "manifestoofcommu0000unse",
+        "communistmanifes0000marx_k3x7",
+        "communistmanifes0000marx_j4h8",
+        "manifestoofcommu0000marx",
+        "communistmanifes0002marx_w9t7",
+        "communistmanifes0000marx_m7s0",
+        "manifesteduparti0000marx_t5x9",
+        "communistmani00marx",
+        "communistmanifes0000marx_g4q8",
+        "communistmanifes0000unse_q2u1",
+        "communistmanifes0possony0marx",
+        "communistmanifes0000marx_i3l0",
+        "communistmanifes00marx_7",
+        "communistmanifes0000unse_l9v2",
+        "communistmanifes0000marx",
+        "communistmanifes1955marx",
+        "communistmanifes0000marx_o2n2",
+        "manifesteduparti0000marx_r1q0",
+        "manifestoofcommu00marx",
+        "manifestoofcommumarxrich",
+        "manifestoofcommu1987marx",
+        "communistmanifes0000marx_g5o2",
+        "communistmanifes00marx_1",
+        "communistmanifes0000marx_t5y3",
+        "communistmanifes00marx",
+        "manifesteduparti0000marx",
+        "communistmanifes0000marx_z9j3",
+        "communistmanifes00karl_0",
+        "communistmanifes00marx_5",
+        "communistmanifes0000marx_w5h4",
+        "communistmanifes0000marx_b7p8",
+        "communistmanifes0000marx_s7l0",
+        "communistmanifes00marx_1",
+        "communistmanifes0000unse_u4f1",
+        "communistmanifes01955marx",
+        "manifesteduparti0000karl",
+        "communistmanifes0000unse_q5g1"
+      ],
+      "ia_collection": [
+        "Princeton",
+        "PrincetonRR",
+        "americana",
+        "americanuniversity-ol",
+        "belmont-ol",
+        "binghamton-ol",
+        "brigham_young_university",
+        "cdl",
+        "claremont_school_of_theology",
+        "cnusd-ol",
+        "cua-ol",
+        "dartmouthlibrary-ol",
+        "delawarecountydistrictlibrary",
+        "denverpubliclibrary-ol",
+        "fedlink",
+        "framingham-ol",
+        "georgetown-university-law-library-ol",
+        "greatbooks",
+        "gutenberg",
+        "gwulibraries-ol",
+        "inlibrary",
+        "internet-books",
+        "internetarchivebooks",
+        "johnshopkins-ol",
+        "library_of_atlantis",
+        "library_of_congress",
+        "marygrovecollege",
+        "marymount-ol",
+        "nationalyiddishbookcenter",
+        "occidentalcollegelibrary-ol",
+        "printdisabled",
+        "randolph-macon-college-ol",
+        "riceuniversity-ol",
+        "robarts",
+        "rochester-ol",
+        "stmaryscountylibrary",
+        "the-claremont-colleges-ol",
+        "thomasfisher",
+        "thomasfishercanadiana",
+        "toronto",
+        "trent_university",
+        "tulsacc-ol",
+        "udc-ol",
+        "uhmauicollege-ol",
+        "unb-ol",
+        "uni-ol",
+        "university_of_illinois_urbana-champaign",
+        "university_of_toronto",
+        "universityofarizona-ol",
+        "universityofcoloradoboulder-ol",
+        "universityofoklahoma-ol",
+        "universityofthewest-ol",
+        "wilsoncollege-ol"
+      ],
+      "key": "/works/OL629052W",
+      "language": [
+        "arm",
+        "yid",
+        "fre",
+        "dut",
+        "dan",
+        "eng",
+        "mul",
+        "ita",
+        "rus",
+        "ger",
+        "spa",
+        "gre",
+        "tel",
+        "gle",
+        "por",
+        "tur",
+        "ukr",
+        "cze",
+        "epo",
+        "glg",
+        "cpf",
+        "und",
+        "pol"
+      ],
+      "lending_edition_s": "OL37823020M",
+      "lending_identifier_s": "communistmanifes00marx_490",
+      "public_scan_b": true,
+      "title": "Manifest der Kommunistischen Partei",
+      "id_standard_ebooks": [
+        "karl-marx_friedrich-engels/the-communist-manifesto/samuel-moore"
+      ],
+      "id_project_gutenberg": [
+        "61",
+        "31193"
+      ]
+    },
+    {
+      "author_key": [
+        "OL7549769A",
+        "OL1368A"
+      ],
+      "author_name": [
+        "Karl Marx",
+        "Friedrich Engels"
+      ],
+      "cover_edition_key": "OL40094193M",
+      "cover_i": 13525032,
+      "ebook_access": "borrowable",
+      "edition_count": 157,
+      "first_publish_year": 1848,
+      "has_fulltext": true,
+      "ia": [
+        "communistmanifes0000karl_q5j3"
+      ],
+      "ia_collection": [
+        "inlibrary",
+        "internetarchivebooks",
+        "printdisabled"
+      ],
+      "key": "/works/OL28992472W",
+      "language": [
+        "spa",
+        "mal",
+        "eng",
+        "por",
+        "tel",
+        "mar",
+        "ita",
+        "fre",
+        "hin",
+        "ger",
+        "dut"
+      ],
+      "lending_edition_s": "OL45623840M",
+      "lending_identifier_s": "communistmanifes0000karl_q5j3",
+      "public_scan_b": false,
+      "title": "Manifest der Kommunistischen Partei"
+    },
+    {
+      "author_key": [
+        "OL3120184A"
+      ],
+      "author_name": [
+        "Marx-Engels"
+      ],
+      "cover_edition_key": "OL35424274M",
+      "cover_i": 12265936,
+      "ebook_access": "borrowable",
+      "edition_count": 20,
+      "first_publish_year": 1947,
+      "has_fulltext": true,
+      "ia": [
+        "komunistmanifest0000karl"
+      ],
+      "ia_collection": [
+        "inlibrary",
+        "internetarchivebooks",
+        "printdisabled"
+      ],
+      "key": "/works/OL26264298W",
+      "language": [
+        "eng"
+      ],
+      "lending_edition_s": "OL35424274M",
+      "lending_identifier_s": "komunistmanifest0000karl",
+      "public_scan_b": false,
+      "title": "Komunist Manifesto"
+    },
+    {
+      "author_key": [
+        "OL48230A",
+        "OL517794A",
+        "OL5585317A",
+        "OL3217100A",
+        "OL3217101A"
+      ],
+      "author_name": [
+        "Karl Marx",
+        "Carlos Nelson Coutinho",
+        "Daniel Aarão Reis Filho",
+        "Cesar Benjamin",
+        "Ari Jose Alberti"
+      ],
+      "cover_edition_key": "OL141706M",
+      "cover_i": 13442271,
+      "ebook_access": "no_ebook",
+      "edition_count": 4,
+      "first_publish_year": 1998,
+      "has_fulltext": false,
+      "key": "/works/OL18291226W",
+      "language": [
+        "por"
+      ],
+      "public_scan_b": false,
+      "title": "A opção brasileira"
+    },
+    {
+      "author_key": [
+        "OL10879585A"
+      ],
+      "author_name": [
+        "Alex Lombello Amaral"
+      ],
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 2019,
+      "has_fulltext": false,
+      "key": "/works/OL29994174W",
+      "language": [
+        "por"
+      ],
+      "public_scan_b": false,
+      "title": "Manifesto Comunista de Karl Marx e Friedrich Engels No Século XXI"
+    }
+  ]
+}

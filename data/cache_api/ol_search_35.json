@@ -1,0 +1,167 @@
+{
+  "numFound": 6,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 6,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "Tristes Tropiques Claude Levi-Strauss",
+  "offset": null,
+  "docs": [
+    {
+      "author_name": [
+        "Claude Lévi-Strauss",
+        "Wang zhi ming"
+      ],
+      "cover_i": 7105674,
+      "isbn": [
+        "9780671808907",
+        "0548440492",
+        "0671808907",
+        "0140551654",
+        "0689701225",
+        "9782266026123",
+        "9780140043938",
+        "9780671458508",
+        "0141197544",
+        "0141970731",
+        "2266026127",
+        "9780679602460",
+        "0143106252",
+        "9780330306454",
+        "9780141970738",
+        "0140165622",
+        "5170666896",
+        "2266119826",
+        "9780140551655",
+        "9780143106258",
+        "9782266013949",
+        "2259003591",
+        "2266013947",
+        "0224008439",
+        "9780141197548",
+        "9780689701221",
+        "9782266119825",
+        "9780689105722",
+        "5271287904",
+        "9780140165623",
+        "9780224008433",
+        "0140043934",
+        "0671458507",
+        "9782259003599",
+        "730011007X",
+        "0330306456",
+        "9785271287909",
+        "9780548440490",
+        "9785170666898",
+        "9787300110073",
+        "0679602461",
+        "068910572X"
+      ],
+      "key": "/works/OL8261409W",
+      "language": [
+        "chi",
+        "ger",
+        "fre",
+        "rus",
+        "eng"
+      ],
+      "publish_year": [
+        1955,
+        1960,
+        1961,
+        1962,
+        1963,
+        1964,
+        1965,
+        1966,
+        1967,
+        1968,
+        1970,
+        1972,
+        1973,
+        1974,
+        1976,
+        1977,
+        1981,
+        1982,
+        1984,
+        1989,
+        1990,
+        1992,
+        1993,
+        1997,
+        2001,
+        2007,
+        2009,
+        2010,
+        2011,
+        2012
+      ],
+      "publisher": [
+        "Union Generale D'Editions",
+        "Atheneum Books",
+        "Zhong guo ren min ta xue chu ban she",
+        "Penguin Books",
+        "Librarie Plon",
+        "Librairie Plon",
+        "Penguin",
+        "Picador",
+        "Penguin Books, Limited",
+        "Astrelʹ",
+        "Kiepenheuer & Witsch",
+        "Kessinger Publishing, LLC",
+        "hutchinson of london",
+        "Pocket",
+        "Modern Library",
+        "Brand: Macmillan Pub Co",
+        "New York",
+        "CRITERION BOOKS",
+        "Plon",
+        "Cape",
+        "Atheneum",
+        "Hutchinson",
+        "AST",
+        "atheneum newyork",
+        "Adler's Foreign Books Inc",
+        "Criterion Books"
+      ],
+      "title": "Tristes Tropiques"
+    },
+    {
+      "author_name": [
+        "Joël Askénazi"
+      ],
+      "isbn": [
+        "9782729892739",
+        "2729892737"
+      ],
+      "key": "/works/OL18881173W",
+      "language": [
+        "fre"
+      ],
+      "publish_year": [
+        1992
+      ],
+      "publisher": [
+        "Edition Marketing"
+      ],
+      "title": "Analyses & réflexions sur Lévi-Strauss, Tristes tropiques"
+    },
+    {
+      "author_name": [
+        "F. M. Spencer"
+      ],
+      "key": "/works/OL10595740W",
+      "language": [
+        "eng"
+      ],
+      "publish_year": [
+        1987
+      ],
+      "publisher": [
+        "University of Birmingham"
+      ],
+      "title": "Textual strategies in the work of Claude Levi-Strauss"
+    }
+  ]
+}

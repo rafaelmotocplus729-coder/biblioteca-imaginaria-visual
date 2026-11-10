@@ -1,0 +1,100 @@
+{
+  "numFound": 6,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 6,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "A República Platão",
+  "offset": null,
+  "docs": [
+    {
+      "author_key": [
+        "OL4198790A"
+      ],
+      "author_name": [
+        "Platao"
+      ],
+      "cover_edition_key": "OL13424747M",
+      "cover_i": 13269480,
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 2005,
+      "has_fulltext": false,
+      "key": "/works/OL34320287W",
+      "public_scan_b": false,
+      "title": "República de Platão, A"
+    },
+    {
+      "cover_edition_key": "OL13424744M",
+      "cover_i": 13176949,
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 2005,
+      "has_fulltext": false,
+      "key": "/works/OL34309686W",
+      "public_scan_b": false,
+      "title": "República de Platão, A"
+    },
+    {
+      "author_key": [
+        "OL4198790A",
+        "OL6071737A"
+      ],
+      "author_name": [
+        "Platao",
+        "3"
+      ],
+      "cover_edition_key": "OL45027772M",
+      "cover_i": 13119966,
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 2002,
+      "has_fulltext": false,
+      "key": "/works/OL33149252W",
+      "public_scan_b": false,
+      "title": "Republica, A"
+    },
+    {
+      "author_key": [
+        "OL2846270A",
+        "OL16621169A",
+        "OL16638575A"
+      ],
+      "author_name": [
+        "Charles H. Patterson",
+        "Platão",
+        "Cristina Giro"
+      ],
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 1989,
+      "has_fulltext": false,
+      "key": "/works/OL46091403W",
+      "language": [
+        "por"
+      ],
+      "public_scan_b": false,
+      "title": "A República [de] Platão"
+    },
+    {
+      "author_key": [
+        "OL16621169A",
+        "OL16613284A"
+      ],
+      "author_name": [
+        "Platão",
+        "Maria Helena da Rocha Pereira"
+      ],
+      "ebook_access": "no_ebook",
+      "edition_count": 2,
+      "first_publish_year": 1972,
+      "has_fulltext": false,
+      "key": "/works/OL46052303W",
+      "language": [
+        "por"
+      ],
+      "public_scan_b": false,
+      "title": "A República"
+    }
+  ]
+}

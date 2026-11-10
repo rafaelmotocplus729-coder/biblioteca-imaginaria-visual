@@ -1,0 +1,46 @@
+{
+  "first_publish_date": "1972",
+  "key": "/works/OL1756937W",
+  "title": "Grande sertão",
+  "dewey_number": [
+    "869.3"
+  ],
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL204214A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "covers": [
+    13909068,
+    5550732,
+    8476614,
+    12369975,
+    13116178,
+    13768105
+  ],
+  "subjects": [
+    "Exhibitions",
+    "Romance"
+  ],
+  "genres": [
+    "/tags/OL177T"
+  ],
+  "latest_revision": 7,
+  "revision": 7,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-09T22:16:57.037987"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2026-09-03T01:30:15.684877"
+  }
+}

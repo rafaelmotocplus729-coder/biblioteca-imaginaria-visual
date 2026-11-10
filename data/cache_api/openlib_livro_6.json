@@ -1,0 +1,31 @@
+{
+  "numFound": 1,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 1,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "Cultura: um conceito antropológico Roque de Barros Laraia",
+  "offset": null,
+  "docs": [
+    {
+      "author_key": [
+        "OL510458A"
+      ],
+      "author_name": [
+        "Roque de Barros Laraia"
+      ],
+      "cover_edition_key": "OL1029329M",
+      "cover_i": 13585244,
+      "ebook_access": "no_ebook",
+      "edition_count": 2,
+      "first_publish_year": 1986,
+      "has_fulltext": false,
+      "key": "/works/OL3182421W",
+      "language": [
+        "por"
+      ],
+      "public_scan_b": false,
+      "title": "Cultura"
+    }
+  ]
+}

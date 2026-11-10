@@ -1,0 +1,117 @@
+{
+  "numFound": 34,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 34,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "Liquid Modernity Zygmunt Bauman",
+  "offset": null,
+  "docs": [
+    {
+      "author_name": [
+        "Zygmunt Bauman"
+      ],
+      "cover_i": 483125,
+      "isbn": [
+        "9780745624105",
+        "074562409X",
+        "0745624103",
+        "9780745657028",
+        "0745657028",
+        "0745674410",
+        "9780745624099",
+        "074565701X",
+        "9780745674414",
+        "9780745657011"
+      ],
+      "key": "/works/OL527224W",
+      "language": [
+        "eng"
+      ],
+      "publish_year": [
+        2000,
+        2012,
+        2013
+      ],
+      "publisher": [
+        "Polity Press",
+        "Blackwell",
+        "polity"
+      ],
+      "title": "Liquid modernity"
+    },
+    {
+      "author_name": [
+        "Lydia Bauman",
+        "Zygmunt Bauman"
+      ],
+      "cover_i": 7505235,
+      "isbn": [
+        "9788537811214",
+        "0745672760",
+        "0745637175",
+        "0745637167",
+        "9780745653549",
+        "0745653553",
+        "9780745672762",
+        "9780745637174",
+        "9780745637167",
+        "8537811211",
+        "9780745653556",
+        "0745653545"
+      ],
+      "key": "/works/OL17401195W",
+      "language": [
+        "eng",
+        "por"
+      ],
+      "publish_year": [
+        2011,
+        2013
+      ],
+      "publisher": [
+        "Polity Press",
+        "Jorge Zahar",
+        "Zahar"
+      ],
+      "title": "Culture In A Liquid Modern World"
+    },
+    {
+      "author_name": [
+        "Zygmunt Bauman"
+      ],
+      "cover_i": 483347,
+      "isbn": [
+        "9788308039830",
+        "0745635156",
+        "2818503094",
+        "8308039839",
+        "2841567753",
+        "9782841567751",
+        "0745635148",
+        "9780745635149",
+        "9782818503096",
+        "9780745635156"
+      ],
+      "key": "/works/OL527258W",
+      "language": [
+        "fre",
+        "eng"
+      ],
+      "publish_year": [
+        2016,
+        2005,
+        2006,
+        2007
+      ],
+      "publisher": [
+        "PLURIEL",
+        "Wydawnictwo Literackie",
+        "Polity Press",
+        "Librairie Arthème Fayard",
+        "Rouergue/Chambon"
+      ],
+      "title": "Liquid Life"
+    }
+  ]
+}

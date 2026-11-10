@@ -1,0 +1,62 @@
+{
+  "numFound": 1,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 1,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "Saints and Sinners Eamon Duffy",
+  "offset": null,
+  "docs": [
+    {
+      "author_name": [
+        "Eamon Duffy"
+      ],
+      "cover_i": 160635,
+      "isbn": [
+        "9781299463684",
+        "9780300175035",
+        "9780300073324",
+        "9780300077995",
+        "0300175035",
+        "9780300207088",
+        "0300077998",
+        "9781322244549",
+        "0300073321",
+        "9788804490524",
+        "1322244545",
+        "1299463681",
+        "0300115970",
+        "8804490527",
+        "0300091656",
+        "9780300091656",
+        "9780300206128",
+        "0300207085",
+        "9780300115970",
+        "0300206127"
+      ],
+      "key": "/works/OL2758048W",
+      "language": [
+        "ita",
+        "eng"
+      ],
+      "publish_year": [
+        1997,
+        1999,
+        2001,
+        2002,
+        2006,
+        2009,
+        2014,
+        2015
+      ],
+      "publisher": [
+        "Yale University Press",
+        "Yale University Press, in association with S4C",
+        "The Folio Society",
+        "Mondadori",
+        "Yale Nota Bene/Yale University Press"
+      ],
+      "title": "Saints & sinners"
+    }
+  ]
+}

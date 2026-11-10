@@ -1,0 +1,78 @@
+{
+  "numFound": 4,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 4,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "A Interpretação dos Sonhos Sigmund Freud",
+  "offset": null,
+  "docs": [
+    {
+      "author_key": [
+        "OL108452A"
+      ],
+      "author_name": [
+        "Sigmund Freud"
+      ],
+      "cover_edition_key": "OL56976742M",
+      "cover_i": 14827192,
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 2014,
+      "has_fulltext": false,
+      "key": "/works/OL41943394W",
+      "language": [
+        "por"
+      ],
+      "public_scan_b": false,
+      "title": "A Interpretação Dos Sonhos"
+    },
+    {
+      "author_key": [
+        "OL108452A"
+      ],
+      "author_name": [
+        "Sigmund Freud"
+      ],
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 2019,
+      "has_fulltext": false,
+      "key": "/works/OL27713653W",
+      "public_scan_b": false,
+      "title": "Freud - A interpretacao dos sonhos 1900 - Obras completas volume 4"
+    },
+    {
+      "author_key": [
+        "OL108452A",
+        "OL16623296A"
+      ],
+      "author_name": [
+        "Sigmund Freud",
+        "Lubélia Magalhães"
+      ],
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 1988,
+      "has_fulltext": false,
+      "key": "/works/OL46052759W",
+      "language": [
+        "por"
+      ],
+      "public_scan_b": false,
+      "title": "A interpretação dos sonhos"
+    },
+    {
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 2000,
+      "has_fulltext": false,
+      "key": "/works/OL19152628W",
+      "language": [
+        "por"
+      ],
+      "public_scan_b": false,
+      "title": "A ciência dos sonhos"
+    }
+  ]
+}

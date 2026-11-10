@@ -1,0 +1,101 @@
+{
+  "numFound": 19,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 19,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "Man and his Symbols Carl Gustav Jung",
+  "offset": null,
+  "docs": [
+    {
+      "author_name": [
+        "Carl Gustav Jung"
+      ],
+      "cover_i": 6534585,
+      "isbn": [
+        "9780440351832",
+        "8449301610",
+        "1879557177",
+        "9782221027702",
+        "0440351839",
+        "0613922670",
+        "9780330253215",
+        "9781879557178",
+        "0330253212",
+        "9788449301612",
+        "3530565016",
+        "9783530565010",
+        "9780385052214",
+        "0385052219",
+        "9780613922678"
+      ],
+      "key": "/works/OL95157W",
+      "language": [
+        "spa",
+        "fre",
+        "por",
+        "eng",
+        "ger"
+      ],
+      "publish_year": [
+        2016,
+        1993,
+        1994,
+        1995,
+        1964,
+        1998,
+        1968,
+        1969,
+        1978,
+        1979
+      ],
+      "publisher": [
+        "Dell",
+        "Tandem Library",
+        "Doubleday",
+        "Audio Scholar",
+        "Picador",
+        "Ediciones Paidos Iberica",
+        "[Dell Pub. Co.",
+        "Robert Laffont",
+        "MacMillan",
+        "Pont Royal",
+        "HarperCollins Brasil",
+        "Walter-Verlag"
+      ],
+      "title": "Man and His Symbols"
+    },
+    {
+      "author_name": [
+        "Carl Gustav Jung"
+      ],
+      "cover_i": 281903,
+      "isbn": [
+        "8421746650",
+        "9788421746653",
+        "8421742086",
+        "9788421742082"
+      ],
+      "key": "/works/OL8050238W",
+      "language": [
+        "spa"
+      ],
+      "publish_year": [
+        1995,
+        1997
+      ],
+      "publisher": [
+        "Noguer y Caralt",
+        "Noguer Y Caralt Editores"
+      ],
+      "title": "Man and His Symbols"
+    },
+    {
+      "author_name": [
+        "Carl Gustav Jung"
+      ],
+      "key": "/works/OL16323445W",
+      "title": "Man and his symbols"
+    }
+  ]
+}

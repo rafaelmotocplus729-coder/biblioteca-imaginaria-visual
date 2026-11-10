@@ -1,0 +1,78 @@
+{
+  "numFound": 6,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 6,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "Catecismo da Igreja Católica Igreja Católica",
+  "offset": null,
+  "docs": [
+    {
+      "cover_edition_key": "OL13370765M",
+      "cover_i": 5278476,
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 1999,
+      "has_fulltext": false,
+      "key": "/works/OL26421923W",
+      "language": [
+        "por"
+      ],
+      "public_scan_b": false,
+      "title": "Catecismo da Igreja Católica"
+    },
+    {
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 2005,
+      "has_fulltext": false,
+      "key": "/works/OL13371353M",
+      "language": [
+        "por"
+      ],
+      "public_scan_b": false,
+      "title": "Compêndio do Catecismo da Igreja Católica"
+    },
+    {
+      "cover_edition_key": "OL13371352M",
+      "cover_i": 5279043,
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 2005,
+      "has_fulltext": false,
+      "key": "/works/OL34953730W",
+      "language": [
+        "por"
+      ],
+      "public_scan_b": false,
+      "title": "Compêndio do Catecismo da Igreja Católica"
+    },
+    {
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 2001,
+      "has_fulltext": false,
+      "key": "/works/OL13395493M",
+      "language": [
+        "por"
+      ],
+      "public_scan_b": false,
+      "title": "Síntese do Novo Catecismo da Igreja Católica"
+    },
+    {
+      "author_key": [
+        "OL13495859A"
+      ],
+      "author_name": [
+        "_"
+      ],
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 2002,
+      "has_fulltext": false,
+      "key": "/works/OL38064258W",
+      "public_scan_b": false,
+      "title": "Catecismo da Igreja Católica (Em Portuguese do Brasil)"
+    }
+  ]
+}

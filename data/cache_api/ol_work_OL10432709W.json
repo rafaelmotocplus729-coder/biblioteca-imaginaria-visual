@@ -1,0 +1,154 @@
+{
+  "description": "The Brothers Karamazov, Dostoevsky’s crowning achievement, is a tale of patricide and family rivalry that embodies the moral and spiritual dissolution of an entire society (Russia in the 1870s). It created a national furor comparable only to the excitement stirred by the publication, in 1866, of Crime and Punishment. To Dostoevsky, The Brothers Karamazov captured the quintessence of Russian character in all its exaltation, compassion, and profligacy. Significantly, the book was on Tolstoy’s bedside table when he died. Readers in every language have since accepted Dostoevsky’s own evaluation of this work and have gone further by proclaiming it one of the few great novels of all ages and countries.\r\n([source][1])",
+  "links": [
+    {
+      "title": "Wikipedia entry",
+      "url": "http://en.wikipedia.org/wiki/The_Brothers_Karamazov",
+      "type": {
+        "key": "/type/link"
+      }
+    },
+    {
+      "title": "VIAF ID: 309288985 (Work)",
+      "url": "http://viaf.org/viaf/309288985",
+      "type": {
+        "key": "/type/link"
+      }
+    },
+    {
+      "title": "The Brothers Karamazov-Ebookzy",
+      "url": "https://ebookzy.com/the-brothers-karamazov/",
+      "type": {
+        "key": "/type/link"
+      }
+    },
+    {
+      "title": "Amazon.com",
+      "url": "https://www.amazon.com/dp/B07NHG53LL/?tag=internetarchi-20",
+      "type": {
+        "key": "/type/link"
+      }
+    },
+    {
+      "title": "Die Brüder Karamasow von Fjodor Dostojewski",
+      "url": "https://love-books-review.com/de/die-brueder-karamasow-von-fjodor-dostojewski/",
+      "type": {
+        "key": "/type/link"
+      }
+    }
+  ],
+  "title": "Братья Карамазовы",
+  "covers": [
+    8272336,
+    10458920,
+    10998148,
+    10736021,
+    11089846,
+    -1,
+    14889155,
+    14910123,
+    12621719
+  ],
+  "subject_places": [
+    "Russia",
+    "Russia (Federation)"
+  ],
+  "subjects": [
+    "Literature - Classics / Criticism",
+    "Russian",
+    "Literature: Classics",
+    "Classics",
+    "Literary",
+    "19th century fiction",
+    "Russian Novel",
+    "Crime and criminals",
+    "Russian literature",
+    "Fiction",
+    "fiction classics",
+    "literary fiction",
+    "murder",
+    "Brothers",
+    "Fathers and sons",
+    "Social life and customs",
+    "Romance russo",
+    "Criticism and interpretation",
+    "Long Now Manual for Civilization",
+    "Literature",
+    "Collections",
+    "Indexes",
+    "Translations into English",
+    "Ancient History",
+    "History",
+    "Doctrines",
+    "Dominicans. English Province",
+    "Catholic Church",
+    "Dominicans",
+    "Continental european fiction (fictional works by one author)",
+    "Fathers and sons, fiction",
+    "Fiction, psychological",
+    "Fiction, family life",
+    "Brothers, fiction",
+    "Russia (federation), fiction",
+    "Littérature",
+    "Index",
+    "Manners and customs",
+    "Notebooks, sketchbooks",
+    "Bratʹi︠a︡ Karamazovy (Dostoyevsky, Fyodor)",
+    "Russia",
+    "Psychology",
+    "Popular Work",
+    "Fiction, family life, general",
+    "Teologia",
+    "Russian fiction",
+    "Translations from Russian",
+    "Astronomy",
+    "Early works to 1800",
+    "Greek Mathematics",
+    "Political science",
+    "Political ethics",
+    "The State",
+    "Controversial literature",
+    "Didactic fiction",
+    "Fathers and sons -- Fiction",
+    "Russia -- Social life and customs -- 1533-1917 -- Fiction",
+    "Brothers -- Fiction",
+    "Fiction, general",
+    "Fiction in English",
+    "Library",
+    "Personal copy"
+  ],
+  "subject_people": [
+    "Jesus Christ",
+    "Fyodor Dostoyevsky (1821-1881)"
+  ],
+  "key": "/works/OL10432709W",
+  "authors": [
+    {
+      "author": {
+        "key": "/authors/OL22242A"
+      },
+      "type": {
+        "key": "/type/author_role"
+      }
+    }
+  ],
+  "subject_times": [
+    "1533-1917"
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "genres": [
+    "/tags/OL174T"
+  ],
+  "latest_revision": 80,
+  "revision": 80,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T02:58:10.075203"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2026-11-06T21:51:04.809383"
+  }
+}

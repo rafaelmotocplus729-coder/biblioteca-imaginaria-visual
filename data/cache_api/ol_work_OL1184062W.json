@@ -1,0 +1,91 @@
+{
+  "title": "Apologie pour l'histoire ou Métier d'historien",
+  "subject_places": [
+    "France"
+  ],
+  "key": "/works/OL1184062W",
+  "authors": [
+    {
+      "author": {
+        "key": "/authors/OL119624A"
+      },
+      "type": {
+        "key": "/type/author_role"
+      }
+    }
+  ],
+  "subject_people": [
+    "Marc Léopold Benjamin Bloch (1886-1944)"
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subjects": [
+    "Historiography",
+    "Historians",
+    "Feudalism",
+    "Biography",
+    "Philosophy",
+    "History",
+    "Methode",
+    "Geschichtsschreibung",
+    "Literary collections",
+    "World War, 1914-1918",
+    "French Personal narratives",
+    "War",
+    "Methodology",
+    "World history",
+    "Historia",
+    "Metodologi a.",
+    "Filosofi a.",
+    "Sources",
+    "Histoire",
+    "Méthodologie",
+    "Historiens",
+    "Geschiedschrijving",
+    "Historiographie",
+    "Recherche",
+    "Geschichtswissenschaft",
+    "Geschichtstheorie",
+    "Histoire (discipline)",
+    "Historien",
+    "Métier"
+  ],
+  "first_publish_date": "1954",
+  "covers": [
+    14850180,
+    2143103
+  ],
+  "first_sentence": {
+    "type": "/type/text",
+    "value": "THE WORD \"history\" is very old-so old that men have sometimes grown weary of it."
+  },
+  "excerpts": [
+    {
+      "excerpt": "THE WORD \"history\" is very old-so old that men have sometimes grown weary of it."
+    }
+  ],
+  "dewey_number": [
+    "907",
+    "907/.2"
+  ],
+  "lc_classifications": [
+    "D13 .B562 1995"
+  ],
+  "identifiers": {
+    "wikidata": [
+      "Q17122272"
+    ]
+  },
+  "description": "*Apologie pour l'histoire ou Métier d'historien* est un essai de Marc Bloch rédigé entre la fin de 1940 et les premiers mois de 1943. Inachevé, il est publié de manière posthume en 1949, à l’initiative de Lucien Febvre. Marc Bloch s'interroge sur ce qu'est l’histoire, et plus particulièrement sur le rôle et les méthodes de l’historien dans la construction de cette science.",
+  "latest_revision": 14,
+  "revision": 14,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-09T20:40:27.431036"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-03-07T23:43:48.087782"
+  }
+}

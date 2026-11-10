@@ -1,0 +1,28 @@
+{
+  "numFound": 1,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 1,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "O Futuro de uma Ilusão Sigmund Freud",
+  "offset": null,
+  "docs": [
+    {
+      "author_key": [
+        "OL108452A"
+      ],
+      "author_name": [
+        "Sigmund Freud"
+      ],
+      "cover_edition_key": "OL35664128M",
+      "cover_i": 12369852,
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 2014,
+      "has_fulltext": false,
+      "key": "/works/OL26415119W",
+      "public_scan_b": false,
+      "title": "Freud. 1926-1929. Inibição, Sintoma E Angustia, O Futuro De Uma Ilusão E Outros Textos"
+    }
+  ]
+}

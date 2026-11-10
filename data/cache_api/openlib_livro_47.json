@@ -1,0 +1,105 @@
+{
+  "numFound": 6,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 6,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "Modernidade Líquida Zygmunt Bauman",
+  "offset": null,
+  "docs": [
+    {
+      "author_key": [
+        "OL37109A"
+      ],
+      "author_name": [
+        "Zygmunt Bauman"
+      ],
+      "cover_edition_key": "OL29066335M",
+      "cover_i": 10373556,
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 2003,
+      "has_fulltext": false,
+      "key": "/works/OL21460457W",
+      "public_scan_b": false,
+      "title": "Modernidad líquida"
+    },
+    {
+      "author_key": [
+        "OL37109A"
+      ],
+      "author_name": [
+        "Zygmunt Bauman"
+      ],
+      "cover_edition_key": "OL9138142M",
+      "cover_i": 1052133,
+      "ebook_access": "unclassified",
+      "edition_count": 1,
+      "first_publish_year": 2002,
+      "has_fulltext": false,
+      "ia": [
+        "modernidadlquida00zygm"
+      ],
+      "key": "/works/OL527227W",
+      "language": [
+        "spa"
+      ],
+      "public_scan_b": false,
+      "title": "Modernidad Liquida / Liquid Modernity"
+    },
+    {
+      "author_key": [
+        "OL37109A"
+      ],
+      "author_name": [
+        "Zygmunt Bauman"
+      ],
+      "cover_edition_key": "OL35628103M",
+      "cover_i": 12335101,
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 2013,
+      "has_fulltext": false,
+      "key": "/works/OL26387962W",
+      "public_scan_b": false,
+      "title": "La cultura en el mundo de la modernidad líquida"
+    },
+    {
+      "author_key": [
+        "OL37109A"
+      ],
+      "author_name": [
+        "Zygmunt Bauman"
+      ],
+      "cover_edition_key": "OL24367290M",
+      "cover_i": 6597784,
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 2007,
+      "has_fulltext": false,
+      "key": "/works/OL15384896W",
+      "language": [
+        "spa"
+      ],
+      "public_scan_b": false,
+      "title": "Los retos de la educación en la modernidad líquida"
+    },
+    {
+      "author_key": [
+        "OL37109A"
+      ],
+      "author_name": [
+        "Zygmunt Bauman"
+      ],
+      "cover_edition_key": "OL25879988M",
+      "cover_i": 7386123,
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 2015,
+      "has_fulltext": false,
+      "key": "/works/OL17306698W",
+      "public_scan_b": false,
+      "title": "Ceguera moral"
+    }
+  ]
+}

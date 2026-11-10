@@ -1,0 +1,50 @@
+{
+  "subtitle": "romance",
+  "title": "Vidas secas",
+  "first_publish_date": "1964",
+  "key": "/works/OL2900596W",
+  "authors": [
+    {
+      "author": {
+        "key": "/authors/OL441423A"
+      },
+      "type": {
+        "key": "/type/author_role"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subject_people": [
+    "Graciliano Ramos (1892-1953)"
+  ],
+  "subjects": [
+    "Illustrations",
+    "Seca in literature",
+    "Myth in literature",
+    "In literature",
+    "Literature",
+    "Vidas secas (Ramos, Graciliano)"
+  ],
+  "covers": [
+    12369687
+  ],
+  "description": {
+    "type": "/type/text",
+    "value": "O que impulsiona os personagens é a seca, áspera e cruel, e paradoxalmente a ligação telúrica, afetiva, que expõe naqueles seres em retirada, à procura de meios de sobrevivência e um futuro. Apesar desse sentimento de transbordante solidariedade e compaixão com que a narrativa acompanha a miúda saga do vaqueiro Fabiano e sua gente, o autor contou: \"Procurei auscultar a alma do ser rude e quase primitivo que mora na zona mais recuada do sertão... os meus personagens são quase selvagens... pesquisa que os escritores regionalistas não fazem e nem mesmo podem fazer ...porque comumente não são familiares com o ambiente que descrevem...Fiz o livrinho sem paisagens, sem diálogos. E sem amor. A minha gente, quase muda, vive numa casa velha de fazenda. As pessoas adultas, preocupadas com o estômago, não tem tempo de abraçar-se. Até a cachorra [Baleia] é uma criatura decente, porque na vizinhança não existem galãs caninos\". VIDAS SECAS é o livro em que Graciliano, visto como antipoético e anti-sonhador por excelência, consegue atingir, com o rigor do texto que tanto prezava, um estado maior de poesia."
+  },
+  "genres": [
+    "/tags/OL174T"
+  ],
+  "latest_revision": 7,
+  "revision": 7,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-10T00:59:26.110443"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2026-08-28T13:55:15.787347"
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "numFound": 1,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 1,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "A Ética Protestante e o Espírito do Capitalismo Max Weber",
+  "offset": null,
+  "docs": [
+    {
+      "author_key": [
+        "OL139548A"
+      ],
+      "author_name": [
+        "Max Weber"
+      ],
+      "cover_edition_key": "OL17730471M",
+      "cover_height": 193,
+      "cover_i": 5381835,
+      "cover_width": 128,
+      "ebook_access": "public",
+      "edition_count": 137,
+      "first_publish_year": 1700,
+      "has_fulltext": true,
+      "ia": [
+        "protestantethics00webe",
+        "lethiqueprotesta0000maxw",
+        "xinjiaolunliyuzi0003weib",
+        "lethiqueprotesta0000webe",
+        "protestantethics0000maxw_i4e5",
+        "protestantethics0000webe_n0i6",
+        "protestantethics0000webe_r7r0",
+        "protestantethics0000webe_y4p3",
+        "protestantethicsweberich",
+        "protestantethics00maxw_1",
+        "protestantethics00weberich",
+        "protestantethics0000webe",
+        "protestantethic00webe"
+      ],
+      "ia_collection": [
+        "americana",
+        "americanuniversity-ol",
+        "binghamton-ol",
+        "cdl",
+        "claremont_school_of_theology",
+        "cua-ol",
+        "framingham-ol",
+        "georgetown-university-law-library-ol",
+        "goffstownlibrary-ol",
+        "gwulibraries-ol",
+        "inlibrary",
+        "internetarchivebooks",
+        "johnshopkins-ol",
+        "marygrovecollege",
+        "openlibrary-d-ol",
+        "popularchinesebooks",
+        "printdisabled",
+        "rochester-ol",
+        "saiacs-ol",
+        "the-claremont-colleges-ol",
+        "udc-ol",
+        "unb-ol",
+        "uni-ol",
+        "universityofarizona-ol",
+        "universityofcoloradoboulder-ol",
+        "universityofoklahoma-ol",
+        "universityofthewest-ol",
+        "wilsoncollege-ol"
+      ],
+      "key": "/works/OL1362905W",
+      "language": [
+        "jpn",
+        "ger",
+        "por",
+        "fre",
+        "alb",
+        "chi",
+        "eng",
+        "spa"
+      ],
+      "lending_edition_s": "OL17967952M",
+      "lending_identifier_s": "protestantethics00webe",
+      "public_scan_b": true,
+      "title": "Die protestantische Ethik und der Geist des Kapitalismus"
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "numFound": 1,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 1,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "A Sociedade contra o Estado Pierre Clastres",
+  "offset": null,
+  "docs": [
+    {
+      "author_key": [
+        "OL390687A",
+        "OL6514279A"
+      ],
+      "author_name": [
+        "Pierre Clastres",
+        "Pierre Clastres"
+      ],
+      "cover_edition_key": "OL4786924M",
+      "cover_height": 475,
+      "cover_i": 983754,
+      "cover_width": 291,
+      "ebook_access": "printdisabled",
+      "edition_count": 16,
+      "first_publish_year": 1900,
+      "has_fulltext": true,
+      "ia": [
+        "societyagainstst0000clas",
+        "societyagainstst0000clas_u5t8"
+      ],
+      "ia_collection": [
+        "binghamton-ol",
+        "dartmouthlibrary-ol",
+        "framingham-ol",
+        "internetarchivebooks",
+        "johnshopkins-ol",
+        "openlibrary-d-ol",
+        "printdisabled",
+        "riceuniversity-ol",
+        "rochester-ol",
+        "unb-ol",
+        "uni-ol",
+        "universityofcoloradoboulder-ol",
+        "universityofoklahoma-ol"
+      ],
+      "key": "/works/OL2677206W",
+      "language": [
+        "fre",
+        "eng",
+        "tur",
+        "spa",
+        "por"
+      ],
+      "public_scan_b": false,
+      "title": "La société contre l'État"
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "numFound": 9,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 9,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "Formacao Economica do Brasil Celso Furtado",
+  "offset": null,
+  "docs": [
+    {
+      "author_name": [
+        "Celso Furtado"
+      ],
+      "cover_i": 15210532,
+      "isbn": [
+        "8535909524",
+        "9788535909524"
+      ],
+      "key": "/works/OL33368565W",
+      "language": [
+        "por"
+      ],
+      "publish_year": [
+        1961,
+        2007,
+        1967
+      ],
+      "publisher": [
+        "Editôra Fundo de Cultura",
+        "Companhia Editora Nacional",
+        "Companhia das Letras"
+      ],
+      "title": "Formação econômica do Brasil"
+    },
+    {
+      "author_name": [
+        "Celso Furtado"
+      ],
+      "cover_i": 8170382,
+      "isbn": [
+        "8535909524",
+        "9783770513185",
+        "3770513185",
+        "9788535909524"
+      ],
+      "key": "/works/OL2305472W",
+      "language": [
+        "spa",
+        "ger",
+        "fre",
+        "por"
+      ],
+      "publish_year": [
+        1959,
+        1962,
+        1967,
+        1975,
+        1972,
+        2007
+      ],
+      "publisher": [
+        "Editora Nacional",
+        "Editôra Fundo de Cultura",
+        "Mouton",
+        "Companhia das Letras",
+        "Fink",
+        "Fondo de Cultura Económica",
+        "Editôra Fundo de Cultura"
+      ],
+      "title": "Formação econômica do Brasil"
+    },
+    {
+      "author_name": [
+        "Celso Furtado"
+      ],
+      "key": "/works/OL2305426W",
+      "language": [
+        "spa"
+      ],
+      "publish_year": [
+        1974
+      ],
+      "publisher": [
+        "Fondo de Cultura Económica"
+      ],
+      "title": "Formación económica del Brasil"
+    }
+  ]
+}

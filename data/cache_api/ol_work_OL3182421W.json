@@ -1,0 +1,40 @@
+{
+  "lc_classifications": [
+    "GN316 .L37 1986"
+  ],
+  "key": "/works/OL3182421W",
+  "title": "Cultura",
+  "first_publish_date": "1986",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL510458A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subjects": [
+    "Culture",
+    "Ethnology",
+    "Cultura",
+    "Antropologia cultural e social"
+  ],
+  "covers": [
+    13585244
+  ],
+  "latest_revision": 4,
+  "revision": 4,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-10T02:38:27.492263"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2023-12-11T14:32:54.041032"
+  }
+}

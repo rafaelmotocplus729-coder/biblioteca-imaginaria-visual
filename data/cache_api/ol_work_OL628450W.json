@@ -1,0 +1,94 @@
+{
+  "description": {
+    "type": "/type/text",
+    "value": "Das Kapital, Karl Marx's seminal work, is the book that above all others formed the twentieth century. From Kapital sprung the economic and political systems that at one time dominated half the earth and for nearly a century kept the world on the brink of war."
+  },
+  "subjects": [
+    "Economics",
+    "Capital",
+    "Communism",
+    "Marxian economics",
+    "Socialism",
+    "Scientific socialism",
+    "One-act plays, American",
+    "One-act plays, English",
+    "History",
+    "Économie politique",
+    "Economics, philosophy",
+    "Early works to 1800",
+    "Philosophy and religion",
+    "Happiness",
+    "Economía",
+    "Capitalism",
+    "Marx, Karl, 1818-1883",
+    "Socialisme",
+    "Communisme",
+    "Economique",
+    "Économie marxiste",
+    "Kapital (Marx, Karl)",
+    "Labor economics",
+    "Assassination attempt, 1986",
+    "Imprisonment",
+    "Long Now Manual for Civilization"
+  ],
+  "key": "/works/OL628450W",
+  "title": "Das Kapital",
+  "authors": [
+    {
+      "author": {
+        "key": "/authors/OL48230A"
+      },
+      "type": {
+        "key": "/type/author_role"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "covers": [
+    10995820
+  ],
+  "links": [
+    {
+      "title": "Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Das_Kapital",
+      "type": {
+        "key": "/type/link"
+      }
+    },
+    {
+      "title": "Wikidata",
+      "url": "https://www.wikidata.org/wiki/Q58784",
+      "type": {
+        "key": "/type/link"
+      }
+    },
+    {
+      "title": "VIAF ID: 189504446",
+      "url": "https://viaf.org/viaf/189504446",
+      "type": {
+        "key": "/type/link"
+      }
+    }
+  ],
+  "subject_people": [
+    "Karl Marx (1818-1883)"
+  ],
+  "subject_times": [
+    "19th century"
+  ],
+  "subject_places": [
+    "India"
+  ],
+  "latest_revision": 28,
+  "revision": 28,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-08T06:45:28.641797"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-03-25T07:44:48.976817"
+  }
+}

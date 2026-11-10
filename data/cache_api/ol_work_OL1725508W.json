@@ -1,0 +1,40 @@
+{
+  "key": "/works/OL1725508W",
+  "title": "Science and human behaviour",
+  "first_publish_date": "1965",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL198302A"
+      }
+    }
+  ],
+  "dewey_number": [
+    "150"
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "covers": [
+    10008655
+  ],
+  "lc_classifications": [
+    "BF121 .S54"
+  ],
+  "subjects": [
+    "Psychology"
+  ],
+  "latest_revision": 3,
+  "revision": 3,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-09T22:13:10.875803"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2022-02-15T09:38:22.353240"
+  }
+}

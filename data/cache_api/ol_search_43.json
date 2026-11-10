@@ -1,0 +1,171 @@
+{
+  "numFound": 21,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 21,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "The Great Transformation Karl Polanyi",
+  "offset": null,
+  "docs": [
+    {
+      "author_name": [
+        "Karl Polanyi"
+      ],
+      "cover_i": 966056,
+      "isbn": [
+        "080705643X",
+        "0848817117",
+        "129992235X",
+        "8535205985",
+        "2070124746",
+        "9788535250763",
+        "0807056790",
+        "9788535205985",
+        "8477310475",
+        "9786071652638",
+        "9782070124749",
+        "853525076X",
+        "0374965137",
+        "1428811192",
+        "6071652634",
+        "6556390100",
+        "9780374965136",
+        "9780848817114",
+        "9788477310471",
+        "3518278606",
+        "9789681670788",
+        "9780807056790",
+        "9780807056431",
+        "2070213323",
+        "9781428811195",
+        "9782070213320",
+        "9783518278604",
+        "9786556390109",
+        "9681670787",
+        "9781299922358"
+      ],
+      "key": "/works/OL3617884W",
+      "language": [
+        "fre",
+        "spa",
+        "kor",
+        "chi",
+        "eng",
+        "por"
+      ],
+      "publish_year": [
+        1944,
+        1945,
+        1946,
+        1957,
+        1964,
+        1968,
+        1971,
+        1975,
+        1983,
+        1985,
+        1989,
+        1991,
+        1999,
+        2000,
+        2001,
+        2004,
+        2007,
+        2011,
+        2016,
+        2017,
+        2021
+      ],
+      "publisher": [
+        "Campus",
+        "Gollancz",
+        "Farrar & Rinehart, inc.",
+        "Editora Campus",
+        "Yuan liu chu ban shi ye gu feng you shien gong si",
+        "V. Gollancz",
+        "Ediciones de La Piqueta",
+        "Academic Internet Publishers",
+        "Fondo de Cultura Económica",
+        "Gallimard",
+        "The Beacon Press",
+        "Contraponto",
+        "Rinehart",
+        "Octagon Books",
+        "Fondo de Cultura Economica USA",
+        "Minŭmsa",
+        "Beacon Press",
+        "Amereon Ltd",
+        "GALLIMARD (ï¿½DITIONS)",
+        "CAMPUS - GRUPO ELSEVIER",
+        "Yuan liu chu ban shi ye gu feng you xian gong si",
+        "Suhrkamp",
+        "Victor Gallancz"
+      ],
+      "title": "The Great Transformation"
+    },
+    {
+      "author_name": [
+        "POLANYI",
+        "Karl Polanyi",
+        "Paula Monteiro",
+        "Julia; Fernando Varela; Álvarez-Uria",
+        "Silvio García-Aguirre",
+        "Julia; Fernando Varela; Álvarez-Uria"
+      ],
+      "cover_i": 13988596,
+      "isbn": [
+        "9780241685556",
+        "9780807018828",
+        "0241685559",
+        "8492559675",
+        "9788492559671",
+        "0807018821"
+      ],
+      "key": "/works/OL12764342W",
+      "language": [
+        "eng"
+      ],
+      "publish_year": [
+        2016,
+        2024,
+        2025,
+        2001,
+        1944
+      ],
+      "publisher": [
+        "Beacon Press, Boston",
+        "Farrar & Rinehart, inc.",
+        "Penguin Books, Limited",
+        "Beacon Press",
+        "Virus Editorial"
+      ],
+      "title": "THE GREAT TRANSFORMATION"
+    },
+    {
+      "author_name": [
+        "Kari Levitt",
+        "Kenneth McRobbie",
+        "Kenneth McRobbie"
+      ],
+      "cover_i": 1867141,
+      "isbn": [
+        "1551641437",
+        "9781551641423",
+        "9781551641430",
+        "1551641429"
+      ],
+      "key": "/works/OL17992029W",
+      "language": [
+        "eng"
+      ],
+      "publish_year": [
+        2000,
+        1999
+      ],
+      "publisher": [
+        "Black Rose Books"
+      ],
+      "title": "Karl Polanyi in Vienna"
+    }
+  ]
+}

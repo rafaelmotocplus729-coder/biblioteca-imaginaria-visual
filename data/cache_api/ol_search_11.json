@@ -1,0 +1,122 @@
+{
+  "numFound": 15,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 15,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "Economics in One Lesson Henry Hazlitt",
+  "offset": null,
+  "docs": [
+    {
+      "author_name": [
+        "Henry Hazlitt"
+      ],
+      "cover_i": 4437768,
+      "isbn": [
+        "9780517548233",
+        "9780983541462",
+        "0786199172",
+        "0517548232",
+        "0930073193",
+        "9780870005176",
+        "0613919122",
+        "0870005170",
+        "9780786196029",
+        "9780786199174",
+        "0786196025",
+        "9780930073190",
+        "9780613919128",
+        "0930073207",
+        "0870004271",
+        "0983541469",
+        "9780870004278",
+        "9780786113811",
+        "9780930073206",
+        "0786113812"
+      ],
+      "key": "/works/OL541970W",
+      "language": [
+        "eng"
+      ],
+      "publish_year": [
+        2020,
+        1988,
+        1962,
+        2012,
+        1996,
+        1999,
+        2000,
+        2001,
+        1972,
+        1974,
+        1946,
+        1979,
+        1948
+      ],
+      "publisher": [
+        "Pocket Books",
+        "Harper & Brothers",
+        "Tandem Library",
+        "Three Rivers Press",
+        "Currency",
+        "Arlington House Publishers",
+        "Macfadden Publications",
+        "Blackstone Audiobooks",
+        "Manor Books",
+        "Arlington House",
+        "Fox & Wilkes",
+        "Laissez Faire Books"
+      ],
+      "title": "Economics in One Lesson"
+    },
+    {
+      "author_name": [
+        "Henry Hazlitt"
+      ],
+      "cover_i": 10839203,
+      "isbn": [
+        "9780307760623",
+        "1433272466",
+        "9781433272462",
+        "0307760626"
+      ],
+      "key": "/works/OL11039254W",
+      "language": [
+        "eng"
+      ],
+      "publish_year": [
+        2009,
+        1979,
+        1988
+      ],
+      "publisher": [
+        "Three Rivers Press",
+        "Blackstone Audiobooks",
+        "Macfadden Books",
+        "Blackstone Audio, Inc."
+      ],
+      "title": "Economics in one lesson"
+    },
+    {
+      "author_name": [
+        "Henry Hazlitt"
+      ],
+      "cover_i": 10272973,
+      "isbn": [
+        "193355021X",
+        "9781933550213"
+      ],
+      "key": "/works/OL16972551W",
+      "language": [
+        "eng"
+      ],
+      "publish_year": [
+        2008
+      ],
+      "publisher": [
+        "Ludwig von Mises Institute"
+      ],
+      "title": "Economics in one lesson"
+    }
+  ]
+}

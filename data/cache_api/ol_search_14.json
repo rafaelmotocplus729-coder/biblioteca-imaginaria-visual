@@ -1,0 +1,50 @@
+{
+  "numFound": 2,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 2,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "Existentialism is a Humanism Jean-Paul Sartre",
+  "offset": null,
+  "docs": [
+    {
+      "author_name": [
+        "Joseph J. Kockelmans"
+      ],
+      "cover_i": 14936445,
+      "isbn": [
+        "9780385002141",
+        "0385002149"
+      ],
+      "key": "/works/OL3902056W",
+      "language": [
+        "eng"
+      ],
+      "publish_year": [
+        2000,
+        1972
+      ],
+      "publisher": [
+        "DoubleDay",
+        "Anchor Books"
+      ],
+      "title": "Contemporary European ethics"
+    },
+    {
+      "author_name": [
+        "Joseph J. Kockelmans"
+      ],
+      "key": "/works/OL18389446W",
+      "language": [
+        "eng"
+      ],
+      "publish_year": [
+        1972
+      ],
+      "publisher": [
+        "Anchor Books"
+      ],
+      "title": "Contemporary European ethics"
+    }
+  ]
+}

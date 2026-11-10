@@ -1,0 +1,79 @@
+{
+  "first_publish_date": "February 2, 1983",
+  "key": "/works/OL3617884W",
+  "title": "The Great Transformation",
+  "authors": [
+    {
+      "author": {
+        "key": "/authors/OL615334A"
+      },
+      "type": {
+        "key": "/type/author_role"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "covers": [
+    966056,
+    8033470,
+    588078,
+    8684148,
+    12341696,
+    10121122
+  ],
+  "dewey_number": [
+    "330.9",
+    "330.9 P"
+  ],
+  "subjects": [
+    "Economics",
+    "Economic conditions",
+    "Social history",
+    "History",
+    "1750-1918",
+    "Économique",
+    "Histoire",
+    "Histoire économique",
+    "Economic history",
+    "Histoire sociale",
+    "Economia Politica",
+    "Libéralisme économique",
+    "Economics, history",
+    "Outlines, syllabi",
+    "Aspectos sociológicos",
+    "Cambio social",
+    "Liberalismo",
+    "Economía",
+    "Economía de libre mercado",
+    "Historia económica",
+    "History of economics",
+    "Baking - general & miscellaneous",
+    "Social history - general & miscellaneous",
+    "Economic history - general & miscellaneous"
+  ],
+  "subject_times": [
+    "1750-1918",
+    "Modern, 1500-"
+  ],
+  "subject_people": [
+    "Karl Polanyi (1886-1964)"
+  ],
+  "description": "\"In this classic work of economic history and social theory, Karl Polonyi analyzes the economic and social changes brought about by the \"great transformation\" of the Industrial Revolution. His analysis explains not only the deficiencies of the self-regulating market, but the potentially dire social consequences of untempered market capitalism. New introductory material reveals the renewed importance of Polanyi's seminal analysis in an era of globalization and free trade.\"--BOOK JACKET.",
+  "identifiers": {
+    "goodreads": [
+      "1997401"
+    ]
+  },
+  "latest_revision": 10,
+  "revision": 10,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-10T04:00:03.337277"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2026-03-15T09:29:34.633797"
+  }
+}

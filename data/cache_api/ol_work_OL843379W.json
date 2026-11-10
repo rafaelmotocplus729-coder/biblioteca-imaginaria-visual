@@ -1,0 +1,68 @@
+{
+  "title": "Reflections on the revolution in France",
+  "covers": [
+    7141859,
+    7141857,
+    4175236
+  ],
+  "subject_places": [
+    "France",
+    "Great Britain"
+  ],
+  "subjects": [
+    "Correspondence",
+    "Politics and government",
+    "Causes and character",
+    "Revolution",
+    "British Foreign public opinion",
+    "Public opinion",
+    "Causes",
+    "History",
+    "Revolution (France : 1789-1799) fast (OCoLC)fst01354514",
+    "War",
+    "France, politics and government, 1789-1799",
+    "France, history, revolution, 1789-1799",
+    "Burke, edmund, 1729-1797",
+    "France, history, revolution, 1789-1799, causes",
+    "Public opinion, great britain",
+    "Philosophy, french",
+    "Long Now Manual for Civilization"
+  ],
+  "subject_people": [
+    "Edmund Burke (1729-1797)"
+  ],
+  "key": "/works/OL843379W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL2658712A"
+      }
+    }
+  ],
+  "subject_times": [
+    "Revolution, 1789-1799",
+    "18th century",
+    "1789-1799",
+    "1760-1820"
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "description": {
+    "type": "/type/text",
+    "value": "Edmund Burke's Reflections on the Revolution in France, written and published during 1789-90, has become a classic of English conservatism, and that is the reason it is still being read nearly two hundred years later. John Pocock's edition of Burke's Reflections is two classics in one: Burke's Reflections and Pocock's reflections on Burke and the eighteenth century. - Publisher."
+  },
+  "latest_revision": 22,
+  "revision": 22,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-09T05:27:46.041649"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-03-25T07:34:18.194884"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "numFound": 1,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 1,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "Os Donos do Poder Raymundo Faoro",
+  "offset": null,
+  "docs": [
+    {
+      "author_name": [
+        "Raymundo Faoro"
+      ],
+      "cover_i": 6390023,
+      "isbn": [
+        "9786559210961",
+        "8525033391",
+        "9788525033390",
+        "6559210960"
+      ],
+      "key": "/works/OL3709959W",
+      "language": [
+        "por"
+      ],
+      "publish_year": [
+        2001,
+        2021,
+        1958,
+        1975
+      ],
+      "publisher": [
+        "Companhia das Letras",
+        "Editora Globo",
+        "Editôra Globo"
+      ],
+      "title": "Os donos do poder"
+    }
+  ]
+}

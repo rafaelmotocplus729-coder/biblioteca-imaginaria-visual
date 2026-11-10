@@ -1,0 +1,73 @@
+{
+  "numFound": 12,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 12,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "Science and Human Behavior B. F. Skinner",
+  "offset": null,
+  "docs": [
+    {
+      "author_name": [
+        "B. F. Skinner"
+      ],
+      "cover_i": 10008655,
+      "key": "/works/OL1725508W",
+      "language": [
+        "und",
+        "eng"
+      ],
+      "publish_year": [
+        1960,
+        1953,
+        1965,
+        1959
+      ],
+      "publisher": [
+        "Free Press",
+        "Macmillan",
+        "Collier Macmillan"
+      ],
+      "title": "Science and human behaviour"
+    },
+    {
+      "author_name": [
+        "B. F. Skinner"
+      ],
+      "cover_i": 19159,
+      "isbn": [
+        "0029290406",
+        "9780029290408"
+      ],
+      "key": "/works/OL269927W",
+      "language": [
+        "eng"
+      ],
+      "publish_year": [
+        1965
+      ],
+      "publisher": [
+        "Macmillan",
+        "Free Press"
+      ],
+      "title": "Science And Human Behavior"
+    },
+    {
+      "author_name": [
+        "B. F. Skinner"
+      ],
+      "key": "/works/OL42838393W",
+      "language": [
+        "eng"
+      ],
+      "publish_year": [
+        1964,
+        1966
+      ],
+      "publisher": [
+        "Macmillan"
+      ],
+      "title": "Science and human behavior"
+    }
+  ]
+}

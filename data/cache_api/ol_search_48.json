@@ -1,0 +1,153 @@
+{
+  "numFound": 14,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 14,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "The Human Condition Hannah Arendt",
+  "offset": null,
+  "docs": [
+    {
+      "author_name": [
+        "Hannah Arendt"
+      ],
+      "cover_i": 5746840,
+      "isbn": [
+        "3492202179",
+        "9789501294248",
+        "2702112757",
+        "9789722902014",
+        "084466183X",
+        "8408224867",
+        "9780226025933",
+        "9788449318238",
+        "847509855X",
+        "9501254143",
+        "9780226025995",
+        "022658674X",
+        "8449318238",
+        "0226025950",
+        "9722902016",
+        "8449331633",
+        "884521351",
+        "0226025926",
+        "0226025934",
+        "9783492202176",
+        "9782702112755",
+        "3492005179",
+        "9780226586748",
+        "022658660X",
+        "9788449331633",
+        "9780226025926",
+        "9780844661834",
+        "9789501254143",
+        "9783492005173",
+        "9780226025988",
+        "9783492236232",
+        "0226924572",
+        "9788475098555",
+        "9501294242",
+        "0226025985",
+        "9780226025957",
+        "9780226586601",
+        "0226025993",
+        "9780226924571",
+        "3492236235",
+        "9788408224860"
+      ],
+      "key": "/works/OL10460638W",
+      "language": [
+        "fre",
+        "spa",
+        "ita",
+        "ger",
+        "eng",
+        "por"
+      ],
+      "publish_year": [
+        1958,
+        1959,
+        1960,
+        1961,
+        1967,
+        1969,
+        1983,
+        1985,
+        1989,
+        1991,
+        1993,
+        1998,
+        2001,
+        2002,
+        2003,
+        2005,
+        2013,
+        2014,
+        2016,
+        2018,
+        2019,
+        2020
+      ],
+      "publisher": [
+        "Univ. of Chicago Press",
+        "Chicago U.P.",
+        "Austral",
+        "R. Piper",
+        "Bompiani",
+        "University of Chicago Press",
+        "Calmann-Lévy",
+        "W. Kohlhammer",
+        "R. Piper & Co.",
+        "Cambridge U.P",
+        "Ediciones Paidós",
+        "Piper",
+        "Paidós",
+        "Peter Smith Publisher Inc",
+        "DIFEL e o.",
+        "Doubleday"
+      ],
+      "title": "The Human Condition"
+    },
+    {
+      "author_name": [
+        "Sahar Aurore Saeidnia",
+        "Anthony F. Lang"
+      ],
+      "isbn": [
+        "1351354949",
+        "9781351354943",
+        "1351353152",
+        "9781351353151",
+        "1351351362",
+        "9781351351362"
+      ],
+      "key": "/works/OL29322753W",
+      "language": [
+        "eng"
+      ],
+      "publish_year": [
+        2017
+      ],
+      "publisher": [
+        "Macat International Limited"
+      ],
+      "title": "Analysis of Hannah Arendt's the Human Condition"
+    },
+    {
+      "author_name": [
+        "Hannah Arendt"
+      ],
+      "key": "/works/OL43632981W",
+      "language": [
+        "eng"
+      ],
+      "publish_year": [
+        1965
+      ],
+      "publisher": [
+        "University of Chicago Press"
+      ],
+      "title": "The human condition"
+    }
+  ]
+}

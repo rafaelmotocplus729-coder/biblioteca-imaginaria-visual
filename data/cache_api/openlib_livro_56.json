@@ -1,0 +1,121 @@
+{
+  "numFound": 3,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 3,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "Vigiar e Punir Michel Foucault",
+  "offset": null,
+  "docs": [
+    {
+      "author_key": [
+        "OL4346031A",
+        "OL2865744A"
+      ],
+      "author_name": [
+        "Michel Foucault",
+        "Simon Prebble"
+      ],
+      "cover_edition_key": "OL9303141M",
+      "cover_height": 196,
+      "cover_i": 5539160,
+      "cover_width": 128,
+      "ebook_access": "printdisabled",
+      "edition_count": 30,
+      "first_publish_year": 1975,
+      "has_fulltext": true,
+      "ia": [
+        "disciplinepunish0000fouc_v3t0",
+        "disciplinepunish00fouc",
+        "surveilleretpuni0000fouc",
+        "disciplinepunish0000fouc_j5k6",
+        "disciplinepunish0000fouc",
+        "vigiarepunirhist00fouc"
+      ],
+      "ia_collection": [
+        "americana",
+        "americanuniversity-ol",
+        "barryuniversity-ol",
+        "belmont-ol",
+        "binghamton-ol",
+        "cua-ol",
+        "dartmouthlibrary-ol",
+        "framingham-ol",
+        "georgetown-university-law-library",
+        "georgetown-university-law-library-ol",
+        "georgetown-university-law-library-rr",
+        "globallibraries",
+        "gwulibraries-ol",
+        "hamiltonpubliclibrary-ol",
+        "internetarchivebooks",
+        "ithacacollege-ol",
+        "johnshopkins-ol",
+        "marygrovecollege",
+        "marymount-ol",
+        "occidentalcollegelibrary-ol",
+        "patron-library-collection",
+        "patron-schools-colleges-university-libraries",
+        "printdisabled",
+        "randolph-macon-college-ol",
+        "riceuniversity-ol",
+        "rochester-ol",
+        "the-claremont-colleges-ol",
+        "udc-ol",
+        "unb-ol",
+        "uni-ol",
+        "universityofarizona-ol",
+        "universityofcoloradoboulder-ol",
+        "wilsoncollege-ol"
+      ],
+      "key": "/works/OL26841W",
+      "language": [
+        "eng",
+        "fre",
+        "spa",
+        "por",
+        "ger"
+      ],
+      "public_scan_b": false,
+      "subtitle": "The Birth of the Prison",
+      "title": "Discipline and Punish"
+    },
+    {
+      "author_key": [
+        "OL6602026A"
+      ],
+      "author_name": [
+        "Luiz Antônio Bogo Chies"
+      ],
+      "cover_edition_key": "OL27019251M",
+      "cover_i": 8620874,
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 2019,
+      "has_fulltext": false,
+      "key": "/works/OL19829075W",
+      "language": [
+        "por"
+      ],
+      "public_scan_b": false,
+      "title": "Revisitando Foucault e outros textos em questão penitenciária"
+    },
+    {
+      "author_key": [
+        "OL7294654A"
+      ],
+      "author_name": [
+        "Fundação Presidente Antônio Carlos"
+      ],
+      "cover_edition_key": "OL25949171M",
+      "cover_i": 7448530,
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 2016,
+      "has_fulltext": false,
+      "key": "/works/OL17370216W",
+      "public_scan_b": false,
+      "subtitle": "atualidades e ensino",
+      "title": "Direito"
+    }
+  ]
+}

@@ -1,0 +1,81 @@
+{
+  "first_publish_date": "1974",
+  "title": "La société contre l'État",
+  "covers": [
+    983754,
+    13988505,
+    13988506,
+    719276,
+    8685309,
+    12317667
+  ],
+  "lc_classifications": [
+    "GN490 .C57"
+  ],
+  "key": "/works/OL2677206W",
+  "authors": [
+    {
+      "author": {
+        "key": "/authors/OL390687A"
+      },
+      "type": {
+        "key": "/type/author_role"
+      }
+    },
+    {
+      "author": {
+        "key": "/authors/OL6514279A"
+      },
+      "type": {
+        "key": "/type/author_role"
+      }
+    }
+  ],
+  "dewey_number": [
+    "301.5/92"
+  ],
+  "subjects": [
+    "Economic anthropology",
+    "Indians",
+    "Indians of South America",
+    "Political anthropology",
+    "Economics,Primitive",
+    "Government, Primitive",
+    "Primitive Government",
+    "Autorita t",
+    "Indigenes Volk",
+    "Staat",
+    "Politische Anthropologie",
+    "Politisches System",
+    "Indianer",
+    "Ureinwohner",
+    "Segmentierte Gesellschaft",
+    "Politik",
+    "Hierarchie",
+    "Social life and customs",
+    "Anthropologie politique"
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "description": "\"The thesis is radical,\" writes Marshall Sahlins of this landmark text in anthropology and political science. \"We conventionally define the state as the regulation of violence; it may be the origin of it. Clastres's thesis is that economic expropriation and political coercion are inconsistent with the character of tribal society - which is to say, with the greater part of human history.\" Can there be a society that is not divided into oppressors and oppressed, or that refuses coercive state apparatuses? In this beautifully written book, Pierre Clastres offers examples of South American Indian groups that, although without hierarchical leadership, were both affluent and complex. In so doing he refutes the usual negative definition of tribal society and poses its order as a radical critique of our own Western state of power.",
+  "links": [
+    {
+      "title": "Reseña por Jesús Aller en Rebelión",
+      "url": "https://rebelion.org/aprendiendo-de-los-primitivos/",
+      "type": {
+        "key": "/type/link"
+      }
+    }
+  ],
+  "latest_revision": 10,
+  "revision": 10,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-10T00:12:25.113395"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-03-30T12:00:32.781526"
+  }
+}

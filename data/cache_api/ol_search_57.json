@@ -1,0 +1,120 @@
+{
+  "numFound": 3,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 3,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "Society Against the State Pierre Clastres",
+  "offset": null,
+  "docs": [
+    {
+      "author_name": [
+        "Pierre Clastres",
+        "Pierre Clastres"
+      ],
+      "cover_i": 983754,
+      "isbn": [
+        "0942299019",
+        "8540501872",
+        "9780942299878",
+        "0942299876",
+        "0893960225",
+        "9788485321209",
+        "9780631180104",
+        "0942299000",
+        "9788492559176",
+        "8492559179",
+        "9780942299007",
+        "9780916354381",
+        "9780893960223",
+        "9789755396132",
+        "9788540501874",
+        "2707300217",
+        "9755396136",
+        "0916354385",
+        "9780916354671",
+        "9780942299014",
+        "9782707300218",
+        "8485321200",
+        "0631180109",
+        "0916354679"
+      ],
+      "key": "/works/OL2677206W",
+      "language": [
+        "fre",
+        "eng",
+        "tur",
+        "spa",
+        "por"
+      ],
+      "publish_year": [
+        2010,
+        1987,
+        2020,
+        1989,
+        2012,
+        1900,
+        1974,
+        1977,
+        1978,
+        1979,
+        1980
+      ],
+      "publisher": [
+        "Éditions de minuit",
+        "Ayrinti Yayinlari",
+        "Distributed by the MIT Press",
+        "Zone Books",
+        "Éditions de Minuit",
+        "Blackwell",
+        "Urizen Books",
+        "Cosac & Naify",
+        "Afrontamento",
+        "Aperture",
+        "Monte Avila Editores",
+        "Virus Editorial",
+        "Cambridge University Press"
+      ],
+      "title": "La société contre l'État"
+    },
+    {
+      "author_name": [
+        "Brian C. J. Singer"
+      ],
+      "key": "/works/OL4689276W",
+      "language": [
+        "eng"
+      ],
+      "publish_year": [
+        1986
+      ],
+      "publisher": [
+        "Center for Humanistic Studies, University of Minnesota"
+      ],
+      "title": "Societies against the state"
+    },
+    {
+      "author_name": [
+        "Robert Graham"
+      ],
+      "cover_i": 2903892,
+      "isbn": [
+        "9781551643113",
+        "1551643111",
+        "1551643103",
+        "9781551643106"
+      ],
+      "key": "/works/OL8271381W",
+      "language": [
+        "eng"
+      ],
+      "publish_year": [
+        2008
+      ],
+      "publisher": [
+        "Black Rose Books"
+      ],
+      "title": "Anarchism"
+    }
+  ]
+}

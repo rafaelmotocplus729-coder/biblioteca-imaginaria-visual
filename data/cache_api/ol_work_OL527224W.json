@@ -1,0 +1,66 @@
+{
+  "covers": [
+    483125
+  ],
+  "key": "/works/OL527224W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL37109A"
+      }
+    }
+  ],
+  "title": "Liquid modernity",
+  "subjects": [
+    "Aspect social",
+    "Civilisation",
+    "Communauté",
+    "Community",
+    "Espace et temps",
+    "Individu et société",
+    "Individualism",
+    "Liberty",
+    "Liberté",
+    "Postmodernism",
+    "Postmodernisme",
+    "Social aspects",
+    "Social aspects of Postmodernism",
+    "Social history",
+    "Space and time",
+    "Travail",
+    "Work",
+    "Modern Civilization",
+    "Modernism (aesthetics)",
+    "Communities",
+    "Social history - general & miscellaneous",
+    "Physics of time",
+    "Social sciences - general & miscellaneous",
+    "Emotions - psychology",
+    "Characteristics & qualities - self-improvement",
+    "Social history, 20th century"
+  ],
+  "subject_times": [
+    "1970-",
+    "20e siècle"
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "description": {
+    "type": "/type/text",
+    "value": "In this text, Bauman examines how we have moved away from a \"heavy\" and \"solid\", hardware-focused modernity to a \"light\" and \"liquid\", software-based modernity. This passage, he argues, has brought profound change to all aspects of the human condition."
+  },
+  "latest_revision": 9,
+  "revision": 9,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-08T04:30:42.038122"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-08-16T22:05:36.609350"
+  }
+}

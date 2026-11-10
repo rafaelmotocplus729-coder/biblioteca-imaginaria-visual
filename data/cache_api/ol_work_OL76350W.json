@@ -1,0 +1,97 @@
+{
+  "title": "Orthodoxy",
+  "covers": [
+    6268135,
+    743216,
+    7209764,
+    6835662,
+    8703537,
+    8535641,
+    8890017,
+    8923058,
+    9111890,
+    9216470,
+    10324884,
+    10673508,
+    11437916,
+    11544837,
+    11951707,
+    12043947,
+    12622038,
+    1029239,
+    1029308,
+    7756442,
+    8703513,
+    11154491,
+    13164839,
+    2965250,
+    13232354,
+    13617166,
+    13703906,
+    13251246
+  ],
+  "subjects": [
+    "Apologetics",
+    "Christianity",
+    "History",
+    "Essence, genius, nature",
+    "Evidence",
+    "Nonfiction",
+    "Religion & Spirituality",
+    "Essays",
+    "Christendom",
+    "Christianisme",
+    "Apologetiek",
+    "Apologetics, history, 20th century",
+    "Chesterton, g. k. (gilbert keith), 1874-1936",
+    "Christianity, essence, genius, nature",
+    "Aplogetics",
+    "Filosofia e religiao",
+    "Apologetica",
+    "Theology",
+    "Philosophy and religion",
+    "Christianity -- Essence, genius, nature",
+    "Ha resie",
+    "Rechtgla ubigkeit",
+    "Literatur",
+    "Discipling (christianity)",
+    "Religion, philosophy",
+    "Religion",
+    "Biography",
+    "Chrześcijaństwo",
+    "Wiara",
+    "Religia",
+    "Wiara a nauka"
+  ],
+  "subject_people": [
+    "G. K. Chesterton (1874-1936)"
+  ],
+  "key": "/works/OL76350W",
+  "authors": [
+    {
+      "author": {
+        "key": "/authors/OL18524A"
+      },
+      "type": {
+        "key": "/type/author_role"
+      }
+    }
+  ],
+  "subject_times": [
+    "20th century"
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "description": "<p><i>Orthodoxy</i> is <a href=\"https://standardebooks.org/ebooks/g-k-chesterton\">G. K. Chesterton’s</a> response to his critics’ assertion that his earlier collection of essays, <i><a href=\"https://standardebooks.org/ebooks/g-k-chesterton/heretics\">Heretics</a></i>, had “merely criticised current philosophies without offering any alternative philosophy.” In his intellectual journey from pagan to agnostic to positivist philosopher, he had attempted to build a philosophy “some ten minutes in advance of the truth.” But when he compared his modern philosophy with Christian theology, he realized that he was “the man who with the utmost daring discovered what had been discovered before.” Thus, <i>Orthodoxy</i> is a work of Christian apologetics, where Chesterton tries to show that Christianity is a universal answer to the everyday needs of humanity, and not just an arbitrary philosophy handed down from on high.</p>",
+  "latest_revision": 32,
+  "revision": 32,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-10-16T10:05:09.889767"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-11-02T10:15:22.587002"
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "covers": [
+    8243669
+  ],
+  "first_publish_date": "1989",
+  "key": "/works/OL349392W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL7447A"
+      }
+    }
+  ],
+  "subjects": [
+    "Catechetics",
+    "Catechisms",
+    "Catecismos",
+    "Catequesis",
+    "Catholic Church",
+    "Catholic Church - Catechisms - English",
+    "Catéchismes anglais",
+    "Chinese",
+    "Croatian",
+    "Doctrines",
+    "English",
+    "English Catechisms",
+    "French",
+    "French Catechisms",
+    "Iglesia Católica",
+    "Italian",
+    "Polyglot",
+    "Spanish",
+    "Spanish Catechisms",
+    "Turkish Catechisms",
+    "Église catholique",
+    "Español",
+    "Catecismos, Español",
+    "Texts",
+    "Quechua language",
+    "Glaube",
+    "Katholische Kirche",
+    "Catholic church, catechisms and creeds",
+    "Katechismus der Katholischen Kirche"
+  ],
+  "title": "Catechismus Ecclesiae Catholicae",
+  "type": {
+    "key": "/type/work"
+  },
+  "description": {
+    "type": "/type/text",
+    "value": "The catechism draws on the Bible, the Mass, the sacraments, church tradition and teaching, and the lives of the saints."
+  },
+  "latest_revision": 32,
+  "revision": 32,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-10-27T07:08:37.182181"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2026-09-14T09:16:19.942345"
+  }
+}

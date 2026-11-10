@@ -1,0 +1,128 @@
+{
+  "numFound": 34,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 34,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "Vidas Secas Graciliano Ramos",
+  "offset": null,
+  "docs": [
+    {
+      "author_name": [
+        "Graciliano Ramos de Oliveira"
+      ],
+      "cover_i": 12369687,
+      "isbn": [
+        "9500513749",
+        "9788501085290",
+        "6580210885",
+        "8501114774",
+        "8501067342",
+        "9789500513746",
+        "3518371673",
+        "9722106996",
+        "8501085294",
+        "9788501114778",
+        "9786580210886",
+        "9788501067340",
+        "9789722106993",
+        "9783518371671"
+      ],
+      "key": "/works/OL2900596W",
+      "language": [
+        "ger",
+        "por",
+        "spa"
+      ],
+      "publish_year": [
+        2018,
+        1986,
+        1988,
+        1991,
+        2024,
+        1964,
+        1965,
+        2001,
+        1970,
+        2003,
+        1972,
+        2008,
+        1980,
+        1981
+      ],
+      "publisher": [
+        "Portugália Editora",
+        "Publicações Europa-América",
+        "Livraria José Olympio Editora",
+        "Record",
+        "Centro Editor de America Latina",
+        "Corregidor",
+        "Editora Record",
+        "Edições Tempo",
+        "Casa de las Américas",
+        "Suhrkamp",
+        "Editora Antofágica",
+        "Grupo Editorial Record",
+        "Caminho"
+      ],
+      "title": "Vidas secas"
+    },
+    {
+      "author_name": [
+        "Graciliano Ramos de Oliveira"
+      ],
+      "key": "/works/OL2900595W",
+      "language": [
+        "por"
+      ],
+      "publish_year": [
+        1963,
+        1966,
+        1968,
+        1970,
+        1972,
+        1947
+      ],
+      "publisher": [
+        "Portugália Editora",
+        "Livraria Martins",
+        "Martins",
+        "J. Olympio"
+      ],
+      "title": "Vidas sêcas"
+    },
+    {
+      "author_name": [
+        "Graciliano Ramos"
+      ],
+      "cover_i": 14158825,
+      "isbn": [
+        "8501005584",
+        "9788501114785",
+        "9786580210886",
+        "9788501005588",
+        "6580210885",
+        "8501114782"
+      ],
+      "key": "/works/OL31247718W",
+      "language": [
+        "por"
+      ],
+      "publish_year": [
+        2024,
+        2002,
+        1986,
+        2019
+      ],
+      "publisher": [
+        "BTFDREEM",
+        "Antofágica",
+        "Editoria Record",
+        "Editora Record",
+        "editoria record",
+        "Record"
+      ],
+      "title": "Vidas Secas"
+    }
+  ]
+}

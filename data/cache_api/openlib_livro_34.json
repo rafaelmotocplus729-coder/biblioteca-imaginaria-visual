@@ -1,0 +1,116 @@
+{
+  "numFound": 42,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 42,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "Casa-Grande & Senzala Gilberto Freyre",
+  "offset": null,
+  "docs": [
+    {
+      "author_key": [
+        "OL119550A"
+      ],
+      "author_name": [
+        "Gilberto Freyre"
+      ],
+      "cover_i": 7150131,
+      "ebook_access": "borrowable",
+      "edition_count": 25,
+      "first_publish_year": 1936,
+      "has_fulltext": true,
+      "ia": [
+        "mastersslave00frey"
+      ],
+      "ia_collection": [
+        "inlibrary",
+        "internetarchivebooks",
+        "printdisabled"
+      ],
+      "key": "/works/OL1183191W",
+      "language": [
+        "ger",
+        "eng",
+        "spa",
+        "por"
+      ],
+      "lending_edition_s": "OL6197525M",
+      "lending_identifier_s": "mastersslave00frey",
+      "public_scan_b": false,
+      "title": "Casa-grande & senzala"
+    },
+    {
+      "author_key": [
+        "OL563810A"
+      ],
+      "author_name": [
+        "Ruy João Marques"
+      ],
+      "ebook_access": "no_ebook",
+      "edition_count": 2,
+      "first_publish_year": 1983,
+      "has_fulltext": false,
+      "key": "/works/OL3423728W",
+      "language": [
+        "por"
+      ],
+      "public_scan_b": false,
+      "title": "\"Casa grande & senzala,\" Gilberto Freyre e medicina"
+    },
+    {
+      "author_key": [
+        "OL4651011A"
+      ],
+      "author_name": [
+        "Ruy João Marques"
+      ],
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 1983,
+      "has_fulltext": false,
+      "key": "/works/OL38502824W",
+      "language": [
+        "por"
+      ],
+      "public_scan_b": false,
+      "title": "\"Casa Grande & senzala\", gilberto freyre e medicina"
+    },
+    {
+      "author_key": [
+        "OL4651011A"
+      ],
+      "author_name": [
+        "Ruy João Marques"
+      ],
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 1983,
+      "has_fulltext": false,
+      "key": "/works/OL42638437W",
+      "language": [
+        "por"
+      ],
+      "public_scan_b": false,
+      "title": "\"Casa grande & senzala\""
+    },
+    {
+      "author_key": [
+        "OL119550A"
+      ],
+      "author_name": [
+        "Gilberto Freyre"
+      ],
+      "ebook_access": "no_ebook",
+      "edition_count": 2,
+      "first_publish_year": 1957,
+      "has_fulltext": false,
+      "key": "/works/OL4233452W",
+      "language": [
+        "spa",
+        "por"
+      ],
+      "public_scan_b": false,
+      "title": "Casa-grande & senzala"
+    }
+  ]
+}

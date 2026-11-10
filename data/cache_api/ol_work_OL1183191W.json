@@ -1,0 +1,67 @@
+{
+  "title": "Casa-grande & senzala",
+  "covers": [
+    7150131
+  ],
+  "subject_places": [
+    "Brazil"
+  ],
+  "subjects": [
+    "Blacks",
+    "Indians of South America",
+    "Slavery",
+    "History",
+    "Social life and customs",
+    "Social conditions",
+    "Family",
+    "Civilization",
+    "African influences",
+    "Slavery in Brazil",
+    "Themes, motives",
+    "Indios de Brasil",
+    "Influencias africanas",
+    "Families",
+    "Vida social y costumbres",
+    "Civilización",
+    "Historia",
+    "Negros",
+    "Esclavitud",
+    "Familia",
+    "Noirs",
+    "Conditions sociales et morales",
+    "Native Americans",
+    "Esclavage",
+    "Manners and customs",
+    "Indiens d'Amérique",
+    "Civilizacion",
+    "Black people",
+    "Sociologia",
+    "Portuguese language",
+    "Terms and phrases"
+  ],
+  "subject_people": [
+    "Gilberto Freyre (1900-1987)"
+  ],
+  "key": "/works/OL1183191W",
+  "authors": [
+    {
+      "type": "/type/author_role",
+      "author": {
+        "key": "/authors/OL119550A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "latest_revision": 9,
+  "revision": 9,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-09T20:40:16.133957"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2024-08-20T21:24:30.860005"
+  }
+}

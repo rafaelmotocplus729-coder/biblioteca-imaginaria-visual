@@ -1,0 +1,43 @@
+{
+  "numFound": 2,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 2,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "Pensamentos Blaise Pascal",
+  "offset": null,
+  "docs": [
+    {
+      "author_key": [
+        "OL127510A"
+      ],
+      "author_name": [
+        "Blaise Pascal"
+      ],
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 2021,
+      "has_fulltext": false,
+      "key": "/works/OL26051117W",
+      "language": [
+        "eng"
+      ],
+      "public_scan_b": false,
+      "title": "Pensamentos"
+    },
+    {
+      "cover_edition_key": "OL26231081M",
+      "cover_i": 7902006,
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 2017,
+      "has_fulltext": false,
+      "key": "/works/OL17626018W",
+      "language": [
+        "por"
+      ],
+      "public_scan_b": false,
+      "title": "A Hora Silenciosa IV"
+    }
+  ]
+}

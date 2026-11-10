@@ -1,0 +1,35 @@
+{
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T03:46:06.474933"
+  },
+  "subject_places": [
+    "Brazil"
+  ],
+  "subjects": [
+    "Brazilian Civilization",
+    "Civilization",
+    "Civilization, Brazilian"
+  ],
+  "latest_revision": 3,
+  "key": "/works/OL10959245W",
+  "title": "Raizes do Brasil",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL4552878A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2010-12-03T13:06:14.293395"
+  },
+  "revision": 3
+}

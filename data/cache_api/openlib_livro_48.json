@@ -1,0 +1,35 @@
+{
+  "numFound": 1,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 1,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "A Condição Humana Hannah Arendt",
+  "offset": null,
+  "docs": [
+    {
+      "author_key": [
+        "OL142235A",
+        "OL15818919A",
+        "OL16611079A",
+        "OL16611080A"
+      ],
+      "author_name": [
+        "Hannah Arendt",
+        "Roberto Raposo",
+        "Danielle Allen",
+        "Margaret Canovan"
+      ],
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 2026,
+      "has_fulltext": false,
+      "key": "/works/OL46025451W",
+      "language": [
+        "por"
+      ],
+      "public_scan_b": false,
+      "title": "A condição humana"
+    }
+  ]
+}

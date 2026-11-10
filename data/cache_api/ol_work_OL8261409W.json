@@ -1,0 +1,84 @@
+{
+  "title": "Tristes Tropiques",
+  "key": "/works/OL8261409W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL373260A"
+      }
+    },
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL7924473A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subjects": [
+    "Brazil, description and travel",
+    "Indians of south america",
+    "Description and travel",
+    "Social life and customs",
+    "Indiens d'Amérique",
+    "Descriptions et voyages",
+    "Anthropology",
+    "Indigenous peoples",
+    "Travel",
+    "Religion primitive",
+    "Strukturalismus",
+    "Société primitive",
+    "Ethnologie",
+    "Conseil national de la Résistance (France)",
+    "Underground movements",
+    "World War, 1939-1945",
+    "History",
+    "Indians of south america, social life and customs",
+    "Indians of south america, social conditions",
+    "Yan jiu",
+    "Ren lei xue",
+    "Civilization"
+  ],
+  "subject_places": [
+    "Brazil",
+    "Brésil",
+    "Amérique du Sud"
+  ],
+  "covers": [
+    7105674,
+    419507,
+    10499448,
+    10499449,
+    10819188,
+    12893593,
+    15083061,
+    10031134,
+    13204773,
+    11746814,
+    10664315
+  ],
+  "description": {
+    "type": "/type/text",
+    "value": "Tristes Tropiques was an immensely popular bestseller when it was first published in France in 1955.\n\nClaude Levi-Strauss's groundbreaking study of the societies of a number of Amazonian peoples is a cornerstone of structural anthropology and an exploration by the author of his own intellectual roots as a professor of philosophy in Brazil before the Second World War, as a Jewish exile from Nazi-occupied Europe, and later as a world-renowned academic (he taught at New York's New School for Social Research and was French cultural attache to the United States). Levi-Strauss's central journey leads from the Amazon basin through the dense upland jungles of Brazil.\n\nThere, among the Amerindian tribes - the Caduveo, Bororo, Nambikwara, and Tupi-Kawahib - he found \"a human society reduced to its most basic expression.\" Levi-Strauss's discussion of his fieldwork in Tristes Tropiques endures as a milestone of anthropology, but the book is also, in its brilliant diversions on other, more familiar cultures, a great work of literature, a vivid travelogue, and an engaging memoir - a demonstration of the marvelous mental agility of one of the century's most important thinkers.\n\nPresented here is the translation by John and Doreen Weightman of the complete text of the revised French edition of 1968, together with the original photographs and illustrations."
+  },
+  "subject_times": [
+    "1951-"
+  ],
+  "latest_revision": 9,
+  "revision": 9,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-10T22:34:52.477547"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-08-30T14:04:34.375483"
+  }
+}

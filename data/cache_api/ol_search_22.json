@@ -1,0 +1,85 @@
+{
+  "numFound": 9,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 9,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "Politics as a Vocation Max Weber",
+  "offset": null,
+  "docs": [
+    {
+      "author_name": [
+        "Max Weber"
+      ],
+      "cover_i": 12977771,
+      "key": "/works/OL1362868W",
+      "language": [
+        "eng"
+      ],
+      "publish_year": [
+        1972,
+        1965
+      ],
+      "publisher": [
+        "Fortress Press"
+      ],
+      "title": "Politics as a vocation"
+    },
+    {
+      "author_name": [
+        "Max Weber",
+        "David S. Owen",
+        "Tracy B. Strong",
+        "Rodney Livingstone"
+      ],
+      "cover_i": 662428,
+      "isbn": [
+        "1603840729",
+        "0872206653",
+        "9780872206656",
+        "9781603840729"
+      ],
+      "key": "/works/OL19910067W",
+      "language": [
+        "eng"
+      ],
+      "publish_year": [
+        2004
+      ],
+      "publisher": [
+        "Hackett Pub.",
+        "Hackett Publishing Company",
+        "Hackett Publishing Company, Incorporated"
+      ],
+      "title": "The vocation lectures"
+    },
+    {
+      "author_name": [
+        "Tom McClean",
+        "Jason Xidias",
+        "William Brett"
+      ],
+      "isbn": [
+        "1351350919",
+        "1912282399",
+        "1351354493",
+        "9781351354493",
+        "9781351350914",
+        "9781912282395",
+        "9781351352703",
+        "1351352709"
+      ],
+      "key": "/works/OL29321234W",
+      "language": [
+        "eng"
+      ],
+      "publish_year": [
+        2017
+      ],
+      "publisher": [
+        "Macat International Limited"
+      ],
+      "title": "Analysis of Max Weber's Politics As a Vocation"
+    }
+  ]
+}

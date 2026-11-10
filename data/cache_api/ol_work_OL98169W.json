@@ -1,0 +1,62 @@
+{
+  "subjects": [
+    "Ethics",
+    "Asceticism",
+    "Good and evil",
+    "Ethiek",
+    "Etica",
+    "Nietzsche, friedrich wilhelm, 1844-1900",
+    "Philosophy, german",
+    "Mortality",
+    "Philosophy, modern, 20th century",
+    "Social",
+    "PHILOSOPHY",
+    "Ethics & Moral Philosophy",
+    "Morals",
+    "Morale",
+    "Ascétisme",
+    "Etik",
+    "Ethics (philosophy)",
+    "Literary collections",
+    "B3313.z73 e5 1998",
+    "170",
+    "Nietzsche, friedrich wilhelm , 1844-1900",
+    "B3313 .f79 1994",
+    "193",
+    "Ethics & moral philosophy - theoretical",
+    "B3313.z7 e65 1989"
+  ],
+  "key": "/works/OL98169W",
+  "title": "Zur Genealogie der Moral",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL20157A"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "covers": [
+    119371,
+    118934
+  ],
+  "description": {
+    "type": "/type/text",
+    "value": "On the Genealogy of Morals (1887) is a book about the history of ethics and about interpretation. Nietzsche rewrites the former as a history of cruelty, exposing the central values of the Judaeo-Christian and liberal traditions - compassion, equality, justice - as the product of a brutal process of conditioning designed to domesticate the animal vitality of earlier cultures. The result is a book which raises profoundly disquieting issues about the violence of both ethics and interpretation.\n\nNietzsche questions moral certainties by showing that religion and science have no claim to absolute truth, before turning on his own arguments in order to call their very presuppositions into question. The Genealogy is the most sustained of Nietzsche's later works and offers one of the fullest expressions of his characteristic concerns. This edition places his ideas within the cultural context of his own time and stresses the relevance of his work for a contemporary audience."
+  },
+  "latest_revision": 25,
+  "revision": 25,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-10-17T16:58:29.600954"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2024-08-06T12:06:32.645792"
+  }
+}

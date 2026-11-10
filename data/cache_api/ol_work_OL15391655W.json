@@ -1,0 +1,57 @@
+{
+  "description": {
+    "type": "/type/text",
+    "value": "An historical novel by Japanese writer Shusaku Endo telling the story of a young Portuguese missionary in 17th Century Japan. After being smuggled into the country a Jesuit missionary fresh from the seminary finds the Christian population have been forced underground by a government eager to stamp out foreign interference and values. Consequently he quickly finds himself a fugitive in a strange and frightening land and begins to doubt his mission due to the silence of his god."
+  },
+  "title": "Silence",
+  "covers": [
+    6601656
+  ],
+  "subject_places": [
+    "Japan"
+  ],
+  "subjects": [
+    "Fiction",
+    "Christians",
+    "History",
+    "Missionaries in Fiction",
+    "Civilization",
+    "Missionaries",
+    "Japanese literature",
+    "Persecution",
+    "Missionaries, fiction",
+    "Japan, fiction",
+    "Fiction, historical, general",
+    "Fiction, christian, historical"
+  ],
+  "key": "/works/OL15391655W",
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL4282449A"
+      }
+    }
+  ],
+  "subject_times": [
+    "16th century"
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "genres": [
+    "/tags/OL170T"
+  ],
+  "latest_revision": 9,
+  "revision": 9,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2010-09-30T00:04:10.959514"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2026-08-29T09:46:52.443334"
+  }
+}

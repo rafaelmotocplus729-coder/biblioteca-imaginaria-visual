@@ -1,0 +1,89 @@
+{
+  "numFound": 3,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 3,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "Apologia da História Marc Bloch",
+  "offset": null,
+  "docs": [
+    {
+      "author_key": [
+        "OL119624A"
+      ],
+      "author_name": [
+        "Marc Bloch"
+      ],
+      "cover_edition_key": "OL27792855M",
+      "cover_height": 630,
+      "cover_i": 14850180,
+      "cover_width": 370,
+      "ebook_access": "borrowable",
+      "edition_count": 53,
+      "first_publish_year": 1949,
+      "has_fulltext": true,
+      "ia": [
+        "historianscraft00blocrich",
+        "historianscraft0000marc",
+        "historianscraft0000bloc"
+      ],
+      "ia_collection": [
+        "americana",
+        "inlibrary",
+        "internetarchivebooks",
+        "marygrovecollege",
+        "printdisabled"
+      ],
+      "key": "/works/OL1184062W",
+      "language": [
+        "eng",
+        "und",
+        "heb",
+        "rus",
+        "spa",
+        "fre"
+      ],
+      "lending_edition_s": "OL6114394M",
+      "lending_identifier_s": "historianscraft00blocrich",
+      "public_scan_b": false,
+      "title": "Apologie pour l'histoire ou Métier d'historien"
+    },
+    {
+      "author_key": [
+        "OL119624A"
+      ],
+      "author_name": [
+        "Marc Bloch"
+      ],
+      "cover_edition_key": "OL9162621M",
+      "cover_height": 3508,
+      "cover_i": 9839534,
+      "cover_width": 2481,
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 2001,
+      "has_fulltext": false,
+      "key": "/works/OL16917143W",
+      "language": [
+        "por"
+      ],
+      "public_scan_b": false,
+      "subtitle": "ou o ofício do historiador",
+      "title": "Apologia da história"
+    },
+    {
+      "cover_edition_key": "OL25938335M",
+      "cover_i": 7438285,
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 2016,
+      "has_fulltext": false,
+      "key": "/works/OL17360445W",
+      "language": [
+        "por"
+      ],
+      "public_scan_b": false,
+      "title": "Provérbios 11"
+    }
+  ]
+}

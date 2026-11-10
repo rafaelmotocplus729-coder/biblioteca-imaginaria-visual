@@ -1,0 +1,82 @@
+{
+  "numFound": 9,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 9,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "Discourse on Inequality Jean-Jacques Rousseau",
+  "offset": null,
+  "docs": [
+    {
+      "author_name": [
+        "Jean-Jacques Rousseau",
+        "Ian Johnston"
+      ],
+      "isbn": [
+        "1502773147",
+        "1718621469",
+        "1523326417",
+        "9781718621466",
+        "1979316325",
+        "9781979316323",
+        "9781523326419",
+        "9781502773142"
+      ],
+      "key": "/works/OL40621111W",
+      "language": [
+        "eng"
+      ],
+      "publish_year": [
+        2016,
+        2017,
+        2018,
+        2014
+      ],
+      "publisher": [
+        "CreateSpace Independent Publishing Platform"
+      ],
+      "title": "Discourse on the Origin and the Foundations of Inequality among Men"
+    },
+    {
+      "author_name": [
+        "Jean-Jacques Rousseau",
+        "Helena Rosenblatt"
+      ],
+      "isbn": [
+        "1319242707",
+        "9781319242701"
+      ],
+      "key": "/works/OL27834322W",
+      "language": [
+        "eng"
+      ],
+      "publish_year": [
+        2010
+      ],
+      "publisher": [
+        "Bedford/Saint Martin's"
+      ],
+      "title": "Discourse on the Origin and Foundations of Inequality among Men"
+    },
+    {
+      "author_name": [
+        "Paul Simukanzye"
+      ],
+      "isbn": [
+        "9982072536",
+        "9789982072533"
+      ],
+      "key": "/works/OL23940923W",
+      "language": [
+        "eng"
+      ],
+      "publish_year": [
+        2005
+      ],
+      "publisher": [
+        "Mission Press"
+      ],
+      "title": "The ethical challenge of justice"
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "numFound": 1,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 1,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "A Riqueza das Nações Adam Smith",
+  "offset": null,
+  "docs": [
+    {
+      "author_key": [
+        "OL39302A",
+        "OL16621696A",
+        "OL16621697A",
+        "OL334187A",
+        "OL16618585A"
+      ],
+      "author_name": [
+        "Adam Smith",
+        "Hermes Augusto dos Santos",
+        "Teodora Cardoso",
+        "Cristóvão de Aguiar",
+        "Luís Mendonça"
+      ],
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 1987,
+      "has_fulltext": false,
+      "key": "/works/OL46050144W",
+      "language": [
+        "por"
+      ],
+      "public_scan_b": false,
+      "title": "Inquérito sobre a natureza e as causas da riqueza das nações"
+    }
+  ]
+}

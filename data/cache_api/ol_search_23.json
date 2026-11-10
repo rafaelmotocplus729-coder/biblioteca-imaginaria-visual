@@ -1,0 +1,103 @@
+{
+  "numFound": 7,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 7,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "Ha-Joon Chang Capitalism",
+  "offset": null,
+  "docs": [
+    {
+      "author_name": [
+        "Irb Media"
+      ],
+      "isbn": [
+        "9798822503380"
+      ],
+      "key": "/works/OL28064979W",
+      "language": [
+        "eng"
+      ],
+      "publish_year": [
+        2022
+      ],
+      "publisher": [
+        "IRB MEDIA"
+      ],
+      "title": "Summary of Ha-Joon Chang's 23 Things They Don't Tell You about Capitalism"
+    },
+    {
+      "author_name": [
+        "Anwar Shaikh"
+      ],
+      "cover_i": 5372478,
+      "isbn": [
+        "1135986908",
+        "1280731702",
+        "9780415770477",
+        "1135986940",
+        "9781135986902",
+        "1135986924",
+        "1135986959",
+        "9780203966389",
+        "9781280731709",
+        "9780415648042",
+        "0415648041",
+        "0203966384",
+        "0415770475",
+        "9781135986940",
+        "9781135986926",
+        "9781135986957"
+      ],
+      "key": "/works/OL18207436W",
+      "language": [
+        "eng"
+      ],
+      "publish_year": [
+        2013,
+        2006,
+        2007
+      ],
+      "publisher": [
+        "Routledge",
+        "Taylor & Francis Group"
+      ],
+      "title": "Globalization and the myths of free trade"
+    },
+    {
+      "author_name": [
+        "Noam Chomsky",
+        "C. J. Polychroniou"
+      ],
+      "cover_i": 11228140,
+      "isbn": [
+        "9781642595000",
+        "9780241997109",
+        "164259458X",
+        "1642595004",
+        "1642594792",
+        "9780241993934",
+        "9780241993941",
+        "0241997100",
+        "0241993946",
+        "0241993938",
+        "9781642594799",
+        "9781642594584"
+      ],
+      "key": "/works/OL24574525W",
+      "language": [
+        "eng"
+      ],
+      "publish_year": [
+        2021
+      ],
+      "publisher": [
+        "Penguin",
+        "Unknown Publisher",
+        "Penguin Books, Limited",
+        "Haymarket Books"
+      ],
+      "title": "The Precipice"
+    }
+  ]
+}

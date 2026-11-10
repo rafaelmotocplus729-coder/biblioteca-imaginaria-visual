@@ -1,0 +1,88 @@
+{
+  "numFound": 14,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 14,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "Raizes do Brasil Sergio Buarque de Holanda",
+  "offset": null,
+  "docs": [
+    {
+      "author_name": [
+        "Sérgio Buarque de Holanda"
+      ],
+      "cover_i": 15131487,
+      "isbn": [
+        "9788535925487",
+        "8535925481"
+      ],
+      "key": "/works/OL10959245W",
+      "language": [
+        "por"
+      ],
+      "publish_year": [
+        1936,
+        2015
+      ],
+      "publisher": [
+        "Olympio",
+        "Companhia das Letras"
+      ],
+      "title": "Raizes do Brasil"
+    },
+    {
+      "author_name": [
+        "Sérgio Buarque de Holanda"
+      ],
+      "cover_i": 13506748,
+      "isbn": [
+        "8503001772",
+        "9788503001779"
+      ],
+      "key": "/works/OL1755154W",
+      "language": [
+        "por"
+      ],
+      "publish_year": [
+        1986,
+        1969,
+        1975,
+        1978,
+        1948
+      ],
+      "publisher": [
+        "J. Olympio",
+        "José Olympio",
+        "J. Olympio Editora"
+      ],
+      "title": "Raízes do Brasil"
+    },
+    {
+      "author_name": [
+        "Sérgio Buarque de Holanda"
+      ],
+      "isbn": [
+        "9788503001779",
+        "9788535909234",
+        "8535909230",
+        "8503001772"
+      ],
+      "key": "/works/OL10959247W",
+      "language": [
+        "por"
+      ],
+      "publish_year": [
+        1976,
+        1994,
+        1973,
+        2006
+      ],
+      "publisher": [
+        "José Olimpio Editora",
+        "J. Olympio",
+        "Companhia das Letras"
+      ],
+      "title": "Raízes do Brasil"
+    }
+  ]
+}

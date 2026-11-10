@@ -1,0 +1,32 @@
+{
+  "numFound": 1,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 1,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "Cultura um conceito antropologico Roque Laraia",
+  "offset": null,
+  "docs": [
+    {
+      "author_name": [
+        "Roque de Barros Laraia"
+      ],
+      "cover_i": 13585244,
+      "isbn": [
+        "858506157X",
+        "9788585061579"
+      ],
+      "key": "/works/OL3182421W",
+      "language": [
+        "por"
+      ],
+      "publish_year": [
+        1986
+      ],
+      "publisher": [
+        "J. Zahar Editor"
+      ],
+      "title": "Cultura"
+    }
+  ]
+}

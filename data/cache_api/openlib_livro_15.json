@@ -1,0 +1,80 @@
+{
+  "numFound": 2,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 2,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "A Morte de Ivan Ilitch Liev Tolstói",
+  "offset": null,
+  "docs": [
+    {
+      "author_key": [
+        "OL26783A",
+        "OL2734499A",
+        "OL2964952A",
+        "OL12583619A"
+      ],
+      "author_name": [
+        "Leo Tolstoy",
+        "Anthony Briggs",
+        "Anthony Horvath",
+        "Zinc Read"
+      ],
+      "cover_edition_key": "OL3686936M",
+      "cover_height": 475,
+      "cover_i": 419697,
+      "cover_width": 356,
+      "ebook_access": "public",
+      "edition_count": 189,
+      "first_publish_year": 1887,
+      "has_fulltext": true,
+      "ia": [
+        "ivnilyitchothe00tolsrich",
+        "deathofivanilych0000levn",
+        "lamortdivanilitc0000tols",
+        "lamortdivanilitc0000tols_v6z9",
+        "deathofivanilyic00tols",
+        "deathofivanilyic0000tols_t9k3",
+        "deathofivanilyic0000tols"
+      ],
+      "ia_collection": [
+        "americana",
+        "cdl",
+        "inlibrary",
+        "internetarchivebooks",
+        "printdisabled"
+      ],
+      "key": "/works/OL267174W",
+      "language": [
+        "aze",
+        "spa",
+        "rus",
+        "eng",
+        "fre",
+        "ger"
+      ],
+      "lending_edition_s": "OL7023326M",
+      "lending_identifier_s": "ivnilyitchothe00tolsrich",
+      "public_scan_b": true,
+      "title": "Смерть Ивана Ильича"
+    },
+    {
+      "author_key": [
+        "OL26783A"
+      ],
+      "author_name": [
+        "Лев Толстой"
+      ],
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 1966,
+      "has_fulltext": false,
+      "key": "/works/OL12845597W",
+      "language": [
+        "fre"
+      ],
+      "public_scan_b": false,
+      "title": "La sonate à Kreutzer. La mort d'Ivan Ilitch"
+    }
+  ]
+}

@@ -1,0 +1,155 @@
+{
+  "numFound": 11,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 11,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "Discipline and Punish Michel Foucault",
+  "offset": null,
+  "docs": [
+    {
+      "author_name": [
+        "Michel Foucault",
+        "Simon Prebble"
+      ],
+      "cover_i": 5539160,
+      "isbn": [
+        "9788412471670",
+        "0241386012",
+        "9781452665566",
+        "9782070729685",
+        "0394499425",
+        "0679752552",
+        "8432320757",
+        "8412471679",
+        "9780241386019",
+        "9780679752554",
+        "014199133X",
+        "9780713910407",
+        "9788432320750",
+        "0140551972",
+        "9788432303326",
+        "9788532605085",
+        "9780394499420",
+        "0307819299",
+        "2070729680",
+        "987987014X",
+        "9780141991337",
+        "8415555016",
+        "0713910402",
+        "9782070291793",
+        "9780307819291",
+        "3518074490",
+        "8806174762",
+        "0394727673",
+        "9780140137224",
+        "9783518074497",
+        "1452665567",
+        "9780140551976",
+        "2070291790",
+        "9788806174767",
+        "9789879870143",
+        "9788415555018",
+        "8432303321",
+        "014013722X",
+        "9780394727677",
+        "8532605087"
+      ],
+      "key": "/works/OL26841W",
+      "language": [
+        "eng",
+        "fre",
+        "spa",
+        "por",
+        "ger"
+      ],
+      "publish_year": [
+        2019,
+        2020,
+        2022,
+        2023,
+        1991,
+        1995,
+        1998,
+        2001,
+        2002,
+        2005,
+        1975,
+        1976,
+        1977,
+        1979,
+        2012,
+        2013
+      ],
+      "publisher": [
+        "Siglo XXI",
+        "Gallimard French",
+        "Vintage eBooks",
+        "Penguin Books Ltd",
+        "Suhrkamp",
+        "Siglo XXI de España Editores, S.A.",
+        "A. Lane",
+        "Penguin Books",
+        "Biblioteca Nueva",
+        "Tantor Audio",
+        "Gallimard",
+        "Einaudi",
+        "Penguin Books, Limited",
+        "philosophie",
+        "Vintage Books",
+        "Clave Intelectual",
+        "Vozes",
+        "Pantheon Books"
+      ],
+      "title": "Discipline and Punish"
+    },
+    {
+      "author_name": [
+        "Meghan Kallman",
+        "Rachele Dini"
+      ],
+      "isbn": [
+        "1351350420",
+        "1351352210",
+        "9781351350426",
+        "1351354000",
+        "9781351354004",
+        "9781351352215"
+      ],
+      "key": "/works/OL29319680W",
+      "language": [
+        "eng"
+      ],
+      "publish_year": [
+        2017
+      ],
+      "publisher": [
+        "Macat International Limited"
+      ],
+      "title": "Analysis of Michel Foucault's Discipline and Punish"
+    },
+    {
+      "author_name": [
+        "Meghan Kallman",
+        "Rachele Dini"
+      ],
+      "isbn": [
+        "1912127512",
+        "9781912303755",
+        "1912303752",
+        "9781912127511"
+      ],
+      "key": "/works/OL25197379W",
+      "language": [
+        "eng"
+      ],
+      "publish_year": [
+        2017
+      ],
+      "publisher": [
+        "Taylor & Francis Group"
+      ],
+      "title": "Discipline and Punish"
+    }
+  ]
+}

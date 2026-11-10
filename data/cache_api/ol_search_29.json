@@ -1,0 +1,210 @@
+{
+  "numFound": 29,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 29,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "Suicide Emile Durkheim",
+  "offset": null,
+  "docs": [
+    {
+      "author_name": [
+        "Émile Durkheim"
+      ],
+      "cover_i": 972713,
+      "isbn": [
+        "0415045878",
+        "0140449671",
+        "9780203994320",
+        "9781134470204",
+        "9781364047986",
+        "1134470185",
+        "9782130530909",
+        "0415278309",
+        "1547069058",
+        "9798685600479",
+        "1015397344",
+        "9781015401792",
+        "1015401791",
+        "1134470223",
+        "9781439118269",
+        "1364047985",
+        "9798700028578",
+        "9781134470228",
+        "9798558595079",
+        "1134470231",
+        "9781134470235",
+        "1134470207",
+        "9780415278317",
+        "0415278317",
+        "9780710068903",
+        "0029086507",
+        "0343284707",
+        "0710068905",
+        "9781547069057",
+        "9780415278300",
+        "1439118264",
+        "9780684836324",
+        "9780029086605",
+        "9781015397347",
+        "0029086604",
+        "9780141915340",
+        "2130545432",
+        "9798558594805",
+        "0203994329",
+        "0353332259",
+        "9781134470181",
+        "014191534X",
+        "9780353332256",
+        "9780029086506",
+        "9798558594980",
+        "1523494506",
+        "9780140449679",
+        "9781607966425",
+        "9781523494507",
+        "9789500392914",
+        "0710033117",
+        "9500392917",
+        "1607966425",
+        "9780415045872",
+        "9780343284701",
+        "9780710033116",
+        "2130530907",
+        "9798702791173",
+        "9782130545439",
+        "0684836327"
+      ],
+      "key": "/works/OL606917W",
+      "language": [
+        "fre",
+        "eng",
+        "spa"
+      ],
+      "publish_year": [
+        1930,
+        1951,
+        1952,
+        1958,
+        1960,
+        1962,
+        1963,
+        1965,
+        1966,
+        1967,
+        1968,
+        1969,
+        1970,
+        1850,
+        1990,
+        1997,
+        2002,
+        2004,
+        2005,
+        2006,
+        2007,
+        2010,
+        2012,
+        2013,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        1897
+      ],
+      "publisher": [
+        "The Free Press",
+        "Penguin Classics",
+        "Simon & Schuster, Limited",
+        "Macmillan",
+        "Presses universitaires de France",
+        "Routledge",
+        "Independently Published",
+        "Penguin Books",
+        "Franklin Classics Trade Press",
+        "Routledge & Kegan Paul PLC",
+        "CreateSpace Independent Publishing Platform",
+        "Losada",
+        "Penguin Books, Limited",
+        "Presses Universitaires de France - PUF",
+        "the free press glencoe",
+        "Free Press",
+        "Routledge,an imprint of Taylor & Francis Books Ltd",
+        "New York, The Free Press",
+        "Franklin Classics",
+        "A Free Press Paperback/The Macmillan Company",
+        "Taylor & Francis Group",
+        "PUF",
+        "Creative Media Partners, LLC",
+        "Routledge & Kegan Paul",
+        "Blurb",
+        "www.snowballpublishing.com",
+        "F. Alcan",
+        "Routledge Classics",
+        "Routledge & K. Paul"
+      ],
+      "title": "Le suicide"
+    },
+    {
+      "author_name": [
+        "David Lester"
+      ],
+      "cover_i": 9795982,
+      "isbn": [
+        "0914783734",
+        "9780914783732"
+      ],
+      "key": "/works/OL17991331W",
+      "language": [
+        "eng"
+      ],
+      "publish_year": [
+        1994
+      ],
+      "publisher": [
+        "Charles Press"
+      ],
+      "title": "Emile Durkheim"
+    },
+    {
+      "author_name": [
+        "W. S. F. Pickering",
+        "Geoffrey Walford"
+      ],
+      "isbn": [
+        "9780585447476",
+        "0585447470",
+        "9780415205825",
+        "0415205824",
+        "113462607X",
+        "9781138007307",
+        "9781134626076",
+        "1134626126",
+        "1134626096",
+        "9781134626120",
+        "9781134626090",
+        "9781280069864",
+        "1134626118",
+        "1280069864",
+        "1138007307",
+        "9781134626113"
+      ],
+      "key": "/works/OL19588991W",
+      "language": [
+        "eng"
+      ],
+      "publish_year": [
+        2000,
+        2002,
+        2014
+      ],
+      "publisher": [
+        "Taylor & Francis Group",
+        "Routledge"
+      ],
+      "title": "Durkheim's Suicide"
+    }
+  ]
+}

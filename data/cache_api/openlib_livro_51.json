@@ -1,0 +1,33 @@
+{
+  "numFound": 1,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 1,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "Temor e Tremor Søren Kierkegaard",
+  "offset": null,
+  "docs": [
+    {
+      "author_key": [
+        "OL20509A",
+        "OL16614115A",
+        "OL1042983A"
+      ],
+      "author_name": [
+        "Søren Kierkegaard",
+        "Maria José Marinho",
+        "Alberto Ferreira"
+      ],
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 1959,
+      "has_fulltext": false,
+      "key": "/works/OL46067042W",
+      "language": [
+        "por"
+      ],
+      "public_scan_b": false,
+      "title": "Temor e tremor"
+    }
+  ]
+}

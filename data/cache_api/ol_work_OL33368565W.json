@@ -1,0 +1,36 @@
+{
+  "type": {
+    "key": "/type/work"
+  },
+  "title": "Formação econômica do Brasil",
+  "subjects": [
+    "Economic conditions"
+  ],
+  "subject_places": [
+    "Brazil"
+  ],
+  "subject_people": [
+    "Celso Furtado"
+  ],
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL7428905A"
+      }
+    }
+  ],
+  "key": "/works/OL33368565W",
+  "latest_revision": 1,
+  "revision": 1,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2023-01-02T18:01:12.584029"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2023-01-02T18:01:12.584029"
+  }
+}

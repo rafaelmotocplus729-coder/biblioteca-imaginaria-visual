@@ -1,0 +1,35 @@
+{
+  "numFound": 1,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 1,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "O Suicídio Émile Durkheim",
+  "offset": null,
+  "docs": [
+    {
+      "author_key": [
+        "OL4287664A",
+        "OL16613643A",
+        "OL16615292A",
+        "OL16615293A"
+      ],
+      "author_name": [
+        "Émile Durkheim",
+        "Luz Cary",
+        "Margarida Garrido",
+        "J. Vasconcelos Esteves"
+      ],
+      "ebook_access": "no_ebook",
+      "edition_count": 2,
+      "first_publish_year": 1982,
+      "has_fulltext": false,
+      "key": "/works/OL46034606W",
+      "language": [
+        "por"
+      ],
+      "public_scan_b": false,
+      "title": "O suicídio"
+    }
+  ]
+}

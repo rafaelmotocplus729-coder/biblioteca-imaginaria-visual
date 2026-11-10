@@ -1,0 +1,177 @@
+{
+  "numFound": 30,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 30,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "Thinking Fast and Slow Daniel Kahneman",
+  "offset": null,
+  "docs": [
+    {
+      "author_name": [
+        "Daniel Kahneman"
+      ],
+      "cover_i": 13290711,
+      "isbn": [
+        "9788466357876",
+        "0374275637",
+        "8483068613",
+        "9780385676533",
+        "9780141918921",
+        "3328100342",
+        "0141033576",
+        "9781804220375",
+        "0739357980",
+        "8466357874",
+        "3886808866",
+        "9783886808861",
+        "9787508633558",
+        "8804671955",
+        "1846140552",
+        "9789588613680",
+        "9047007662",
+        "9788934956150",
+        "0374533555",
+        "0385676530",
+        "9789047013044",
+        "9788490322505",
+        "9780385676519",
+        "9780374533557",
+        "2081307820",
+        "0606275649",
+        "8490322503",
+        "0307989704",
+        "9781846140556",
+        "9782081307827",
+        "7508633555",
+        "1535535830",
+        "146416617X",
+        "9781535535830",
+        "9754345317",
+        "9789047007661",
+        "9047013042",
+        "9783328100348",
+        "9780307989703",
+        "9780739357989",
+        "8934956151",
+        "9781464166174",
+        "9789585433564",
+        "9585433567",
+        "180422037X",
+        "9780141033570",
+        "1846146062",
+        "9788483068618",
+        "9780606275644",
+        "9863200611",
+        "9781846146060",
+        "9780374275631",
+        "0385676514",
+        "9788804671954",
+        "9788372786777",
+        "958861368X",
+        "9789863200611",
+        "8372786771",
+        "9789754345315",
+        "0141918926"
+      ],
+      "key": "/works/OL15992072W",
+      "language": [
+        "ger",
+        "chi",
+        "kor",
+        "dut",
+        "fre",
+        "tur",
+        "pol",
+        "eng"
+      ],
+      "publish_year": [
+        2016,
+        2017,
+        2018,
+        2019,
+        2021,
+        2022,
+        2011,
+        2012,
+        2013,
+        2014
+      ],
+      "publisher": [
+        "Uitgeverij Business Contact",
+        "Varlık Yayınları",
+        "Worth Publishers, Incorporated",
+        "Farrar, Straus and Giroux",
+        "Penguin Books",
+        "Debolsillo",
+        "Flammarion",
+        "Tian xia yuan jian chu ban gu fen you xian gong si",
+        "Kimyoungsa/Tsai Fong Books",
+        "Turtleback",
+        "Anchor Canada",
+        "Media Rodzina",
+        "Siedler",
+        "Penguin Books, Limited",
+        "Allen Lane",
+        "Mondadori",
+        "Doubleday Canada",
+        "Random House Audio",
+        "Farrar Straus Giroux",
+        "CreateSpace Independent Publishing Platform",
+        "Macmillan ",
+        "Penguin Verlag",
+        "DEBATE",
+        "Farrar, Straus & Giroux",
+        "Penguin",
+        "W H Freeman & Co",
+        "中信出版社",
+        "Debate",
+        "Bilmem ",
+        "Business Contact"
+      ],
+      "title": "Thinking, Fast and Slow"
+    },
+    {
+      "author_name": [
+        "Jacqueline Allan"
+      ],
+      "cover_i": 13214974,
+      "isbn": [
+        "1912453991",
+        "1912453053",
+        "9781912453993",
+        "9781912453054"
+      ],
+      "key": "/works/OL25742643W",
+      "language": [
+        "eng"
+      ],
+      "publish_year": [
+        2018
+      ],
+      "publisher": [
+        "Taylor & Francis Group"
+      ],
+      "title": "A Macat Analysis of Daniel Kahneman's Thinking, Fast and Slow"
+    },
+    {
+      "author_name": [
+        "Gloria J. Russell"
+      ],
+      "isbn": [
+        "9798809159685"
+      ],
+      "key": "/works/OL28067455W",
+      "language": [
+        "eng"
+      ],
+      "publish_year": [
+        2022
+      ],
+      "publisher": [
+        "Independently Published"
+      ],
+      "title": "Thinking Fast and Slow by Daniel Kahneman"
+    }
+  ]
+}

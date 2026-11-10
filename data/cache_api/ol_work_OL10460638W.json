@@ -1,0 +1,85 @@
+{
+  "subjects": [
+    "Sociology",
+    "Technology",
+    "Economics",
+    "Humanisme",
+    "Sociologie",
+    "Sociologia",
+    "Handlung",
+    "Handelen",
+    "Anthropologie philosophique",
+    "Technologie",
+    "Économie politique",
+    "Sociale evolutie",
+    "Arbeit",
+    "Pensée politique et sociale",
+    "Philosophie",
+    "Addresses, essays, lectures",
+    "Philosophy",
+    "Politische Philosophie",
+    "Politieke filosofie",
+    "Political science",
+    "Uitbuiting",
+    "Kant, immanuel, 1724-1804",
+    "Human beings",
+    "Life",
+    "Critique et interprétation",
+    "Homme",
+    "Action (Philosophie)",
+    "Modernité",
+    "Philosophie de l'homme",
+    "Économique",
+    "Philosophical anthropology",
+    "Act (philosophy)",
+    "Vita activa",
+    "Politische Zeitfragen",
+    "Sozialphilosophie",
+    "Statsvetenskap",
+    "Sociologi",
+    "Läromedel"
+  ],
+  "key": "/works/OL10460638W",
+  "title": "The Human Condition",
+  "authors": [
+    {
+      "author": {
+        "key": "/authors/OL142235A"
+      },
+      "type": {
+        "key": "/type/author_role"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "covers": [
+    5746840,
+    139537,
+    3346131,
+    5270123,
+    8834630,
+    8632052,
+    12338982,
+    14041739
+  ],
+  "first_publish_date": "June 1958",
+  "dewey_number": [
+    "301 A"
+  ],
+  "description": {
+    "type": "/type/text",
+    "value": "A work of striking originality bursting with unexpected insights, The Human condition is in many respects more relevant now than when it first appeared in 1958. In her study of the state of modern humanity, Hannah Arendt considers humankind from the perspective of the actions of which it is capable. The problems Arendt identified then--diminishing human agency and political freedom, the paradox that as human powers increase through technological and humanistic inquiry, we are less equipped to control the consequences of our actions--continue to confront us today. This new edition, published to coincide with the fortieth anniversary of its original publication, contains an improved and expanded index and a new introduction by noted Arendt scholar Margaret Canovan which incisively analyzes the book's argument and examines its present relevance. A classic in political and social theory, The Human condition is a work that has proved both timeless and perpetually timely."
+  },
+  "latest_revision": 25,
+  "revision": 25,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-11T03:00:40.062927"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2026-02-02T00:56:58.609470"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "type": {
+    "key": "/type/work"
+  },
+  "title": "Summary of Ha-Joon Chang's 23 Things They Don't Tell You about Capitalism",
+  "subjects": [
+    "Business"
+  ],
+  "authors": [
+    {
+      "type": {
+        "key": "/type/author_role"
+      },
+      "author": {
+        "key": "/authors/OL10394876A"
+      }
+    }
+  ],
+  "key": "/works/OL28064979W",
+  "latest_revision": 1,
+  "revision": 1,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2022-06-18T23:40:50.499522"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2022-06-18T23:40:50.499522"
+  }
+}

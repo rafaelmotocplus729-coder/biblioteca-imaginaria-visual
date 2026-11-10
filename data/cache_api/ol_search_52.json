@@ -1,0 +1,163 @@
+{
+  "numFound": 59,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 59,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "On the Genealogy of Morality Friedrich Nietzsche",
+  "offset": null,
+  "docs": [
+    {
+      "author_name": [
+        "Friedrich Nietzsche"
+      ],
+      "cover_i": 119371,
+      "isbn": [
+        "9781420928761",
+        "3150071232",
+        "9780872202832",
+        "0872202844",
+        "0760780811",
+        "9780521404594",
+        "9780872202849",
+        "1420928767",
+        "9780521871235",
+        "9780521406109",
+        "9780192831378",
+        "9783150071236",
+        "0631018603",
+        "0199537089",
+        "9780631018605",
+        "0872202836",
+        "052169163X",
+        "9780192836175",
+        "0521871239",
+        "0486426912",
+        "3442075564",
+        "019283617X",
+        "0521406102",
+        "9783442075560",
+        "9780199537082",
+        "0679724621",
+        "0521404592",
+        "9780679724629",
+        "9780486426914",
+        "9780521691635",
+        "0192831372",
+        "9780760780817"
+      ],
+      "key": "/works/OL98169W",
+      "language": [
+        "eng",
+        "ger"
+      ],
+      "publish_year": [
+        1920,
+        1923,
+        1967,
+        1969,
+        1972,
+        1988,
+        1989,
+        1993,
+        1994,
+        1996,
+        1997,
+        1998,
+        1999,
+        2003,
+        2006,
+        2007,
+        2008,
+        1887,
+        1897,
+        1910,
+        1913,
+        1918
+      ],
+      "publisher": [
+        "OXFORD PAPERBACKS",
+        "Foulis",
+        "Carlton House",
+        "Hackett Pub. Co.",
+        "Boni and Liveright",
+        "Vintage Books",
+        "Goldman",
+        "Macmillan",
+        "Oxford University Press",
+        "Digireads.com",
+        "Boni and Liveright, inc.",
+        "Philipp Reclam Jun.",
+        "Dover Publications",
+        "The Modern Library",
+        "Cambridge University Press",
+        "Random House",
+        "Blackwell",
+        "Goldmann",
+        "Reclam",
+        "C.G. Naumann",
+        "Oxford University Press, USA"
+      ],
+      "title": "Zur Genealogie der Moral"
+    },
+    {
+      "author_name": [
+        "Friedrich Nietzsche"
+      ],
+      "cover_i": 15157779,
+      "isbn": [
+        "0679724621",
+        "9780679724629"
+      ],
+      "key": "/works/OL15326236W",
+      "language": [
+        "eng"
+      ],
+      "publish_year": [
+        1969,
+        1989
+      ],
+      "publisher": [
+        "Vintage",
+        "Vintage Books"
+      ],
+      "title": "On the genealogy of morals.  Ecce Homo"
+    },
+    {
+      "author_name": [
+        "Friedrich Nietzsche"
+      ],
+      "cover_i": 5586642,
+      "isbn": [
+        "0879681721",
+        "9780879681722"
+      ],
+      "key": "/works/OL98172W",
+      "language": [
+        "eng"
+      ],
+      "publish_year": [
+        1924,
+        1911,
+        1909,
+        1974,
+        1910,
+        1913,
+        1914,
+        2015
+      ],
+      "publisher": [
+        "T. N. Foulis",
+        "Macmillan",
+        "Garden Press",
+        "Allen & Unwin",
+        "T.N. Foulis",
+        "Foulis",
+        "George Allen & Unwin",
+        "Delphi Classics",
+        "Gordon Press"
+      ],
+      "title": "The complete works of Friedrich Nietzsche"
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "subjects": [
+    "Psychoanalysis",
+    "Psychology and religion",
+    "Psychotherapy",
+    "Religion",
+    "Religious Psychology",
+    "Psychology, religious",
+    "Psychoanalytic Theory",
+    "Psychologie religieuse",
+    "Psychanalyse",
+    "Psychology of religion",
+    "Religion (discipline)"
+  ],
+  "key": "/works/OL1069670W",
+  "title": "Zukunft einer Illusion",
+  "authors": [
+    {
+      "author": {
+        "key": "/authors/OL108452A"
+      },
+      "type": {
+        "key": "/type/author_role"
+      }
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "covers": [
+    6503974,
+    12878755,
+    8800655,
+    12211769
+  ],
+  "description": {
+    "type": "/type/text",
+    "value": "In what is considered one of his greatest contributions to psychology, Austrian psychiatrist, Sigmund Freud describes his perspectives on the development and origins of religion - religion as an illusion, wishes that are the \"fulfillments of the oldest, strongest, and most urgent wishes of mankind.\" He goes on to explain and illustrate, \"what is characteristic of illusions is that they are derived from human wishes.\""
+  },
+  "latest_revision": 18,
+  "revision": 18,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-09T20:22:02.517362"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2025-08-30T14:11:29.051557"
+  }
+}

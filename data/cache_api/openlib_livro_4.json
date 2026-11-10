@@ -1,0 +1,129 @@
+{
+  "numFound": 34,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 34,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "Vidas Secas Graciliano Ramos",
+  "offset": null,
+  "docs": [
+    {
+      "author_key": [
+        "OL441423A"
+      ],
+      "author_name": [
+        "Graciliano Ramos de Oliveira"
+      ],
+      "cover_edition_key": "OL35663964M",
+      "cover_height": 500,
+      "cover_i": 12369687,
+      "cover_width": 345,
+      "ebook_access": "printdisabled",
+      "edition_count": 17,
+      "first_publish_year": 1964,
+      "has_fulltext": true,
+      "ia": [
+        "vidassecas0000ramo"
+      ],
+      "ia_collection": [
+        "internetarchivebooks",
+        "printdisabled"
+      ],
+      "key": "/works/OL2900596W",
+      "language": [
+        "ger",
+        "por",
+        "spa"
+      ],
+      "public_scan_b": false,
+      "subtitle": "romance",
+      "title": "Vidas secas"
+    },
+    {
+      "author_key": [
+        "OL441423A"
+      ],
+      "author_name": [
+        "Graciliano Ramos de Oliveira"
+      ],
+      "ebook_access": "no_ebook",
+      "edition_count": 6,
+      "first_publish_year": 1947,
+      "has_fulltext": false,
+      "key": "/works/OL2900595W",
+      "language": [
+        "por"
+      ],
+      "public_scan_b": false,
+      "subtitle": "romance",
+      "title": "Vidas sêcas"
+    },
+    {
+      "author_key": [
+        "OL10833300A"
+      ],
+      "author_name": [
+        "Graciliano Ramos"
+      ],
+      "cover_edition_key": "OL47541481M",
+      "cover_i": 14158825,
+      "ebook_access": "no_ebook",
+      "edition_count": 4,
+      "first_publish_year": 1986,
+      "has_fulltext": false,
+      "key": "/works/OL31247718W",
+      "language": [
+        "por"
+      ],
+      "public_scan_b": false,
+      "title": "Vidas Secas"
+    },
+    {
+      "author_key": [
+        "OL441423A"
+      ],
+      "author_name": [
+        "Graciliano Ramos de Oliveira"
+      ],
+      "cover_edition_key": "OL5945073M",
+      "cover_i": 6951345,
+      "ebook_access": "printdisabled",
+      "edition_count": 1,
+      "first_publish_year": 1965,
+      "has_fulltext": true,
+      "ia": [
+        "barrenlivesvidas00ramo"
+      ],
+      "ia_collection": [
+        "internetarchivebooks",
+        "printdisabled"
+      ],
+      "key": "/works/OL2900560W",
+      "language": [
+        "eng",
+        "spa"
+      ],
+      "public_scan_b": false,
+      "title": "Barren lives (Vidas s^cas)"
+    },
+    {
+      "author_key": [
+        "OL1970294A"
+      ],
+      "author_name": [
+        "Séminaire Graciliano Ramos: Vidas sêcas Poitiers 1971."
+      ],
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 1972,
+      "has_fulltext": false,
+      "key": "/works/OL7032536W",
+      "language": [
+        "por",
+        "fre"
+      ],
+      "public_scan_b": false,
+      "title": "Graciliano Ramos: Vidas sêcas"
+    }
+  ]
+}

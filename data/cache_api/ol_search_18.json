@@ -1,0 +1,44 @@
+{
+  "numFound": 2,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 2,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "O Povo Brasileiro Darcy Ribeiro",
+  "offset": null,
+  "docs": [
+    {
+      "author_name": [
+        "Darcy Ribeiro"
+      ],
+      "cover_i": 3842030,
+      "isbn": [
+        "9788571644519",
+        "8526022253",
+        "8571644519",
+        "9788526022256"
+      ],
+      "key": "/works/OL1755883W",
+      "language": [
+        "por"
+      ],
+      "publish_year": [
+        1995,
+        2015
+      ],
+      "publisher": [
+        "Global Editora",
+        "Companhia das Letras"
+      ],
+      "title": "O povo brasileiro"
+    },
+    {
+      "author_name": [
+        "Darcy Ribeiro"
+      ],
+      "cover_i": 8294099,
+      "key": "/works/OL17700241W",
+      "title": "O povo brasileiro"
+    }
+  ]
+}

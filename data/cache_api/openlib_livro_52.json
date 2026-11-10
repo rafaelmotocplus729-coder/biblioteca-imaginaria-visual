@@ -1,0 +1,49 @@
+{
+  "numFound": 2,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 2,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "Genealogia da Moral Friedrich Nietzsche",
+  "offset": null,
+  "docs": [
+    {
+      "author_key": [
+        "OL20157A"
+      ],
+      "author_name": [
+        "Friedrich Nietzsche"
+      ],
+      "cover_edition_key": "OL40799740M",
+      "cover_i": 13345772,
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 2017,
+      "has_fulltext": false,
+      "key": "/works/OL29656098W",
+      "language": [
+        "por"
+      ],
+      "public_scan_b": false,
+      "title": "Genealogia Da Moral, Uma Polêmica"
+    },
+    {
+      "author_key": [
+        "OL20157A"
+      ],
+      "author_name": [
+        "Friedrich Nietzsche"
+      ],
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 2016,
+      "has_fulltext": false,
+      "key": "/works/OL40375129W",
+      "language": [
+        "por"
+      ],
+      "public_scan_b": false,
+      "title": "Genealogia Da Moral"
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "description": "Thomas Hobbes' Leviathan, from 1651, is one of the first and most influential arguments towards social contract. Written in the midst of the English Civil War, it concerns the structure of government and society and argues for strong central governance and the rule of an absolute sovereign as the way to avoid civil war and chaos.",
+  "title": "Leviathan",
+  "covers": [
+    6525465,
+    770359,
+    103121,
+    119257,
+    4705684,
+    1866205,
+    118563,
+    1046880,
+    10723538
+  ],
+  "subjects": [
+    "Political science",
+    "The State",
+    "Early works to 1800",
+    "Sciences politiques",
+    "État",
+    "Ouvrages avant 1800",
+    "Nonfiction",
+    "Politics",
+    "Philosophy",
+    "Politieke filosofie",
+    "Science politique",
+    "open_syllabus_project",
+    "Political science -- Early works to 1800.",
+    "State, The.",
+    "State, the",
+    "Political science, early works to 1800",
+    "Government",
+    "General",
+    "National",
+    "Reference",
+    "Essays",
+    "Political science--early works to 1800",
+    "State",
+    "Jc153 .h65 1998",
+    "320.1",
+    "Jc153 .h65 1994",
+    "Staatsfilosofie",
+    "Hobbes, thomas",
+    "Filosofia moderna",
+    "Ciencia politica"
+  ],
+  "subject_people": [
+    "Thomas Hobbes (1588-1679)"
+  ],
+  "key": "/works/OL653987W",
+  "authors": [
+    {
+      "author": {
+        "key": "/authors/OL50870A"
+      },
+      "type": {
+        "key": "/type/author_role"
+      }
+    }
+  ],
+  "subject_times": [
+    "Early works to 1800"
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subtitle": "Or the Matter, Form, and Power of a Commonwealth Ecclesiastical and Civil",
+  "latest_revision": 31,
+  "revision": 31,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-09T00:21:10.408210"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2024-07-25T13:57:18.832498"
+  }
+}

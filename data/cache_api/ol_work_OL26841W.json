@@ -1,0 +1,138 @@
+{
+  "subtitle": "The Birth of the Prison",
+  "title": "Discipline and Punish",
+  "covers": [
+    5539160,
+    4433349,
+    4433348,
+    969901,
+    8732606,
+    8732608,
+    10719262,
+    12284027,
+    13686103,
+    13997974
+  ],
+  "first_sentence": {
+    "type": "/type/text",
+    "value": "On 2 March 1757 Damiens the regicide condemmed 'to make the amende honorable before the main door of the Church of Paris', where he was to be 'taken and conveyed in a cart, wearing nothing but a a shirt, holding a torch of burning wax weighing two pounds'; then, 'in the said cart, to the place de Greve, where, on a scaffold that will be erected there, the flesh will be torn from his breasts, arms, thighs and calves with red-hot pincers, his right hand, holding the knife with which he committed the said parricide, burnt with sulphur, and,on those places where the flesh will be torn away, poured molten lead, boiling oil, burning resin, wax and sulphur melted together and then his body drawn and quartered by four horses and his limbs and body consumed by fire, reduced to ashes and his ashes thrown to the winds' (Pieces originales . . ., 372-4)."
+  },
+  "first_publish_date": "April 25, 1991",
+  "key": "/works/OL26841W",
+  "authors": [
+    {
+      "author": {
+        "key": "/authors/OL4346031A"
+      },
+      "type": {
+        "key": "/type/author_role"
+      }
+    },
+    {
+      "author": {
+        "key": "/authors/OL2865744A"
+      },
+      "type": {
+        "key": "/type/author_role"
+      }
+    }
+  ],
+  "excerpts": [
+    {
+      "excerpt": "On 2 March 1757 Damiens the regicide condemmed 'to make the amende honorable before the main door of the Church of Paris', where he was to be 'taken and conveyed in a cart, wearing nothing but a a shirt, holding a torch of burning wax weighing two pounds'; then, 'in the said cart, to the place de Greve, where, on a scaffold that will be erected there, the flesh will be torn from his breasts, arms, thighs and calves with red-hot pincers, his right hand, holding the knife with which he committed the said parricide, burnt with sulphur, and,on those places where the flesh will be torn away, poured molten lead, boiling oil, burning resin, wax and sulphur melted together and then his body drawn and quartered by four horses and his limbs and body consumed by fire, reduced to ashes and his ashes thrown to the winds' (Pieces originales . . ., 372-4)."
+    }
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "subjects": [
+    "Prison discipline",
+    "Punishment",
+    "Prisons",
+    "Discipline",
+    "Contrôle social",
+    "Peines",
+    "Histoire",
+    "Fiction, general",
+    "Hv8666 .f6813 1979",
+    "365",
+    "Philosophy, modern, 20th century",
+    "PHILOSOPHY",
+    "Social",
+    "SOCIAL SCIENCE",
+    "Criminology",
+    "Sociology",
+    "Social Theory",
+    "Straffen",
+    "Gevangenissen",
+    "Sociale aspecten",
+    "Filosofische aspecten",
+    "Tucht",
+    "Geschichte",
+    "Strafvollzug",
+    "Fängelser",
+    "Straff",
+    "Disciplin (ordning)",
+    "History & surveys",
+    "Criminologia",
+    "Prisa o (histo ria)",
+    "Tratamento de preso,",
+    "Punibilidade",
+    "Regime penitencia rio,",
+    "Viole ncia (criminologia)",
+    "Pena,",
+    "Tortura",
+    "Direito penal",
+    "Direitos humanos",
+    "Histo ria",
+    "Viole ncia",
+    "Aspectos morais",
+    "Punic ʹa o.",
+    "Pena corporal",
+    "Sistema penitencia rio",
+    "Penitencia ria,",
+    "Regime penitenciário,",
+    "Sistema penitenciário",
+    "Violência",
+    "Prisão (história)",
+    "Penitenciária,",
+    "Punição",
+    "Violência (criminologia)",
+    "História",
+    "Crime",
+    "Punishments",
+    "Criminal justice",
+    "History",
+    "Essays",
+    "SOCIAL SCIENCE / Penology",
+    "Penology"
+  ],
+  "description": "English version of \"Surveiller et punir : naissance de la prison\"",
+  "genres": [
+    "/tags/OL166T"
+  ],
+  "identifiers": {
+    "wikidata": [
+      "Q334370"
+    ]
+  },
+  "links": [
+    {
+      "title": "Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Discipline_and_Punish",
+      "type": {
+        "key": "/type/link"
+      }
+    }
+  ],
+  "latest_revision": 15,
+  "revision": 15,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-10-12T22:31:17.033421"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2026-09-28T19:36:19.669782"
+  }
+}

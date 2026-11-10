@@ -1,0 +1,106 @@
+{
+  "numFound": 70,
+  "start": 0,
+  "numFoundExact": true,
+  "num_found": 70,
+  "documentation_url": "https://openlibrary.org/dev/docs/api/search",
+  "q": "Grande Sertão: Veredas João Guimarães Rosa",
+  "offset": null,
+  "docs": [
+    {
+      "author_key": [
+        "OL204214A"
+      ],
+      "author_name": [
+        "João Guimarães Rosa"
+      ],
+      "cover_edition_key": "OL2500719M",
+      "cover_height": 500,
+      "cover_i": 13909068,
+      "cover_width": 354,
+      "ebook_access": "no_ebook",
+      "edition_count": 18,
+      "first_publish_year": 1956,
+      "has_fulltext": false,
+      "key": "/works/OL1756937W",
+      "language": [
+        "ger",
+        "spa",
+        "por"
+      ],
+      "public_scan_b": false,
+      "title": "Grande sertão"
+    },
+    {
+      "author_key": [
+        "OL204214A"
+      ],
+      "author_name": [
+        "João Guimarães Rosa"
+      ],
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 1963,
+      "has_fulltext": false,
+      "key": "/works/OL8997211W",
+      "language": [
+        "eng"
+      ],
+      "public_scan_b": false,
+      "title": "The devil to pay in the backlands"
+    },
+    {
+      "author_key": [
+        "OL644586A"
+      ],
+      "author_name": [
+        "Eduardo de Faria Coutinho"
+      ],
+      "cover_edition_key": "OL44656488M",
+      "cover_i": 13946180,
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 2013,
+      "has_fulltext": false,
+      "key": "/works/OL32828249W",
+      "language": [
+        "por"
+      ],
+      "public_scan_b": false,
+      "title": "Grande sertão, veredas"
+    },
+    {
+      "author_key": [
+        "OL204214A"
+      ],
+      "author_name": [
+        "João Guimarães Rosa"
+      ],
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 2019,
+      "has_fulltext": false,
+      "key": "/works/OL28769034W",
+      "public_scan_b": false,
+      "title": "Grande sertao veredas - Edicao em quadrinhos"
+    },
+    {
+      "author_key": [
+        "OL204214A"
+      ],
+      "author_name": [
+        "João Guimarães Rosa"
+      ],
+      "ebook_access": "no_ebook",
+      "edition_count": 1,
+      "first_publish_year": 1956,
+      "has_fulltext": false,
+      "key": "/works/OL45566784W",
+      "language": [
+        "por"
+      ],
+      "public_scan_b": false,
+      "title": "Grande sertão"
+    }
+  ]
+}

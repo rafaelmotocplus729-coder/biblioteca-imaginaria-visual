@@ -1,0 +1,63 @@
+{
+  "subtitle": "étude de sociologie",
+  "covers": [
+    972713,
+    4937173,
+    4937174,
+    4937027,
+    8724385,
+    15072635,
+    7964189,
+    11222022,
+    11285128,
+    13014518
+  ],
+  "key": "/works/OL606917W",
+  "authors": [
+    {
+      "author": {
+        "key": "/authors/OL4287664A"
+      },
+      "type": {
+        "key": "/type/author_role"
+      }
+    }
+  ],
+  "title": "Le suicide",
+  "subjects": [
+    "Suicide",
+    "Suicidio (Psicologia)",
+    "Problemas Sociais",
+    "Sociological aspects",
+    "Sociological aspects of Suicide",
+    "open_syllabus_project",
+    "Soziologie",
+    "Sociologiska aspekter",
+    "Verklaringen",
+    "Selbstmord",
+    "Sociale situatie",
+    "Självmord",
+    "Zelfmoord",
+    "Toegepaste sociologie",
+    "Aspect sociologique",
+    "SOCIAL SCIENCE",
+    "Customs & Traditions",
+    "Socioeconomic Factors",
+    "Risk Factors",
+    "Psychology"
+  ],
+  "type": {
+    "key": "/type/work"
+  },
+  "description": "Originally published in 1897, this is Durkheim's pioneering attempt to offer a sociological explanation for a phenomenon regarded until then as exclusively psychological and individualistic.",
+  "latest_revision": 10,
+  "revision": 10,
+  "created": {
+    "type": "/type/datetime",
+    "value": "2009-12-08T06:15:38.588391"
+  },
+  "last_modified": {
+    "type": "/type/datetime",
+    "value": "2026-02-01T23:13:44.868202"
+  }
+}
