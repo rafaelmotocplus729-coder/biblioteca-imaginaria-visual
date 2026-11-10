@@ -5,6 +5,7 @@ const STORAGE_URL_KEY = 'zettel_supabase_url';
 const STORAGE_KEY_KEY = 'zettel_supabase_anon_key';
 
 const DEFAULT_PROJECT_URL = 'https://meeinyzahufzttyqouwg.supabase.co';
+const DEFAULT_ANON_KEY = 'sb_publishable_QCZF6jOLEk5Na5LpzH219g_EgqHJLgq';
 
 export interface SupabaseConfig {
   url: string;
@@ -21,7 +22,7 @@ export function getStoredSupabaseConfig(): SupabaseConfig {
 
   return {
     url: localUrl || envUrl || DEFAULT_PROJECT_URL,
-    anonKey: localKey || envKey
+    anonKey: localKey || envKey || DEFAULT_ANON_KEY
   };
 }
 
