@@ -70,45 +70,45 @@ export const ModalLivro: React.FC<ModalLivroProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-sm flex justify-center items-center p-3 sm:p-6 animate-fadeIn">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/70 backdrop-blur-md flex justify-center items-center p-3 sm:p-6 animate-fadeIn">
       <div
-        className="relative bg-library-paper dark:bg-library-darkPaper w-full max-w-4xl max-h-[92vh] overflow-y-auto rounded-xl shadow-2xl border border-slate-200 dark:border-library-darkBorder text-slate-800 dark:text-slate-100 flex flex-col focus:outline-none"
+        className="relative bg-library-paper dark:bg-library-darkPaper w-full max-w-4xl max-h-[92vh] overflow-y-auto rounded-xl shadow-2xl border border-stone-300 dark:border-stone-800 text-stone-800 dark:text-stone-100 flex flex-col focus:outline-none"
         tabIndex={-1}
       >
-        {/* Cabeçalho Fixo do Modal */}
-        <div className="sticky top-0 z-20 flex items-center justify-between px-6 py-4 bg-library-paper/95 dark:bg-library-darkPaper/95 backdrop-blur border-b border-slate-200 dark:border-library-darkBorder">
+        {/* Cabeçalho Fixo do Modal com Toque Clássico */}
+        <div className="sticky top-0 z-20 flex items-center justify-between px-6 py-4 bg-library-paper/95 dark:bg-library-darkPaper/95 backdrop-blur-md border-b border-stone-200 dark:border-stone-800">
           <div className="flex items-center gap-3">
             <span
-              className="px-2.5 py-1 text-xs font-bold rounded text-white"
+              className="px-2.5 py-1 text-xs font-cinzel font-bold tracking-wider rounded text-white shadow-xs"
               style={{ backgroundColor: cores.hex }}
             >
               Nível {livro.nivel} · Livro #{livro.id}
             </span>
             {livro.obra_de_vida && (
-              <span className="flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-200 border border-amber-300 dark:border-amber-800">
+              <span className="flex items-center gap-1.5 text-xs font-cinzel font-semibold px-2.5 py-0.5 rounded-full bg-amber-100/80 dark:bg-amber-950/60 text-amber-900 dark:text-amber-200 border border-amber-400/50">
                 <Star className="w-3 h-3 text-amber-500 fill-amber-500" />
                 Obra de Vida
               </span>
             )}
             {livro.idioma_leitura === 'en' && (
-              <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300">
+              <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-stone-200 dark:bg-stone-800 text-stone-800 dark:text-stone-200 border border-stone-300 dark:border-stone-700">
                 Leitura em Inglês [EN]
               </span>
             )}
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 transition-colors"
+            className="p-1.5 rounded-full hover:bg-stone-200/80 dark:hover:bg-stone-800 text-stone-500 hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100 transition-colors"
             title="Fechar (Esc)"
           >
-            <X className="w-6 h-6" />
+            <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Notificação Temporária de Abandono sem Culpa */}
         {mensagemAbandono && (
-          <div className="bg-amber-50 dark:bg-amber-950/80 border-l-4 border-amber-500 text-amber-900 dark:text-amber-200 p-3 mx-6 mt-4 rounded text-sm font-medium flex items-center gap-2">
-            <ShieldAlert className="w-4 h-4 text-amber-600" />
+          <div className="bg-amber-50/90 dark:bg-amber-950/80 border-l-4 border-amber-600 text-amber-950 dark:text-amber-200 p-3.5 mx-6 mt-4 rounded text-sm font-serif italic flex items-center gap-2.5">
+            <ShieldAlert className="w-4 h-4 text-amber-600 shrink-0" />
             {mensagemAbandono}
           </div>
         )}
@@ -116,9 +116,14 @@ export const ModalLivro: React.FC<ModalLivroProps> = ({
         {/* Corpo do Modal na ordem exata da Seção 7.2 */}
         <div className="p-6 sm:p-8 space-y-8">
           {/* 1 e 2: Capa, Autor, Título, Ano, Área, Classe */}
-          <div className="flex flex-col md:flex-row gap-6 items-start">
-            {/* Capa */}
-            <div className="w-full md:w-56 shrink-0 aspect-[2/3] rounded-lg overflow-hidden shadow-lg border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 relative">
+          <div className="flex flex-col md:flex-row gap-7 items-start">
+            {/* Capa com Efeito Físico de Livro */}
+            <div className="w-full md:w-56 shrink-0 aspect-[2/3] rounded overflow-hidden shadow-book-hover border border-stone-300 dark:border-stone-700 bg-stone-100 dark:bg-stone-900 relative">
+              {/* Sombra de lombada física na esquerda */}
+              <div className="absolute left-0 top-0 bottom-0 w-3 pointer-events-none bg-gradient-to-r from-black/40 via-black/15 to-transparent z-10" />
+              <div className="absolute left-3 top-0 bottom-0 w-[1px] pointer-events-none bg-black/25 dark:bg-white/10 z-10" />
+              <div className="absolute right-0 top-0 bottom-0 w-[2px] pointer-events-none bg-gradient-to-l from-amber-100/40 dark:from-white/10 to-transparent z-10" />
+
               {livro.capa_url && !imagemErro ? (
                 <img
                   src={livro.capa_url}
@@ -139,21 +144,22 @@ export const ModalLivro: React.FC<ModalLivroProps> = ({
                     background: `linear-gradient(150deg, ${cores.hex}ee, ${cores.hex}cc, ${cores.hex}ff)`
                   }}
                 >
-                  <div className="absolute inset-2 border border-white/20 rounded pointer-events-none"></div>
+                  <div className="absolute inset-2 border border-amber-300/40 rounded pointer-events-none" />
+                  <div className="absolute inset-2.5 border border-amber-300/20 rounded pointer-events-none" />
 
-                  <div className="flex justify-between text-xs opacity-80 font-serif z-10">
-                    <span className="font-mono">#{livro.id}</span>
+                  <div className="flex justify-between text-xs opacity-90 font-cinzel z-10">
+                    <span className="font-bold">#{livro.id}</span>
                     <span>{livro.ano}</span>
                   </div>
-                  <div className="my-auto z-10">
-                    <h4 className="font-serif font-bold text-xl leading-tight drop-shadow">
+                  <div className="my-auto z-10 text-center">
+                    <h4 className="font-serif font-bold text-xl leading-tight drop-shadow text-amber-50">
                       {livro.titulo}
                     </h4>
-                    <p className="text-sm opacity-90 mt-2 font-medium">
+                    <p className="text-sm opacity-90 mt-2 font-serif italic text-amber-100">
                       {livro.autor}
                     </p>
                   </div>
-                  <div className="flex justify-between text-[11px] uppercase font-bold tracking-wider opacity-80 border-t border-white/20 pt-2 z-10">
+                  <div className="flex justify-between text-[10px] uppercase font-cinzel font-bold tracking-wider opacity-90 border-t border-amber-300/30 pt-2 z-10">
                     <span>{livro.area}</span>
                     <span>{livro.classe}</span>
                   </div>
@@ -162,59 +168,59 @@ export const ModalLivro: React.FC<ModalLivroProps> = ({
             </div>
 
             {/* Metadados Principais */}
-            <div className="flex-1 space-y-3">
+            <div className="flex-1 space-y-3.5">
               <div className="flex items-center gap-2 flex-wrap">
                 <span
-                  className="px-2.5 py-0.5 text-xs font-bold uppercase rounded text-white"
+                  className="px-2.5 py-0.5 text-xs font-cinzel font-bold uppercase rounded text-white shadow-2xs"
                   style={{ backgroundColor: cores.hex }}
                 >
                   {livro.area}
                 </span>
-                <span className="px-2.5 py-0.5 text-xs font-bold uppercase rounded bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-slate-200">
+                <span className="px-2.5 py-0.5 text-xs font-cinzel font-bold uppercase rounded bg-stone-200 dark:bg-stone-800 text-stone-800 dark:text-stone-200 border border-stone-300 dark:border-stone-700">
                   {livro.classe}
                 </span>
-                <span className="text-sm text-slate-500 dark:text-slate-400 font-serif">
+                <span className="text-sm text-stone-600 dark:text-stone-400 font-cinzel font-semibold">
                   Publicado em {livro.ano}
                 </span>
               </div>
 
-              <h2 className="text-2xl sm:text-3xl font-serif font-bold text-slate-900 dark:text-slate-50 leading-tight">
+              <h2 className="text-2xl sm:text-3xl font-serif font-bold text-stone-900 dark:text-stone-50 leading-tight">
                 {livro.titulo}
               </h2>
-              <p className="text-lg text-slate-700 dark:text-slate-300 font-serif">
+              <p className="text-lg text-stone-700 dark:text-stone-300 font-serif italic">
                 {livro.autor}
               </p>
 
               {/* 3: Aviso de Resumo (Seção 7.6 e 7.2) */}
               <div className="pt-2">
                 {livro.resumo_permitido === 'nao' && (
-                  <div className="p-3 rounded-lg bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 text-rose-900 dark:text-rose-200 flex items-start gap-3">
-                    <span className="font-bold text-rose-600 text-base">✗</span>
+                  <div className="p-3.5 rounded-lg bg-rose-50/90 dark:bg-rose-950/40 border border-rose-300 dark:border-rose-900 text-rose-950 dark:text-rose-200 flex items-start gap-3">
+                    <span className="font-bold text-rose-700 text-base">✗</span>
                     <div>
-                      <div className="font-bold text-sm">{LEGENDA_RESUMO.nao.rotulo}</div>
-                      <p className="text-xs opacity-90 mt-0.5">
+                      <div className="font-serif font-bold text-sm">{LEGENDA_RESUMO.nao.rotulo}</div>
+                      <p className="text-xs opacity-90 mt-0.5 font-serif">
                         {LEGENDA_RESUMO.nao.descricao}
                       </p>
                     </div>
                   </div>
                 )}
                 {livro.resumo_permitido === 'sim' && (
-                  <div className="p-3 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900 text-emerald-900 dark:text-emerald-200 flex items-start gap-3">
-                    <span className="font-bold text-emerald-600 text-base">✓</span>
+                  <div className="p-3.5 rounded-lg bg-emerald-50/90 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-900 text-emerald-950 dark:text-emerald-200 flex items-start gap-3">
+                    <span className="font-bold text-emerald-700 text-base">✓</span>
                     <div>
-                      <div className="font-bold text-sm">{LEGENDA_RESUMO.sim.rotulo}</div>
-                      <p className="text-xs opacity-90 mt-0.5">
+                      <div className="font-serif font-bold text-sm">{LEGENDA_RESUMO.sim.rotulo}</div>
+                      <p className="text-xs opacity-90 mt-0.5 font-serif">
                         {LEGENDA_RESUMO.sim.descricao}
                       </p>
                     </div>
                   </div>
                 )}
                 {livro.resumo_permitido === 'estrutura' && (
-                  <div className="p-3 rounded-lg bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900 text-amber-900 dark:text-amber-200 flex items-start gap-3">
-                    <span className="font-bold text-amber-600 text-base">~</span>
+                  <div className="p-3.5 rounded-lg bg-amber-50/90 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-900 text-amber-950 dark:text-amber-200 flex items-start gap-3">
+                    <span className="font-bold text-amber-700 text-base">~</span>
                     <div>
-                      <div className="font-bold text-sm">{LEGENDA_RESUMO.estrutura.rotulo}</div>
-                      <p className="text-xs opacity-90 mt-0.5">
+                      <div className="font-serif font-bold text-sm">{LEGENDA_RESUMO.estrutura.rotulo}</div>
+                      <p className="text-xs opacity-90 mt-0.5 font-serif">
                         {LEGENDA_RESUMO.estrutura.descricao}
                       </p>
                     </div>
@@ -223,16 +229,16 @@ export const ModalLivro: React.FC<ModalLivroProps> = ({
               </div>
 
               {/* Status de Leitura Atual & Ações Rápidas */}
-              <div className="pt-4 flex flex-wrap gap-2 items-center">
-                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider mr-1">
+              <div className="pt-4 flex flex-wrap gap-2.5 items-center">
+                <span className="text-xs font-cinzel font-bold text-stone-500 uppercase tracking-wider mr-1">
                   Estado:
                 </span>
                 <button
                   onClick={() => onAtualizarEstado(livro.id, 'lendo')}
-                  className={`px-3 py-1.5 rounded-md text-xs font-medium flex items-center gap-1.5 transition-all ${
+                  className={`px-3.5 py-1.5 rounded text-xs font-serif font-semibold flex items-center gap-1.5 transition-all shadow-xs ${
                     estado === 'lendo'
-                      ? 'bg-amber-500 text-white shadow-md'
-                      : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+                      ? 'bg-amber-600 text-white shadow-md'
+                      : 'bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-stone-700 border border-stone-300 dark:border-stone-700'
                   }`}
                 >
                   <BookOpen className="w-3.5 h-3.5" />
@@ -240,10 +246,10 @@ export const ModalLivro: React.FC<ModalLivroProps> = ({
                 </button>
                 <button
                   onClick={() => setMostrarModalLido(true)}
-                  className={`px-3 py-1.5 rounded-md text-xs font-medium flex items-center gap-1.5 transition-all ${
+                  className={`px-3.5 py-1.5 rounded text-xs font-serif font-semibold flex items-center gap-1.5 transition-all shadow-xs ${
                     estado === 'lido'
-                      ? 'bg-emerald-600 text-white shadow-md'
-                      : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+                      ? 'bg-emerald-700 text-white shadow-md'
+                      : 'bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-stone-700 border border-stone-300 dark:border-stone-700'
                   }`}
                 >
                   <CheckCircle className="w-3.5 h-3.5" />
@@ -251,10 +257,10 @@ export const ModalLivro: React.FC<ModalLivroProps> = ({
                 </button>
                 <button
                   onClick={() => onAtualizarEstado(livro.id, 'reler_5_anos')}
-                  className={`px-3 py-1.5 rounded-md text-xs font-medium flex items-center gap-1.5 transition-all ${
+                  className={`px-3.5 py-1.5 rounded text-xs font-serif font-semibold flex items-center gap-1.5 transition-all shadow-xs ${
                     estado === 'reler_5_anos'
-                      ? 'bg-purple-600 text-white shadow-md'
-                      : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+                      ? 'bg-purple-700 text-white shadow-md'
+                      : 'bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-stone-700 border border-stone-300 dark:border-stone-700'
                   }`}
                 >
                   <Clock className="w-3.5 h-3.5" />
@@ -262,10 +268,10 @@ export const ModalLivro: React.FC<ModalLivroProps> = ({
                 </button>
                 <button
                   onClick={handleAbandonar}
-                  className={`px-3 py-1.5 rounded-md text-xs font-medium flex items-center gap-1.5 transition-all ${
+                  className={`px-3.5 py-1.5 rounded text-xs font-serif font-semibold flex items-center gap-1.5 transition-all shadow-xs ${
                     estado === 'abandonado'
-                      ? 'bg-slate-600 text-white shadow-md'
-                      : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+                      ? 'bg-stone-700 text-white shadow-md'
+                      : 'bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-stone-700 border border-stone-300 dark:border-stone-700'
                   }`}
                 >
                   <XCircle className="w-3.5 h-3.5" />
@@ -276,13 +282,15 @@ export const ModalLivro: React.FC<ModalLivroProps> = ({
           </div>
 
           {/* 4: Tese */}
-          <div className="space-y-1.5 border-t border-slate-100 dark:border-slate-800 pt-5">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-              Tese
+          <div className="space-y-2 border-t border-stone-200 dark:border-stone-800 pt-6">
+            <h3 className="text-xs font-cinzel font-bold uppercase tracking-widest text-stone-500 dark:text-stone-400">
+              Tese Fundamental da Obra
             </h3>
-            <p className="font-serif text-lg leading-relaxed text-slate-800 dark:text-slate-200 italic bg-amber-50/50 dark:bg-amber-950/20 p-4 rounded-lg border-l-4 border-amber-500">
-              "{livro.tese}"
-            </p>
+            <div className="relative font-serif text-lg leading-relaxed text-stone-900 dark:text-stone-100 italic bg-amber-50/70 dark:bg-amber-950/20 p-5 rounded-lg border-l-4 border-amber-600 shadow-xs">
+              <span className="text-2xl text-amber-700/60 font-serif mr-1">“</span>
+              {livro.tese}
+              <span className="text-2xl text-amber-700/60 font-serif ml-1">”</span>
+            </div>
           </div>
 
           {/* 5: O que acrescenta */}

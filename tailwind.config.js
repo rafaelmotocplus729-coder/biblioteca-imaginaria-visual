@@ -37,7 +37,13 @@ export default {
       },
       fontFamily: {
         serif: ['"Playfair Display"', 'Georgia', 'Cambria', '"Times New Roman"', 'serif'],
+        cinzel: ['"Cinzel"', 'serif'],
         sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+      },
+      boxShadow: {
+        'book': '-4px 4px 10px -2px rgba(0, 0, 0, 0.25), 0 2px 4px -1px rgba(0, 0, 0, 0.1)',
+        'book-hover': '-6px 8px 18px -2px rgba(0, 0, 0, 0.35), 0 4px 8px -2px rgba(0, 0, 0, 0.15)',
+        'shelf': '0 8px 16px -4px rgba(46, 30, 23, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.1)',
       }
     },
   },
