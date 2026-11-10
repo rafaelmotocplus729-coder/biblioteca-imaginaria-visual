@@ -116,3 +116,14 @@
   background: rgba(156, 163, 175, 0.7);
 }
 
+/* Ocultar barra de rolagem mantendo funcionalidade de scroll */
+.scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+

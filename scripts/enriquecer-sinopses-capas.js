@@ -11,66 +11,66 @@ const livros = JSON.parse(fs.readFileSync(enriquecidoPath, 'utf8'));
 
 // Mapeamento definitivo e completo de todas as 60 capas em português autênticas
 export const TODAS_CAPAS_CONFIRMADAS = {
-  1: 'https://covers.openlibrary.org/b/isbn/9788588062894-L.jpg', // Como Ler Livros (É Realizações)
-  2: 'https://covers.openlibrary.org/b/isbn/9780521189064-L.jpg', // English Grammar in Use [EN]
-  3: 'https://covers.openlibrary.org/b/isbn/9788535914849-L.jpg', // 1984 (Companhia das Letras)
-  4: 'https://covers.openlibrary.org/b/id/12369687-L.jpg',        // Vidas Secas (Record)
-  5: '/capas/5.webp',                                             // Em Busca de Sentido (Vozes)
-  6: 'https://covers.openlibrary.org/b/isbn/9788571104808-L.jpg', // Cultura: um conceito antropológico (Zahar)
-  7: '/capas/7.webp',                                             // Armas, Germes e Aço (Record)
-  8: '/capas/8.jpg',                                              // Os Problemas da Filosofia (Edições 70)
-  9: '/capas/9.jpg',                                              // Apologia de Sócrates (L&PM)
-  10: '/capas/10.webp',                                           // Ortodoxia (Ecclesiae)
-  11: '/capas/11.webp',                                           // Economia numa Única Lição (Instituto Mises / Record)
-  12: 'https://covers.openlibrary.org/b/isbn/9788585934231-L.jpg', // Manifesto Comunista (Boitempo)
-  13: 'https://covers.openlibrary.org/b/isbn/9788501115591-L.jpg', // O Mito de Sísifo (Record)
-  14: '/capas/14.webp',                                           // O Existencialismo é um Humanismo (Vozes)
-  15: 'https://covers.openlibrary.org/b/isbn/9788573263596-L.jpg', // A Morte de Ivan Ilitch (Editora 34)
-  16: 'https://covers.openlibrary.org/b/id/123152-L.jpg',          // Memórias Póstumas de Brás Cubas (Edição BR)
-  17: 'https://covers.openlibrary.org/b/isbn/9788535928136-L.jpg', // Raízes do Brasil (Companhia das Letras)
-  18: 'https://covers.openlibrary.org/b/isbn/9788571644519-L.jpg', // O Povo Brasileiro (Companhia das Letras)
-  19: 'https://covers.openlibrary.org/b/isbn/9788571106093-L.jpg', // Apologia da História (Zahar)
-  20: 'https://covers.openlibrary.org/b/isbn/9788539003839-L.jpg', // Rápido e Devagar (Objetiva)
-  21: '/capas/21.webp',                                           // O Homem e seus Símbolos (HarperCollins)
-  22: '/capas/22.jpg',                                            // Ciência e Política: Duas Vocações (Martin Claret)
-  23: '/capas/23.webp',                                           // 23 Coisas que Não Nos Contaram sobre o Capitalismo (Pensamento)
-  24: 'https://covers.openlibrary.org/b/isbn/9788515020164-L.jpg', // Catecismo da Igreja Católica (Loyola)
-  25: '/capas/25.jpg',                                            // A República (Perspectiva / Martin Claret)
-  26: '/capas/26.jpg',                                            // Ética a Nicômaco (Edipro)
-  27: '/capas/27.jpg',                                            // Confissões (Penguin-Companhia)
-  28: '/capas/28.webp',                                           // Santos e Pecadores: História dos Papas (Edições 70)
-  29: '/capas/29.webp',                                           // O Suicídio (Edipro)
-  30: '/capas/30.jpg',                                            // O Futuro de uma Ilusão (Companhia das Letras)
-  31: '/capas/31.webp',                                           // Ciência e Comportamento Humano (Martins Fontes)
-  32: '/capas/32.webp',                                           // Leviatã (Martin Claret)
-  33: '/capas/33.webp',                                           // Discurso sobre a Origem da Desigualdade (L&PM)
-  34: 'https://covers.openlibrary.org/b/isbn/9788526008694-L.jpg', // Casa-Grande & Senzala (Global)
-  35: 'https://covers.openlibrary.org/b/isbn/9788571645851-L.jpg', // Tristes Trópicos (Companhia das Letras)
-  36: 'https://covers.openlibrary.org/b/isbn/9780141393063-L.jpg', // Politics and the English Language [EN]
-  37: '/capas/37.webp',                                           // Pensamentos (Kírion / Martins Fontes)
-  38: 'https://covers.openlibrary.org/b/isbn/9788573260793-L.jpg', // Os Irmãos Karamázov (Editora 34)
-  39: 'https://covers.openlibrary.org/b/isbn/9788542208801-L.jpg', // Silêncio (Tusquets)
-  40: '/capas/40.webp',                                           // Rerum Novarum (Paulus)
-  41: '/capas/41.webp',                                           // A Riqueza das Nações (Ediouro / WMF Martins Fontes)
-  42: '/capas/42.webp',                                           // O Caminho da Servidão (LVM)
-  43: '/capas/43.webp',                                           // A Grande Transformação (Contraponto)
-  44: '/capas/44.webp',                                           // Reflexões sobre a Revolução na França (Vide Editorial)
-  45: '/capas/45.jpg',                                            // A Ética Protestante e o Espírito do Capitalismo (Martin Claret)
-  46: 'https://covers.openlibrary.org/b/id/15210532-L.jpg',        // Formação Econômica do Brasil (Cia das Letras)
-  47: '/capas/47.webp',                                           // Modernidade Líquida (Zahar)
-  48: 'https://covers.openlibrary.org/b/isbn/9788521803935-L.jpg', // A Condição Humana (Forense Universitária)
-  49: '/capas/49.webp',                                           // História da Guerra do Peloponeso (WMF Martins Fontes)
-  50: '/capas/50.webp',                                           // Fundamentação da Metafísica dos Costumes (Martin Claret)
-  51: '/capas/51.jpg',                                            // Temor e Tremor (Relógio D'\''Água / Vozes)
-  52: 'https://covers.openlibrary.org/b/isbn/9788571648050-L.jpg', // Genealogia da Moral (Companhia das Letras)
-  53: '/capas/53.webp',                                           // Suma Teológica (Ecclesiae / Loyola)
-  54: 'https://covers.openlibrary.org/b/isbn/9788573261202-L.jpg', // A Divina Comédia (Editora 34)
-  55: '/capas/55.webp',                                           // O Capital, Livro 1 (Boitempo)
-  56: 'https://covers.openlibrary.org/b/isbn/9788532605085-L.jpg', // Vigiar e Punir (Vozes)
-  57: '/capas/57.webp',                                           // A Sociedade contra o Estado (Ubu)
-  58: 'https://covers.openlibrary.org/b/id/6390023-L.jpg',          // Os Donos do Poder (Globo)
-  59: 'https://covers.openlibrary.org/b/isbn/9788535932027-L.jpg', // Grande Sertão: Veredas (Cia das Letras)
-  60: '/capas/60.jpg'                                             // A Interpretação dos Sonhos (L&PM)
+  "1": "/capas/1.webp",
+  "2": "/capas/2.webp",
+  "3": "/capas/3.webp",
+  "4": "/capas/4.webp",
+  "5": "/capas/5.webp",
+  "6": "/capas/6.webp",
+  "7": "/capas/7.webp",
+  "8": "/capas/8.jpg",
+  "9": "/capas/9.jpg",
+  "10": "/capas/10.webp",
+  "11": "/capas/11.webp",
+  "12": "/capas/12.webp",
+  "13": "/capas/13.webp",
+  "14": "/capas/14.webp",
+  "15": "/capas/15.webp",
+  "16": "/capas/16.webp",
+  "17": "/capas/17.webp",
+  "18": "/capas/18.webp",
+  "19": "/capas/19.webp",
+  "20": "/capas/20.webp",
+  "21": "/capas/21.webp",
+  "22": "/capas/22.jpg",
+  "23": "/capas/23.webp",
+  "24": "/capas/24.webp",
+  "25": "/capas/25.jpg",
+  "26": "/capas/26.jpg",
+  "27": "/capas/27.jpg",
+  "28": "/capas/28.webp",
+  "29": "/capas/29.webp",
+  "30": "/capas/30.jpg",
+  "31": "/capas/31.webp",
+  "32": "/capas/32.webp",
+  "33": "/capas/33.webp",
+  "34": "/capas/34.webp",
+  "35": "/capas/35.webp",
+  "36": "/capas/36.webp",
+  "37": "/capas/37.webp",
+  "38": "/capas/38.webp",
+  "39": "/capas/39.webp",
+  "40": "/capas/40.webp",
+  "41": "/capas/41.webp",
+  "42": "/capas/42.webp",
+  "43": "/capas/43.webp",
+  "44": "/capas/44.webp",
+  "45": "/capas/45.jpg",
+  "46": "/capas/46.webp",
+  "47": "/capas/47.webp",
+  "48": "/capas/48.webp",
+  "49": "/capas/49.webp",
+  "50": "/capas/50.webp",
+  "51": "/capas/51.jpg",
+  "52": "/capas/52.webp",
+  "53": "/capas/53.webp",
+  "54": "/capas/54.webp",
+  "55": "/capas/55.webp",
+  "56": "/capas/56.webp",
+  "57": "/capas/57.webp",
+  "58": "/capas/58.webp",
+  "59": "/capas/59.webp",
+  "60": "/capas/60.jpg"
 };
 
 export const SINOPSES_EDITORIAL_PT = {
