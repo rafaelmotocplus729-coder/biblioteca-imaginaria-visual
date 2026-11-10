@@ -94,6 +94,13 @@ export interface Filtros {
 // ==========================================
 export type TipoNotaZettel = 'indice' | 'referencia' | 'permanente';
 
+export type TipoRelacaoDialetica =
+  | 'desenvolve'    // 🌲 Desenvolve / Aprofunda a ideia
+  | 'contraponto'   // ⚡ Contrapõe / Objeção / Tensão dialética
+  | 'complementa'   // 🧩 Complementa / Visão afim
+  | 'aplica'        // 💡 Aplica / Exemplo concreto
+  | 'origem';       // 📜 Origem histórica / Genealogia
+
 export interface NotaZettel {
   id: string; // Ex: "202501152223"
   titulo: string; // Nome da nota (sem extensão .md)
@@ -107,6 +114,9 @@ export interface NotaZettel {
   livroId?: number; // Vínculo com um dos 120 livros da Biblioteca Imaginária
   pagina?: number | string;
   relacao?: string; // Link [[Outra Nota Permanente]]
+  tipoRelacao?: TipoRelacaoDialetica; // Classificação dialética da conexão
+  justificativaRelacao?: string; // Por que as duas ideias se conectam
+  citacaoOriginal?: string; // Trecho literal que originou a nota permanente
   
   conteudo: string; // Texto Markdown com #síntese, #comentário, #citação e [[Wikilinks]]
   dataCriacao: string;

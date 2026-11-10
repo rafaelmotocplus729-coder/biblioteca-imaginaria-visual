@@ -8,7 +8,8 @@ import {
   SessaoRevisao,
   NotaZettel,
   NotaTemporaria,
-  CanvasZettel
+  CanvasZettel,
+  TipoRelacaoDialetica
 } from '../types';
 import livrosEnriquecidos from '../../data/enriquecido.json';
 import relacoesPadrao from '../../data/relacoes.json';
@@ -96,7 +97,17 @@ interface BibliotecaState {
   marcarNotaTemporariaProcessada: (id: string) => void;
   removerNotaTemporaria: (id: string) => void;
   criarNotaReferenciaDeLivro: (livroId: number) => NotaZettel;
-  criarNotaPermanenteRapida: (numTema: number, titulo: string, referencia: string, pagina?: number | string, relacao?: string) => NotaZettel;
+  criarNotaPermanenteRapida: (
+    numTema: number,
+    titulo: string,
+    referencia: string,
+    pagina?: number | string,
+    relacao?: string,
+    conteudoInicial?: string,
+    tipoRelacao?: TipoRelacaoDialetica,
+    citacaoOriginal?: string,
+    justificativaRelacao?: string
+  ) => NotaZettel;
   salvarCanvasZettel: (canvas: CanvasZettel) => void;
   exportarZettelkastenMarkdown: () => string;
 
@@ -968,7 +979,7 @@ ${livro.sinopse_editorial || livro.tese}
     return novaNota;
   },
 
-  criarNotaPermanenteRapida: (numTema, titulo, referencia, pagina, relacao) => {
+  criarNotaPermanenteRapida: (numTema, titulo, referencia, pagina, relacao, conteudoInicial, tipoRelacao, citacaoOriginal, justificativaRelacao) => {
     const agora = new Date();
     const stamp = agora.getFullYear().toString() +
       String(agora.getMonth() + 1).padStart(2, '0') +
@@ -977,19 +988,44 @@ ${livro.sinopse_editorial || livro.tese}
       String(agora.getMinutes()).padStart(2, '0');
 
     const tituloNota = `${numTema}-${stamp} - ${titulo}`;
-    const temaNome = numTema === 1 ? '1 Literatura' : (numTema === 2 ? '2 Filosofia' : '3 Método e Produtividade Intelectual');
+    const temaNome = numTema === 1 ? '1 Literatura' : (numTema === 2 ? '2 Filosofia' : (numTema === 3 ? '3 Psicologia' : (numTema === 4 ? '4 Religião' : '5 Filosofia')));
+
+    // Monta o corpo com a citação de apoio clássica se fornecida
+    let corpo = `# ${titulo}\n\n`;
+    if (citacaoOriginal) {
+      corpo += `> "${citacaoOriginal.trim()}"\n`;
+      corpo += `> — ${referencia ? referencia.replace(/\[\[|\]\]/g, '') : 'Fonte'}${pagina ? `, p. ${pagina}` : ''}\n\n`;
+    }
+    corpo += `## Minha Ideia\n`;
+    corpo += conteudoInicial && conteudoInicial.trim()
+      ? conteudoInicial.trim()
+      : 'Texto autônomo, claro e sintético, com minhas palavras. Uma única ideia.';
+
+    if (relacao) {
+      const relacaoNome = relacao.replace(/\[\[|\]\]/g, '');
+      const rotuloRelacao = tipoRelacao ? ` (${tipoRelacao})` : '';
+      corpo += `\n\n## Conexões\n- [[${relacaoNome}]]${rotuloRelacao}${justificativaRelacao ? `: ${justificativaRelacao}` : ''}`;
+    }
+
+    const tags = ['nota permanente'];
+    if (tipoRelacao) {
+      tags.push(`relacao:${tipoRelacao}`);
+    }
 
     const novaNota: NotaZettel = {
       id: stamp,
       titulo: tituloNota,
       tipo: 'permanente',
       pasta: '03 permanentes',
-      tags: ['nota permanente'],
+      tags,
       referencia: referencia ? (referencia.startsWith('[[') ? referencia : `[[${referencia}]]`) : undefined,
       pagina: pagina || undefined,
       relacao: relacao ? (relacao.startsWith('[[') ? relacao : `[[${relacao}]]`) : undefined,
+      tipoRelacao,
+      justificativaRelacao,
+      citacaoOriginal,
       tema: `[[${temaNome}]]`,
-      conteudo: `# ${titulo}\n\nTexto autônomo, claro e sintético, com minhas palavras. Uma única ideia.`,
+      conteudo: corpo,
       dataCriacao: agora.toISOString(),
       dataAtualizacao: agora.toISOString()
     };
