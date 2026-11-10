@@ -6,7 +6,6 @@ import {
 import { useBibliotecaStore } from '../store/useBibliotecaStore';
 import {
   Folder,
-  Plus,
   Search,
   Link as LinkIcon,
   BookOpen,
@@ -24,12 +23,15 @@ import {
   ChevronDown,
   Image as ImageIcon,
   Highlighter,
-  BookMarked,
   FileText,
   FolderPlus,
   FilePlus,
   Upload,
-  Book
+  Book,
+  PanelLeftClose,
+  PanelLeft,
+  Compass,
+  Clock
 } from 'lucide-react';
 
 interface ZettelkastenViewProps {
@@ -51,7 +53,7 @@ const PRESETS_WALLPAPERS: WallpaperPreset[] = [
     nome: 'Claroscuro Barroco (Caravaggio)',
     descricao: 'Pintura a óleo clássica com iluminação dramática e luz de velas quente',
     url: 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?q=80&w=2000&auto=format&fit=crop',
-    autor: 'Artes Clássicas / Galeria'
+    autor: 'Galeria Clássica'
   },
   {
     id: 'rembrandt',
@@ -65,7 +67,7 @@ const PRESETS_WALLPAPERS: WallpaperPreset[] = [
     nome: 'A Escola de Atenas (Rafael)',
     descricao: 'Arquitetura renascentista monumental e mestres da filosofia',
     url: 'https://images.unsplash.com/photo-1544644181-1484b3fdfc62?q=80&w=2000&auto=format&fit=crop',
-    autor: 'Afresco do Vaticano'
+    autor: 'Afresco Renascentista'
   },
   {
     id: 'biblioteca',
@@ -90,10 +92,10 @@ const PRESETS_WALLPAPERS: WallpaperPreset[] = [
   },
   {
     id: 'solido',
-    nome: 'Preto Sólido Obsidian (Sem Imagem)',
-    descricao: 'Fundo minimalista escuro sem imagem com foco total no texto',
+    nome: 'Puro / Sem Imagem',
+    descricao: 'Superfície limpa e neutra que acompanha o tema da biblioteca',
     url: '',
-    autor: 'Minimalismo Puro'
+    autor: 'Minimalismo Clássico'
   }
 ];
 
@@ -126,6 +128,7 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
 
   // Estados de layout e visão
   const [visaoAtiva, setVisaoAtiva] = useState<'acervo' | 'inbox' | 'canvas'>('acervo');
+  const [sidebarAberta, setSidebarAberta] = useState(true);
   const [busca, setBusca] = useState('');
   const [propriedadesAberta, setPropriedadesAberta] = useState(true);
   const [backlinksAberto, setBacklinksAberto] = useState(false);
@@ -133,7 +136,7 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
   // Estados de expansão de pastas na Árvore do Obsidian
   const [pastasAbertas, setPastasAbertas] = useState<Record<string, boolean>>({
     biblioteca: true,
-    '00 - INÍCIO': true,
+    '00 - INÍCIO': false,
     '01 - ÍNDICE': true,
     '02 - REFERÊNCIAS': true,
     '03 - PERMANENTES': true,
@@ -176,15 +179,15 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
     if (!fundoZettelkasten || fundoZettelkasten === 'solido') return '';
     const preset = PRESETS_WALLPAPERS.find((p) => p.id === fundoZettelkasten);
     if (preset) return preset.url;
-    // URL personalizada ou data URL
     return fundoZettelkasten;
   }, [fundoZettelkasten]);
 
-  // Nota ativa selecionada
+  // Nota ativa selecionada (prioriza a nota de Meursault ou Dom Casmurro)
   const notaAtiva = useMemo(() => {
     if (!notaZettelSelecionadaId && notasZettel.length > 0) {
-      // Prioriza a nota de O Estrangeiro ou a primeira permanente
-      const estrangeiro = notasZettel.find((n) => n.titulo.includes('O estrangeiro') || n.id === '1-202528122325');
+      const estrangeiro = notasZettel.find(
+        (n) => n.titulo.includes('O estrangeiro') || n.id === '1-261220251138' || n.id === '1-202528122325'
+      );
       if (estrangeiro) return estrangeiro;
       const primeiraPerm = notasZettel.find((n) => n.tipo === 'permanente');
       return primeiraPerm || notasZettel[0];
@@ -208,11 +211,22 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
 
   // Separar notas por pasta
   const notasPorPasta = useMemo(() => {
-    const indices = notasZettel.filter((n) => n.tipo === 'indice' || n.pasta === '01 índice');
-    const referencias = notasZettel.filter((n) => n.tipo === 'referencia' || n.pasta === '02 referências');
-    const permanentes = notasZettel.filter((n) => n.tipo === 'permanente' || n.pasta === '03 permanentes');
+    const q = busca.toLowerCase().trim();
+    const filtrar = (lista: NotaZettel[]) => {
+      if (!q) return lista;
+      return lista.filter(
+        (n) =>
+          n.titulo.toLowerCase().includes(q) ||
+          n.conteudo.toLowerCase().includes(q) ||
+          n.tags.some((t) => t.toLowerCase().includes(q))
+      );
+    };
+
+    const indices = filtrar(notasZettel.filter((n) => n.tipo === 'indice' || n.pasta === '01 índice'));
+    const referencias = filtrar(notasZettel.filter((n) => n.tipo === 'referencia' || n.pasta === '02 referências'));
+    const permanentes = filtrar(notasZettel.filter((n) => n.tipo === 'permanente' || n.pasta === '03 permanentes'));
     return { indices, referencias, permanentes };
-  }, [notasZettel]);
+  }, [notasZettel, busca]);
 
   // Backlinks
   const backlinks = useMemo(() => {
@@ -229,7 +243,7 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
     });
   }, [notasZettel, notaAtiva]);
 
-  // Estatísticas de palavras e caracteres da nota ativa (como visto na barra inferior do Obsidian)
+  // Estatísticas de palavras e caracteres da nota ativa
   const statsNota = useMemo(() => {
     if (!notaAtiva) return { palavras: 0, caracteres: 0 };
     const textoLimpo = notaAtiva.conteudo.replace(/[#*`_\[\]==]/g, '');
@@ -268,13 +282,12 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
 
   // Inserção de texto destacado ==texto==
   const handleInserirMarcaTexto = () => {
-    setConteudoEditando((prev) => prev + ' ==texto destacado com marca-texto== ');
+    setConteudoEditando((prev) => prev + ' ==trecho destacado com marca-texto== ');
   };
 
   // Clicar em Wikilink
   const handleClicarWikilink = (linkTexto: string) => {
     const limpo = linkTexto.replace(/\[\[|\]\]/g, '').trim();
-    // Procura por nota correspondente
     const notaAlvo = notasZettel.find(
       (n) => n.titulo.toLowerCase() === limpo.toLowerCase() || n.titulo.toLowerCase().includes(limpo.toLowerCase())
     );
@@ -283,7 +296,6 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
       setVisaoAtiva('acervo');
       return;
     }
-    // Procura por livro da estante
     const livroAlvo = livros.find((l) => l.titulo.toLowerCase().includes(limpo.toLowerCase()));
     if (livroAlvo && onSelecionarLivroEstante) {
       onSelecionarLivroEstante(livroAlvo.id);
@@ -470,34 +482,35 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
   const renderizarTextoFormatado = (texto: string) => {
     const linhas = texto.split('\n');
     return (
-      <div className="space-y-4 font-sans leading-relaxed text-stone-200 text-sm sm:text-[15px]">
+      <div className="space-y-4 font-serif leading-relaxed text-stone-800 dark:text-stone-200 text-sm sm:text-base">
         {linhas.map((linha, idx) => {
           // Título H1
           if (linha.startsWith('# ')) {
             return (
               <h1
                 key={idx}
-                className="text-xl sm:text-2xl font-bold text-white pt-4 pb-2 border-b border-stone-800 tracking-tight"
+                className="text-xl sm:text-2xl font-serif font-bold text-stone-900 dark:text-stone-100 pt-4 pb-2 border-b border-stone-200 dark:border-stone-800 tracking-tight"
               >
                 {linha.replace('# ', '')}
               </h1>
             );
           }
-          // Título H2 (como visto em image.png: REFERÊNCIAS, RELEVÂNCIAS, NOTAS RELACIONADAS)
+          // Título H2 (como em image.png: REFERÊNCIAS, RELEVÂNCIAS, NOTAS RELACIONADAS)
           if (linha.startsWith('## ')) {
             return (
               <h2
                 key={idx}
-                className="text-sm sm:text-base font-bold uppercase tracking-wider text-stone-300 pt-5 pb-1 font-sans"
+                className="text-xs sm:text-sm font-bold uppercase tracking-wider text-amber-900 dark:text-amber-300 pt-5 pb-1 font-sans flex items-center gap-2"
               >
-                {linha.replace('## ', '')}
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-600"></span>
+                <span>{linha.replace('## ', '')}</span>
               </h2>
             );
           }
           // Título H3
           if (linha.startsWith('### ')) {
             return (
-              <h3 key={idx} className="text-sm font-bold text-stone-200 pt-2">
+              <h3 key={idx} className="text-sm font-bold font-serif text-stone-900 dark:text-stone-200 pt-2">
                 {linha.replace('### ', '')}
               </h3>
             );
@@ -509,12 +522,12 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
             return (
               <div
                 key={idx}
-                className="p-3 rounded-lg bg-emerald-950/40 border-l-3 border-emerald-500 text-xs sm:text-sm flex items-start gap-2.5"
+                className="p-3 rounded-xl bg-emerald-50/80 dark:bg-emerald-950/40 border-l-3 border-emerald-600 text-xs sm:text-sm font-sans flex items-start gap-2.5 shadow-2xs"
               >
                 <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-700 text-white shrink-0">
                   #síntese
                 </span>
-                <span className="flex-1 text-emerald-100">
+                <span className="flex-1 font-serif text-stone-900 dark:text-emerald-100">
                   {renderizarMarcacoesNaLinha(partes[1] || partes[0])}
                 </span>
               </div>
@@ -527,12 +540,12 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
             return (
               <div
                 key={idx}
-                className="p-3 rounded-lg bg-sky-950/40 border-l-3 border-sky-500 text-xs sm:text-sm flex items-start gap-2.5"
+                className="p-3 rounded-xl bg-sky-50/80 dark:bg-sky-950/40 border-l-3 border-sky-600 text-xs sm:text-sm font-sans flex items-start gap-2.5 shadow-2xs"
               >
                 <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-sky-700 text-white shrink-0">
                   #comentário
                 </span>
-                <span className="flex-1 text-sky-100">
+                <span className="flex-1 font-serif text-stone-900 dark:text-sky-100">
                   {renderizarMarcacoesNaLinha(partes[1] || partes[0])}
                 </span>
               </div>
@@ -545,12 +558,12 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
             return (
               <div
                 key={idx}
-                className="p-3 rounded-lg bg-amber-950/40 border-l-3 border-amber-500 text-xs sm:text-sm italic flex items-start gap-2.5"
+                className="p-3 rounded-xl bg-amber-50/80 dark:bg-amber-950/40 border-l-3 border-amber-600 text-xs sm:text-sm italic flex items-start gap-2.5 shadow-2xs"
               >
-                <span className="px-2 py-0.5 rounded text-[10px] font-bold not-italic bg-amber-700 text-white shrink-0">
+                <span className="px-2 py-0.5 rounded text-[10px] font-bold not-italic bg-amber-700 text-white shrink-0 font-sans">
                   #citação
                 </span>
-                <span className="flex-1 text-amber-100">
+                <span className="flex-1 font-serif text-stone-900 dark:text-amber-100">
                   {renderizarMarcacoesNaLinha(partes[1] || partes[0])}
                 </span>
               </div>
@@ -561,7 +574,7 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
           if (linha.startsWith('- ')) {
             return (
               <div key={idx} className="flex items-start gap-2 text-xs sm:text-sm pl-2">
-                <span className="text-stone-400 font-bold select-none">•</span>
+                <span className="text-amber-700 dark:text-amber-400 font-bold select-none">•</span>
                 <span className="flex-1">{renderizarMarcacoesNaLinha(linha.replace('- ', ''))}</span>
               </div>
             );
@@ -574,7 +587,7 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
 
           // Parágrafo regular
           return (
-            <p key={idx} className="text-xs sm:text-sm leading-relaxed text-stone-300">
+            <p key={idx} className="text-xs sm:text-sm leading-relaxed text-stone-800 dark:text-stone-300">
               {renderizarMarcacoesNaLinha(linha)}
             </p>
           );
@@ -585,7 +598,6 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
 
   // Parser combinado de ==marca-texto amarelo== e [[Wikilinks]]
   const renderizarMarcacoesNaLinha = (str: string) => {
-    // Regex para pegar tanto [[Wikilink]] quanto ==destaque==
     const regex = /(==[^=]+==|\[\[[^\]\|]+(?:\|[^\]]+)?\]\])/g;
     const parts = [];
     let lastIndex = 0;
@@ -604,7 +616,7 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
         parts.push(
           <mark
             key={match.index}
-            className="bg-yellow-400/35 text-yellow-200 px-1 py-0.5 rounded-sm border-b border-yellow-400/50 font-medium mx-0.5 select-text"
+            className="bg-amber-200/80 dark:bg-yellow-500/25 text-stone-950 dark:text-yellow-100 px-1 py-0.5 rounded-xs border-b border-amber-400 dark:border-yellow-400/50 font-medium mx-0.5 select-text"
           >
             {textoDestacado}
           </mark>
@@ -617,10 +629,10 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
           <button
             key={match.index}
             onClick={() => handleClicarWikilink(linkText)}
-            className="inline-flex items-center gap-1 px-1.5 py-0.2 mx-0.5 rounded text-xs font-medium text-amber-300 hover:text-amber-200 underline decoration-amber-400/50 hover:decoration-amber-300 cursor-pointer"
-            title={`Navegar para conexão: [[${linkText}]]`}
+            className="inline-flex items-center gap-0.5 px-1.5 py-0.2 mx-0.5 rounded text-xs font-sans font-medium text-amber-800 dark:text-amber-300 hover:text-amber-950 dark:hover:text-amber-100 bg-amber-100/70 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800 hover:border-amber-400 transition cursor-pointer"
+            title={`Navegar para: [[${linkText}]]`}
           >
-            <LinkIcon className="w-2.5 h-2.5 text-amber-400" />
+            <LinkIcon className="w-2.5 h-2.5 text-amber-700 dark:text-amber-400" />
             <span>[[{linkText}]]</span>
           </button>
         );
@@ -637,7 +649,7 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
   };
 
   return (
-    <div className="relative rounded-2xl overflow-hidden border border-stone-800 bg-[#141518] text-stone-200 shadow-2xl transition-all min-h-[820px] flex flex-col">
+    <div className="relative rounded-2xl overflow-hidden border border-stone-200 dark:border-stone-800 bg-white dark:bg-[#16171b] text-stone-900 dark:text-stone-100 shadow-sm transition-colors min-h-[840px] flex flex-col">
       {/* =========================================================================
           CAMADA DE FUNDO / WALLPAPER (COM REGULADOR DE OPACIDADE E DESFOQUE)
          ========================================================================= */}
@@ -651,56 +663,76 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
           }}
         />
       )}
-      {/* Vinheta escura para garantir contraste e leitura impecável */}
-      <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-[#141518]/70 via-[#141518]/50 to-[#141518]/85 z-0" />
+      {/* Véu suave de transição que harmoniza o papel de parede com o tema ativo */}
+      {urlFundoAtivo && (
+        <div className="absolute inset-0 pointer-events-none bg-white/75 dark:bg-[#141518]/85 backdrop-blur-[0.5px] z-0" />
+      )}
 
       {/* =========================================================================
-          BARRA DE FERRAMENTAS SUPERIOR (ESTILO OBSIDIAN RIBBON TABS)
+          BARRA DE FERRAMENTAS SUPERIOR (HARMONIOSA COM O HEADER DA BIBLIOTECA)
          ========================================================================= */}
-      <div className="relative z-10 flex items-center justify-between border-b border-stone-800/80 bg-[#121316]/90 px-3 py-2 text-xs">
-        {/* Abas Superiores (Guia Ativa do Documento) */}
-        <div className="flex items-center gap-1.5 overflow-x-auto max-w-[70%]">
-          {notaAtiva && (
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-stone-800/90 border border-stone-700 text-stone-200 text-xs font-sans shadow-xs">
-              <FileText className="w-3.5 h-3.5 text-amber-400" />
-              <span className="font-semibold truncate max-w-[200px] sm:max-w-[320px]">
-                {notaAtiva.titulo}
-              </span>
-              <button
-                onClick={() => selecionarNotaZettel(null)}
-                className="text-stone-400 hover:text-stone-200 ml-1 cursor-pointer"
-                title="Fechar aba"
-              >
-                <X className="w-3 h-3" />
-              </button>
-            </div>
-          )}
-
-          {/* Botão Nova Nota na barra */}
+      <div className="relative z-10 flex flex-wrap items-center justify-between border-b border-stone-200 dark:border-stone-800 bg-stone-50/90 dark:bg-[#121316]/90 backdrop-blur px-3 py-2 text-xs gap-2">
+        {/* Lado Esquerdo: Toggle da Sidebar + Alternador de Visão */}
+        <div className="flex items-center gap-2">
+          {/* Botão de recolher/expandir sidebar */}
           <button
-            onClick={() => {
-              setModalNovoTipo('permanente');
-              setModalNovoTitulo('');
-              setModalNovoRef('');
-              setModalNovoPagina('');
-              setModalNovoRelacao('');
-            }}
-            className="p-1.5 rounded-md text-stone-400 hover:text-stone-100 hover:bg-stone-800/60 transition cursor-pointer"
-            title="Nova Nota Permanente"
+            onClick={() => setSidebarAberta((prev) => !prev)}
+            className="p-1.5 rounded-lg text-stone-600 dark:text-stone-400 hover:bg-stone-200/60 dark:hover:bg-stone-800 transition cursor-pointer"
+            title={sidebarAberta ? 'Recolher Painel de Pastas' : 'Expandir Painel de Pastas'}
           >
-            <Plus className="w-3.5 h-3.5" />
+            {sidebarAberta ? <PanelLeftClose className="w-4 h-4" /> : <PanelLeft className="w-4 h-4" />}
           </button>
+
+          {/* Abas de Navegação Integradas */}
+          <div className="flex items-center bg-stone-200/70 dark:bg-stone-800 p-0.5 rounded-lg text-xs">
+            <button
+              onClick={() => setVisaoAtiva('acervo')}
+              className={`flex items-center gap-1.5 px-3 py-1 rounded-md font-bold transition ${
+                visaoAtiva === 'acervo'
+                  ? 'bg-white dark:bg-stone-700 text-stone-900 dark:text-stone-100 shadow-2xs'
+                  : 'text-stone-600 dark:text-stone-400 hover:text-stone-900'
+              }`}
+            >
+              <FileText className="w-3.5 h-3.5 text-amber-600" />
+              <span>Notas ({notasZettel.length})</span>
+            </button>
+            <button
+              onClick={() => setVisaoAtiva('inbox')}
+              className={`flex items-center gap-1.5 px-3 py-1 rounded-md font-bold transition relative ${
+                visaoAtiva === 'inbox'
+                  ? 'bg-white dark:bg-stone-700 text-amber-800 dark:text-amber-300 shadow-2xs'
+                  : 'text-stone-600 dark:text-stone-400 hover:text-stone-900'
+              }`}
+            >
+              <Clock className="w-3.5 h-3.5 text-amber-600" />
+              <span>Inbox 48h</span>
+              {notasTemporarias.filter((t) => !t.processada).length > 0 && (
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+              )}
+            </button>
+            <button
+              onClick={() => setVisaoAtiva('canvas')}
+              className={`flex items-center gap-1.5 px-3 py-1 rounded-md font-bold transition ${
+                visaoAtiva === 'canvas'
+                  ? 'bg-white dark:bg-stone-700 text-purple-800 dark:text-purple-300 shadow-2xs'
+                  : 'text-stone-600 dark:text-stone-400 hover:text-stone-900'
+              }`}
+            >
+              <LayoutGrid className="w-3.5 h-3.5 text-purple-600" />
+              <span>Canvas</span>
+            </button>
+          </div>
         </div>
 
-        {/* Ações Rápidas no Canto Superior Direito */}
+        {/* Lado Direito: Ações Rápidas & Personalização */}
         <div className="flex items-center gap-1.5 shrink-0">
           {/* Botão Personalizar Imagem de Fundo */}
           <button
             onClick={() => setModalFundoAberto(true)}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-stone-800/70 hover:bg-stone-700 border border-stone-700/80 text-stone-300 text-xs transition cursor-pointer"
-            title="Trocar a Imagem de Fundo (Wallpaper Chiaroscuro / Clássico)"
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-300 text-xs transition cursor-pointer"
+            title="Escolher Imagem de Fundo (Pintura Barroca Chiaroscuro / Clássica)"
           >
-            <ImageIcon className="w-3.5 h-3.5 text-amber-400" />
+            <ImageIcon className="w-3.5 h-3.5 text-amber-600" />
             <span className="hidden sm:inline">Imagem de Fundo</span>
           </button>
 
@@ -709,8 +741,8 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
             onClick={() => setModoEdicao((prev) => !prev)}
             className={`p-1.5 rounded-lg border transition cursor-pointer ${
               modoEdicao
-                ? 'bg-amber-600 text-white border-amber-500'
-                : 'bg-stone-800/70 text-stone-300 hover:bg-stone-700 border-stone-700/80'
+                ? 'bg-amber-700 text-white border-amber-600'
+                : 'bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-stone-700 border-stone-200 dark:border-stone-700'
             }`}
             title={modoEdicao ? 'Alternar para Modo Leitura' : 'Alternar para Modo Edição'}
           >
@@ -721,13 +753,13 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
           {notaAtiva && (
             <button
               onClick={handleCopiarWikilinkNota}
-              className="p-1.5 rounded-lg bg-stone-800/70 hover:bg-stone-700 border border-stone-700/80 text-stone-300 transition cursor-pointer"
+              className="p-1.5 rounded-lg bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-300 transition cursor-pointer"
               title="Copiar Wikilink [[Título]]"
             >
               {linkCopiadoNotif ? (
-                <Check className="w-3.5 h-3.5 text-emerald-400" />
+                <Check className="w-3.5 h-3.5 text-emerald-600" />
               ) : (
-                <LinkIcon className="w-3.5 h-3.5 text-amber-400" />
+                <LinkIcon className="w-3.5 h-3.5 text-amber-600" />
               )}
             </button>
           )}
@@ -738,8 +770,8 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
               onClick={handleToggleRevisar}
               className={`p-1.5 rounded-lg border transition cursor-pointer ${
                 notaAtiva.revisar
-                  ? 'bg-amber-900/60 text-amber-300 border-amber-600'
-                  : 'bg-stone-800/70 text-stone-400 hover:text-stone-200 border-stone-700/80'
+                  ? 'bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-200 border-amber-300'
+                  : 'bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-400 hover:bg-stone-200 dark:hover:bg-stone-700 border-stone-200 dark:border-stone-700'
               }`}
               title={notaAtiva.revisar ? 'Remover tag #revisar' : 'Marcar para #revisar'}
             >
@@ -755,7 +787,7 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
                   removerNotaZettel(notaAtiva.id);
                 }
               }}
-              className="p-1.5 rounded-lg bg-stone-800/70 hover:bg-rose-950/60 hover:text-rose-400 border border-stone-700/80 text-stone-400 transition cursor-pointer"
+              className="p-1.5 rounded-lg bg-stone-100 dark:bg-stone-800 hover:bg-rose-50 dark:hover:bg-rose-950/60 hover:text-rose-600 border border-stone-200 dark:border-stone-700 text-stone-500 transition cursor-pointer"
               title="Excluir nota"
             >
               <Trash2 className="w-3.5 h-3.5" />
@@ -765,543 +797,547 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
           {/* Exportar Markdown */}
           <button
             onClick={handleCopiarExportacao}
-            className="p-1.5 rounded-lg bg-stone-800/70 hover:bg-stone-700 border border-stone-700/80 text-stone-300 text-xs transition cursor-pointer"
+            className="p-1.5 rounded-lg bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-300 transition cursor-pointer"
             title="Exportar Markdown para o Obsidian"
           >
-            {copiadoNotif ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+            {copiadoNotif ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
           </button>
         </div>
       </div>
 
       {/* =========================================================================
-          CORPO PRINCIPAL: SIDEBAR OBSIDIAN + WORKSPACE DA NOTA
+          CORPO PRINCIPAL: SIDEBAR RETRÁTIL + ÁREA EDITORIAL DO DOCUMENTO
          ========================================================================= */}
-      <div className="relative z-10 flex-1 grid grid-cols-1 lg:grid-cols-12 min-h-[750px]">
+      <div className="relative z-10 flex-1 flex overflow-hidden min-h-[760px]">
         {/* -------------------------------------------------------------
-            COLUNA DA ESQUERDA: ÁRVORE DE PASTAS (EXACTA DO OBSIDIAN)
-            (Como em image_2.png e image_3.png)
+            COLUNA DA ESQUERDA: ÁRVORE HIERÁRQUICA (EXPANSÍVEL / RETRÁTIL)
            ------------------------------------------------------------- */}
-        <div className="lg:col-span-4 xl:col-span-3 border-r border-stone-800/80 bg-[#16171b]/95 backdrop-blur-md flex flex-col">
-          {/* Topo da Sidebar com Ações de Pasta */}
-          <div className="p-3 border-b border-stone-800/80 flex items-center justify-between">
-            <div className="flex items-center gap-1.5">
-              <Folder className="w-4 h-4 text-amber-500" />
-              <span className="font-bold text-xs uppercase tracking-wider text-stone-300 font-sans">
-                Biblioteca
-              </span>
-            </div>
-
-            <div className="flex items-center gap-1 text-stone-400">
-              <button
-                onClick={() => {
-                  setModalNovoTipo('permanente');
-                  setModalNovoTitulo('');
-                }}
-                className="p-1 rounded hover:bg-stone-800 hover:text-stone-200 cursor-pointer"
-                title="Nova Nota"
-              >
-                <FilePlus className="w-3.5 h-3.5" />
-              </button>
-              <button
-                onClick={() => {
-                  setModalNovoTipo('indice');
-                  setModalNovoTitulo('');
-                }}
-                className="p-1 rounded hover:bg-stone-800 hover:text-stone-200 cursor-pointer"
-                title="Nova Pasta / Macrotema"
-              >
-                <FolderPlus className="w-3.5 h-3.5" />
-              </button>
-              <button
-                onClick={() => setModalFundoAberto(true)}
-                className="p-1 rounded hover:bg-stone-800 hover:text-stone-200 cursor-pointer"
-                title="Configurar Imagem de Fundo"
-              >
-                <ImageIcon className="w-3.5 h-3.5 text-amber-400" />
-              </button>
-            </div>
-          </div>
-
-          {/* Campo de Busca Rápida na Sidebar */}
-          <div className="p-2.5 border-b border-stone-800/60">
-            <div className="relative">
-              <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-stone-500" />
-              <input
-                type="text"
-                value={busca}
-                onChange={(e) => setBusca(e.target.value)}
-                placeholder="Buscar no cofre..."
-                className="w-full pl-8 pr-2.5 py-1.5 text-xs rounded-lg bg-stone-900 border border-stone-800 text-stone-200 placeholder-stone-500 focus:outline-none focus:border-amber-600/70"
-              />
-              {busca && (
-                <button
-                  onClick={() => setBusca('')}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 text-stone-500 hover:text-stone-300"
-                >
-                  <X className="w-3 h-3" />
-                </button>
-              )}
-            </div>
-          </div>
-
-          {/* Árvore de Diretórios (Hierárquica como no Obsidian das imagens) */}
-          <div className="flex-1 overflow-y-auto p-2 space-y-1 text-xs select-none">
-            {/* Raiz Biblioteca */}
-            <div className="space-y-1">
-              <div
-                onClick={() => togglePasta('biblioteca')}
-                className="flex items-center gap-1.5 px-2 py-1.5 rounded-md hover:bg-stone-800/50 cursor-pointer text-stone-300 font-bold"
-              >
-                {pastasAbertas.biblioteca ? (
-                  <ChevronDown className="w-3.5 h-3.5 text-stone-400" />
-                ) : (
-                  <ChevronRight className="w-3.5 h-3.5 text-stone-400" />
-                )}
+        {sidebarAberta && (
+          <aside className="w-64 sm:w-72 shrink-0 border-r border-stone-200 dark:border-stone-800 bg-stone-50/70 dark:bg-[#131417]/95 backdrop-blur flex flex-col transition-all">
+            {/* Topo da Sidebar com Ações */}
+            <div className="p-3 border-b border-stone-200 dark:border-stone-800 flex items-center justify-between">
+              <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-stone-700 dark:text-stone-300">
+                <Folder className="w-3.5 h-3.5 text-amber-600" />
                 <span>Biblioteca</span>
               </div>
+              <div className="flex items-center gap-1 text-stone-500">
+                <button
+                  onClick={() => {
+                    setModalNovoTipo('permanente');
+                    setModalNovoTitulo('');
+                  }}
+                  className="p-1 rounded hover:bg-stone-200 dark:hover:bg-stone-800 hover:text-stone-900 dark:hover:text-stone-100 cursor-pointer"
+                  title="Nova Nota Permanente"
+                >
+                  <FilePlus className="w-3.5 h-3.5" />
+                </button>
+                <button
+                  onClick={() => {
+                    setModalNovoTipo('indice');
+                    setModalNovoTitulo('');
+                  }}
+                  className="p-1 rounded hover:bg-stone-200 dark:hover:bg-stone-800 hover:text-stone-900 dark:hover:text-stone-100 cursor-pointer"
+                  title="Novo Macrotema"
+                >
+                  <FolderPlus className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </div>
 
-              {pastasAbertas.biblioteca && (
-                <div className="pl-3.5 space-y-1 border-l border-stone-800 ml-2">
-                  {/* 00 - INÍCIO */}
-                  <div>
-                    <div
-                      onClick={() => togglePasta('00 - INÍCIO')}
-                      className="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-stone-800/60 cursor-pointer text-stone-400 hover:text-stone-200"
-                    >
-                      {pastasAbertas['00 - INÍCIO'] ? (
-                        <ChevronDown className="w-3 h-3" />
+            {/* Busca Rápida na Árvore */}
+            <div className="p-2 border-b border-stone-200 dark:border-stone-800">
+              <div className="relative">
+                <Search className="w-3 h-3 absolute left-2.5 top-1/2 -translate-y-1/2 text-stone-400" />
+                <input
+                  type="text"
+                  value={busca}
+                  onChange={(e) => setBusca(e.target.value)}
+                  placeholder="Filtrar notas..."
+                  className="w-full pl-7 pr-2.5 py-1 text-xs rounded-md bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 text-stone-900 dark:text-stone-100 placeholder-stone-400 focus:outline-none focus:border-amber-600"
+                />
+              </div>
+            </div>
+
+            {/* Lista em Árvore */}
+            <div className="flex-1 overflow-y-auto p-2 space-y-1 text-xs select-none">
+              <div className="space-y-1">
+                {/* 00 - INÍCIO */}
+                <div>
+                  <div
+                    onClick={() => togglePasta('00 - INÍCIO')}
+                    className="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-stone-200/60 dark:hover:bg-stone-800/60 cursor-pointer text-stone-600 dark:text-stone-400"
+                  >
+                    {pastasAbertas['00 - INÍCIO'] ? (
+                      <ChevronDown className="w-3 h-3 text-stone-400" />
+                    ) : (
+                      <ChevronRight className="w-3 h-3 text-stone-400" />
+                    )}
+                    <span>00 - INÍCIO</span>
+                  </div>
+                  {pastasAbertas['00 - INÍCIO'] && (
+                    <div className="pl-4 space-y-0.5 mt-0.5">
+                      <div
+                        onClick={() => setVisaoAtiva('acervo')}
+                        className="px-2 py-1 rounded hover:bg-stone-200 dark:hover:bg-stone-800 cursor-pointer text-stone-600 dark:text-stone-300 flex items-center gap-1.5"
+                      >
+                        <Compass className="w-3 h-3 text-amber-600" />
+                        <span>Guia do Zettelkasten</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* 01 - ÍNDICE */}
+                <div>
+                  <div
+                    onClick={() => togglePasta('01 - ÍNDICE')}
+                    className="flex items-center justify-between px-2 py-1 rounded-md hover:bg-stone-200/60 dark:hover:bg-stone-800/60 cursor-pointer text-stone-700 dark:text-stone-300 font-medium"
+                  >
+                    <div className="flex items-center gap-1.5">
+                      {pastasAbertas['01 - ÍNDICE'] ? (
+                        <ChevronDown className="w-3 h-3 text-purple-600" />
                       ) : (
-                        <ChevronRight className="w-3 h-3" />
+                        <ChevronRight className="w-3 h-3 text-purple-600" />
                       )}
-                      <span>00 - INÍCIO</span>
+                      <span>01 - ÍNDICE</span>
                     </div>
-                    {pastasAbertas['00 - INÍCIO'] && (
-                      <div className="pl-4 space-y-0.5 mt-0.5">
-                        <div
-                          onClick={() => setVisaoAtiva('acervo')}
-                          className="px-2 py-1 rounded hover:bg-stone-800/80 cursor-pointer text-stone-400 hover:text-stone-100 flex items-center gap-1.5"
-                        >
-                          <BookMarked className="w-3 h-3 text-amber-500" />
-                          <span>Guia do Zettelkasten</span>
-                        </div>
-                      </div>
-                    )}
+                    <span className="text-[10px] text-stone-400">{notasPorPasta.indices.length}</span>
                   </div>
 
-                  {/* 01 - ÍNDICE */}
-                  <div>
-                    <div
-                      onClick={() => togglePasta('01 - ÍNDICE')}
-                      className="flex items-center justify-between px-2 py-1 rounded-md hover:bg-stone-800/60 cursor-pointer text-stone-300 font-medium"
-                    >
-                      <div className="flex items-center gap-1.5">
-                        {pastasAbertas['01 - ÍNDICE'] ? (
-                          <ChevronDown className="w-3 h-3 text-purple-400" />
-                        ) : (
-                          <ChevronRight className="w-3 h-3 text-purple-400" />
-                        )}
-                        <span>01 - ÍNDICE</span>
-                      </div>
-                      <span className="text-[10px] text-stone-500">{notasPorPasta.indices.length}</span>
+                  {pastasAbertas['01 - ÍNDICE'] && (
+                    <div className="pl-4 space-y-0.5 mt-0.5">
+                      {notasPorPasta.indices.map((nota) => {
+                        const isSel = notaAtiva?.id === nota.id;
+                        return (
+                          <div
+                            key={nota.id}
+                            onClick={() => {
+                              selecionarNotaZettel(nota.id);
+                              setVisaoAtiva('acervo');
+                            }}
+                            className={`px-2 py-1 rounded hover:bg-stone-200/70 dark:hover:bg-stone-800 cursor-pointer truncate flex items-center gap-1.5 ${
+                              isSel
+                                ? 'bg-purple-100 text-purple-900 dark:bg-purple-950/70 dark:text-purple-300 font-bold'
+                                : 'text-stone-600 dark:text-stone-400'
+                            }`}
+                          >
+                            <span className="w-1.5 h-1.5 rounded-full bg-purple-500 shrink-0"></span>
+                            <span className="truncate">{nota.titulo}</span>
+                          </div>
+                        );
+                      })}
                     </div>
+                  )}
+                </div>
 
-                    {pastasAbertas['01 - ÍNDICE'] && (
-                      <div className="pl-4 space-y-0.5 mt-0.5">
-                        {notasPorPasta.indices.map((nota) => {
-                          const isSel = notaAtiva?.id === nota.id;
-                          return (
-                            <div
-                              key={nota.id}
-                              onClick={() => {
-                                selecionarNotaZettel(nota.id);
-                                setVisaoAtiva('acervo');
-                              }}
-                              className={`px-2 py-1 rounded hover:bg-stone-800 cursor-pointer truncate flex items-center gap-1.5 ${
-                                isSel ? 'bg-purple-950/60 text-purple-300 font-bold' : 'text-stone-400'
-                              }`}
-                            >
-                              <span className="w-1.5 h-1.5 rounded-full bg-purple-500 shrink-0"></span>
-                              <span className="truncate">{nota.titulo}</span>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* 02 - REFERÊNCIAS */}
-                  <div>
-                    <div
-                      onClick={() => togglePasta('02 - REFERÊNCIAS')}
-                      className="flex items-center justify-between px-2 py-1 rounded-md hover:bg-stone-800/60 cursor-pointer text-stone-300 font-medium"
-                    >
-                      <div className="flex items-center gap-1.5">
-                        {pastasAbertas['02 - REFERÊNCIAS'] ? (
-                          <ChevronDown className="w-3 h-3 text-sky-400" />
-                        ) : (
-                          <ChevronRight className="w-3 h-3 text-sky-400" />
-                        )}
-                        <span>02 - REFERÊNCIAS</span>
-                      </div>
-                      <span className="text-[10px] text-stone-500">{notasPorPasta.referencias.length}</span>
-                    </div>
-
-                    {pastasAbertas['02 - REFERÊNCIAS'] && (
-                      <div className="pl-4 space-y-0.5 mt-0.5">
-                        {notasPorPasta.referencias.map((nota) => {
-                          const isSel = notaAtiva?.id === nota.id;
-                          return (
-                            <div
-                              key={nota.id}
-                              onClick={() => {
-                                selecionarNotaZettel(nota.id);
-                                setVisaoAtiva('acervo');
-                              }}
-                              className={`px-2 py-1 rounded hover:bg-stone-800 cursor-pointer truncate flex items-center gap-1.5 ${
-                                isSel ? 'bg-sky-950/60 text-sky-300 font-bold' : 'text-stone-400'
-                              }`}
-                            >
-                              <span className="w-1.5 h-1.5 rounded-full bg-sky-500 shrink-0"></span>
-                              <span className="truncate">{nota.titulo}</span>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* 03 - PERMANENTES */}
-                  <div>
-                    <div
-                      onClick={() => togglePasta('03 - PERMANENTES')}
-                      className="flex items-center justify-between px-2 py-1 rounded-md hover:bg-stone-800/60 cursor-pointer text-stone-300 font-medium"
-                    >
-                      <div className="flex items-center gap-1.5">
-                        {pastasAbertas['03 - PERMANENTES'] ? (
-                          <ChevronDown className="w-3 h-3 text-emerald-400" />
-                        ) : (
-                          <ChevronRight className="w-3 h-3 text-emerald-400" />
-                        )}
-                        <span>03 - PERMANENTES</span>
-                      </div>
-                      <span className="text-[10px] text-stone-500">{notasPorPasta.permanentes.length}</span>
-                    </div>
-
-                    {pastasAbertas['03 - PERMANENTES'] && (
-                      <div className="pl-4 space-y-0.5 mt-0.5 max-h-56 overflow-y-auto">
-                        {notasPorPasta.permanentes.map((nota) => {
-                          const isSel = notaAtiva?.id === nota.id;
-                          return (
-                            <div
-                              key={nota.id}
-                              onClick={() => {
-                                selecionarNotaZettel(nota.id);
-                                setVisaoAtiva('acervo');
-                              }}
-                              className={`px-2 py-1 rounded hover:bg-stone-800 cursor-pointer truncate flex items-center gap-1.5 ${
-                                isSel ? 'bg-emerald-950/60 text-emerald-300 font-bold' : 'text-stone-400'
-                              }`}
-                            >
-                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0"></span>
-                              <span className="truncate">{nota.titulo}</span>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* 04 - DIÁRIO INTELECTUAL (INBOX 48H) */}
-                  <div>
-                    <div
-                      onClick={() => {
-                        togglePasta('04 - DIÁRIO INTELECTUAL');
-                        setVisaoAtiva('inbox');
-                      }}
-                      className="flex items-center justify-between px-2 py-1 rounded-md hover:bg-stone-800/60 cursor-pointer text-amber-400 hover:text-amber-300 font-medium"
-                    >
-                      <div className="flex items-center gap-1.5">
-                        {pastasAbertas['04 - DIÁRIO INTELECTUAL'] ? (
-                          <ChevronDown className="w-3 h-3 text-amber-500" />
-                        ) : (
-                          <ChevronRight className="w-3 h-3 text-amber-500" />
-                        )}
-                        <span>04 - DIÁRIO INTELECTUAL</span>
-                      </div>
-                      {notasTemporarias.filter((t) => !t.processada).length > 0 && (
-                        <span className="text-[10px] px-1.5 rounded-full bg-amber-900/60 text-amber-300 border border-amber-700">
-                          {notasTemporarias.filter((t) => !t.processada).length}
-                        </span>
+                {/* 02 - REFERÊNCIAS */}
+                <div>
+                  <div
+                    onClick={() => togglePasta('02 - REFERÊNCIAS')}
+                    className="flex items-center justify-between px-2 py-1 rounded-md hover:bg-stone-200/60 dark:hover:bg-stone-800/60 cursor-pointer text-stone-700 dark:text-stone-300 font-medium"
+                  >
+                    <div className="flex items-center gap-1.5">
+                      {pastasAbertas['02 - REFERÊNCIAS'] ? (
+                        <ChevronDown className="w-3 h-3 text-sky-600" />
+                      ) : (
+                        <ChevronRight className="w-3 h-3 text-sky-600" />
                       )}
+                      <span>02 - REFERÊNCIAS</span>
                     </div>
+                    <span className="text-[10px] text-stone-400">{notasPorPasta.referencias.length}</span>
                   </div>
 
-                  {/* MODELO (TEMPLATES) */}
-                  <div>
-                    <div
-                      onClick={() => togglePasta('MODELO')}
-                      className="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-stone-800/60 cursor-pointer text-stone-400 hover:text-stone-200"
-                    >
-                      {pastasAbertas.MODELO ? <ChevronDown className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
-                      <span>MODELO</span>
+                  {pastasAbertas['02 - REFERÊNCIAS'] && (
+                    <div className="pl-4 space-y-0.5 mt-0.5">
+                      {notasPorPasta.referencias.map((nota) => {
+                        const isSel = notaAtiva?.id === nota.id;
+                        return (
+                          <div
+                            key={nota.id}
+                            onClick={() => {
+                              selecionarNotaZettel(nota.id);
+                              setVisaoAtiva('acervo');
+                            }}
+                            className={`px-2 py-1 rounded hover:bg-stone-200/70 dark:hover:bg-stone-800 cursor-pointer truncate flex items-center gap-1.5 ${
+                              isSel
+                                ? 'bg-sky-100 text-sky-900 dark:bg-sky-950/70 dark:text-sky-300 font-bold'
+                                : 'text-stone-600 dark:text-stone-400'
+                            }`}
+                          >
+                            <span className="w-1.5 h-1.5 rounded-full bg-sky-500 shrink-0"></span>
+                            <span className="truncate">{nota.titulo}</span>
+                          </div>
+                        );
+                      })}
                     </div>
-                    {pastasAbertas.MODELO && (
-                      <div className="pl-4 space-y-0.5 mt-0.5 text-stone-500 text-[11px]">
-                        <div
-                          onClick={() => {
-                            setModalNovoTipo('indice');
-                            setModalNovoTitulo('');
-                          }}
-                          className="hover:text-stone-300 cursor-pointer py-0.5"
-                        >
-                          Template — Nota Índice
-                        </div>
-                        <div
-                          onClick={() => {
-                            setModalNovoTipo('referencia');
-                            setModalNovoTitulo('');
-                          }}
-                          className="hover:text-stone-300 cursor-pointer py-0.5"
-                        >
-                          Template — Nota de Referência
-                        </div>
-                        <div
-                          onClick={() => {
-                            setModalNovoTipo('permanente');
-                            setModalNovoTitulo('');
-                          }}
-                          className="hover:text-stone-300 cursor-pointer py-0.5"
-                        >
-                          Template — Nota Permanente
-                        </div>
-                      </div>
+                  )}
+                </div>
+
+                {/* 03 - PERMANENTES */}
+                <div>
+                  <div
+                    onClick={() => togglePasta('03 - PERMANENTES')}
+                    className="flex items-center justify-between px-2 py-1 rounded-md hover:bg-stone-200/60 dark:hover:bg-stone-800/60 cursor-pointer text-stone-700 dark:text-stone-300 font-medium"
+                  >
+                    <div className="flex items-center gap-1.5">
+                      {pastasAbertas['03 - PERMANENTES'] ? (
+                        <ChevronDown className="w-3 h-3 text-emerald-600" />
+                      ) : (
+                        <ChevronRight className="w-3 h-3 text-emerald-600" />
+                      )}
+                      <span>03 - PERMANENTES</span>
+                    </div>
+                    <span className="text-[10px] text-stone-400">{notasPorPasta.permanentes.length}</span>
+                  </div>
+
+                  {pastasAbertas['03 - PERMANENTES'] && (
+                    <div className="pl-4 space-y-0.5 mt-0.5 max-h-60 overflow-y-auto">
+                      {notasPorPasta.permanentes.map((nota) => {
+                        const isSel = notaAtiva?.id === nota.id;
+                        return (
+                          <div
+                            key={nota.id}
+                            onClick={() => {
+                              selecionarNotaZettel(nota.id);
+                              setVisaoAtiva('acervo');
+                            }}
+                            className={`px-2 py-1 rounded hover:bg-stone-200/70 dark:hover:bg-stone-800 cursor-pointer truncate flex items-center gap-1.5 ${
+                              isSel
+                                ? 'bg-emerald-100 text-emerald-900 dark:bg-emerald-950/70 dark:text-emerald-300 font-bold'
+                                : 'text-stone-600 dark:text-stone-400'
+                            }`}
+                          >
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0"></span>
+                            <span className="truncate">{nota.titulo}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+
+                {/* 04 - DIÁRIO INTELECTUAL */}
+                <div>
+                  <div
+                    onClick={() => {
+                      togglePasta('04 - DIÁRIO INTELECTUAL');
+                      setVisaoAtiva('inbox');
+                    }}
+                    className={`flex items-center justify-between px-2 py-1 rounded-md hover:bg-stone-200/60 dark:hover:bg-stone-800/60 cursor-pointer font-medium ${
+                      visaoAtiva === 'inbox'
+                        ? 'text-amber-800 dark:text-amber-300 font-bold bg-amber-50 dark:bg-amber-950/40'
+                        : 'text-stone-700 dark:text-stone-300'
+                    }`}
+                  >
+                    <div className="flex items-center gap-1.5">
+                      <Clock className="w-3 h-3 text-amber-600" />
+                      <span>04 - DIÁRIO INTELECTUAL</span>
+                    </div>
+                    {notasTemporarias.filter((t) => !t.processada).length > 0 && (
+                      <span className="text-[10px] px-1.5 rounded-full bg-amber-200 dark:bg-amber-900 text-amber-900 dark:text-amber-200 font-bold">
+                        {notasTemporarias.filter((t) => !t.processada).length}
+                      </span>
                     )}
-                  </div>
-
-                  {/* Rascunho / Canvas */}
-                  <div>
-                    <div
-                      onClick={() => {
-                        togglePasta('Rascunho');
-                        setVisaoAtiva('canvas');
-                      }}
-                      className="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-stone-800/60 cursor-pointer text-stone-400 hover:text-stone-200"
-                    >
-                      {pastasAbertas.Rascunho ? <ChevronDown className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
-                      <span>Rascunho / Canvas</span>
-                    </div>
                   </div>
                 </div>
-              )}
+
+                {/* MODELO */}
+                <div>
+                  <div
+                    onClick={() => togglePasta('MODELO')}
+                    className="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-stone-200/60 dark:hover:bg-stone-800/60 cursor-pointer text-stone-500"
+                  >
+                    {pastasAbertas.MODELO ? <ChevronDown className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
+                    <span>MODELO</span>
+                  </div>
+                  {pastasAbertas.MODELO && (
+                    <div className="pl-4 space-y-0.5 mt-0.5 text-stone-500 text-[11px]">
+                      <div
+                        onClick={() => {
+                          setModalNovoTipo('indice');
+                          setModalNovoTitulo('');
+                        }}
+                        className="hover:text-stone-800 dark:hover:text-stone-200 cursor-pointer py-0.5"
+                      >
+                        Template — Nota Índice
+                      </div>
+                      <div
+                        onClick={() => {
+                          setModalNovoTipo('referencia');
+                          setModalNovoTitulo('');
+                        }}
+                        className="hover:text-stone-800 dark:hover:text-stone-200 cursor-pointer py-0.5"
+                      >
+                        Template — Nota Referência
+                      </div>
+                      <div
+                        onClick={() => {
+                          setModalNovoTipo('permanente');
+                          setModalNovoTitulo('');
+                        }}
+                        className="hover:text-stone-800 dark:hover:text-stone-200 cursor-pointer py-0.5"
+                      >
+                        Template — Nota Permanente
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Rascunho / Canvas */}
+                <div>
+                  <div
+                    onClick={() => {
+                      togglePasta('Rascunho');
+                      setVisaoAtiva('canvas');
+                    }}
+                    className={`flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-stone-200/60 dark:hover:bg-stone-800/60 cursor-pointer text-stone-500 ${
+                      visaoAtiva === 'canvas' ? 'text-purple-700 dark:text-purple-300 font-bold' : ''
+                    }`}
+                  >
+                    {pastasAbertas.Rascunho ? <ChevronDown className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
+                    <span>Rascunho / Canvas</span>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          </aside>
+        )}
 
         {/* -------------------------------------------------------------
-            COLUNA DA DIREITA: ÁREA DO DOCUMENTO OBSIDIAN
-            (Como em image.png e image_4.png)
+            ÁREA DO DOCUMENTO / WORKSPACE CENTRAL (RESPIRAÇÃO EDITORIAL)
            ------------------------------------------------------------- */}
-        <div className="lg:col-span-8 xl:col-span-9 flex flex-col justify-between overflow-y-auto">
+        <main className="flex-1 flex flex-col justify-between overflow-y-auto">
           {visaoAtiva === 'inbox' ? (
-            /* SEÇÃO CAIXA DE ENTRADA 48H */
-            <div className="p-6 sm:p-8 space-y-6">
-              <div className="border-b border-stone-800 pb-4">
-                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800">
+            /* =========================================================
+               VISÃO DIÁRIO INTELECTUAL (INBOX 48H)
+               ========================================================= */
+            <div className="max-w-4xl mx-auto w-full p-6 sm:p-10 space-y-6">
+              <div className="border-b border-stone-200 dark:border-stone-800 pb-4">
+                <span className="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
                   04 - DIÁRIO INTELECTUAL
                 </span>
-                <h2 className="text-2xl font-serif font-bold text-white mt-1">
+                <h2 className="text-2xl sm:text-3xl font-serif font-bold text-stone-900 dark:text-stone-100 mt-2">
                   Caixa de Entrada & Captura Rápida (&le; 48 Horas)
                 </h2>
-                <p className="text-xs text-stone-400 mt-1">
-                  Capture reflexões durante a leitura sem atrito. Processe em até 48h em notas permanentes e descarte.
+                <p className="text-xs sm:text-sm text-stone-500 dark:text-stone-400 mt-1 font-serif">
+                  Capture pensamentos essenciais sem pausar a leitura. Processe em notas permanentes em até 48h e descarte.
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                {/* Form de Captura */}
-                <form onSubmit={handleSalvarCaptura} className="p-5 rounded-xl bg-stone-900/80 border border-stone-800 space-y-3">
-                  <div className="text-xs font-bold text-stone-200 uppercase">Novo Registro Rápido</div>
+              {/* Form de Captura Rápida */}
+              <div className="bg-stone-50 dark:bg-[#18191d] border border-stone-200 dark:border-stone-800 rounded-2xl p-5 space-y-4 shadow-xs">
+                <div className="text-xs font-bold uppercase tracking-wider text-stone-700 dark:text-stone-300 font-sans flex items-center gap-1.5">
+                  <Clock className="w-4 h-4 text-amber-600" />
+                  <span>Novo Registro Rápido</span>
+                </div>
+
+                <form onSubmit={handleSalvarCaptura} className="space-y-3">
                   <textarea
-                    rows={4}
+                    rows={3}
                     value={inboxPensamento}
                     onChange={(e) => setInboxPensamento(e.target.value)}
-                    placeholder="Pensamento ou síntese da página..."
-                    className="w-full p-2.5 text-xs rounded-lg bg-stone-950 border border-stone-800 text-stone-100 placeholder-stone-500 focus:outline-none focus:border-amber-500"
+                    placeholder="Pensamento ou síntese rápida da leitura..."
+                    className="w-full p-3 text-xs sm:text-sm rounded-xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 text-stone-900 dark:text-stone-100 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-amber-500/40 font-serif leading-relaxed"
                     required
                   />
-                  <div className="grid grid-cols-2 gap-2">
-                    <select
-                      value={inboxLivroId}
-                      onChange={(e) => setInboxLivroId(e.target.value === '' ? '' : Number(e.target.value))}
-                      className="w-full p-2 text-xs rounded-lg bg-stone-950 border border-stone-800 text-stone-200"
-                    >
-                      <option value="">Fonte Externa...</option>
-                      {livros.map((l) => (
-                        <option key={l.id} value={l.id}>
-                          #{l.id} {l.titulo}
-                        </option>
-                      ))}
-                    </select>
-                    <input
-                      type="text"
-                      value={inboxPagina}
-                      onChange={(e) => setInboxPagina(e.target.value)}
-                      placeholder="Pág. (Ex: 84)"
-                      className="w-full p-2 text-xs rounded-lg bg-stone-950 border border-stone-800 text-stone-200"
-                    />
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    <div>
+                      <select
+                        value={inboxLivroId}
+                        onChange={(e) => setInboxLivroId(e.target.value === '' ? '' : Number(e.target.value))}
+                        className="w-full p-2 text-xs rounded-lg bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 text-stone-900 dark:text-stone-100"
+                      >
+                        <option value="">Fonte Externa / Outra</option>
+                        {livros.map((l) => (
+                          <option key={l.id} value={l.id}>
+                            #{l.id} {l.titulo}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <input
+                        type="text"
+                        value={inboxPagina}
+                        onChange={(e) => setInboxPagina(e.target.value)}
+                        placeholder="Nº da Página (Ex: 84)"
+                        className="w-full p-2 text-xs rounded-lg bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 text-stone-900 dark:text-stone-100"
+                      />
+                    </div>
                   </div>
+
                   {inboxLivroId === '' && (
                     <input
                       type="text"
                       value={inboxFonteTexto}
                       onChange={(e) => setInboxFonteTexto(e.target.value)}
-                      placeholder="Nome da Fonte ou Livro..."
-                      className="w-full p-2 text-xs rounded-lg bg-stone-950 border border-stone-800 text-stone-200"
+                      placeholder="Nome da Fonte ou Livro externo..."
+                      className="w-full p-2 text-xs rounded-lg bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 text-stone-900 dark:text-stone-100"
                     />
                   )}
+
                   <button
                     type="submit"
-                    className="w-full py-2 rounded-lg bg-amber-700 hover:bg-amber-600 text-white font-bold text-xs transition cursor-pointer"
+                    className="w-full py-2.5 rounded-xl bg-amber-700 hover:bg-amber-600 text-white font-bold text-xs shadow-xs transition cursor-pointer"
                   >
-                    Capturar Pensamento
+                    Registrar Pensamento no Inbox
                   </button>
                 </form>
+              </div>
 
-                {/* Lista de Temporárias */}
-                <div className="space-y-2.5">
-                  <div className="text-xs font-bold text-stone-400 uppercase">Notas na Fila</div>
+              {/* Lista de Notas na Fila */}
+              <div className="space-y-3">
+                <div className="text-xs font-bold text-stone-500 uppercase tracking-wider font-sans">
+                  Fila de Processamento Ativa ({notasTemporarias.filter((t) => !t.processada).length})
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
                   {notasTemporarias.map((t) => (
                     <div
                       key={t.id}
-                      className={`p-3.5 rounded-xl border text-xs space-y-2 ${
+                      className={`p-4 rounded-xl border transition flex flex-col justify-between ${
                         t.processada
-                          ? 'bg-stone-900/40 border-stone-800/50 opacity-50'
-                          : 'bg-stone-900 border-stone-700 shadow-sm'
+                          ? 'bg-stone-100/60 dark:bg-stone-900/30 border-stone-200 dark:border-stone-800 opacity-60'
+                          : 'bg-white dark:bg-[#18191d] border-stone-200 dark:border-stone-700 shadow-2xs hover:border-amber-400'
                       }`}
                     >
-                      <div className="flex items-center justify-between text-[11px] text-stone-400">
-                        <span>{t.fonte} {t.pagina ? `· p. ${t.pagina}` : ''}</span>
-                        {!t.processada && (
-                          <span className="text-amber-400 font-bold">&le; 48h</span>
+                      <div>
+                        <div className="flex items-center justify-between text-xs text-stone-500 mb-2">
+                          <span className="font-semibold text-stone-700 dark:text-stone-300">
+                            {t.fonte} {t.pagina ? `· p. ${t.pagina}` : ''}
+                          </span>
+                          {!t.processada && (
+                            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-200">
+                              &le; 48h
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-xs sm:text-sm font-serif text-stone-900 dark:text-stone-100 italic leading-relaxed">
+                          "{t.pensamento}"
+                        </p>
+                      </div>
+
+                      <div className="mt-4 pt-3 border-t border-stone-100 dark:border-stone-800 flex items-center justify-between">
+                        {!t.processada ? (
+                          <>
+                            <button
+                              onClick={() => handleConverterEmPermanente(t)}
+                              className="text-xs font-bold text-emerald-700 dark:text-emerald-400 hover:underline flex items-center gap-1 cursor-pointer"
+                            >
+                              <ArrowRight className="w-3.5 h-3.5" />
+                              <span>Sintetizar em Permanente</span>
+                            </button>
+                            <button
+                              onClick={() => removerNotaTemporaria(t.id)}
+                              className="p-1 rounded text-stone-400 hover:text-rose-600 transition"
+                              title="Descartar nota (Lixo)"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </>
+                        ) : (
+                          <div className="text-xs text-emerald-600 flex items-center gap-1">
+                            <CheckCircle2 className="w-3.5 h-3.5" />
+                            <span>Processada em Permanente</span>
+                          </div>
                         )}
                       </div>
-                      <p className="text-stone-200 italic font-serif">"{t.pensamento}"</p>
-                      {!t.processada ? (
-                        <div className="flex items-center justify-between pt-1">
-                          <button
-                            onClick={() => handleConverterEmPermanente(t)}
-                            className="text-emerald-400 hover:underline font-bold text-[11px] flex items-center gap-1 cursor-pointer"
-                          >
-                            <ArrowRight className="w-3 h-3" />
-                            <span>Sintetizar em Permanente</span>
-                          </button>
-                          <button
-                            onClick={() => removerNotaTemporaria(t.id)}
-                            className="text-stone-500 hover:text-rose-400 cursor-pointer"
-                            title="Descartar (Lixo)"
-                          >
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </button>
-                        </div>
-                      ) : (
-                        <div className="text-[11px] text-emerald-400 flex items-center gap-1">
-                          <CheckCircle2 className="w-3 h-3" />
-                          <span>Processada</span>
-                        </div>
-                      )}
                     </div>
                   ))}
                 </div>
               </div>
             </div>
           ) : visaoAtiva === 'canvas' ? (
-            /* SEÇÃO CANVAS / ROTEIRO */
-            <div className="p-6 sm:p-8 space-y-5">
-              <div className="border-b border-stone-800 pb-3 flex items-center justify-between">
+            /* =========================================================
+               VISÃO CANVAS DE ARTICULAÇÃO
+               ========================================================= */
+            <div className="max-w-5xl mx-auto w-full p-6 sm:p-10 space-y-6">
+              <div className="border-b border-stone-200 dark:border-stone-800 pb-4 flex items-center justify-between">
                 <div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-purple-950 text-purple-300 border border-purple-800">
+                  <span className="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-900 dark:bg-purple-950 dark:text-purple-300 border border-purple-200 dark:border-purple-800">
                     Mesa de Articulação / Canvas
                   </span>
-                  <h2 className="text-2xl font-serif font-bold text-white mt-1">
+                  <h2 className="text-2xl sm:text-3xl font-serif font-bold text-stone-900 dark:text-stone-100 mt-2">
                     {canvasZettel[0]?.titulo || 'Mesa de Articulação Conceitual'}
                   </h2>
                 </div>
                 <button
                   onClick={() => setVisaoAtiva('acervo')}
-                  className="text-xs text-stone-400 hover:text-stone-200 underline"
+                  className="text-xs text-amber-700 dark:text-amber-400 hover:underline font-bold"
                 >
                   Voltar ao Leitor
                 </button>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="p-4 rounded-xl bg-sky-950/30 border border-sky-800/60 space-y-2">
-                  <div className="text-xs font-bold text-sky-300 uppercase">1. Fontes Fichadas</div>
-                  <div className="p-2.5 rounded bg-stone-900 border border-sky-900 text-xs">
-                    <div className="font-bold text-stone-100">100 anos de solidão</div>
-                    <div className="text-[11px] text-stone-400">Gabriel García Márquez</div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <div className="p-4 rounded-xl bg-sky-50/70 dark:bg-sky-950/20 border border-sky-200 dark:border-sky-900 space-y-2.5">
+                  <div className="text-xs font-bold text-sky-800 dark:text-sky-300 uppercase">1. Fontes Fichadas</div>
+                  <div className="p-3 rounded-lg bg-white dark:bg-stone-900 border border-sky-200 dark:border-sky-800 shadow-2xs">
+                    <div className="font-bold text-xs text-stone-900 dark:text-stone-100">100 anos de solidão</div>
+                    <div className="text-[11px] text-stone-500">Gabriel García Márquez</div>
                   </div>
-                  <div className="p-2.5 rounded bg-stone-900 border border-sky-900 text-xs">
-                    <div className="font-bold text-stone-100">O estrangeiro</div>
-                    <div className="text-[11px] text-stone-400">Albert Camus</div>
-                  </div>
-                </div>
-
-                <div className="p-4 rounded-xl bg-emerald-950/30 border border-emerald-800/60 space-y-2">
-                  <div className="text-xs font-bold text-emerald-300 uppercase">2. Ideias Conectadas</div>
-                  <div className="p-2.5 rounded bg-stone-900 border border-emerald-900 text-xs">
-                    <div className="font-bold text-emerald-300">Tempo circular como prisão</div>
-                    <div className="text-[11px] text-stone-400">Repetição mecânica dos erros.</div>
-                  </div>
-                  <div className="p-2.5 rounded bg-stone-900 border border-emerald-900 text-xs">
-                    <div className="font-bold text-emerald-300">O absurdo como experiência</div>
-                    <div className="text-[11px] text-stone-400">A ausência de sentido e a consciência.</div>
+                  <div className="p-3 rounded-lg bg-white dark:bg-stone-900 border border-sky-200 dark:border-sky-800 shadow-2xs">
+                    <div className="font-bold text-xs text-stone-900 dark:text-stone-100">O estrangeiro</div>
+                    <div className="text-[11px] text-stone-500">Albert Camus</div>
                   </div>
                 </div>
 
-                <div className="p-4 rounded-xl bg-amber-950/30 border border-amber-800/60 space-y-2">
-                  <div className="text-xs font-bold text-amber-300 uppercase">3. Tese Emergente</div>
-                  <p className="text-xs text-stone-300 font-serif leading-relaxed">
+                <div className="p-4 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900 space-y-2.5">
+                  <div className="text-xs font-bold text-emerald-800 dark:text-emerald-300 uppercase">2. Ideias Conectadas</div>
+                  <div className="p-3 rounded-lg bg-white dark:bg-stone-900 border border-emerald-200 dark:border-emerald-800 shadow-2xs">
+                    <div className="font-bold text-xs text-emerald-800 dark:text-emerald-300">Tempo circular como prisão</div>
+                    <div className="text-[11px] text-stone-500">Repetição mecânica dos erros.</div>
+                  </div>
+                  <div className="p-3 rounded-lg bg-white dark:bg-stone-900 border border-emerald-200 dark:border-emerald-800 shadow-2xs">
+                    <div className="font-bold text-xs text-emerald-800 dark:text-emerald-300">O absurdo como experiência</div>
+                    <div className="text-[11px] text-stone-500">A ausência de sentido e a consciência.</div>
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-xl bg-amber-50/80 dark:bg-amber-950/30 border border-amber-300 dark:border-amber-800 space-y-2.5">
+                  <div className="text-xs font-bold text-amber-900 dark:text-amber-300 uppercase">3. Tese Emergente</div>
+                  <p className="text-xs sm:text-sm text-stone-800 dark:text-stone-200 font-serif leading-relaxed">
                     "A ruptura lúcida do absurdo camusiano é a única vacina contra a amnésia trágica de Macondo."
                   </p>
                 </div>
               </div>
             </div>
           ) : notaAtiva ? (
-            /* =============================================================
-               DOCUMENTO PRINCIPAL OBSIDIAN (EXATO DE image.png e image_4.png)
-               ============================================================= */
-            <div className="p-6 sm:p-10 max-w-4xl mx-auto w-full space-y-6">
-              {/* Breadcrumb idêntico ao de image.png: Biblioteca / 02 - REFERÊNCIAS / 1 - ... */}
-              <div className="text-[11px] font-sans text-stone-400 flex items-center gap-1.5 overflow-x-auto pb-1">
+            /* =========================================================
+               VISÃO PRINCIPAL DA NOTA (EDITORIAL & FOCADA)
+               ========================================================= */
+            <div className="max-w-3xl mx-auto w-full px-6 sm:px-10 py-8 space-y-6">
+              {/* Breadcrumb idêntico ao Obsidian */}
+              <div className="text-xs font-sans text-stone-400 dark:text-stone-500 flex items-center gap-1.5 overflow-x-auto pb-1">
                 <span>Biblioteca</span>
                 <span>/</span>
-                <span className="uppercase">{notaAtiva.pasta}</span>
+                <span className="uppercase font-medium text-stone-600 dark:text-stone-400">{notaAtiva.pasta}</span>
                 <span>/</span>
-                <span className="text-stone-200 font-medium truncate">{notaAtiva.titulo}</span>
+                <span className="text-stone-800 dark:text-stone-200 font-semibold truncate">{notaAtiva.titulo}</span>
               </div>
 
-              {/* Título Principal em Destaque */}
+              {/* Título Principal */}
               <div>
                 {modoEdicao ? (
                   <input
                     type="text"
                     value={tituloEditando}
                     onChange={(e) => setTituloEditando(e.target.value)}
-                    className="w-full text-xl sm:text-2xl font-bold p-2 rounded-lg bg-stone-900 border border-stone-700 text-white focus:outline-none focus:border-amber-500 font-sans"
+                    className="w-full text-2xl sm:text-3xl font-serif font-bold p-2 rounded-xl bg-stone-100 dark:bg-stone-900 border border-stone-300 dark:border-stone-700 text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-amber-500/40"
                   />
                 ) : (
-                  <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight leading-snug font-sans">
+                  <h1 className="text-2xl sm:text-3xl font-serif font-bold text-stone-900 dark:text-stone-100 tracking-tight leading-snug">
                     {notaAtiva.titulo}
                   </h1>
                 )}
               </div>
 
-              {/* Caixa de "Propriedades" idêntica à de image.png */}
-              <div className="border border-stone-800 bg-[#16171b]/80 rounded-xl p-3.5 space-y-2 font-sans text-xs">
+              {/* Caixa "Propriedades" do Obsidian */}
+              <div className="border border-stone-200/90 dark:border-stone-800/90 bg-stone-50/80 dark:bg-[#1a1c22]/80 rounded-xl p-3.5 space-y-2 font-sans text-xs shadow-2xs">
                 <div
                   onClick={() => setPropriedadesAberta((prev) => !prev)}
-                  className="flex items-center justify-between text-stone-400 cursor-pointer font-medium hover:text-stone-200"
+                  className="flex items-center justify-between text-stone-500 dark:text-stone-400 cursor-pointer font-bold hover:text-stone-800 dark:hover:text-stone-200"
                 >
                   <div className="flex items-center gap-1.5">
                     {propriedadesAberta ? <ChevronDown className="w-3.5 h-3.5" /> : <ChevronRight className="w-3.5 h-3.5" />}
@@ -1310,19 +1346,19 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
                 </div>
 
                 {propriedadesAberta && (
-                  <div className="pt-2 space-y-2 text-stone-300">
+                  <div className="pt-2 space-y-2 text-stone-700 dark:text-stone-300">
                     {/* Linha ID */}
                     <div className="flex items-center gap-4 text-xs">
-                      <div className="w-24 text-stone-500 flex items-center gap-1.5 shrink-0">
+                      <div className="w-24 text-stone-400 flex items-center gap-1.5 shrink-0 font-medium">
                         <span className="font-mono text-stone-400">≡</span>
                         <span>ID</span>
                       </div>
-                      <div className="font-mono text-stone-300">{notaAtiva.id}</div>
+                      <div className="font-mono text-stone-800 dark:text-stone-200">{notaAtiva.id}</div>
                     </div>
 
                     {/* Linha Tags */}
                     <div className="flex items-center gap-4 text-xs">
-                      <div className="w-24 text-stone-500 flex items-center gap-1.5 shrink-0">
+                      <div className="w-24 text-stone-400 flex items-center gap-1.5 shrink-0 font-medium">
                         <Tag className="w-3 h-3 text-stone-400" />
                         <span>tags</span>
                       </div>
@@ -1330,10 +1366,10 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
                         {notaAtiva.tags.map((t) => (
                           <span
                             key={t}
-                            className="px-2 py-0.5 rounded-full text-[11px] bg-stone-800 text-stone-300 border border-stone-700 flex items-center gap-1"
+                            className="px-2 py-0.5 rounded-full text-[11px] bg-stone-200/70 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border border-stone-300 dark:border-stone-700 flex items-center gap-1"
                           >
                             <span>{t}</span>
-                            <span className="text-stone-500 hover:text-stone-300 cursor-pointer text-[10px]">×</span>
+                            <span className="text-stone-400 hover:text-stone-600 cursor-pointer text-[10px]">×</span>
                           </span>
                         ))}
                       </div>
@@ -1342,29 +1378,29 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
                     {/* Linha Tema */}
                     {notaAtiva.tema && (
                       <div className="flex items-center gap-4 text-xs">
-                        <div className="w-24 text-stone-500 flex items-center gap-1.5 shrink-0">
+                        <div className="w-24 text-stone-400 flex items-center gap-1.5 shrink-0 font-medium">
                           <Folder className="w-3 h-3 text-stone-400" />
                           <span>Tema</span>
                         </div>
                         <button
                           onClick={() => handleClicarWikilink(notaAtiva.tema || '')}
-                          className="font-semibold text-stone-200 underline hover:text-amber-300 cursor-pointer"
+                          className="font-semibold text-purple-700 dark:text-purple-400 underline hover:text-purple-900 cursor-pointer"
                         >
                           {notaAtiva.tema.replace(/\[\[|\]\]/g, '')}
                         </button>
                       </div>
                     )}
 
-                    {/* Linha Referência (se permanente) */}
+                    {/* Linha Referência */}
                     {notaAtiva.referencia && (
                       <div className="flex items-center gap-4 text-xs">
-                        <div className="w-24 text-stone-500 flex items-center gap-1.5 shrink-0">
+                        <div className="w-24 text-stone-400 flex items-center gap-1.5 shrink-0 font-medium">
                           <BookOpen className="w-3 h-3 text-stone-400" />
                           <span>Referência</span>
                         </div>
                         <button
                           onClick={() => handleClicarWikilink(notaAtiva.referencia || '')}
-                          className="font-semibold text-sky-400 underline hover:text-sky-300 cursor-pointer truncate max-w-md"
+                          className="font-semibold text-sky-700 dark:text-sky-400 underline hover:text-sky-900 cursor-pointer truncate max-w-md"
                         >
                           {notaAtiva.referencia.replace(/\[\[|\]\]/g, '')}
                         </button>
@@ -1374,37 +1410,31 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
                     {/* Linha Relação Afim */}
                     {notaAtiva.relacao && (
                       <div className="flex items-center gap-4 text-xs">
-                        <div className="w-24 text-stone-500 flex items-center gap-1.5 shrink-0">
+                        <div className="w-24 text-stone-400 flex items-center gap-1.5 shrink-0 font-medium">
                           <Lightbulb className="w-3 h-3 text-stone-400" />
                           <span>Relação</span>
                         </div>
                         <button
                           onClick={() => handleClicarWikilink(notaAtiva.relacao || '')}
-                          className="font-semibold text-emerald-400 underline hover:text-emerald-300 cursor-pointer truncate max-w-md"
+                          className="font-semibold text-emerald-700 dark:text-emerald-400 underline hover:text-emerald-900 cursor-pointer truncate max-w-md"
                         >
                           {notaAtiva.relacao.replace(/\[\[|\]\]/g, '')}
                         </button>
                       </div>
                     )}
-
-                    {/* Adicionar propriedade */}
-                    <div className="pt-1 text-[11px] text-stone-500 hover:text-stone-300 cursor-pointer flex items-center gap-1">
-                      <Plus className="w-3 h-3" />
-                      <span>Adicionar propriedade</span>
-                    </div>
                   </div>
                 )}
               </div>
 
-              {/* Conteúdo da Nota (Modo Leitura ou Modo Edição) */}
+              {/* Corpo da Nota */}
               <div className="py-2">
                 {modoEdicao ? (
                   <div className="space-y-3">
-                    <div className="flex flex-wrap items-center gap-2 pb-2 border-b border-stone-800 text-xs">
+                    <div className="flex flex-wrap items-center gap-2 pb-2 border-b border-stone-200 dark:border-stone-800 text-xs">
                       <button
                         type="button"
                         onClick={handleInserirMarcaTexto}
-                        className="px-2.5 py-1 rounded bg-yellow-500/20 text-yellow-300 border border-yellow-500/40 font-medium flex items-center gap-1 cursor-pointer"
+                        className="px-2.5 py-1 rounded bg-amber-100 text-amber-900 dark:bg-yellow-500/20 dark:text-yellow-300 border border-amber-300 dark:border-yellow-500/40 font-medium flex items-center gap-1 cursor-pointer"
                         title="Destacar com marca-texto amarelo ==texto=="
                       >
                         <Highlighter className="w-3 h-3" />
@@ -1413,28 +1443,28 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
                       <button
                         type="button"
                         onClick={() => handleInserirTexto('- #síntese p. : ')}
-                        className="px-2 py-1 rounded bg-emerald-950 text-emerald-300 text-[11px] cursor-pointer"
+                        className="px-2 py-1 rounded bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 text-[11px] cursor-pointer"
                       >
                         + #síntese
                       </button>
                       <button
                         type="button"
                         onClick={() => handleInserirTexto('- #comentário p. : ')}
-                        className="px-2 py-1 rounded bg-sky-950 text-sky-300 text-[11px] cursor-pointer"
+                        className="px-2 py-1 rounded bg-sky-100 text-sky-800 dark:bg-sky-950 dark:text-sky-300 text-[11px] cursor-pointer"
                       >
                         + #comentário
                       </button>
                       <button
                         type="button"
                         onClick={() => handleInserirTexto('- #citação p. : ""')}
-                        className="px-2 py-1 rounded bg-amber-950 text-amber-300 text-[11px] cursor-pointer"
+                        className="px-2 py-1 rounded bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 text-[11px] cursor-pointer"
                       >
                         + #citação
                       </button>
                       <button
                         type="button"
                         onClick={() => handleInserirTexto('[[Nota Relacionada]]')}
-                        className="px-2 py-1 rounded bg-stone-800 text-stone-200 text-[11px] cursor-pointer"
+                        className="px-2 py-1 rounded bg-stone-200 dark:bg-stone-800 text-stone-800 dark:text-stone-200 text-[11px] cursor-pointer"
                       >
                         + [[Wikilink]]
                       </button>
@@ -1444,19 +1474,19 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
                       rows={18}
                       value={conteudoEditando}
                       onChange={(e) => setConteudoEditando(e.target.value)}
-                      className="w-full p-4 font-mono text-xs sm:text-sm rounded-xl bg-stone-900/90 border border-stone-700 text-stone-100 focus:outline-none focus:border-amber-500 leading-relaxed"
+                      className="w-full p-4 font-mono text-xs sm:text-sm rounded-xl bg-stone-50 dark:bg-stone-900 border border-stone-300 dark:border-stone-700 text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-amber-500/40 leading-relaxed"
                     />
 
                     <div className="flex justify-end gap-2">
                       <button
                         onClick={() => setModoEdicao(false)}
-                        className="px-4 py-1.5 rounded-lg text-xs font-medium text-stone-400 hover:bg-stone-800"
+                        className="px-4 py-1.5 rounded-lg text-xs font-medium text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
                       >
                         Cancelar
                       </button>
                       <button
                         onClick={handleSalvarEdicao}
-                        className="px-4 py-1.5 rounded-lg text-xs font-bold bg-amber-600 hover:bg-amber-500 text-white shadow-sm"
+                        className="px-4 py-1.5 rounded-lg text-xs font-bold bg-amber-700 hover:bg-amber-600 text-white shadow-xs"
                       >
                         Salvar Alterações
                       </button>
@@ -1468,66 +1498,65 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
               </div>
             </div>
           ) : (
-            <div className="p-16 text-center text-stone-500 text-sm space-y-2">
-              <Lightbulb className="w-8 h-8 mx-auto text-stone-600" />
+            <div className="p-16 text-center text-stone-400 text-sm space-y-2">
+              <Lightbulb className="w-8 h-8 mx-auto text-stone-300 dark:text-stone-600" />
               <div>Selecione uma nota na árvore de diretórios ao lado para visualizar.</div>
             </div>
           )}
 
-          {/* =============================================================
-              BARRA DE STATUS INFERIOR DO OBSIDIAN
-              (Como em image.png e image_4.png: 0 link inverso | 726 palavras | 4.531 caracteres | Canvas mindmap: 80)
-             ============================================================= */}
-          <div className="border-t border-stone-800/90 bg-[#121316]/95 px-4 py-2 flex items-center justify-between text-[11px] text-stone-400 font-sans z-10">
+          {/* =========================================================
+              BARRA INFERIOR DE STATUS DO OBSIDIAN
+             ========================================================= */}
+          <div className="border-t border-stone-200 dark:border-stone-800 bg-stone-50/80 dark:bg-[#121316]/90 px-4 py-2 flex items-center justify-between text-[11px] text-stone-500 font-sans z-10">
             {/* Esquerda: Links inversos */}
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setBacklinksAberto((prev) => !prev)}
-                className="hover:text-stone-200 flex items-center gap-1 cursor-pointer"
+                className="hover:text-amber-800 dark:hover:text-amber-300 flex items-center gap-1 cursor-pointer"
                 title="Exibir Conexões Reversas / Backlinks"
               >
-                <LinkIcon className="w-3 h-3 text-amber-500" />
+                <LinkIcon className="w-3 h-3 text-amber-600" />
                 <span>
                   {backlinks.length} {backlinks.length === 1 ? 'link inverso' : 'links inversos'}
                 </span>
               </button>
             </div>
 
-            {/* Direita: Contadores de palavras, caracteres e canvas */}
+            {/* Direita: Contadores */}
             <div className="flex items-center gap-3 font-mono text-[11px]">
               <span>{statsNota.palavras.toLocaleString('pt-BR')} palavras</span>
-              <span className="text-stone-600">|</span>
+              <span className="text-stone-300 dark:text-stone-700">|</span>
               <span>{statsNota.caracteres.toLocaleString('pt-BR')} caracteres</span>
-              <span className="text-stone-600">|</span>
-              <span className="flex items-center gap-1 text-stone-300">
-                <LayoutGrid className="w-3 h-3 text-purple-400" />
-                <span>Canvas mindmap: 80</span>
+              <span className="text-stone-300 dark:text-stone-700">|</span>
+              <span className="flex items-center gap-1 text-stone-600 dark:text-stone-400 font-sans">
+                <LayoutGrid className="w-3 h-3 text-purple-600" />
+                <span>Canvas: 80</span>
               </span>
             </div>
           </div>
-        </div>
+        </main>
       </div>
 
       {/* =========================================================================
-          GAVETA DE BACKLINKS (QUANDO CLICADO EM 'LINKS INVERSOS')
+          GAVETA DE BACKLINKS RETRÁTIL
          ========================================================================= */}
       {backlinksAberto && notaAtiva && (
-        <div className="fixed bottom-10 right-4 w-96 rounded-2xl bg-stone-900 border border-stone-700 shadow-2xl p-4 z-40 space-y-3 animate-fadeIn">
-          <div className="flex items-center justify-between border-b border-stone-800 pb-2">
-            <div className="flex items-center gap-1.5 text-xs font-bold text-stone-200">
-              <LinkIcon className="w-3.5 h-3.5 text-amber-500" />
+        <div className="fixed bottom-12 right-6 w-80 sm:w-96 rounded-2xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 shadow-2xl p-4 z-40 space-y-3 animate-fadeIn">
+          <div className="flex items-center justify-between border-b border-stone-200 dark:border-stone-800 pb-2">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-stone-900 dark:text-stone-100">
+              <LinkIcon className="w-3.5 h-3.5 text-amber-600" />
               <span>Conexões Reversas ({backlinks.length})</span>
             </div>
             <button
               onClick={() => setBacklinksAberto(false)}
-              className="text-stone-400 hover:text-stone-200"
+              className="text-stone-400 hover:text-stone-600 dark:hover:text-stone-200"
             >
               <X className="w-4 h-4" />
             </button>
           </div>
 
           {backlinks.length === 0 ? (
-            <div className="text-xs text-stone-500 italic py-2">
+            <div className="text-xs text-stone-400 italic py-2">
               Nenhuma outra nota cita [[{notaAtiva.titulo}]] diretamente ainda.
             </div>
           ) : (
@@ -1539,7 +1568,7 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
                     selecionarNotaZettel(b.id);
                     setBacklinksAberto(false);
                   }}
-                  className="p-2 rounded-lg bg-stone-950 hover:bg-stone-800 border border-stone-800 text-xs cursor-pointer text-stone-200 hover:text-amber-300"
+                  className="p-2 rounded-lg bg-stone-50 dark:bg-stone-950 hover:bg-amber-50 dark:hover:bg-stone-800 border border-stone-200 dark:border-stone-800 text-xs cursor-pointer text-stone-800 dark:text-stone-200 hover:text-amber-900 transition"
                 >
                   <div className="font-semibold">{b.titulo}</div>
                   <div className="text-[10px] text-stone-500 truncate">{b.pasta}</div>
@@ -1551,32 +1580,31 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
       )}
 
       {/* =========================================================================
-          MODAL DE PERSONALIZAÇÃO DA IMAGEM DE FUNDO (WALLPAPER CHIAROSCURO)
-          (Atende a solicitação explícita do usuário: 'coloque ser possível trocar também o fundo da imagem')
+          MODAL DE PERSONALIZAÇÃO DA IMAGEM DE FUNDO
          ========================================================================= */}
       {modalFundoAberto && (
-        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-[#18191d] border border-stone-700 rounded-2xl max-w-xl w-full p-6 space-y-5 shadow-2xl text-stone-200">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-[#18191d] border border-stone-200 dark:border-stone-700 rounded-2xl max-w-xl w-full p-6 space-y-5 shadow-2xl text-stone-800 dark:text-stone-200">
             {/* Cabeçalho */}
-            <div className="flex items-center justify-between border-b border-stone-800 pb-3">
+            <div className="flex items-center justify-between border-b border-stone-200 dark:border-stone-800 pb-3">
               <div className="flex items-center gap-2">
-                <ImageIcon className="w-5 h-5 text-amber-500" />
-                <h3 className="font-serif font-bold text-lg text-white">
-                  Personalizar Imagem de Fundo do Zettelkasten
+                <ImageIcon className="w-5 h-5 text-amber-600" />
+                <h3 className="font-serif font-bold text-lg text-stone-900 dark:text-white">
+                  Imagem de Fundo do Zettelkasten
                 </h3>
               </div>
               <button
                 onClick={() => setModalFundoAberto(false)}
-                className="text-stone-400 hover:text-white cursor-pointer"
+                className="text-stone-400 hover:text-stone-600 dark:hover:text-white cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            {/* Galeria de Presets Clássicos / Chiaroscuro */}
+            {/* Presets */}
             <div className="space-y-2">
-              <div className="text-xs font-bold uppercase text-stone-400 tracking-wider">
-                Selecione uma Obra Clássica de Fundo:
+              <div className="text-xs font-bold uppercase text-stone-500 tracking-wider">
+                Obras Clássicas Disponíveis:
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 max-h-56 overflow-y-auto pr-1">
                 {PRESETS_WALLPAPERS.map((preset) => {
@@ -1587,22 +1615,22 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
                       onClick={() => setFundoZettelkasten(preset.id)}
                       className={`relative rounded-xl overflow-hidden border p-2 cursor-pointer transition flex flex-col justify-between ${
                         isSelected
-                          ? 'border-amber-500 bg-amber-950/30 ring-2 ring-amber-500/50'
-                          : 'border-stone-800 bg-stone-900/80 hover:border-stone-600'
+                          ? 'border-amber-600 bg-amber-50 dark:bg-amber-950/40 ring-2 ring-amber-500/40'
+                          : 'border-stone-200 dark:border-stone-800 bg-stone-50 dark:bg-stone-900/60 hover:border-amber-400'
                       }`}
                     >
                       {preset.url ? (
                         <div
-                          className="h-16 w-full rounded-lg bg-cover bg-center mb-1.5 border border-stone-800"
+                          className="h-16 w-full rounded-lg bg-cover bg-center mb-1.5 border border-stone-200 dark:border-stone-800"
                           style={{ backgroundImage: `url('${preset.url}')` }}
                         />
                       ) : (
-                        <div className="h-16 w-full rounded-lg bg-stone-950 mb-1.5 flex items-center justify-center text-[10px] text-stone-500 border border-stone-800">
-                          Preto Puro
+                        <div className="h-16 w-full rounded-lg bg-stone-200 dark:bg-stone-950 mb-1.5 flex items-center justify-center text-[10px] text-stone-500 border border-stone-200 dark:border-stone-800">
+                          Sem Imagem
                         </div>
                       )}
                       <div>
-                        <div className="text-xs font-bold text-stone-100 truncate">{preset.nome}</div>
+                        <div className="text-xs font-bold text-stone-900 dark:text-stone-100 truncate">{preset.nome}</div>
                         <div className="text-[10px] text-stone-500 truncate">{preset.autor}</div>
                       </div>
                     </div>
@@ -1611,10 +1639,10 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
               </div>
             </div>
 
-            {/* Inserir URL personalizada ou Fazer Upload do PC */}
-            <div className="space-y-2 pt-2 border-t border-stone-800">
-              <div className="text-xs font-bold uppercase text-stone-400 tracking-wider">
-                Ou use Imagem Própria (URL ou Arquivo Local):
+            {/* URL Personalizada ou Upload */}
+            <div className="space-y-2 pt-2 border-t border-stone-200 dark:border-stone-800">
+              <div className="text-xs font-bold uppercase text-stone-500 tracking-wider">
+                Ou use Imagem Própria:
               </div>
               <div className="flex gap-2">
                 <input
@@ -1622,7 +1650,7 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
                   value={customFundoUrl}
                   onChange={(e) => setCustomFundoUrl(e.target.value)}
                   placeholder="https://...cole a URL da imagem aqui"
-                  className="flex-1 px-3 py-1.5 rounded-lg bg-stone-950 border border-stone-800 text-xs text-stone-200 focus:outline-none focus:border-amber-500"
+                  className="flex-1 px-3 py-1.5 rounded-lg bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 text-xs text-stone-900 dark:text-stone-100 focus:outline-none focus:border-amber-600"
                 />
                 <button
                   type="button"
@@ -1631,14 +1659,14 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
                       setFundoZettelkasten(customFundoUrl.trim());
                     }
                   }}
-                  className="px-3 py-1.5 rounded-lg bg-stone-800 hover:bg-stone-700 text-xs font-bold text-stone-200"
+                  className="px-3 py-1.5 rounded-lg bg-stone-200 dark:bg-stone-800 hover:bg-stone-300 text-xs font-bold text-stone-800 dark:text-stone-200"
                 >
                   Aplicar URL
                 </button>
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="px-3 py-1.5 rounded-lg bg-amber-800 hover:bg-amber-700 text-xs font-bold text-white flex items-center gap-1 cursor-pointer"
+                  className="px-3 py-1.5 rounded-lg bg-amber-700 hover:bg-amber-600 text-xs font-bold text-white flex items-center gap-1 cursor-pointer"
                   title="Fazer Upload de arquivo de imagem do computador"
                 >
                   <Upload className="w-3.5 h-3.5" />
@@ -1655,49 +1683,47 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
             </div>
 
             {/* Ajustes de Opacidade e Desfoque */}
-            <div className="grid grid-cols-2 gap-4 pt-3 border-t border-stone-800">
+            <div className="grid grid-cols-2 gap-4 pt-3 border-t border-stone-200 dark:border-stone-800">
               <div>
-                <div className="flex justify-between text-xs text-stone-400 mb-1">
+                <div className="flex justify-between text-xs text-stone-500 mb-1">
                   <span>Opacidade do Fundo</span>
-                  <span className="font-mono font-bold text-amber-400">{opacidadeFundoZettelkasten}%</span>
+                  <span className="font-mono font-bold text-amber-700 dark:text-amber-400">{opacidadeFundoZettelkasten}%</span>
                 </div>
                 <input
                   type="range"
                   min="5"
-                  max="70"
+                  max="60"
                   step="1"
                   value={opacidadeFundoZettelkasten}
                   onChange={(e) => setOpacidadeFundoZettelkasten(Number(e.target.value))}
-                  className="w-full accent-amber-500 cursor-pointer"
+                  className="w-full accent-amber-600 cursor-pointer"
                 />
-                <div className="text-[10px] text-stone-500 mt-0.5">Recomendado: 20% - 30%</div>
               </div>
 
               <div>
-                <div className="flex justify-between text-xs text-stone-400 mb-1">
+                <div className="flex justify-between text-xs text-stone-500 mb-1">
                   <span>Desfoque (Blur)</span>
-                  <span className="font-mono font-bold text-amber-400">{desfoqueFundoZettelkasten}px</span>
+                  <span className="font-mono font-bold text-amber-700 dark:text-amber-400">{desfoqueFundoZettelkasten}px</span>
                 </div>
                 <input
                   type="range"
                   min="0"
-                  max="12"
+                  max="10"
                   step="1"
                   value={desfoqueFundoZettelkasten}
                   onChange={(e) => setDesfoqueFundoZettelkasten(Number(e.target.value))}
-                  className="w-full accent-amber-500 cursor-pointer"
+                  className="w-full accent-amber-600 cursor-pointer"
                 />
-                <div className="text-[10px] text-stone-500 mt-0.5">Recomendado: 0px - 2px</div>
               </div>
             </div>
 
-            {/* Botão Concluir */}
-            <div className="pt-3 border-t border-stone-800 flex justify-end">
+            {/* Fechar */}
+            <div className="pt-3 border-t border-stone-200 dark:border-stone-800 flex justify-end">
               <button
                 onClick={() => setModalFundoAberto(false)}
-                className="px-5 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs shadow-md transition cursor-pointer"
+                className="px-5 py-2 rounded-xl bg-amber-700 hover:bg-amber-600 text-white font-bold text-xs shadow-xs transition cursor-pointer"
               >
-                Concluir e Salvar
+                Concluir
               </button>
             </div>
           </div>
@@ -1708,15 +1734,15 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
           MODAIS DE CRIAÇÃO (PERMANENTE / REFERÊNCIA / ÍNDICE)
          ========================================================================= */}
       {modalNovoTipo && (
-        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-[#18191d] border border-stone-700 rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl text-stone-200">
-            <div className="flex items-center justify-between border-b border-stone-800 pb-3">
-              <h3 className="font-serif font-bold text-lg text-white">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-[#18191d] border border-stone-200 dark:border-stone-700 rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl text-stone-800 dark:text-stone-200">
+            <div className="flex items-center justify-between border-b border-stone-200 dark:border-stone-800 pb-3">
+              <h3 className="font-serif font-bold text-lg text-stone-900 dark:text-white">
                 {modalNovoTipo === 'permanente' && 'Nova Nota Permanente (1 Ideia Atômica)'}
                 {modalNovoTipo === 'referencia' && 'Nova Nota de Referência (Fonte/Livro)'}
                 {modalNovoTipo === 'indice' && 'Nova Nota de Índice (Macrotema)'}
               </h3>
-              <button onClick={() => setModalNovoTipo(null)} className="text-stone-400 hover:text-white cursor-pointer">
+              <button onClick={() => setModalNovoTipo(null)} className="text-stone-400 hover:text-stone-600 dark:hover:text-white cursor-pointer">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -1724,7 +1750,7 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
             {modalNovoTipo === 'permanente' && (
               <form onSubmit={handleCriarPermanenteSubmit} className="space-y-3.5">
                 <div>
-                  <label className="block text-xs font-bold text-stone-300 mb-1">
+                  <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">
                     Título Sintético do Conceito
                   </label>
                   <input
@@ -1732,18 +1758,18 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
                     value={modalNovoTitulo}
                     onChange={(e) => setModalNovoTitulo(e.target.value)}
                     placeholder="Ex: O absurdo como divórcio entre sentido e o mundo"
-                    className="w-full p-2.5 text-xs rounded-lg bg-stone-950 border border-stone-800 text-stone-100 focus:outline-none focus:border-emerald-500"
+                    className="w-full p-2.5 text-xs rounded-lg bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 text-stone-900 dark:text-stone-100 focus:outline-none focus:border-emerald-600"
                     required
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-2.5">
                   <div>
-                    <label className="block text-xs font-bold text-stone-300 mb-1">Macrotema</label>
+                    <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">Macrotema</label>
                     <select
                       value={modalNovoTemaNum}
                       onChange={(e) => setModalNovoTemaNum(Number(e.target.value))}
-                      className="w-full p-2.5 text-xs rounded-lg bg-stone-950 border border-stone-800 text-stone-100"
+                      className="w-full p-2.5 text-xs rounded-lg bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 text-stone-900 dark:text-stone-100"
                     >
                       <option value={1}>1 - LITERATURA</option>
                       <option value={2}>2 - HISTÓRIA</option>
@@ -1753,36 +1779,36 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
                     </select>
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-stone-300 mb-1">Página</label>
+                    <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">Página</label>
                     <input
                       type="text"
                       value={modalNovoPagina}
                       onChange={(e) => setModalNovoPagina(e.target.value)}
                       placeholder="Ex: 84"
-                      className="w-full p-2.5 text-xs rounded-lg bg-stone-950 border border-stone-800 text-stone-100"
+                      className="w-full p-2.5 text-xs rounded-lg bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 text-stone-900 dark:text-stone-100"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-stone-300 mb-1">Referência (Fonte)</label>
+                  <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">Referência (Fonte)</label>
                   <input
                     type="text"
                     value={modalNovoRef}
                     onChange={(e) => setModalNovoRef(e.target.value)}
                     placeholder="Ex: [[1 - 261220251138 - O estrangeiro]]"
-                    className="w-full p-2.5 text-xs rounded-lg bg-stone-950 border border-stone-800 text-stone-100"
+                    className="w-full p-2.5 text-xs rounded-lg bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 text-stone-900 dark:text-stone-100"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-stone-300 mb-1">Relação Afim</label>
+                  <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">Relação Afim</label>
                   <input
                     type="text"
                     value={modalNovoRelacao}
                     onChange={(e) => setModalNovoRelacao(e.target.value)}
                     placeholder="Ex: [[Outra Nota Permanente]]"
-                    className="w-full p-2.5 text-xs rounded-lg bg-stone-950 border border-stone-800 text-stone-100"
+                    className="w-full p-2.5 text-xs rounded-lg bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 text-stone-900 dark:text-stone-100"
                   />
                 </div>
 
@@ -1790,7 +1816,7 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
                   <button
                     type="button"
                     onClick={() => setModalNovoTipo(null)}
-                    className="px-4 py-2 rounded-lg text-xs font-medium text-stone-400 hover:bg-stone-800"
+                    className="px-4 py-2 rounded-lg text-xs font-medium text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
                   >
                     Cancelar
                   </button>
@@ -1807,13 +1833,13 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
             {modalNovoTipo === 'referencia' && (
               <form onSubmit={handleCriarReferenciaSubmit} className="space-y-3.5">
                 <div>
-                  <label className="block text-xs font-bold text-stone-300 mb-1">
+                  <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">
                     Fichar Livro da Estante (1 Clique)
                   </label>
                   <select
                     value={modalNovoLivroId}
                     onChange={(e) => setModalNovoLivroId(e.target.value === '' ? '' : Number(e.target.value))}
-                    className="w-full p-2.5 text-xs rounded-lg bg-stone-950 border border-stone-800 text-stone-100"
+                    className="w-full p-2.5 text-xs rounded-lg bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 text-stone-900 dark:text-stone-100"
                   >
                     <option value="">Digitar título / fonte manualmente abaixo...</option>
                     {livros.map((l) => (
@@ -1826,7 +1852,7 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
 
                 {modalNovoLivroId === '' && (
                   <div>
-                    <label className="block text-xs font-bold text-stone-300 mb-1">
+                    <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">
                       Título da Fonte Externa
                     </label>
                     <input
@@ -1834,7 +1860,7 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
                       value={modalNovoTitulo}
                       onChange={(e) => setModalNovoTitulo(e.target.value)}
                       placeholder="Ex: Crime e Castigo ou Ensaio sobre a Cegueira"
-                      className="w-full p-2.5 text-xs rounded-lg bg-stone-950 border border-stone-800 text-stone-100"
+                      className="w-full p-2.5 text-xs rounded-lg bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 text-stone-900 dark:text-stone-100"
                       required
                     />
                   </div>
@@ -1844,7 +1870,7 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
                   <button
                     type="button"
                     onClick={() => setModalNovoTipo(null)}
-                    className="px-4 py-2 rounded-lg text-xs font-medium text-stone-400 hover:bg-stone-800"
+                    className="px-4 py-2 rounded-lg text-xs font-medium text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
                   >
                     Cancelar
                   </button>
@@ -1861,7 +1887,7 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
             {modalNovoTipo === 'indice' && (
               <form onSubmit={handleCriarIndiceSubmit} className="space-y-3.5">
                 <div>
-                  <label className="block text-xs font-bold text-stone-300 mb-1">
+                  <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">
                     Nome do Macrotema / Índice
                   </label>
                   <input
@@ -1869,7 +1895,7 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
                     value={modalNovoTitulo}
                     onChange={(e) => setModalNovoTitulo(e.target.value)}
                     placeholder="Ex: 6 - SOCIOLOGIA ou 7 - POLÍTICA"
-                    className="w-full p-2.5 text-xs rounded-lg bg-stone-950 border border-stone-800 text-stone-100"
+                    className="w-full p-2.5 text-xs rounded-lg bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 text-stone-900 dark:text-stone-100"
                     required
                   />
                 </div>
@@ -1878,7 +1904,7 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
                   <button
                     type="button"
                     onClick={() => setModalNovoTipo(null)}
-                    className="px-4 py-2 rounded-lg text-xs font-medium text-stone-400 hover:bg-stone-800"
+                    className="px-4 py-2 rounded-lg text-xs font-medium text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
                   >
                     Cancelar
                   </button>
