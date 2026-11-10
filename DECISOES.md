@@ -10,22 +10,23 @@ Este documento registra as decisões de arquitetura e produto adotadas na implem
 | **Persistência de Dados** | `localStorage` local + exportação/importação manual em JSON, Markdown e CSV | Garante privacidade total (nenhum dado pessoal sai do aparelho), custo zero de infraestrutura e controle absoluto pelo usuário. |
 | **Apresentação Visual das Obras** | Capas reais com alternador para visão em lombada | Proporciona tanto o prazer estético da estante visual quanto a densidade de informação da lombada de biblioteca. |
 | **Edições de Clássicos** | Até 3 edições em português com seletor de edição preferida | Permite que o leitor defina qual tradução ou editora possui ou pretende ler (ex.: 34, Martins Fontes, Companhia das Letras, etc.). |
-| **Trilhas Temáticas à Parte** | Não incluído na v1 | Foco no cumprimento rigoroso do grafo dos 60 livros e 5 níveis sem dispersão. |
-| **Obras em Inglês** | Rótulo de idioma `[EN]` nos livros #2 e #36 | Busca nas APIs pela edição em inglês original mantendo fidelidade ao objetivo pedagógico. |
+| **Trilhas e Expansão (v0.2)** | Trilha A (Canônica, 60 obras) + Trilha B (Expansão dialética, 60 obras) | Cada nível passa a contar com 24 obras (12 canônicas + 12 de expansão dialética), totalizando 120 livros e 198 relações. |
+| **Obras em Inglês** | Rótulo de idioma `[EN]` nos livros #2, #36, #72 e #93 | Busca nas APIs pela edição em inglês original mantendo fidelidade ao objetivo pedagógico da trilha de inglês. |
 
 ## 2. Decisões Arquiteturais e Técnicas
 
 - **Stack Tecnológica:** Vite + React 18 + TypeScript + Tailwind CSS + Lucide Icons + Zustand para gerenciamento de estado.
-- **Grafo em Redes & Navegação Hermenêutica:** Implementação híbrida de alta legibilidade com **Modo Foco (Ego-Network)** como padrão — onde a obra central fica em destaque editorial e suas conexões diretas (contrapontos dialéticos, sequências de leitura e diálogos temáticos) são apresentadas em cards legíveis com justificativa intelectual explícita, permitindo viajar pelas ideias de obra em obra com transição instantânea de foco — acompanhado de um alternador para a **Constelação Geral (60 Obras)** em D3 Force Simulation para visão macro com zoom, filtros por nível e área.
+- **Grafo em Redes & Navegação Hermenêutica:** Implementação híbrida de alta legibilidade com **Modo Foco (Ego-Network)** como padrão — onde a obra central fica em destaque editorial e suas conexões diretas (contrapontos dialéticos, sequências de leitura e diálogos temáticos) são apresentadas em cards legíveis com justificativa intelectual explícita, permitindo viajar pelas ideias de obra em obra com transição instantânea de foco — acompanhado de um alternador para a **Constelação Geral (120 Obras)** em D3 Force Simulation para visão macro com zoom, filtros por nível e área.
 - **Integridade dos Dados:** Dados estruturais em `data/livros.json` e `data/relacoes.json`. Enriquecimento cacheado em `data/enriquecido.json` e pendências catalogadas em `data/pendencias.json`.
 - **Regra do Resumo:** Obras com `resumo_permitido = "nao"` contam com o selo rígido *"Resumo trairia o argumento"* e disponibilizam campo editável para *"Guia de Leitura"* pessoal do usuário, nunca gerando paráfrases artificiais.
+- **Fidelidade das Capas em Português:** Aplicação estrita de capas autênticas em português brasileiro (ou inglês para as obras dedicadas do idioma). Nos casos em que a capa em português não está disponível com alta definição nos repositórios públicos, a aplicação aciona automaticamente a capa tipográfica clássica em marfim/linho com moldura dourada e as cores temáticas da área, nunca exibindo capas em línguas estrangeiras indesejadas.
 
 ## 3. Padrões de UX, Design Antiquarian & Produtividade
 
 - **Atmosfera 'Classical Editorial & Antiquarian':** Tons pergaminho suave, dark mode estilo sala de leitura noturna, tipografia serifada e toques em ouro envelhecido.
 - **Lombadas Físicas Proporcionais:** Espessura dinâmica calculada a partir do número real de páginas de cada obra (44px a 84px), com nervuras clássicas de encadernação, cabeceado de tecido e leitura vertical no padrão latino/ABNT de cima para baixo.
-- **Prateleira 3D & Abas Mobile:** Estrutura em madeira nobre com moldura e placas de latão escovado gravadas em algarismos romanos para os níveis I a V, acompanhadas de navegação horizontal ágil em dispositivos móveis e selo comemorativo *Ex-Libris* para cada nível completado.
+- **Prateleira 3D & Seletor de Trilhas:** Estrutura em madeira nobre com moldura e placas de latão escovado gravadas em algarismos romanos para os níveis I a V, acompanhadas de alternador de trilhas (`24 Obras`, `Trilha A · Canônica`, `Trilha B · Expansão`) e modo de prateleiras subdivididas ou intercaladas.
 - **Paleta de Comandos Global (`Cmd+K` / `Ctrl+K`):** Busca instantânea por qualquer livro, autor, conceito de tese ou ação do sistema com navegação 100% via teclado (`E`, `G`, `C`, `D`, `1`–`5`, `Esc`).
-- **Confronto Dialético Lado a Lado:** Painel comparativo hermenêutico frente a frente de obras em contraponto (ex: Hayek vs Polanyi, Hobbes vs Rousseau), permitindo ao leitor registrar e salvar sua síntese pessoal nas notas de estudo.
+- **Confronto Dialético Lado a Lado:** Painel comparativo hermenêutico frente a frente de obras em contraponto (ex: Hayek vs Polanyi, Hobbes vs Rousseau, Pinker vs Skinner, Rawls vs Schmitt), permitindo ao leitor registrar e salvar sua síntese pessoal nas notas de estudo.
 - **Caderno Geral de Estudos & Citações:** Centralizador de todas as anotações, perguntas abertas e reflexões com busca textual e exportação consolidada em arquivo `.md`.
 

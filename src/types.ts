@@ -104,7 +104,7 @@ export interface NotaZettel {
   // Metadados do frontmatter
   tema?: string; // Link [[Nome da Nota Índice]]
   referencia?: string; // Link [[Nome da Nota de Referência]]
-  livroId?: number; // Vínculo com um dos 60 livros da Biblioteca Imaginária
+  livroId?: number; // Vínculo com um dos 120 livros da Biblioteca Imaginária
   pagina?: number | string;
   relacao?: string; // Link [[Outra Nota Permanente]]
   

@@ -123,7 +123,7 @@ const STORAGE_KEY = 'biblioteca_imaginaria_v1';
 // Inicializa o progresso padrão
 function getProgressosIniciais(): Record<number, Progresso> {
   const progs: Record<number, Progresso> = {};
-  for (let i = 1; i <= 60; i++) {
+  for (let i = 1; i <= 120; i++) {
     progs[i] = {
       livro_id: i,
       estado: 'nao_iniciado',
@@ -221,15 +221,28 @@ function sincronizarLivrosComEnriquecidos(livrosSalvos?: Livro[]): Livro[] {
       por_que_antes_do_proximo: enr.por_que_antes_do_proximo,
       sinopse_editorial: enr.sinopse_editorial,
       edicoes_pt: enr.edicoes_pt,
-      status_busca: enr.status_busca
+      status_busca: enr.status_busca,
+      paginas: enr.paginas
     };
   });
 }
 
+function mesclarRelacoesComPadrao(relacoesSalvas?: Relacao[]): Relacao[] {
+  if (!relacoesSalvas || relacoesSalvas.length === 0) return relacoesPadrao as Relacao[];
+  const salvasMap = new Map(relacoesSalvas.map((r) => [r.id || `${r.tipo}-${r.de}-${r.para}`, r]));
+  for (const padrao of (relacoesPadrao as Relacao[])) {
+    const key = padrao.id || `${padrao.tipo}-${padrao.de}-${padrao.para}`;
+    if (!salvasMap.has(key)) {
+      salvasMap.set(key, padrao);
+    }
+  }
+  return Array.from(salvasMap.values());
+}
+
 export const useBibliotecaStore = create<BibliotecaState>((set, get) => ({
   livros: sincronizarLivrosComEnriquecidos(salvo?.livros),
-  relacoes: salvo?.relacoes || (relacoesPadrao as Relacao[]),
-  progressos: salvo?.progressos || getProgressosIniciais(),
+  relacoes: mesclarRelacoesComPadrao(salvo?.relacoes),
+  progressos: salvo?.progressos ? { ...getProgressosIniciais(), ...salvo.progressos } : getProgressosIniciais(),
   sessoesRevisao: salvo?.sessoesRevisao || [],
   
   // Zettelkasten Real (Sem mockups)

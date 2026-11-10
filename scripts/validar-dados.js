@@ -22,8 +22,8 @@ if (!Array.isArray(livros)) {
 }
 
 console.log(`✓ Total de livros carregados: ${livros.length}`);
-if (livros.length !== 60) {
-  console.error(`ERRO: Esperados 60 livros, encontrados ${livros.length}.`);
+if (livros.length !== 120) {
+  console.error(`ERRO: Esperados 120 livros, encontrados ${livros.length}.`);
   process.exit(1);
 }
 
@@ -70,12 +70,12 @@ for (const livro of livros) {
 console.log('\n--- Contagem por Nível ---');
 for (let n = 1; n <= 5; n++) {
   console.log(`Nível ${n}: ${contagemNivel[n]} livros`);
-  if (contagemNivel[n] !== 12) {
-    console.error(`ERRO: Nível ${n} deveria ter 12 livros, mas tem ${contagemNivel[n]}`);
+  if (contagemNivel[n] !== 24) {
+    console.error(`ERRO: Nível ${n} deveria ter 24 livros, mas tem ${contagemNivel[n]}`);
     process.exit(1);
   }
 }
-console.log('✓ Distribuição por nível verificada com sucesso: (12 / 12 / 12 / 12 / 12)');
+console.log('✓ Distribuição por nível verificada com sucesso: (24 / 24 / 24 / 24 / 24)');
 
 console.log('\n--- Contagem por Classe ---');
 console.log(`OBRA:  ${contagemClasse.OBRA}`);

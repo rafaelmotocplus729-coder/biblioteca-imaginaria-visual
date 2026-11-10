@@ -1,84 +1,1388 @@
 [
-  {"id": "prep-1-2", "de": 1, "para": 2, "tipo": "prepara", "nota": "Vem primeiro porque ensina a ler os demais."},
-  {"id": "prep-2-3", "de": 2, "para": 3, "tipo": "prepara", "nota": "Não precede nenhum livro específico, mas prepara os textos em inglês do nível 3."},
-  {"id": "prep-3-4", "de": 3, "para": 4, "tipo": "prepara", "nota": "Vem antes de Graciliano porque a prosa é fácil e já treina você a perguntar ‘o que este estilo está fazendo?’."},
-  {"id": "prep-4-5", "de": 4, "para": 5, "tipo": "prepara", "nota": "Prepara o ouvido para Machado e Rosa."},
-  {"id": "prep-5-6", "de": 5, "para": 6, "tipo": "prepara", "nota": "Prepara Sísifo, que dirá o oposto."},
-  {"id": "prep-6-7", "de": 6, "para": 7, "tipo": "prepara", "nota": "Vem antes de Diamond porque dá o conceito que ele vai desafiar."},
-  {"id": "prep-7-8", "de": 7, "para": 8, "tipo": "prepara", "nota": "É determinista de propósito, e isso será contestado depois por Clastres e Furtado; sai da história para entrar na filosofia com Russell."},
-  {"id": "prep-8-9", "de": 8, "para": 9, "tipo": "prepara", "nota": "Vem antes de Platão para você chegar a ele sabendo o que é um argumento."},
-  {"id": "prep-9-10", "de": 9, "para": 10, "tipo": "prepara", "nota": "Vem antes de Chesterton porque os dois se opõem sobre o que a razão pode alcançar."},
-  {"id": "prep-10-11", "de": 10, "para": 11, "tipo": "prepara", "nota": "Fecha o bloco filosófico-religioso antes de entrar em economia."},
-  {"id": "prep-11-12", "de": 11, "para": 12, "tipo": "prepara", "nota": "Fica antes de Marx para você conhecer a defesa do mercado antes de ouvir a acusação."},
-
-  {"id": "prep-13-14", "de": 13, "para": 14, "tipo": "prepara", "nota": "Vem antes de Sartre porque Sartre responde ao mesmo problema por outro caminho."},
-  {"id": "prep-14-15", "de": 14, "para": 15, "tipo": "prepara", "nota": "Antes de Tolstói porque este mostra o mesmo problema na vida concreta."},
-  {"id": "prep-15-16", "de": 15, "para": 16, "tipo": "prepara", "nota": "Prepara Machado, que trata o mesmo tema com ironia."},
-  {"id": "prep-16-17", "de": 16, "para": 17, "tipo": "prepara", "nota": "Vem antes de Buarque porque dá a textura do país que os ensaios vão analisar."},
-  {"id": "prep-17-18", "de": 17, "para": 18, "tipo": "prepara", "nota": "Antes de Darcy porque este discute a mesma formação por outro ângulo."},
-  {"id": "prep-18-19", "de": 18, "para": 19, "tipo": "prepara", "nota": "Depois dele a leitura sai do Brasil e passa ao método histórico de Bloch."},
-  {"id": "prep-19-20", "de": 19, "para": 20, "tipo": "prepara", "nota": "Vem antes de Kahneman porque é o primeiro livro sobre como não se enganar."},
-  {"id": "prep-20-21", "de": 20, "para": 21, "tipo": "prepara", "nota": "Antes de Jung porque mostra o oposto de uma psicologia de símbolos."},
-  {"id": "prep-21-22", "de": 21, "para": 22, "tipo": "prepara", "nota": "Depois dele a leitura sai do indivíduo e passa à vocação científica e política de Weber."},
-  {"id": "prep-22-23", "de": 22, "para": 23, "tipo": "prepara", "nota": "Entra antes de Chang para dar vocabulário político à discussão econômica."},
-  {"id": "prep-23-24", "de": 23, "para": 24, "tipo": "prepara", "nota": "Vem antes do Catecismo porque a Igreja tem posição própria sobre isso."},
-
-  {"id": "prep-25-26", "de": 25, "para": 26, "tipo": "prepara", "nota": "Antes de Aristóteles porque ele responde a Platão."},
-  {"id": "prep-26-27", "de": 26, "para": 27, "tipo": "prepara", "nota": "Prepara Agostinho, que vai mudar o foco do hábito para a graça."},
-  {"id": "prep-27-28", "de": 27, "para": 28, "tipo": "prepara", "nota": "Antes de Duffy, para você chegar à história da Igreja sabendo o que ela diz de si."},
-  {"id": "prep-28-29", "de": 28, "para": 29, "tipo": "prepara", "nota": "Vem antes de Durkheim para ver a Igreja também como fato social."},
-  {"id": "prep-29-30", "de": 29, "para": 30, "tipo": "prepara", "nota": "Antes de Freud porque contrasta explicações sociais e psíquicas."},
-  {"id": "prep-30-31", "de": 30, "para": 31, "tipo": "prepara", "nota": "Antes de Skinner porque ambos tentam explicar o humano sem metafísica, mas por vias opostas."},
-  {"id": "prep-31-32", "de": 31, "para": 32, "tipo": "prepara", "nota": "Vem antes de Hobbes pelo determinismo comum."},
-  {"id": "prep-32-33", "de": 32, "para": 33, "tipo": "prepara", "nota": "Rousseau responde a ele em seguida."},
-  {"id": "prep-33-34", "de": 33, "para": 34, "tipo": "prepara", "nota": "Prepara Freyre pela ideia de formação social."},
-  {"id": "prep-34-35", "de": 34, "para": 35, "tipo": "prepara", "nota": "Prepara Lévi-Strauss pelo olhar antropológico sobre a vida privada."},
-  {"id": "prep-35-36", "de": 35, "para": 36, "tipo": "prepara", "nota": "Antes de Orwell porque os dois pensam a relação entre cultura e linguagem."},
-
-  {"id": "prep-37-38", "de": 37, "para": 38, "tipo": "prepara", "nota": "Antes de Dostoiévski porque dá a base filosófica do que ele encenará."},
-  {"id": "prep-38-39", "de": 38, "para": 39, "tipo": "prepara", "nota": "Antes de Endō porque este leva o dilema à prova histórica."},
-  {"id": "prep-39-40", "de": 39, "para": 40, "tipo": "prepara", "nota": "Antes de Rerum Novarum para passar da fé individual à social."},
-  {"id": "prep-40-41", "de": 40, "para": 41, "tipo": "prepara", "nota": "Fica antes de Smith para você ter a pergunta moral antes da técnica."},
-  {"id": "prep-41-42", "de": 41, "para": 42, "tipo": "prepara", "nota": "Antes de Hayek porque é a origem do que ele defende."},
-  {"id": "prep-42-43", "de": 42, "para": 43, "tipo": "prepara", "nota": "Antes de Polanyi porque este foi escrito no mesmo ano e diz o oposto."},
-  {"id": "prep-43-44", "de": 43, "para": 44, "tipo": "prepara", "nota": "Fecha o trio econômico e prepara Burke."},
-  {"id": "prep-44-45", "de": 44, "para": 45, "tipo": "prepara", "nota": "Antes de Weber porque ele pergunta de onde vêm as instituições."},
-  {"id": "prep-45-46", "de": 45, "para": 46, "tipo": "prepara", "nota": "Antes de Furtado porque dá a chave para discutir capitalismo periférico."},
-  {"id": "prep-46-47", "de": 46, "para": 47, "tipo": "prepara", "nota": "Antes de Bauman porque este abre o contemporâneo."},
-  {"id": "prep-47-48", "de": 47, "para": 48, "tipo": "prepara", "nota": "Antes de Arendt porque ela pergunta o que sobra da política nesse mundo."},
-
-  {"id": "prep-49-50", "de": 49, "para": 50, "tipo": "prepara", "nota": "Antes de Kant pelo contraste entre poder e dever."},
-  {"id": "prep-50-51", "de": 50, "para": 51, "tipo": "prepara", "nota": "Antes de Kierkegaard porque este se rebela contra a ética universal."},
-  {"id": "prep-51-52", "de": 51, "para": 52, "tipo": "prepara", "nota": "Antes de Nietzsche pela radicalização da subjetividade."},
-  {"id": "prep-52-53", "de": 52, "para": 53, "tipo": "prepara", "nota": "Antes de Aquino para você ler a síntese tomista depois do ataque."},
-  {"id": "prep-53-54", "de": 53, "para": 54, "tipo": "prepara", "nota": "Antes de Dante, que o poetiza."},
-  {"id": "prep-54-55", "de": 54, "para": 55, "tipo": "prepara", "nota": "Fecha o bloco católico e filosófico."},
-  {"id": "prep-55-56", "de": 55, "para": 56, "tipo": "prepara", "nota": "Antes de Foucault porque este deriva o poder para fora da economia."},
-  {"id": "prep-56-57", "de": 56, "para": 57, "tipo": "prepara", "nota": "Antes de Clastres, que pensa a ausência de Estado."},
-  {"id": "prep-57-58", "de": 57, "para": 58, "tipo": "prepara", "nota": "Antes de Faoro pelo contraste com o Estado brasileiro."},
-  {"id": "prep-58-59", "de": 58, "para": 59, "tipo": "prepara", "nota": "Prepara Rosa, que escreve a partir desse Brasil."},
-  {"id": "prep-59-60", "de": 59, "para": 60, "tipo": "prepara", "nota": "Prepara o último."},
-
-  {"id": "contra-11-12", "de": 11, "para": 12, "tipo": "contraponto", "nota": "Defesa do mercado contra a acusação estrutural ao capitalismo."},
-  {"id": "contra-11-23", "de": 11, "para": 23, "tipo": "contraponto", "nota": "Livre mercado como ordem espontânea contra livre mercado como mito."},
-  {"id": "contra-42-43", "de": 42, "para": 43, "tipo": "contraponto", "nota": "Mesmo ano (1944), teses opostas sobre planejamento e mercado."},
-  {"id": "contra-32-33", "de": 32, "para": 33, "tipo": "contraponto", "nota": "Homem lobo do homem contra homem bom corrompido pela sociedade."},
-  {"id": "contra-32-57", "de": 32, "para": 57, "tipo": "contraponto", "nota": "Estado como condição da ordem contra sociedades organizadas contra o Estado."},
-  {"id": "contra-13-51", "de": 13, "para": 51, "tipo": "contraponto", "nota": "Revolta lúcida contra o salto da fé."},
-  {"id": "contra-13-29", "de": 13, "para": 29, "tipo": "contraponto", "nota": "Suicídio como questão filosófica contra suicídio como fato social."},
-  {"id": "contra-30-10", "de": 30, "para": 10, "tipo": "contraponto", "nota": "Religião como ilusão contra religião como paradoxo que resiste."},
-  {"id": "contra-30-27", "de": 30, "para": 27, "tipo": "contraponto", "nota": "Crítica psicológica da fé contra a fé vivida por dentro."},
-  {"id": "contra-52-53", "de": 52, "para": 53, "tipo": "contraponto", "nota": "Moral cristã como ressentimento contra a síntese de fé e razão."},
-  {"id": "contra-50-26", "de": 50, "para": 26, "tipo": "contraponto", "nota": "Ética do dever universal contra ética da virtude e do hábito."},
-  {"id": "contra-17-18", "de": 17, "para": 18, "tipo": "contraponto", "nota": "Homem cordial contra etnia nova nascida da mestiçagem."},
-  {"id": "contra-18-34", "de": 18, "para": 34, "tipo": "contraponto", "nota": "Violência colonial como núcleo contra intimidade senhor-escravo."},
-  {"id": "contra-17-34", "de": 17, "para": 34, "tipo": "contraponto", "nota": "Duas leituras do personalismo e da formação familiar brasileira."},
-  {"id": "contra-31-21", "de": 31, "para": 21, "tipo": "contraponto", "nota": "Comportamento por reforços contra psicologia de símbolos e arquétipos."},
-  {"id": "contra-44-33", "de": 44, "para": 33, "tipo": "contraponto", "nota": "Herança de gerações contra natureza boa corrompida."},
-  {"id": "contra-44-12", "de": 44, "para": 12, "tipo": "contraponto", "nota": "Conservadorismo contra revolução como motor da história."},
-
-  {"id": "tema-13-14", "de": 13, "para": 14, "tipo": "mesmo_tema", "nota": "Sentido e liberdade diante do absurdo."},
-  {"id": "tema-14-15", "de": 14, "para": 15, "tipo": "mesmo_tema", "nota": "O mesmo problema em teoria e em narrativa."},
-  {"id": "tema-13-15", "de": 13, "para": 15, "tipo": "mesmo_tema", "nota": "Vida vazia e morte como revelação."},
-  {"id": "tema-3-36", "de": 3, "para": 36, "tipo": "mesmo_tema", "nota": "Linguagem e poder, em ficção e em ensaio."}
+  {
+    "id": "prep-1-2",
+    "de": 1,
+    "para": 2,
+    "tipo": "prepara",
+    "nota": "Vem primeiro porque ensina a ler os demais."
+  },
+  {
+    "id": "prep-2-3",
+    "de": 2,
+    "para": 3,
+    "tipo": "prepara",
+    "nota": "Não precede nenhum livro específico, mas prepara os textos em inglês do nível 3."
+  },
+  {
+    "id": "prep-3-4",
+    "de": 3,
+    "para": 4,
+    "tipo": "prepara",
+    "nota": "Vem antes de Graciliano porque a prosa é fácil e já treina você a perguntar ‘o que este estilo está fazendo?’."
+  },
+  {
+    "id": "prep-4-5",
+    "de": 4,
+    "para": 5,
+    "tipo": "prepara",
+    "nota": "Prepara o ouvido para Machado e Rosa."
+  },
+  {
+    "id": "prep-5-6",
+    "de": 5,
+    "para": 6,
+    "tipo": "prepara",
+    "nota": "Prepara Sísifo, que dirá o oposto."
+  },
+  {
+    "id": "prep-6-7",
+    "de": 6,
+    "para": 7,
+    "tipo": "prepara",
+    "nota": "Vem antes de Diamond porque dá o conceito que ele vai desafiar."
+  },
+  {
+    "id": "prep-7-8",
+    "de": 7,
+    "para": 8,
+    "tipo": "prepara",
+    "nota": "É determinista de propósito, e isso será contestado depois por Clastres e Furtado; sai da história para entrar na filosofia com Russell."
+  },
+  {
+    "id": "prep-8-9",
+    "de": 8,
+    "para": 9,
+    "tipo": "prepara",
+    "nota": "Vem antes de Platão para você chegar a ele sabendo o que é um argumento."
+  },
+  {
+    "id": "prep-9-10",
+    "de": 9,
+    "para": 10,
+    "tipo": "prepara",
+    "nota": "Vem antes de Chesterton porque os dois se opõem sobre o que a razão pode alcançar."
+  },
+  {
+    "id": "prep-10-11",
+    "de": 10,
+    "para": 11,
+    "tipo": "prepara",
+    "nota": "Fecha o bloco filosófico-religioso antes de entrar em economia."
+  },
+  {
+    "id": "prep-11-12",
+    "de": 11,
+    "para": 12,
+    "tipo": "prepara",
+    "nota": "Fica antes de Marx para você conhecer a defesa do mercado antes de ouvir a acusação."
+  },
+  {
+    "id": "prep-13-14",
+    "de": 13,
+    "para": 14,
+    "tipo": "prepara",
+    "nota": "Vem antes de Sartre porque Sartre responde ao mesmo problema por outro caminho."
+  },
+  {
+    "id": "prep-14-15",
+    "de": 14,
+    "para": 15,
+    "tipo": "prepara",
+    "nota": "Antes de Tolstói porque este mostra o mesmo problema na vida concreta."
+  },
+  {
+    "id": "prep-15-16",
+    "de": 15,
+    "para": 16,
+    "tipo": "prepara",
+    "nota": "Prepara Machado, que trata o mesmo tema com ironia."
+  },
+  {
+    "id": "prep-16-17",
+    "de": 16,
+    "para": 17,
+    "tipo": "prepara",
+    "nota": "Vem antes de Buarque porque dá a textura do país que os ensaios vão analisar."
+  },
+  {
+    "id": "prep-17-18",
+    "de": 17,
+    "para": 18,
+    "tipo": "prepara",
+    "nota": "Antes de Darcy porque este discute a mesma formação por outro ângulo."
+  },
+  {
+    "id": "prep-18-19",
+    "de": 18,
+    "para": 19,
+    "tipo": "prepara",
+    "nota": "Depois dele a leitura sai do Brasil e passa ao método histórico de Bloch."
+  },
+  {
+    "id": "prep-19-20",
+    "de": 19,
+    "para": 20,
+    "tipo": "prepara",
+    "nota": "Vem antes de Kahneman porque é o primeiro livro sobre como não se enganar."
+  },
+  {
+    "id": "prep-20-21",
+    "de": 20,
+    "para": 21,
+    "tipo": "prepara",
+    "nota": "Antes de Jung porque mostra o oposto de uma psicologia de símbolos."
+  },
+  {
+    "id": "prep-21-22",
+    "de": 21,
+    "para": 22,
+    "tipo": "prepara",
+    "nota": "Depois dele a leitura sai do indivíduo e passa à vocação científica e política de Weber."
+  },
+  {
+    "id": "prep-22-23",
+    "de": 22,
+    "para": 23,
+    "tipo": "prepara",
+    "nota": "Entra antes de Chang para dar vocabulário político à discussão econômica."
+  },
+  {
+    "id": "prep-23-24",
+    "de": 23,
+    "para": 24,
+    "tipo": "prepara",
+    "nota": "Vem antes do Catecismo porque a Igreja tem posição própria sobre isso."
+  },
+  {
+    "id": "prep-25-26",
+    "de": 25,
+    "para": 26,
+    "tipo": "prepara",
+    "nota": "Antes de Aristóteles porque ele responde a Platão."
+  },
+  {
+    "id": "prep-26-27",
+    "de": 26,
+    "para": 27,
+    "tipo": "prepara",
+    "nota": "Prepara Agostinho, que vai mudar o foco do hábito para a graça."
+  },
+  {
+    "id": "prep-27-28",
+    "de": 27,
+    "para": 28,
+    "tipo": "prepara",
+    "nota": "Antes de Duffy, para você chegar à história da Igreja sabendo o que ela diz de si."
+  },
+  {
+    "id": "prep-28-29",
+    "de": 28,
+    "para": 29,
+    "tipo": "prepara",
+    "nota": "Vem antes de Durkheim para ver a Igreja também como fato social."
+  },
+  {
+    "id": "prep-29-30",
+    "de": 29,
+    "para": 30,
+    "tipo": "prepara",
+    "nota": "Antes de Freud porque contrasta explicações sociais e psíquicas."
+  },
+  {
+    "id": "prep-30-31",
+    "de": 30,
+    "para": 31,
+    "tipo": "prepara",
+    "nota": "Antes de Skinner porque ambos tentam explicar o humano sem metafísica, mas por vias opostas."
+  },
+  {
+    "id": "prep-31-32",
+    "de": 31,
+    "para": 32,
+    "tipo": "prepara",
+    "nota": "Vem antes de Hobbes pelo determinismo comum."
+  },
+  {
+    "id": "prep-32-33",
+    "de": 32,
+    "para": 33,
+    "tipo": "prepara",
+    "nota": "Rousseau responde a ele em seguida."
+  },
+  {
+    "id": "prep-33-34",
+    "de": 33,
+    "para": 34,
+    "tipo": "prepara",
+    "nota": "Prepara Freyre pela ideia de formação social."
+  },
+  {
+    "id": "prep-34-35",
+    "de": 34,
+    "para": 35,
+    "tipo": "prepara",
+    "nota": "Prepara Lévi-Strauss pelo olhar antropológico sobre a vida privada."
+  },
+  {
+    "id": "prep-35-36",
+    "de": 35,
+    "para": 36,
+    "tipo": "prepara",
+    "nota": "Antes de Orwell porque os dois pensam a relação entre cultura e linguagem."
+  },
+  {
+    "id": "prep-37-38",
+    "de": 37,
+    "para": 38,
+    "tipo": "prepara",
+    "nota": "Antes de Dostoiévski porque dá a base filosófica do que ele encenará."
+  },
+  {
+    "id": "prep-38-39",
+    "de": 38,
+    "para": 39,
+    "tipo": "prepara",
+    "nota": "Antes de Endō porque este leva o dilema à prova histórica."
+  },
+  {
+    "id": "prep-39-40",
+    "de": 39,
+    "para": 40,
+    "tipo": "prepara",
+    "nota": "Antes de Rerum Novarum para passar da fé individual à social."
+  },
+  {
+    "id": "prep-40-41",
+    "de": 40,
+    "para": 41,
+    "tipo": "prepara",
+    "nota": "Fica antes de Smith para você ter a pergunta moral antes da técnica."
+  },
+  {
+    "id": "prep-41-42",
+    "de": 41,
+    "para": 42,
+    "tipo": "prepara",
+    "nota": "Antes de Hayek porque é a origem do que ele defende."
+  },
+  {
+    "id": "prep-42-43",
+    "de": 42,
+    "para": 43,
+    "tipo": "prepara",
+    "nota": "Antes de Polanyi porque este foi escrito no mesmo ano e diz o oposto."
+  },
+  {
+    "id": "prep-43-44",
+    "de": 43,
+    "para": 44,
+    "tipo": "prepara",
+    "nota": "Fecha o trio econômico e prepara Burke."
+  },
+  {
+    "id": "prep-44-45",
+    "de": 44,
+    "para": 45,
+    "tipo": "prepara",
+    "nota": "Antes de Weber porque ele pergunta de onde vêm as instituições."
+  },
+  {
+    "id": "prep-45-46",
+    "de": 45,
+    "para": 46,
+    "tipo": "prepara",
+    "nota": "Antes de Furtado porque dá a chave para discutir capitalismo periférico."
+  },
+  {
+    "id": "prep-46-47",
+    "de": 46,
+    "para": 47,
+    "tipo": "prepara",
+    "nota": "Antes de Bauman porque este abre o contemporâneo."
+  },
+  {
+    "id": "prep-47-48",
+    "de": 47,
+    "para": 48,
+    "tipo": "prepara",
+    "nota": "Antes de Arendt porque ela pergunta o que sobra da política nesse mundo."
+  },
+  {
+    "id": "prep-49-50",
+    "de": 49,
+    "para": 50,
+    "tipo": "prepara",
+    "nota": "Antes de Kant pelo contraste entre poder e dever."
+  },
+  {
+    "id": "prep-50-51",
+    "de": 50,
+    "para": 51,
+    "tipo": "prepara",
+    "nota": "Antes de Kierkegaard porque este se rebela contra a ética universal."
+  },
+  {
+    "id": "prep-51-52",
+    "de": 51,
+    "para": 52,
+    "tipo": "prepara",
+    "nota": "Antes de Nietzsche pela radicalização da subjetividade."
+  },
+  {
+    "id": "prep-52-53",
+    "de": 52,
+    "para": 53,
+    "tipo": "prepara",
+    "nota": "Antes de Aquino para você ler a síntese tomista depois do ataque."
+  },
+  {
+    "id": "prep-53-54",
+    "de": 53,
+    "para": 54,
+    "tipo": "prepara",
+    "nota": "Antes de Dante, que o poetiza."
+  },
+  {
+    "id": "prep-54-55",
+    "de": 54,
+    "para": 55,
+    "tipo": "prepara",
+    "nota": "Fecha o bloco católico e filosófico."
+  },
+  {
+    "id": "prep-55-56",
+    "de": 55,
+    "para": 56,
+    "tipo": "prepara",
+    "nota": "Antes de Foucault porque este deriva o poder para fora da economia."
+  },
+  {
+    "id": "prep-56-57",
+    "de": 56,
+    "para": 57,
+    "tipo": "prepara",
+    "nota": "Antes de Clastres, que pensa a ausência de Estado."
+  },
+  {
+    "id": "prep-57-58",
+    "de": 57,
+    "para": 58,
+    "tipo": "prepara",
+    "nota": "Antes de Faoro pelo contraste com o Estado brasileiro."
+  },
+  {
+    "id": "prep-58-59",
+    "de": 58,
+    "para": 59,
+    "tipo": "prepara",
+    "nota": "Prepara Rosa, que escreve a partir desse Brasil."
+  },
+  {
+    "id": "prep-59-60",
+    "de": 59,
+    "para": 60,
+    "tipo": "prepara",
+    "nota": "Prepara o último."
+  },
+  {
+    "id": "contra-11-12",
+    "de": 11,
+    "para": 12,
+    "tipo": "contraponto",
+    "nota": "Defesa do mercado contra a acusação estrutural ao capitalismo."
+  },
+  {
+    "id": "contra-11-23",
+    "de": 11,
+    "para": 23,
+    "tipo": "contraponto",
+    "nota": "Livre mercado como ordem espontânea contra livre mercado como mito."
+  },
+  {
+    "id": "contra-42-43",
+    "de": 42,
+    "para": 43,
+    "tipo": "contraponto",
+    "nota": "Mesmo ano (1944), teses opostas sobre planejamento e mercado."
+  },
+  {
+    "id": "contra-32-33",
+    "de": 32,
+    "para": 33,
+    "tipo": "contraponto",
+    "nota": "Homem lobo do homem contra homem bom corrompido pela sociedade."
+  },
+  {
+    "id": "contra-32-57",
+    "de": 32,
+    "para": 57,
+    "tipo": "contraponto",
+    "nota": "Estado como condição da ordem contra sociedades organizadas contra o Estado."
+  },
+  {
+    "id": "contra-13-51",
+    "de": 13,
+    "para": 51,
+    "tipo": "contraponto",
+    "nota": "Revolta lúcida contra o salto da fé."
+  },
+  {
+    "id": "contra-13-29",
+    "de": 13,
+    "para": 29,
+    "tipo": "contraponto",
+    "nota": "Suicídio como questão filosófica contra suicídio como fato social."
+  },
+  {
+    "id": "contra-30-10",
+    "de": 30,
+    "para": 10,
+    "tipo": "contraponto",
+    "nota": "Religião como ilusão contra religião como paradoxo que resiste."
+  },
+  {
+    "id": "contra-30-27",
+    "de": 30,
+    "para": 27,
+    "tipo": "contraponto",
+    "nota": "Crítica psicológica da fé contra a fé vivida por dentro."
+  },
+  {
+    "id": "contra-52-53",
+    "de": 52,
+    "para": 53,
+    "tipo": "contraponto",
+    "nota": "Moral cristã como ressentimento contra a síntese de fé e razão."
+  },
+  {
+    "id": "contra-50-26",
+    "de": 50,
+    "para": 26,
+    "tipo": "contraponto",
+    "nota": "Ética do dever universal contra ética da virtude e do hábito."
+  },
+  {
+    "id": "contra-17-18",
+    "de": 17,
+    "para": 18,
+    "tipo": "contraponto",
+    "nota": "Homem cordial contra etnia nova nascida da mestiçagem."
+  },
+  {
+    "id": "contra-18-34",
+    "de": 18,
+    "para": 34,
+    "tipo": "contraponto",
+    "nota": "Violência colonial como núcleo contra intimidade senhor-escravo."
+  },
+  {
+    "id": "contra-17-34",
+    "de": 17,
+    "para": 34,
+    "tipo": "contraponto",
+    "nota": "Duas leituras do personalismo e da formação familiar brasileira."
+  },
+  {
+    "id": "contra-31-21",
+    "de": 31,
+    "para": 21,
+    "tipo": "contraponto",
+    "nota": "Comportamento por reforços contra psicologia de símbolos e arquétipos."
+  },
+  {
+    "id": "contra-44-33",
+    "de": 44,
+    "para": 33,
+    "tipo": "contraponto",
+    "nota": "Herança de gerações contra natureza boa corrompida."
+  },
+  {
+    "id": "contra-44-12",
+    "de": 44,
+    "para": 12,
+    "tipo": "contraponto",
+    "nota": "Conservadorismo contra revolução como motor da história."
+  },
+  {
+    "id": "tema-13-14",
+    "de": 13,
+    "para": 14,
+    "tipo": "mesmo_tema",
+    "nota": "Sentido e liberdade diante do absurdo."
+  },
+  {
+    "id": "tema-14-15",
+    "de": 14,
+    "para": 15,
+    "tipo": "mesmo_tema",
+    "nota": "O mesmo problema em teoria e em narrativa."
+  },
+  {
+    "id": "tema-13-15",
+    "de": 13,
+    "para": 15,
+    "tipo": "mesmo_tema",
+    "nota": "Vida vazia e morte como revelação."
+  },
+  {
+    "id": "tema-3-36",
+    "de": 3,
+    "para": 36,
+    "tipo": "mesmo_tema",
+    "nota": "Linguagem e poder, em ficção e em ensaio."
+  },
+  {
+    "id": "contra-74-31",
+    "de": 74,
+    "para": 31,
+    "tipo": "contraponto",
+    "nota": "Natureza humana inata contra comportamento moldado por reforços."
+  },
+  {
+    "id": "contra-74-33",
+    "de": 74,
+    "para": 33,
+    "tipo": "contraponto",
+    "nota": "Natureza humana evoluída contra o bom selvagem corrompido pela sociedade."
+  },
+  {
+    "id": "contra-75-31",
+    "de": 75,
+    "para": 31,
+    "tipo": "contraponto",
+    "nota": "Psicologia humanista contra behaviorismo."
+  },
+  {
+    "id": "contra-75-76",
+    "de": 75,
+    "para": 76,
+    "tipo": "contraponto",
+    "nota": "Otimismo sobre o crescimento pessoal contra pessimismo filosófico."
+  },
+  {
+    "id": "contra-62-116",
+    "de": 62,
+    "para": 116,
+    "tipo": "contraponto",
+    "nota": "Explicação material da cultura contra interpretação de significados."
+  },
+  {
+    "id": "contra-65-25",
+    "de": 65,
+    "para": 25,
+    "tipo": "contraponto",
+    "nota": "Política pela eficácia contra política pelo conhecimento do Bem."
+  },
+  {
+    "id": "tema-65-49",
+    "de": 65,
+    "para": 49,
+    "tipo": "mesmo_tema",
+    "nota": "Realismo político, em tratado e em história."
+  },
+  {
+    "id": "contra-89-44",
+    "de": 89,
+    "para": 44,
+    "tipo": "contraponto",
+    "nota": "Liberdade individual e crítica da tradição contra a herança de gerações."
+  },
+  {
+    "id": "contra-110-111",
+    "de": 110,
+    "para": 111,
+    "tipo": "contraponto",
+    "nota": "Política como amigo-inimigo contra justiça fundada em acordo."
+  },
+  {
+    "id": "tema-110-32",
+    "de": 110,
+    "para": 32,
+    "tipo": "mesmo_tema",
+    "nota": "O soberano como quem decide."
+  },
+  {
+    "id": "contra-111-42",
+    "de": 111,
+    "para": 42,
+    "tipo": "contraponto",
+    "nota": "Liberalismo igualitário contra o argumento antidirigista."
+  },
+  {
+    "id": "contra-112-113",
+    "de": 112,
+    "para": 113,
+    "tipo": "contraponto",
+    "nota": "Gestão comunitária contra individualismo metodológico."
+  },
+  {
+    "id": "tema-112-43",
+    "de": 112,
+    "para": 43,
+    "tipo": "mesmo_tema",
+    "nota": "Mercado e comunidade como instituições socialmente enraizadas."
+  },
+  {
+    "id": "contra-113-114",
+    "de": 113,
+    "para": 114,
+    "tipo": "contraponto",
+    "nota": "Dedução da ação individual contra análise de agregados e incerteza."
+  },
+  {
+    "id": "tema-113-42",
+    "de": 113,
+    "para": 42,
+    "tipo": "mesmo_tema",
+    "nota": "Escola austríaca e crítica do planejamento central."
+  },
+  {
+    "id": "contra-114-42",
+    "de": 114,
+    "para": 42,
+    "tipo": "contraponto",
+    "nota": "Intervenção estatal contra liberdade de mercado."
+  },
+  {
+    "id": "tema-109-55",
+    "de": 109,
+    "para": 55,
+    "tipo": "mesmo_tema",
+    "nota": "Desenvolvimento do marxismo para a cultura."
+  },
+  {
+    "id": "contra-109-110",
+    "de": 109,
+    "para": 110,
+    "tipo": "contraponto",
+    "nota": "Hegemonia por consentimento contra poder como decisão."
+  },
+  {
+    "id": "tema-102-55",
+    "de": 102,
+    "para": 55,
+    "tipo": "mesmo_tema",
+    "nota": "Dinâmica interna do capitalismo e seu possível fim."
+  },
+  {
+    "id": "tema-99-98",
+    "de": 99,
+    "para": 98,
+    "tipo": "mesmo_tema",
+    "nota": "Pensamento anticolonial, na ação e no discurso."
+  },
+  {
+    "id": "contra-99-22",
+    "de": 99,
+    "para": 22,
+    "tipo": "contraponto",
+    "nota": "Violência como libertação contra ética da responsabilidade."
+  },
+  {
+    "id": "tema-97-44",
+    "de": 97,
+    "para": 44,
+    "tipo": "mesmo_tema",
+    "nota": "Reflexão conservadora-liberal sobre revolução e democracia."
+  },
+  {
+    "id": "contra-100-33",
+    "de": 100,
+    "para": 33,
+    "tipo": "contraponto",
+    "nota": "Civilização como autocontrole contra civilização como corrupção."
+  },
+  {
+    "id": "tema-100-32",
+    "de": 100,
+    "para": 32,
+    "tipo": "mesmo_tema",
+    "nota": "Estado e monopólio da violência."
+  },
+  {
+    "id": "contra-101-41",
+    "de": 101,
+    "para": 41,
+    "tipo": "contraponto",
+    "nota": "Dádiva e laço social contra troca de mercado."
+  },
+  {
+    "id": "contra-103-30",
+    "de": 103,
+    "para": 30,
+    "tipo": "contraponto",
+    "nota": "Religião como experiência com frutos contra religião como ilusão."
+  },
+  {
+    "id": "tema-104-37",
+    "de": 104,
+    "para": 37,
+    "tipo": "mesmo_tema",
+    "nota": "Fé como angústia e graça."
+  },
+  {
+    "id": "contra-106-120",
+    "de": 106,
+    "para": 120,
+    "tipo": "contraponto",
+    "nota": "Ortodoxia sistemática contra teologia da libertação."
+  },
+  {
+    "id": "tema-120-40",
+    "de": 120,
+    "para": 40,
+    "tipo": "mesmo_tema",
+    "nota": "Doutrina social e a pergunta pelo poder na Igreja."
+  },
+  {
+    "id": "contra-93-52",
+    "de": 93,
+    "para": 52,
+    "tipo": "contraponto",
+    "nota": "Lei moral objetiva contra genealogia da moral."
+  },
+  {
+    "id": "contra-87-88",
+    "de": 87,
+    "para": 88,
+    "tipo": "contraponto",
+    "nota": "Refutação como critério contra revoluções de paradigma."
+  },
+  {
+    "id": "contra-87-30",
+    "de": 87,
+    "para": 30,
+    "tipo": "contraponto",
+    "nota": "Falseabilidade como crítica à psicanálise."
+  },
+  {
+    "id": "contra-86-73",
+    "de": 86,
+    "para": 73,
+    "tipo": "contraponto",
+    "nota": "Empirismo cético contra racionalismo."
+  },
+  {
+    "id": "tema-86-50",
+    "de": 86,
+    "para": 50,
+    "tipo": "mesmo_tema",
+    "nota": "Kant responde a Hume."
+  },
+  {
+    "id": "contra-85-73",
+    "de": 85,
+    "para": 73,
+    "tipo": "contraponto",
+    "nota": "Dúvida pessoal e ensaio contra dúvida sistemática."
+  },
+  {
+    "id": "contra-67-68",
+    "de": 67,
+    "para": 68,
+    "tipo": "contraponto",
+    "nota": "Virtude pela vontade contra humildade e graça."
+  },
+  {
+    "id": "tema-67-13",
+    "de": 67,
+    "para": 13,
+    "tipo": "mesmo_tema",
+    "nota": "Como viver diante da finitude."
+  },
+  {
+    "id": "tema-68-27",
+    "de": 68,
+    "para": 27,
+    "tipo": "mesmo_tema",
+    "nota": "Interioridade cristã."
+  },
+  {
+    "id": "tema-118-32",
+    "de": 118,
+    "para": 32,
+    "tipo": "mesmo_tema",
+    "nota": "Teoria do Estado e da coesão política."
+  },
+  {
+    "id": "tema-118-57",
+    "de": 118,
+    "para": 57,
+    "tipo": "mesmo_tema",
+    "nota": "Pensar a política fora do modelo ocidental."
+  },
+  {
+    "id": "tema-119-60",
+    "de": 119,
+    "para": 60,
+    "tipo": "mesmo_tema",
+    "nota": "Sono e sonho como objeto de teoria."
+  },
+  {
+    "id": "tema-119-47",
+    "de": 119,
+    "para": 47,
+    "tipo": "mesmo_tema",
+    "nota": "Precarização da vida contemporânea."
+  },
+  {
+    "id": "tema-115-29",
+    "de": 115,
+    "para": 29,
+    "tipo": "mesmo_tema",
+    "nota": "Fatos sociais e legitimidade simbólica."
+  },
+  {
+    "id": "tema-116-117",
+    "de": 116,
+    "para": 117,
+    "tipo": "mesmo_tema",
+    "nota": "Do interpretar a cultura ao levar a sério o pensamento do outro."
+  },
+  {
+    "id": "tema-117-57",
+    "de": 117,
+    "para": 57,
+    "tipo": "mesmo_tema",
+    "nota": "Etnologia indígena e crítica da separação Estado-sociedade."
+  },
+  {
+    "id": "tema-91-46",
+    "de": 91,
+    "para": 46,
+    "tipo": "mesmo_tema",
+    "nota": "Interpretação estrutural da formação econômica do Brasil."
+  },
+  {
+    "id": "contra-91-34",
+    "de": 91,
+    "para": 34,
+    "tipo": "contraponto",
+    "nota": "Colônia como empresa mercantil contra colônia como intimidade patriarcal."
+  },
+  {
+    "id": "tema-90-19",
+    "de": 90,
+    "para": 19,
+    "tipo": "mesmo_tema",
+    "nota": "Método histórico aplicado a fontes concretas."
+  },
+  {
+    "id": "tema-64-58",
+    "de": 64,
+    "para": 58,
+    "tipo": "mesmo_tema",
+    "nota": "Estado e cidadania no Brasil."
+  },
+  {
+    "id": "tema-66-41",
+    "de": 66,
+    "para": 41,
+    "tipo": "mesmo_tema",
+    "nota": "A ética na origem da economia clássica."
+  },
+  {
+    "id": "contra-84-23",
+    "de": 84,
+    "para": 23,
+    "tipo": "contraponto",
+    "nota": "Visão restrita contra crítica heterodoxa do capitalismo."
+  },
+  {
+    "id": "contra-78-3",
+    "de": 78,
+    "para": 3,
+    "tipo": "contraponto",
+    "nota": "Controle pelo prazer contra controle pelo medo."
+  },
+  {
+    "id": "tema-79-99",
+    "de": 79,
+    "para": 99,
+    "tipo": "mesmo_tema",
+    "nota": "O mundo colonial, na ficção e no ensaio."
+  },
+  {
+    "id": "tema-80-16",
+    "de": 80,
+    "para": 16,
+    "tipo": "mesmo_tema",
+    "nota": "Sátira do Brasil por dois autores distintos."
+  },
+  {
+    "id": "tema-94-3",
+    "de": 94,
+    "para": 3,
+    "tipo": "mesmo_tema",
+    "nota": "Poder impessoal e culpa."
+  },
+  {
+    "id": "tema-94-56",
+    "de": 94,
+    "para": 56,
+    "tipo": "mesmo_tema",
+    "nota": "Vigilância e instituição que julga."
+  },
+  {
+    "id": "tema-96-39",
+    "de": 96,
+    "para": 39,
+    "tipo": "mesmo_tema",
+    "nota": "O padre fraco e a fidelidade."
+  },
+  {
+    "id": "tema-107-16",
+    "de": 107,
+    "para": 16,
+    "tipo": "mesmo_tema",
+    "nota": "Ironia sobre ideais e realidade."
+  },
+  {
+    "id": "tema-108-59",
+    "de": 108,
+    "para": 59,
+    "tipo": "mesmo_tema",
+    "nota": "O sertão por ciência e por romance."
+  },
+  {
+    "id": "tema-70-4",
+    "de": 70,
+    "para": 4,
+    "tipo": "mesmo_tema",
+    "nota": "A vida severina e a vida seca."
+  },
+  {
+    "id": "tema-71-70",
+    "de": 71,
+    "para": 70,
+    "tipo": "mesmo_tema",
+    "nota": "O Nordeste por fé e humor e por poesia."
+  },
+  {
+    "id": "tema-81-21",
+    "de": 81,
+    "para": 21,
+    "tipo": "mesmo_tema",
+    "nota": "Mito e símbolo na experiência religiosa."
+  },
+  {
+    "id": "tema-82-27",
+    "de": 82,
+    "para": 27,
+    "tipo": "mesmo_tema",
+    "nota": "Narrativas de conversão."
+  },
+  {
+    "id": "tema-105-27",
+    "de": 105,
+    "para": 27,
+    "tipo": "mesmo_tema",
+    "nota": "Narrativas de conversão intelectual."
+  },
+  {
+    "id": "tema-83-28",
+    "de": 83,
+    "para": 28,
+    "tipo": "mesmo_tema",
+    "nota": "A Igreja vista por historiadores e sociólogos."
+  },
+  {
+    "id": "tema-83-92",
+    "de": 83,
+    "para": 92,
+    "tipo": "mesmo_tema",
+    "nota": "Igreja primitiva em duas leituras."
+  },
+  {
+    "id": "tema-63-19",
+    "de": 63,
+    "para": 19,
+    "tipo": "mesmo_tema",
+    "nota": "Teoria e método da história."
+  },
+  {
+    "id": "prep-61-62",
+    "de": 61,
+    "para": 62,
+    "tipo": "prepara",
+    "nota": "Vem antes de Harris porque dá a pergunta que ele responde com materialismo: por que as pessoas vivem como vivem?"
+  },
+  {
+    "id": "prep-62-63",
+    "de": 62,
+    "para": 63,
+    "tipo": "prepara",
+    "nota": "Antes de Carr porque ambos buscam causas; Carr pergunta o que conta como causa em história."
+  },
+  {
+    "id": "prep-63-64",
+    "de": 63,
+    "para": 64,
+    "tipo": "prepara",
+    "nota": "Antes de Carvalho para você ver a teoria aplicada a um caso brasileiro."
+  },
+  {
+    "id": "prep-64-65",
+    "de": 64,
+    "para": 65,
+    "tipo": "prepara",
+    "nota": "Antes de Maquiavel porque leva do cidadão ao governante."
+  },
+  {
+    "id": "prep-65-66",
+    "de": 65,
+    "para": 66,
+    "tipo": "prepara",
+    "nota": "Antes de Giannetti porque a pergunta passa do poder para o dinheiro."
+  },
+  {
+    "id": "prep-66-67",
+    "de": 66,
+    "para": 67,
+    "tipo": "prepara",
+    "nota": "Antes de Marco Aurélio porque, depois de poder e dinheiro, vem a pergunta de como viver."
+  },
+  {
+    "id": "prep-67-68",
+    "de": 67,
+    "para": 68,
+    "tipo": "prepara",
+    "nota": "Antes da Imitação de Cristo porque contrasta virtude pela vontade com humildade e graça."
+  },
+  {
+    "id": "prep-68-69",
+    "de": 68,
+    "para": 69,
+    "tipo": "prepara",
+    "nota": "Antes de Sacks para trocar a alma contemplativa pelo paciente concreto."
+  },
+  {
+    "id": "prep-69-70",
+    "de": 69,
+    "para": 70,
+    "tipo": "prepara",
+    "nota": "Antes de Morte e Vida Severina porque mostra o humano concreto, caso a caso, antes da poesia do coletivo."
+  },
+  {
+    "id": "prep-70-71",
+    "de": 70,
+    "para": 71,
+    "tipo": "prepara",
+    "nota": "Antes do Auto da Compadecida porque o mesmo sertão aparece depois pelo humor e pela fé popular."
+  },
+  {
+    "id": "prep-71-72",
+    "de": 71,
+    "para": 72,
+    "tipo": "prepara",
+    "nota": "Antes de Strunk porque fecha o bloco literário e abre a trilha de inglês, que corre em paralelo."
+  },
+  {
+    "id": "prep-73-74",
+    "de": 73,
+    "para": 74,
+    "tipo": "prepara",
+    "nota": "Antes de Pinker porque Pinker ataca o ‘fantasma na máquina’ cartesiano."
+  },
+  {
+    "id": "prep-74-75",
+    "de": 74,
+    "para": 75,
+    "tipo": "prepara",
+    "nota": "Antes de Rogers porque a natureza humana fixa contrasta com a ideia de crescimento pessoal."
+  },
+  {
+    "id": "prep-75-76",
+    "de": 75,
+    "para": 76,
+    "tipo": "prepara",
+    "nota": "Antes de Schopenhauer porque Rogers é otimista sobre a natureza humana e Schopenhauer é o contraponto pessimista."
+  },
+  {
+    "id": "prep-76-77",
+    "de": 76,
+    "para": 77,
+    "tipo": "prepara",
+    "nota": "Antes de Antígona porque leva do cálculo da felicidade ao dilema trágico."
+  },
+  {
+    "id": "prep-77-78",
+    "de": 77,
+    "para": 78,
+    "tipo": "prepara",
+    "nota": "Antes de Huxley porque, da lei contra a consciência, passa-se a um mundo em que a consciência foi dissolvida."
+  },
+  {
+    "id": "prep-78-79",
+    "de": 78,
+    "para": 79,
+    "tipo": "prepara",
+    "nota": "Antes de Achebe porque, depois do controle imaginado, vem uma sociedade real desfeita pelo contato colonial."
+  },
+  {
+    "id": "prep-79-80",
+    "de": 79,
+    "para": 80,
+    "tipo": "prepara",
+    "nota": "Antes de Lima Barreto porque outra sociedade é ridicularizada por um projeto de nação, agora no Brasil."
+  },
+  {
+    "id": "prep-80-81",
+    "de": 80,
+    "para": 81,
+    "tipo": "prepara",
+    "nota": "Antes de Eliade porque, depois da sátira social, vem o conceito de sagrado."
+  },
+  {
+    "id": "prep-81-82",
+    "de": 81,
+    "para": 82,
+    "tipo": "prepara",
+    "nota": "Antes de Merton porque dá o conceito para ler uma conversão vivida."
+  },
+  {
+    "id": "prep-82-83",
+    "de": 82,
+    "para": 83,
+    "tipo": "prepara",
+    "nota": "Antes de Stark porque passa da conversão individual ao crescimento do cristianismo como movimento."
+  },
+  {
+    "id": "prep-83-84",
+    "de": 83,
+    "para": 84,
+    "tipo": "prepara",
+    "nota": "Antes de Sowell porque a pergunta passa de como as crenças se espalham para como as visões de mundo se enfrentam."
+  },
+  {
+    "id": "prep-85-86",
+    "de": 85,
+    "para": 86,
+    "tipo": "prepara",
+    "nota": "Antes de Hume porque ambos duvidam, Montaigne pela experiência, Hume pela análise."
+  },
+  {
+    "id": "prep-86-87",
+    "de": 86,
+    "para": 87,
+    "tipo": "prepara",
+    "nota": "Antes de Popper porque Popper responde ao problema da indução."
+  },
+  {
+    "id": "prep-87-88",
+    "de": 87,
+    "para": 88,
+    "tipo": "prepara",
+    "nota": "Antes de Kuhn porque Kuhn contesta a imagem de ciência de Popper."
+  },
+  {
+    "id": "prep-88-89",
+    "de": 88,
+    "para": 89,
+    "tipo": "prepara",
+    "nota": "Antes de Mill porque, se a ciência depende de comunidades, importa a liberdade de discussão que Mill defende."
+  },
+  {
+    "id": "prep-89-90",
+    "de": 89,
+    "para": 90,
+    "tipo": "prepara",
+    "nota": "Antes de Ginzburg porque Ginzburg mostra o preço de pensar diferente, pago por um moleiro."
+  },
+  {
+    "id": "prep-90-91",
+    "de": 90,
+    "para": 91,
+    "tipo": "prepara",
+    "nota": "Antes de Caio Prado porque passa da escala de um homem para a de uma colônia."
+  },
+  {
+    "id": "prep-91-92",
+    "de": 91,
+    "para": 92,
+    "tipo": "prepara",
+    "nota": "Antes de Eusébio porque sai do Brasil e volta às origens da Igreja."
+  },
+  {
+    "id": "prep-92-93",
+    "de": 92,
+    "para": 93,
+    "tipo": "prepara",
+    "nota": "Antes de Lewis porque, da Igreja que nasce, passa-se à defesa moderna dos valores objetivos."
+  },
+  {
+    "id": "prep-93-94",
+    "de": 93,
+    "para": 94,
+    "tipo": "prepara",
+    "nota": "Antes de Kafka porque, depois dos valores objetivos, vem o mundo em que a lei se tornou opaca."
+  },
+  {
+    "id": "prep-94-95",
+    "de": 94,
+    "para": 95,
+    "tipo": "prepara",
+    "nota": "Antes de Borges porque o labirinto de Kafka vira jogo intelectual em Borges."
+  },
+  {
+    "id": "prep-95-96",
+    "de": 95,
+    "para": 96,
+    "tipo": "prepara",
+    "nota": "Antes de Greene porque, depois do labirinto abstrato, vem o drama moral concreto de um padre."
+  },
+  {
+    "id": "prep-97-98",
+    "de": 97,
+    "para": 98,
+    "tipo": "prepara",
+    "nota": "Antes de Said porque Tocqueville observa a América de fora, e Said examina o olhar europeu sobre o outro."
+  },
+  {
+    "id": "prep-98-99",
+    "de": 98,
+    "para": 99,
+    "tipo": "prepara",
+    "nota": "Antes de Fanon porque passa da crítica do discurso à luta anticolonial."
+  },
+  {
+    "id": "prep-99-100",
+    "de": 99,
+    "para": 100,
+    "tipo": "prepara",
+    "nota": "Antes de Elias porque Fanon trata da violência política, e Elias, de como a civilização a monopolizou."
+  },
+  {
+    "id": "prep-100-101",
+    "de": 100,
+    "para": 101,
+    "tipo": "prepara",
+    "nota": "Antes de Mauss porque, depois da ordem do Estado, vem a ordem anterior da dádiva."
+  },
+  {
+    "id": "prep-101-102",
+    "de": 101,
+    "para": 102,
+    "tipo": "prepara",
+    "nota": "Antes de Schumpeter porque da dádiva passa-se ao capitalismo como destruição criadora."
+  },
+  {
+    "id": "prep-102-103",
+    "de": 102,
+    "para": 103,
+    "tipo": "prepara",
+    "nota": "Antes de James porque da economia a leitura volta ao interior religioso."
+  },
+  {
+    "id": "prep-103-104",
+    "de": 103,
+    "para": 104,
+    "tipo": "prepara",
+    "nota": "Antes de Weil porque James analisa a experiência de fora, e Weil a vive pela atenção."
+  },
+  {
+    "id": "prep-104-105",
+    "de": 104,
+    "para": 105,
+    "tipo": "prepara",
+    "nota": "Antes de Newman porque passa da experiência mística à reflexão sobre como a fé amadurece."
+  },
+  {
+    "id": "prep-105-106",
+    "de": 105,
+    "para": 106,
+    "tipo": "prepara",
+    "nota": "Antes de Ratzinger porque, da fé de um convertido do século XIX, vai-se à fé explicada ao homem moderno."
+  },
+  {
+    "id": "prep-106-107",
+    "de": 106,
+    "para": 107,
+    "tipo": "prepara",
+    "nota": "Antes de Dom Quixote porque dá a fé em forma de argumento, e Cervantes a testa em forma de ironia."
+  },
+  {
+    "id": "prep-107-108",
+    "de": 107,
+    "para": 108,
+    "tipo": "prepara",
+    "nota": "Antes de Os Sertões porque, depois do ideal individual que se choca com o real, vem um ideal coletivo que se choca com o Estado."
+  },
+  {
+    "id": "prep-109-110",
+    "de": 109,
+    "para": 110,
+    "tipo": "prepara",
+    "nota": "Antes de Schmitt porque Gramsci vê o poder como consentimento, e Schmitt, como decisão."
+  },
+  {
+    "id": "prep-110-111",
+    "de": 110,
+    "para": 111,
+    "tipo": "prepara",
+    "nota": "Antes de Rawls porque Schmitt nega o que Rawls tenta fundar: justiça sem inimigo."
+  },
+  {
+    "id": "prep-111-112",
+    "de": 111,
+    "para": 112,
+    "tipo": "prepara",
+    "nota": "Antes de Ostrom porque, depois da justiça distributiva, vê-se comunidades que gerem recursos sem Estado nem mercado."
+  },
+  {
+    "id": "prep-112-113",
+    "de": 112,
+    "para": 113,
+    "tipo": "prepara",
+    "nota": "Antes de Mises porque da gestão coletiva passa-se à lógica do indivíduo."
+  },
+  {
+    "id": "prep-113-114",
+    "de": 113,
+    "para": 114,
+    "tipo": "prepara",
+    "nota": "Antes de Keynes porque do indivíduo dedutivo passa-se aos agregados e à incerteza."
+  },
+  {
+    "id": "prep-114-115",
+    "de": 114,
+    "para": 115,
+    "tipo": "prepara",
+    "nota": "Antes de Bourdieu porque da economia monetária passa-se ao capital simbólico."
+  },
+  {
+    "id": "prep-115-116",
+    "de": 115,
+    "para": 116,
+    "tipo": "prepara",
+    "nota": "Antes de Geertz porque dá a estrutura social do simbólico, e Geertz dá a leitura da cultura como texto."
+  },
+  {
+    "id": "prep-116-117",
+    "de": 116,
+    "para": 117,
+    "tipo": "prepara",
+    "nota": "Antes de Viveiros de Castro porque Geertz interpreta o outro, e Viveiros leva a sério o ponto de vista do outro como metafísica."
+  },
+  {
+    "id": "prep-117-118",
+    "de": 117,
+    "para": 118,
+    "tipo": "prepara",
+    "nota": "Antes de Ibn Khaldun porque, depois do outro como pensador, vem um pensador de fora do Ocidente."
+  },
+  {
+    "id": "prep-118-119",
+    "de": 118,
+    "para": 119,
+    "tipo": "prepara",
+    "nota": "Antes de Crary porque dos ciclos de poder vai-se ao tempo do corpo sob o capitalismo."
+  },
+  {
+    "id": "prep-119-120",
+    "de": 119,
+    "para": 120,
+    "tipo": "prepara",
+    "nota": "Antes de Boff porque do corpo disciplinado vai-se à instituição que disciplina almas."
+  }
 ]

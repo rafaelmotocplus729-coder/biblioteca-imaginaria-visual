@@ -1,1 +1,170 @@
-[]
+[
+  {
+    "id": 61,
+    "titulo": "A Imaginação Sociológica",
+    "autor": "C. Wright Mills",
+    "motivo": "Capa da edição em português não encontrada nas APIs públicas. Aplicada capa tipográfica sóbria conforme Seção 6.5 do PRD."
+  },
+  {
+    "id": 62,
+    "titulo": "Vacas, Porcos, Guerras e Bruxas",
+    "autor": "Marvin Harris",
+    "motivo": "Capa da edição em português não encontrada nas APIs públicas. Aplicada capa tipográfica sóbria conforme Seção 6.5 do PRD."
+  },
+  {
+    "id": 63,
+    "titulo": "Que é História?",
+    "autor": "E. H. Carr",
+    "motivo": "Capa da edição em português não encontrada nas APIs públicas. Aplicada capa tipográfica sóbria conforme Seção 6.5 do PRD."
+  },
+  {
+    "id": 64,
+    "titulo": "Cidadania no Brasil: o longo caminho",
+    "autor": "José Murilo de Carvalho",
+    "motivo": "Capa da edição em português não encontrada nas APIs públicas. Aplicada capa tipográfica sóbria conforme Seção 6.5 do PRD."
+  },
+  {
+    "id": 69,
+    "titulo": "O Homem que Confundiu sua Mulher com um Chapéu",
+    "autor": "Oliver Sacks",
+    "motivo": "Capa da edição em português não encontrada nas APIs públicas. Aplicada capa tipográfica sóbria conforme Seção 6.5 do PRD."
+  },
+  {
+    "id": 77,
+    "titulo": "Antígona",
+    "autor": "Sófocles",
+    "motivo": "Capa da edição em português não encontrada nas APIs públicas. Aplicada capa tipográfica sóbria conforme Seção 6.5 do PRD."
+  },
+  {
+    "id": 78,
+    "titulo": "Admirável Mundo Novo",
+    "autor": "Aldous Huxley",
+    "motivo": "Capa da edição em português não encontrada nas APIs públicas. Aplicada capa tipográfica sóbria conforme Seção 6.5 do PRD."
+  },
+  {
+    "id": 79,
+    "titulo": "O Mundo se Despedaça",
+    "autor": "Chinua Achebe",
+    "motivo": "Capa da edição em português não encontrada nas APIs públicas. Aplicada capa tipográfica sóbria conforme Seção 6.5 do PRD."
+  },
+  {
+    "id": 82,
+    "titulo": "A Montanha dos Sete Patamares",
+    "autor": "Thomas Merton",
+    "motivo": "Capa da edição em português não encontrada nas APIs públicas. Aplicada capa tipográfica sóbria conforme Seção 6.5 do PRD."
+  },
+  {
+    "id": 83,
+    "titulo": "O Crescimento do Cristianismo",
+    "autor": "Rodney Stark",
+    "motivo": "Capa da edição em português não encontrada nas APIs públicas. Aplicada capa tipográfica sóbria conforme Seção 6.5 do PRD."
+  },
+  {
+    "id": 84,
+    "titulo": "Conflito de Visões",
+    "autor": "Thomas Sowell",
+    "motivo": "Capa da edição em português não encontrada nas APIs públicas. Aplicada capa tipográfica sóbria conforme Seção 6.5 do PRD."
+  },
+  {
+    "id": 87,
+    "titulo": "Conjecturas e Refutações",
+    "autor": "Karl Popper",
+    "motivo": "Capa da edição em português não encontrada nas APIs públicas. Aplicada capa tipográfica sóbria conforme Seção 6.5 do PRD."
+  },
+  {
+    "id": 92,
+    "titulo": "História Eclesiástica",
+    "autor": "Eusébio de Cesareia",
+    "motivo": "Capa da edição em português não encontrada nas APIs públicas. Aplicada capa tipográfica sóbria conforme Seção 6.5 do PRD."
+  },
+  {
+    "id": 96,
+    "titulo": "O Poder e a Glória",
+    "autor": "Graham Greene",
+    "motivo": "Capa da edição em português não encontrada nas APIs públicas. Aplicada capa tipográfica sóbria conforme Seção 6.5 do PRD."
+  },
+  {
+    "id": 97,
+    "titulo": "A Democracia na América",
+    "autor": "Alexis de Tocqueville",
+    "motivo": "Capa da edição em português não encontrada nas APIs públicas. Aplicada capa tipográfica sóbria conforme Seção 6.5 do PRD."
+  },
+  {
+    "id": 98,
+    "titulo": "Orientalismo",
+    "autor": "Edward Said",
+    "motivo": "Capa da edição em português não encontrada nas APIs públicas. Aplicada capa tipográfica sóbria conforme Seção 6.5 do PRD."
+  },
+  {
+    "id": 101,
+    "titulo": "Ensaio sobre a Dádiva",
+    "autor": "Marcel Mauss",
+    "motivo": "Capa da edição em português não encontrada nas APIs públicas. Aplicada capa tipográfica sóbria conforme Seção 6.5 do PRD."
+  },
+  {
+    "id": 102,
+    "titulo": "Capitalismo, Socialismo e Democracia",
+    "autor": "Joseph Schumpeter",
+    "motivo": "Capa da edição em português não encontrada nas APIs públicas. Aplicada capa tipográfica sóbria conforme Seção 6.5 do PRD."
+  },
+  {
+    "id": 103,
+    "titulo": "As Variedades da Experiência Religiosa",
+    "autor": "William James",
+    "motivo": "Capa da edição em português não encontrada nas APIs públicas. Aplicada capa tipográfica sóbria conforme Seção 6.5 do PRD."
+  },
+  {
+    "id": 104,
+    "titulo": "A Gravidade e a Graça",
+    "autor": "Simone Weil",
+    "motivo": "Capa da edição em português não encontrada nas APIs públicas. Aplicada capa tipográfica sóbria conforme Seção 6.5 do PRD."
+  },
+  {
+    "id": 105,
+    "titulo": "Apologia Pro Vita Sua",
+    "autor": "John Henry Newman",
+    "motivo": "Capa da edição em português não encontrada nas APIs públicas. Aplicada capa tipográfica sóbria conforme Seção 6.5 do PRD."
+  },
+  {
+    "id": 106,
+    "titulo": "Introdução ao Cristianismo",
+    "autor": "Joseph Ratzinger",
+    "motivo": "Capa da edição em português não encontrada nas APIs públicas. Aplicada capa tipográfica sóbria conforme Seção 6.5 do PRD."
+  },
+  {
+    "id": 107,
+    "titulo": "Dom Quixote",
+    "autor": "Miguel de Cervantes",
+    "motivo": "Capa da edição em português não encontrada nas APIs públicas. Aplicada capa tipográfica sóbria conforme Seção 6.5 do PRD."
+  },
+  {
+    "id": 110,
+    "titulo": "O Conceito do Político",
+    "autor": "Carl Schmitt",
+    "motivo": "Capa da edição em português não encontrada nas APIs públicas. Aplicada capa tipográfica sóbria conforme Seção 6.5 do PRD."
+  },
+  {
+    "id": 112,
+    "titulo": "O Governo dos Bens Comuns",
+    "autor": "Elinor Ostrom",
+    "motivo": "Capa da edição em português não encontrada nas APIs públicas. Aplicada capa tipográfica sóbria conforme Seção 6.5 do PRD."
+  },
+  {
+    "id": 116,
+    "titulo": "A Interpretação das Culturas",
+    "autor": "Clifford Geertz",
+    "motivo": "Capa da edição em português não encontrada nas APIs públicas. Aplicada capa tipográfica sóbria conforme Seção 6.5 do PRD."
+  },
+  {
+    "id": 118,
+    "titulo": "Os Prolegômenos (Al-Muqaddima)",
+    "autor": "Ibn Khaldun",
+    "motivo": "Capa da edição em português não encontrada nas APIs públicas. Aplicada capa tipográfica sóbria conforme Seção 6.5 do PRD."
+  },
+  {
+    "id": 119,
+    "titulo": "24/7: Capitalismo Tardio e os Fins do Sono",
+    "autor": "Jonathan Crary",
+    "motivo": "Capa da edição em português não encontrada nas APIs públicas. Aplicada capa tipográfica sóbria conforme Seção 6.5 do PRD."
+  }
+]

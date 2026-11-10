@@ -101,7 +101,7 @@ export const LivroCard: React.FC<LivroCardProps> = ({
             )}
           </div>
           <span className="text-[8px] font-cinzel font-semibold tracking-widest text-amber-200/90 uppercase">
-            {livro.classe}
+            {livro.classe} {livro.id > 60 ? '· Trilha B' : '· Trilha A'}
           </span>
         </div>
 
@@ -236,6 +236,13 @@ export const LivroCard: React.FC<LivroCardProps> = ({
           <span className="px-2 py-0.5 text-[10px] font-cinzel font-bold rounded shadow-sm bg-stone-900/85 backdrop-blur-md text-stone-100 border border-stone-700/50 flex items-center gap-1">
             #{livro.id}
             {livro.obra_de_vida && <Star className="w-2.5 h-2.5 text-amber-400 fill-amber-400" />}
+          </span>
+          <span className={`px-1.5 py-0.5 text-[8px] font-cinzel font-bold rounded shadow-xs ${
+            livro.id <= 60
+              ? 'bg-stone-800/80 text-stone-300 border border-stone-700/50'
+              : 'bg-amber-950/90 text-amber-200 border border-amber-700/60'
+          }`}>
+            {livro.id <= 60 ? 'Trilha A' : 'Trilha B'}
           </span>
           {livro.idioma_leitura === 'en' && (
             <span className="px-1.5 py-0.5 text-[8px] font-mono font-bold rounded shadow-xs bg-stone-800/90 text-amber-200 border border-stone-600/50">
