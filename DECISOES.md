@@ -16,7 +16,7 @@ Este documento registra as decisões de arquitetura e produto adotadas na implem
 ## 2. Decisões Arquiteturais e Técnicas
 
 - **Stack Tecnológica:** Vite + React 18 + TypeScript + Tailwind CSS + Lucide Icons + Zustand para gerenciamento de estado.
-- **Grafo:** Implementação interativa com D3 (Force Simulation), com nós coloridos por área, espessura e destaque de contrapontos e sequência de preparação.
+- **Grafo em Redes & Navegação Hermenêutica:** Implementação híbrida de alta legibilidade com **Modo Foco (Ego-Network)** como padrão — onde a obra central fica em destaque editorial e suas conexões diretas (contrapontos dialéticos, sequências de leitura e diálogos temáticos) são apresentadas em cards legíveis com justificativa intelectual explícita, permitindo viajar pelas ideias de obra em obra com transição instantânea de foco — acompanhado de um alternador para a **Constelação Geral (60 Obras)** em D3 Force Simulation para visão macro com zoom, filtros por nível e área.
 - **Integridade dos Dados:** Dados estruturais em `data/livros.json` e `data/relacoes.json`. Enriquecimento cacheado em `data/enriquecido.json` e pendências catalogadas em `data/pendencias.json`.
 - **Regra do Resumo:** Obras com `resumo_permitido = "nao"` contam com o selo rígido *"Resumo trairia o argumento"* e disponibilizam campo editável para *"Guia de Leitura"* pessoal do usuário, nunca gerando paráfrases artificiais.
 
