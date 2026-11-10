@@ -1,8 +1,15 @@
 ---
 name: tailwind-patterns
-description: Tailwind CSS v4 principles. CSS-first configuration, container queries, modern patterns, design token architecture.
-allowed-tools: Read, Write, Edit, Glob, Grep
+description: Tailwind CSS v4 principles. CSS-first configuration, container queries, modern patterns,
+  design token architecture.
+...
 ---
+
+## Specification Metadata
+```yaml
+allowed-tools: Read, Write, Edit, Glob, Grep
+```
+
 
 # Tailwind CSS Patterns (v4 - 2025)
 

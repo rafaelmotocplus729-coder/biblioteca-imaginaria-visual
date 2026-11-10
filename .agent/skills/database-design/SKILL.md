@@ -1,8 +1,15 @@
 ---
 name: database-design
-description: Database design principles and decision-making. Schema design, indexing strategy, ORM selection, serverless databases.
-allowed-tools: Read, Write, Edit, Glob, Grep
+description: Database design principles and decision-making. Schema design, indexing strategy,
+  ORM selection, serverless databases.
+...
 ---
+
+## Specification Metadata
+```yaml
+allowed-tools: Read, Write, Edit, Glob, Grep
+```
+
 
 # Database Design
 
