@@ -4,6 +4,8 @@ import { NotaZettel, NotaTemporaria } from '../types';
 const STORAGE_URL_KEY = 'zettel_supabase_url';
 const STORAGE_KEY_KEY = 'zettel_supabase_anon_key';
 
+const DEFAULT_PROJECT_URL = 'https://meeinyzahufzttyqouwg.supabase.co';
+
 export interface SupabaseConfig {
   url: string;
   anonKey: string;
@@ -18,7 +20,7 @@ export function getStoredSupabaseConfig(): SupabaseConfig {
   const localKey = localStorage.getItem(STORAGE_KEY_KEY) || '';
 
   return {
-    url: localUrl || envUrl,
+    url: localUrl || envUrl || DEFAULT_PROJECT_URL,
     anonKey: localKey || envKey
   };
 }
