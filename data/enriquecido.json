@@ -1856,8 +1856,9 @@
       }
     ],
     "sinopse_editorial": "Clássico fundador da sociologia crítica que convida o leitor a cultivar a imaginação sociológica: a capacidade de discernir a intrincada conexão entre as biografias individuais e as grandes estruturas históricas, transformando inquietações privadas em questões públicas conscientes.",
-    "status_busca": "parcial",
-    "paginas": 256
+    "status_busca": "ok",
+    "paginas": 256,
+    "capa_url": "/capas/61.webp"
   },
   {
     "id": 62,
@@ -1883,8 +1884,9 @@
       }
     ],
     "sinopse_editorial": "Investigação antropológica provocadora sobre os enigmas da cultura humana, demonstrando pelo prisma do materialismo cultural que costumes aparentemente bizarros ou irracionais — como a vaca sagrada na Índia ou os tabus alimentares — possuem causas ecológicas e materiais concretas de sobrevivência.",
-    "status_busca": "parcial",
-    "paginas": 240
+    "status_busca": "ok",
+    "paginas": 240,
+    "capa_url": "/capas/62.webp"
   },
   {
     "id": 63,
@@ -1910,8 +1912,9 @@
       }
     ],
     "sinopse_editorial": "Reflexão indispensável sobre a epistemologia do ofício do historiador, demolindo o mito da objetividade pura dos fatos e definindo a história como um diálogo contínuo e sem fim entre o historiador no presente e os acontecimentos do passado.",
-    "status_busca": "parcial",
-    "paginas": 208
+    "status_busca": "ok",
+    "paginas": 208,
+    "capa_url": "/capas/63.webp"
   },
   {
     "id": 64,
@@ -1937,8 +1940,9 @@
       }
     ],
     "sinopse_editorial": "Exame histórico lúcido sobre a trajetória peculiar e invertida dos direitos no Brasil, onde a concessão precoce de direitos sociais precedeu a conquista dos direitos políticos e deixou os direitos civis cronicamente incompletos, forjando a figura do 'estadania'.",
-    "status_busca": "parcial",
-    "paginas": 224
+    "status_busca": "ok",
+    "paginas": 224,
+    "capa_url": "/capas/64.webp"
   },
   {
     "id": 65,
@@ -2080,8 +2084,9 @@
       }
     ],
     "sinopse_editorial": "Coletânea memorável de relatos clínicos humanistas pelo célebre neurologista britânico, explorando as fronteiras enigmáticas do cérebro e da identidade humana através de pacientes que enfrentam perdas perceptivas extraordinárias sem perder sua dignidade de pessoas.",
-    "status_busca": "parcial",
-    "paginas": 336
+    "status_busca": "ok",
+    "paginas": 336,
+    "capa_url": "/capas/69.jpg"
   },
   {
     "id": 70,
@@ -2214,7 +2219,7 @@
     "tese": "A mente não é folha em branco: há natureza humana moldada pela evolução.",
     "acrescenta": "Contraponto à ideia de que tudo é cultura ou condicionamento (Skinner, Rousseau).",
     "por_que_antes_do_proximo": "Antes de Rogers porque a natureza humana fixa contrasta com a ideia de crescimento pessoal.",
-    "capa_url": "/capas/74.jpg",
+    "capa_url": "/capas/74.webp",
     "isbn": "9788535905069",
     "edicoes_pt": [
       {
@@ -2243,7 +2248,7 @@
     "tese": "As pessoas crescem quando recebem aceitação incondicional e empatia; a terapia deve seguir o cliente.",
     "acrescenta": "Psicologia humanista, em oposição ao behaviorismo e à psicanálise.",
     "por_que_antes_do_proximo": "Antes de Schopenhauer porque Rogers é otimista sobre a natureza humana e Schopenhauer é o contraponto pessimista.",
-    "capa_url": "/capas/75.jpg",
+    "capa_url": "/capas/75.webp",
     "isbn": "9788533624023",
     "edicoes_pt": [
       {
@@ -2310,8 +2315,9 @@
       }
     ],
     "sinopse_editorial": "Tragédia grega imortal sobre a colisão inexorável entre a lei sagrada da família e da consciência moral pessoal, encarnada por Antígona, e a razão de Estado e a ordem cívica imposta pelo tirano Creonte.",
-    "status_busca": "parcial",
-    "paginas": 128
+    "status_busca": "ok",
+    "paginas": 128,
+    "capa_url": "/capas/77.jpg"
   },
   {
     "id": 78,
@@ -2337,8 +2343,9 @@
       }
     ],
     "sinopse_editorial": "Distopia clássica e profética sobre uma sociedade totalitária tecnologicamente perfeita, na qual os seres humanos são clonados em castas biológicas, condicionados ao prazer artificial e sedados pelo soma, aniquilando a liberdade e o sofrimento que definem a alma.",
-    "status_busca": "parcial",
-    "paginas": 312
+    "status_busca": "ok",
+    "paginas": 312,
+    "capa_url": "/capas/78.webp"
   },
   {
     "id": 79,
@@ -2364,8 +2371,9 @@
       }
     ],
     "sinopse_editorial": "Romance magistral da literatura pós-colonial africana, recriando com profundidade e dignidade a complexa ordem social e os ritos do povo igbo na Nigéria antes e durante o impacto desestabilizador do domínio imperial britânico.",
-    "status_busca": "parcial",
-    "paginas": 240
+    "status_busca": "ok",
+    "paginas": 240,
+    "capa_url": "/capas/79.webp"
   },
   {
     "id": 80,
@@ -2382,7 +2390,7 @@
     "tese": "O nacionalismo ingênuo e a burocracia republicana esmagam o idealista Policarpo Quaresma.",
     "acrescenta": "O Brasil republicano visto com sátira amarga, perspectiva distinta da de Machado.",
     "por_que_antes_do_proximo": "Antes de Eliade porque, depois da sátira social, vem o conceito de sagrado.",
-    "capa_url": "/capas/80.jpg",
+    "capa_url": "/capas/80.webp",
     "isbn": "9788563560247",
     "edicoes_pt": [
       {
@@ -2449,8 +2457,9 @@
       }
     ],
     "sinopse_editorial": "Autobiografia espiritual extraordinária narrando o percurso de Merton desde a juventude boêmia e intelectual secular até sua conversão ao catolicismo e entrada na ordem contemplativa dos monges trapistas no mosteiro de Gethsemani.",
-    "status_busca": "parcial",
-    "paginas": 560
+    "status_busca": "ok",
+    "paginas": 560,
+    "capa_url": "/capas/82.webp"
   },
   {
     "id": 83,
@@ -2476,8 +2485,9 @@
       }
     ],
     "sinopse_editorial": "Análise sociológica inovadora que desmistifica a expansão da fé cristã no Império Romano, demonstrando como redes sociais densas, cuidados médicos aos enfermos em epidemias e valorização familiar impulsionaram o movimento de forma exponencial.",
-    "status_busca": "parcial",
-    "paginas": 304
+    "status_busca": "ok",
+    "paginas": 304,
+    "capa_url": "/capas/83.webp"
   },
   {
     "id": 84,
@@ -2503,8 +2513,9 @@
       }
     ],
     "sinopse_editorial": "Estudo magistral da filosofia política comparada que elucida a cisão perene do debate público em torno de duas visões premissais sobre a natureza humana: a visão restrita (trágica/prudencial) e a visão irrestrita (utópica/racionalista).",
-    "status_busca": "parcial",
-    "paginas": 336
+    "status_busca": "ok",
+    "paginas": 336,
+    "capa_url": "/capas/84.webp"
   },
   {
     "id": 85,
@@ -2550,7 +2561,7 @@
     "tese": "Todo conhecimento vem da experiência, e a causalidade é hábito, não necessidade demonstrada.",
     "acrescenta": "O problema da indução e o empirismo cético, que Kant dirá tê-lo despertado.",
     "por_que_antes_do_proximo": "Antes de Popper porque Popper responde ao problema da indução.",
-    "capa_url": "/capas/86.jpg",
+    "capa_url": "/capas/86.webp",
     "isbn": "9788571392601",
     "edicoes_pt": [
       {
@@ -2588,8 +2599,9 @@
       }
     ],
     "sinopse_editorial": "Trabalho axial da epistemologia contemporânea, formulando a falseabilidade como critério de demarcação científica genuína: o conhecimento progride não por acumulação indutiva, mas pela formulação de hipóteses ousadas e severas tentativas de refutação.",
-    "status_busca": "parcial",
-    "paginas": 624
+    "status_busca": "ok",
+    "paginas": 624,
+    "capa_url": "/capas/87.webp"
   },
   {
     "id": 88,
@@ -2693,7 +2705,7 @@
     "tese": "A colônia se organizou como empresa de exportação para o mercado europeu, e essa origem marca o país.",
     "acrescenta": "Interpretação marxista da formação do Brasil; contraponto a Freyre e par de Furtado.",
     "por_que_antes_do_proximo": "Antes de Eusébio porque sai do Brasil e volta às origens da Igreja.",
-    "capa_url": "/capas/91.jpg",
+    "capa_url": "/capas/91.webp",
     "isbn": "9788535919615",
     "edicoes_pt": [
       {
@@ -2731,8 +2743,9 @@
       }
     ],
     "sinopse_editorial": "A primeira crônica histórica abrangente dos três séculos inaugurais da Igreja cristã, registrando com preciosidade documental as sucessões episcopais, os conflitos doutrinários e os atos heroicos dos mártires até a paz de Constantino.",
-    "status_busca": "parcial",
-    "paginas": 560
+    "status_busca": "ok",
+    "paginas": 560,
+    "capa_url": "/capas/92.jpg"
   },
   {
     "id": 93,
@@ -2778,7 +2791,7 @@
     "tese": "Um homem é processado por um tribunal que nunca revela a acusação, e a culpa é ao mesmo tempo existencial e burocrática.",
     "acrescenta": "Alegoria do poder e da culpa impessoais; par de Orwell e Foucault.",
     "por_que_antes_do_proximo": "Antes de Borges porque o labirinto de Kafka vira jogo intelectual em Borges.",
-    "capa_url": "/capas/94.jpg",
+    "capa_url": "/capas/94.webp",
     "isbn": "9788573262605",
     "edicoes_pt": [
       {
@@ -2807,7 +2820,7 @@
     "tese": "A realidade, o tempo e o conhecimento são labirintos construídos por livros e ideias.",
     "acrescenta": "Literatura como filosofia em forma curta; metafísica fantástica.",
     "por_que_antes_do_proximo": "Antes de Greene porque, depois do labirinto abstrato, vem o drama moral concreto de um padre.",
-    "capa_url": "/capas/95.jpg",
+    "capa_url": "/capas/95.webp",
     "isbn": "9788535910902",
     "edicoes_pt": [
       {
@@ -2845,8 +2858,9 @@
       }
     ],
     "sinopse_editorial": "Drama moral profundo ambientado no México revolucionário anticlerical, seguindo a fuga desesperada do último padre católico clandestino — homem pecador e alcoólatra que, em meio a suas fraquezas, guarda uma santidade trágica e relutante.",
-    "status_busca": "parcial",
-    "paginas": 304
+    "status_busca": "ok",
+    "paginas": 304,
+    "capa_url": "/capas/96.webp"
   },
   {
     "id": 97,
@@ -2872,8 +2886,9 @@
       }
     ],
     "sinopse_editorial": "Análise insuperável das instituições republicanas e da sociedade civil norte-americana, investigando as consequências da igualdade de condições para a liberdade política e alertando com lucidez sobre os riscos do individualismo e do despotismo brando.",
-    "status_busca": "parcial",
-    "paginas": 704
+    "status_busca": "ok",
+    "paginas": 704,
+    "capa_url": "/capas/97.webp"
   },
   {
     "id": 98,
@@ -2899,8 +2914,9 @@
       }
     ],
     "sinopse_editorial": "Texto seminal da crítica pós-colonial que demonstra como o Ocidente produziu uma imagem discursiva, homogênea e exótica do 'Oriente' a serviço da hegemonia colonial europeia, entrelaçando literatura, filologia e poder geopolítico.",
-    "status_busca": "parcial",
-    "paginas": 432
+    "status_busca": "ok",
+    "paginas": 432,
+    "capa_url": "/capas/98.webp"
   },
   {
     "id": 99,
@@ -2946,7 +2962,7 @@
     "tese": "A civilização é um processo longo de autocontrole individual e monopolização estatal da violência.",
     "acrescenta": "Sociologia histórica da psicologia e dos costumes, contraponto a Rousseau.",
     "por_que_antes_do_proximo": "Antes de Mauss porque, depois da ordem do Estado, vem a ordem anterior da dádiva.",
-    "capa_url": "/capas/100.jpg",
+    "capa_url": "/capas/100.webp",
     "isbn": "9788571101913",
     "edicoes_pt": [
       {
@@ -2984,8 +3000,9 @@
       }
     ],
     "sinopse_editorial": "Estudo antropológico fundacional sobre as formas arcaicas de troca nas sociedades tradicionais, demonstrando que a circulação de bens assenta-se na tríplice obrigação de dar, receber e retribuir, constituindo um 'fato social total' que tece o laço comunitário.",
-    "status_busca": "parcial",
-    "paginas": 256
+    "status_busca": "ok",
+    "paginas": 256,
+    "capa_url": "/capas/101.webp"
   },
   {
     "id": 102,
@@ -3011,8 +3028,9 @@
       }
     ],
     "sinopse_editorial": "Trabalho célebre da economia política que cunhou o conceito de 'destruição criadora' como motor vital do capitalismo, prevendo ao mesmo tempo que o próprio triunfo do sistema geraria uma burocratização e uma hostilidade intelectual capazes de erodi-lo.",
-    "status_busca": "parcial",
-    "paginas": 560
+    "status_busca": "ok",
+    "paginas": 560,
+    "capa_url": "/capas/102.webp"
   },
   {
     "id": 103,
@@ -3038,8 +3056,9 @@
       }
     ],
     "sinopse_editorial": "Estudo pioneiro da psicologia e do pragmatismo filosófico sobre os fenômenos da fé, da conversão e do misticismo, analisando a religião não pelas doutrinas eclesiásticas, mas pelos seus frutos e pela sua ressonância vital na consciência individual.",
-    "status_busca": "parcial",
-    "paginas": 528
+    "status_busca": "ok",
+    "paginas": 528,
+    "capa_url": "/capas/103.webp"
   },
   {
     "id": 104,
@@ -3065,8 +3084,9 @@
       }
     ],
     "sinopse_editorial": "Aforismos e meditações místicas de uma das mentes mais fulgurantes do século XX, refletindo sobre a gravidade que arrasta o mundo para o egoísmo e a força e a necessidade do esvaziamento do eu (décréation) para acolher a luz da graça divina.",
-    "status_busca": "parcial",
-    "paginas": 240
+    "status_busca": "ok",
+    "paginas": 240,
+    "capa_url": "/capas/104.webp"
   },
   {
     "id": 105,
@@ -3092,8 +3112,9 @@
       }
     ],
     "sinopse_editorial": "Defesa autobiográfica vibrante e honesta da evolução de sua consciência religiosa, documentando a trajetória espiritual e teológica que levou Newman a abandonar a Igreja da Inglaterra e ingressar no seio da Igreja Católica Romana.",
-    "status_busca": "parcial",
-    "paginas": 480
+    "status_busca": "ok",
+    "paginas": 480,
+    "capa_url": "/capas/105.webp"
   },
   {
     "id": 106,
@@ -3119,8 +3140,9 @@
       }
     ],
     "sinopse_editorial": "Conferências de Tubinga nas quais o futuro Papa Bento XVI interpreta o Credo apostólico para a mentalidade contemporânea, apresentando a fé cristã não como conjunto de normas frias, mas como acolhimento razoável do sentido e do amor que fundam o cosmos.",
-    "status_busca": "parcial",
-    "paginas": 384
+    "status_busca": "ok",
+    "paginas": 384,
+    "capa_url": "/capas/106.webp"
   },
   {
     "id": 107,
@@ -3146,8 +3168,9 @@
       }
     ],
     "sinopse_editorial": "O marco inaugural da narrativa moderna ocidental, encenando o embate sublime e cômico entre os nobres ideais de cavalaria do engenhoso fidalgo Dom Quixote e a rude realidade cotidiana corporificada em seu fiel escudeiro Sancho Pança.",
-    "status_busca": "parcial",
-    "paginas": 1056
+    "status_busca": "ok",
+    "paginas": 1056,
+    "capa_url": "/capas/107.webp"
   },
   {
     "id": 108,
@@ -3164,7 +3187,7 @@
     "tese": "A guerra de Canudos revela um Brasil dividido entre o litoral e o sertão, e a violência do Estado que o ignora.",
     "acrescenta": "Ciência, literatura e denúncia na mesma prosa; par de Rosa.",
     "por_que_antes_do_proximo": "Fecha o nível e prepara a densidade teórica do nível 5.",
-    "capa_url": "/capas/108.jpg",
+    "capa_url": "/capas/108.webp",
     "isbn": "9788569020479",
     "edicoes_pt": [
       {
@@ -3193,7 +3216,7 @@
     "tese": "O poder se mantém por hegemonia, isto é, por consentimento cultural, e não só pela força.",
     "acrescenta": "Marxismo que valoriza cultura e intelectuais, contraponto ao economicismo.",
     "por_que_antes_do_proximo": "Antes de Schmitt porque Gramsci vê o poder como consentimento, e Schmitt, como decisão.",
-    "capa_url": "/capas/109.jpg",
+    "capa_url": "/capas/109.webp",
     "isbn": "9788520005187",
     "edicoes_pt": [
       {
@@ -3231,8 +3254,9 @@
       }
     ],
     "sinopse_editorial": "Texto polêmico e denso que define a especificidade do político pelo critério irredutível da distinção entre amigo e inimigo, criticando o liberalismo despolitizante e estabelecendo as bases de sua teoria da decisão soberana.",
-    "status_busca": "parcial",
-    "paginas": 160
+    "status_busca": "ok",
+    "paginas": 160,
+    "capa_url": "/capas/110.webp"
   },
   {
     "id": 111,
@@ -3249,7 +3273,7 @@
     "tese": "Os princípios de justiça são os que escolheríamos sem saber nossa posição social (véu da ignorância).",
     "acrescenta": "Liberalismo igualitário, contraponto a Hayek e Hobbes.",
     "por_que_antes_do_proximo": "Antes de Ostrom porque, depois da justiça distributiva, vê-se comunidades que gerem recursos sem Estado nem mercado.",
-    "capa_url": "/capas/111.jpg",
+    "capa_url": "/capas/111.webp",
     "isbn": "9788533616455",
     "edicoes_pt": [
       {
@@ -3287,8 +3311,9 @@
       }
     ],
     "sinopse_editorial": "Obra laureada com o Prêmio Nobel de Economia que desafia os dogmas da intervenção estatal imperativa e da privatização forçada, demonstrando como comunidades locais ao redor do mundo gerenciam com êxito recursos de uso comum mediante regras autônomas.",
-    "status_busca": "parcial",
-    "paginas": 384
+    "status_busca": "ok",
+    "paginas": 384,
+    "capa_url": "/capas/112.webp"
   },
   {
     "id": 113,
@@ -3305,7 +3330,7 @@
     "tese": "A economia deriva por dedução da ação humana intencional, e sem preços de mercado o cálculo econômico é impossível.",
     "acrescenta": "Fundamento da escola austríaca; contraponto a Keynes e Marx.",
     "por_que_antes_do_proximo": "Antes de Keynes porque do indivíduo dedutivo passa-se aos agregados e à incerteza.",
-    "capa_url": "/capas/113.jpg",
+    "capa_url": "/capas/113.webp",
     "isbn": "9788585054151",
     "edicoes_pt": [
       {
@@ -3363,7 +3388,7 @@
     "tese": "O poder simbólico funciona quando é reconhecido como legítimo por quem o sofre.",
     "acrescenta": "Sociologia da dominação cultural, ponte entre Marx e Weber.",
     "por_que_antes_do_proximo": "Antes de Geertz porque dá a estrutura social do simbólico, e Geertz dá a leitura da cultura como texto.",
-    "capa_url": "/capas/115.jpg",
+    "capa_url": "/capas/115.webp",
     "isbn": "9788530803933",
     "edicoes_pt": [
       {
@@ -3401,8 +3426,9 @@
       }
     ],
     "sinopse_editorial": "Manifesto da antropologia interpretativa propondo que o conceito de cultura é essencialmente semiótico: o homem vive amarrado em teias de significados que ele mesmo teceu, cabendo ao antropólogo realizar uma 'descrição densa' de sua tessitura simbólica.",
-    "status_busca": "parcial",
-    "paginas": 336
+    "status_busca": "ok",
+    "paginas": 336,
+    "capa_url": "/capas/116.webp"
   },
   {
     "id": 117,
@@ -3457,8 +3483,9 @@
       }
     ],
     "sinopse_editorial": "Monumento intelectual do pensamento islâmico medieval, pioneiro da sociologia e da filosofia da história, elaborando a teoria cíclica de ascensão e decadência dos impérios e dinastias movida pela coesão social solidária (asabiyya).",
-    "status_busca": "parcial",
-    "paginas": 528
+    "status_busca": "ok",
+    "paginas": 528,
+    "capa_url": "/capas/118.webp"
   },
   {
     "id": 119,
@@ -3484,8 +3511,9 @@
       }
     ],
     "sinopse_editorial": "Crítica filosófica contundente sobre a colonização do tempo humano pelo capitalismo ininterrupto e pelas redes globais 24/7, apontando o sono biológico como o último refúgio e barreira insubmissa contra a mercantilização absoluta da vida.",
-    "status_busca": "parcial",
-    "paginas": 152
+    "status_busca": "ok",
+    "paginas": 152,
+    "capa_url": "/capas/119.webp"
   },
   {
     "id": 120,
@@ -3502,7 +3530,7 @@
     "tese": "A Igreja deve se reformar em direção a estruturas mais participativas, denunciando o poder clerical que se afasta do Evangelho.",
     "acrescenta": "Teologia da libertação; livro que motivou um processo doutrinário no Vaticano e contraponto direto a Ratzinger.",
     "por_que_antes_do_proximo": "Fecha a lista voltando à Igreja como instituição de poder e ao conflito entre fé e estrutura.",
-    "capa_url": "/capas/120.jpg",
+    "capa_url": "/capas/120.webp",
     "isbn": "9788532608468",
     "edicoes_pt": [
       {
