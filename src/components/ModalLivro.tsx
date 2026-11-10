@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Livro, Progresso, Relacao } from '../types';
 import { CORES_AREAS, LEGENDA_RESUMO } from '../constants/theme';
 import {
@@ -40,6 +40,10 @@ export const ModalLivro: React.FC<ModalLivroProps> = ({
   onEscolherEdicao
 }) => {
   const [imagemErro, setImagemErro] = useState(false);
+
+  useEffect(() => {
+    setImagemErro(false);
+  }, [livro.capa_url]);
   const [mostrarModalLido, setMostrarModalLido] = useState(false);
   const [mudouJuizoLocal, setMudouJuizoLocal] = useState<boolean>(progresso?.mudou_meu_juizo ?? true);
   const [perguntaAbertaLocal, setPerguntaAbertaLocal] = useState<string>(progresso?.pergunta_aberta ?? '');
@@ -119,6 +123,12 @@ export const ModalLivro: React.FC<ModalLivroProps> = ({
                 <img
                   src={livro.capa_url}
                   alt={`Capa de ${livro.titulo}`}
+                  onLoad={(e) => {
+                    const img = e.currentTarget;
+                    if (img.naturalWidth <= 1 || img.naturalHeight <= 1) {
+                      setImagemErro(true);
+                    }
+                  }}
                   onError={() => setImagemErro(true)}
                   className="w-full h-full object-cover"
                 />

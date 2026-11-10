@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Livro, Progresso } from '../types';
 import { CORES_AREAS } from '../constants/theme';
 import { BookOpen, CheckCircle, Clock, XCircle, Star } from 'lucide-react';
@@ -17,6 +17,11 @@ export const LivroCard: React.FC<LivroCardProps> = ({
   onClick
 }) => {
   const [imagemErro, setImagemErro] = useState(false);
+
+  useEffect(() => {
+    setImagemErro(false);
+  }, [livro.capa_url]);
+
   const estado = progresso?.estado || 'nao_iniciado';
   const cores = CORES_AREAS[livro.area] || CORES_AREAS['Filosofia'];
 
@@ -118,6 +123,12 @@ export const LivroCard: React.FC<LivroCardProps> = ({
             src={livro.capa_url}
             alt={`Capa de ${livro.titulo}`}
             loading="lazy"
+            onLoad={(e) => {
+              const img = e.currentTarget;
+              if (img.naturalWidth <= 1 || img.naturalHeight <= 1) {
+                setImagemErro(true);
+              }
+            }}
             onError={() => setImagemErro(true)}
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
           />

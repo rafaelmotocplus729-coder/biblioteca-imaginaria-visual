@@ -128,7 +128,10 @@ function sincronizarLivrosComEnriquecidos(livrosSalvos?: Livro[]): Livro[] {
       autor: enr.autor,
       tese: enr.tese,
       acrescenta: enr.acrescenta,
-      por_que_antes_do_proximo: enr.por_que_antes_do_proximo
+      por_que_antes_do_proximo: enr.por_que_antes_do_proximo,
+      sinopse_editorial: enr.sinopse_editorial,
+      edicoes_pt: enr.edicoes_pt,
+      status_busca: enr.status_busca
     };
   });
 }

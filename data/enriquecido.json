@@ -18,28 +18,14 @@
     "isbn": "9781476790152",
     "edicoes_pt": [
       {
-        "editora": "Touchstone",
-        "ano": 1984,
-        "isbn": "9781476790152",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9781476790152-M.jpg",
-        "link": "https://openlibrary.org/works/OL487444W"
-      },
-      {
-        "editora": "Claridad",
-        "ano": 2022,
-        "isbn": "8474449820",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/8474449820-M.jpg",
-        "link": "https://openlibrary.org/works/OL487444W"
-      },
-      {
-        "editora": "Blackstone Audiobooks",
-        "ano": 1992,
+        "editora": "É Realizações",
+        "ano": 2010,
         "isbn": "9788588062894",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9788588062894-M.jpg",
-        "link": "https://openlibrary.org/works/OL487444W"
+        "capa_url": "https://covers.openlibrary.org/b/isbn/9788588062894-L.jpg"
       }
     ],
-    "status_busca": "ok"
+    "status_busca": "ok",
+    "sinopse_editorial": "Guia clássico sobre as técnicas e níveis de leitura analítica e sintópica, ensinando como extrair o sumo do pensamento humano e ler ativamente para além da mera informação passageira."
   },
   {
     "id": 2,
@@ -67,7 +53,8 @@
         "link": "https://openlibrary.org/works/OL19341462W"
       }
     ],
-    "status_busca": "ok"
+    "status_busca": "ok",
+    "sinopse_editorial": "Referência mundial para o domínio da gramática da língua inglesa em nível intermediário, essencial para a leitura direta dos clássicos da tradição anglo-saxônica sem mediações."
   },
   {
     "id": 3,
@@ -109,7 +96,7 @@
         "link": "https://openlibrary.org/works/OL1168083W"
       }
     ],
-    "sinopse_editorial": "Nineteen Eighty-Four: A Novel, often referred to as 1984, is a dystopian social science fiction novel by the English novelist George Orwell (the pen name of Eric Arthur Blair). It was published on 8 June 1949 by Secker & Warburg as Orwell's ninth and final book completed in his lifetime. Thematically, Nineteen Eighty-Four centres on the consequences of totalitarianism, mass surveillance, and repressive regimentation of persons and behaviours within society. Orwell, himself a democratic socialist, modelled the authoritarian government in the novel after Stalinist Russia. More broadly, the novel examines the role of truth and facts within politics and the ways in which they are manipulated.\r\n\r\n----------\t\t\r\nAlso contained in:\t\t\r\n[Novels (Animal Farm / Burmese Days / Clergyman's Daughter / Coming Up for Air / Keep the Aspidistra Flying / Nineteen Eighty-Four)](https://openlibrary.org/works/OL1168045W)\t\t\r\n[Novels (Animal Farm / Nineteen Eighty-Four)](https://openlibrary.org/works/OL1167981W)\r\n[Orwell's Nineteen Eighty-Four: Text, Sources, Criticism](https://openlibrary.org/works/OL1168095W)",
+    "sinopse_editorial": "Romance distópico seminal sobre o totalitarismo, a vigilância onipresente do Grande Irmão, a adulteração contínua da história e a manipulação linguística pela Novilíngua como instrumentos de aniquilação do pensamento livre.",
     "status_busca": "ok"
   },
   {
@@ -152,7 +139,7 @@
         "link": "https://openlibrary.org/works/OL2900596W"
       }
     ],
-    "sinopse_editorial": "O que impulsiona os personagens é a seca, áspera e cruel, e paradoxalmente a ligação telúrica, afetiva, que expõe naqueles seres em retirada, à procura de meios de sobrevivência e um futuro. Apesar desse sentimento de transbordante solidariedade e compaixão com que a narrativa acompanha a miúda saga do vaqueiro Fabiano e sua gente, o autor contou: \"Procurei auscultar a alma do ser rude e quase primitivo que mora na zona mais recuada do sertão... os meus personagens são quase selvagens... pesquisa que os escritores regionalistas não fazem e nem mesmo podem fazer ...porque comumente não são familiares com o ambiente que descrevem...Fiz o livrinho sem paisagens, sem diálogos. E sem amor. A minha gente, quase muda, vive numa casa velha de fazenda. As pessoas adultas, preocupadas com o estômago, não tem tempo de abraçar-se. Até a cachorra [Baleia] é uma criatura decente, porque na vizinhança não existem galãs caninos\". VIDAS SECAS é o livro em que Graciliano, visto como antipoético e anti-sonhador por excelência, consegue atingir, com o rigor do texto que tanto prezava, um estado maior de poesia.",
+    "sinopse_editorial": "Retrato cortante da família de retirantes sertanejos Fabiano, Sinhá Vitória e seus filhos, em sua luta desumana contra a seca e a miséria, revelando a aspereza e a dignidade trágica da condição humana no sertão brasileiro.",
     "status_busca": "ok"
   },
   {
@@ -173,29 +160,27 @@
     "isbn": "9781299562493",
     "edicoes_pt": [
       {
-        "editora": "Verlag für Jugend und Volk",
-        "ano": 1946,
-        "isbn": "9781299562493",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9781299562493-M.jpg",
-        "link": "https://openlibrary.org/works/OL1268413W"
+        "editora": "Editora Vozes",
+        "ano": 2021,
+        "isbn": "9788532605597",
+        "capa_url": "/capas/5.webp"
       },
       {
-        "editora": "Blackstone Audiobooks",
-        "ano": 1947,
-        "isbn": "1844132390",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/1844132390-M.jpg",
-        "link": "https://openlibrary.org/works/OL1268413W"
+        "editora": "Vozes de Bolso",
+        "ano": 2018,
+        "isbn": "9788532644268",
+        "capa_url": "/capas/5.webp"
       },
       {
-        "editora": "Hodder & Stoughton",
-        "ano": 1958,
-        "isbn": "9780798602778",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9780798602778-M.jpg",
-        "link": "https://openlibrary.org/works/OL1268413W"
+        "editora": "Editora Vozes (Edição Especial)",
+        "ano": 2020,
+        "isbn": "9788532664556",
+        "capa_url": "/capas/5.webp"
       }
     ],
-    "sinopse_editorial": "Psychiatrist Viktor Frankl's memoir has riveted generations of readers with its descriptions of life in Nazi death camps and its lessons for spiritual survival. Based on his own experience and the stories of his patients, Frankl argues that we cannot avoid suffering but we can choose how to cope with it, find meaning in it, and move forward with renewed purpose. At the heart of his theory, known as logotherapy, is a conviction that the primary human drive is not pleasure but the pursuit of what we find meaningful. Man's Search for Meaning has become one of the most influential books in America; it continues to inspire us all to find significance in the very act of living.",
-    "status_busca": "parcial"
+    "sinopse_editorial": "O relato autobiográfico e transformador do psiquiatra Viktor Frankl sobre sua vivência nos campos de concentração nazistas e as lições fundamentais de sobrevivência espiritual que dali extraiu. Com base em sua dolorosa experiência pessoal e nos relatos de seus pacientes, Frankl sustenta que não podemos evitar o sofrimento, mas podemos escolher como encará-lo, encontrar nele um sentido e seguir em frente com um propósito renovado. No centro de sua teoria, a logoterapia, repousa a convicção de que a principal força motriz do ser humano não é o prazer, mas a busca por sentido. Uma das obras mais influentes do século XX, que continua inspirando leitores do mundo inteiro a encontrar significado no próprio ato de viver.",
+    "status_busca": "ok",
+    "capa_url": "/capas/5.webp"
   },
   {
     "id": 6,
@@ -223,7 +208,8 @@
         "link": "https://openlibrary.org/works/OL3182421W"
       }
     ],
-    "status_busca": "ok"
+    "status_busca": "ok",
+    "sinopse_editorial": "Introdução concisa e rigorosa à história e ao desenvolvimento do conceito antropológico de cultura, explorando o determinismo biológico, o determinismo geográfico e a diversidade simbólica das sociedades humanas."
   },
   {
     "id": 7,
@@ -243,29 +229,15 @@
     "isbn": "9788970122908",
     "edicoes_pt": [
       {
-        "editora": "Debolsillo",
-        "ano": 1997,
-        "isbn": "9788970122908",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9788970122908-M.jpg",
-        "link": "https://openlibrary.org/works/OL276558W"
-      },
-      {
-        "editora": "Random House",
-        "ano": 1998,
-        "isbn": "607313925X",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/607313925X-M.jpg",
-        "link": "https://openlibrary.org/works/OL276558W"
-      },
-      {
-        "editora": "Debate",
-        "ano": 1999,
-        "isbn": "8806183540",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/8806183540-M.jpg",
-        "link": "https://openlibrary.org/works/OL276558W"
+        "editora": "Editora Record",
+        "ano": 2017,
+        "isbn": "9788501057662",
+        "capa_url": "/capas/7.webp"
       }
     ],
-    "sinopse_editorial": "An epic detective story that offers a gripping expose on why the world is so unequal. Professor Jared Diamond traveled the globe for over 30 years trying to answer this question.",
-    "status_busca": "parcial"
+    "sinopse_editorial": "Investigação transdisciplinar sobre os destinos das sociedades humanas nos últimos 13.000 anos, demonstrando como a geografia biogeográfica e a ecologia — e não diferenças biológicas humanas — ditaram o desenvolvimento desigual das civilizações.",
+    "status_busca": "ok",
+    "capa_url": "/capas/7.webp"
   },
   {
     "id": 8,
@@ -285,29 +257,15 @@
     "isbn": "9781691297337",
     "edicoes_pt": [
       {
-        "editora": "Digireads.com Publishing",
-        "ano": 1923,
-        "isbn": "9781691297337",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9781691297337-M.jpg",
-        "link": "https://openlibrary.org/works/OL1088577W"
-      },
-      {
-        "editora": "Westland, Brian",
-        "ano": 1929,
-        "isbn": "9781412170635",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9781412170635-M.jpg",
-        "link": "https://openlibrary.org/works/OL1088577W"
-      },
-      {
-        "editora": "Oxford University Press",
-        "ano": 1937,
-        "isbn": "1729504485",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/1729504485-M.jpg",
-        "link": "https://openlibrary.org/works/OL1088577W"
+        "editora": "Edições 70",
+        "ano": 2008,
+        "isbn": "9789724414607",
+        "capa_url": "/capas/8.jpg"
       }
     ],
-    "sinopse_editorial": "In the following pages I have confined myself in the main to those problems of philosophy in regard to which I thought it possible to say something positive and constructive, since merely negative criticism seemed out of place. For this reason, theory of knowledge occupies a larger space than metaphysics in the present volume, and some topics much discussed by philosophers are treated very briefly, if at all.",
-    "status_busca": "parcial"
+    "sinopse_editorial": "Uma introdução lúcida aos problemas centrais da teoria do conhecimento e da metafísica, distinguindo entre aparência e realidade, conhecimento por contato e conhecimento por descrição, além de examinar os limites da indução.",
+    "status_busca": "ok",
+    "capa_url": "/capas/8.jpg"
   },
   {
     "id": 9,
@@ -327,29 +285,15 @@
     "isbn": "9781794659490",
     "edicoes_pt": [
       {
-        "editora": "JointAssociation of Classical Teachers",
-        "ano": 1920,
-        "isbn": "9781794659490",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9781794659490-M.jpg",
-        "link": "https://openlibrary.org/works/OL51948W"
-      },
-      {
-        "editora": "Quiet Vision Pub",
-        "ano": 1922,
-        "isbn": "1479418250",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/1479418250-M.jpg",
-        "link": "https://openlibrary.org/works/OL51948W"
-      },
-      {
-        "editora": "Scholartis Press",
-        "ano": 1925,
-        "isbn": "9781576467534",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9781576467534-M.jpg",
-        "link": "https://openlibrary.org/works/OL51948W"
+        "editora": "L&PM Pocket",
+        "ano": 2008,
+        "isbn": "9788525406835",
+        "capa_url": "/capas/9.jpg"
       }
     ],
-    "sinopse_editorial": "There is a well-known saying that the whole of Western Philosophy is footnotes of Plato. This is because his writings have set the schema that philosophy can be said to have followed ever since. Following the teachings of Socrates, Plato's works are among the world's greatest literature. The Apology is the speech made by Socrates in his own defence at his trail, and his justification for his life.Please Note:  This book is easy to read in true text, not scanned images that can sometimes be difficult to decipher.  The Microsoft eBook has a contents page linked to the chapter headings for easy navigation. The Adobe eBook has bookmarks at chapter headings and is printable up to two full copies per year",
-    "status_busca": "parcial"
+    "sinopse_editorial": "O relato do discurso de defesa de Sócrates perante o tribunal de Atenas, no qual o filósofo articula sua vocação moral inflexível de examinar a si mesmo e aos cidadãos, proclamando que uma vida não examinada não vale a pena ser vivida.",
+    "status_busca": "ok",
+    "capa_url": "/capas/9.jpg"
   },
   {
     "id": 10,
@@ -369,29 +313,15 @@
     "isbn": "9781537338941",
     "edicoes_pt": [
       {
-        "editora": "John LaneCompany",
-        "ano": 1921,
-        "isbn": "1484090810",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/1484090810-M.jpg",
-        "link": "https://openlibrary.org/works/OL76350W"
-      },
-      {
-        "editora": "Tyndale House Publishers",
-        "ano": 1922,
-        "isbn": "9781537338941",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9781537338941-M.jpg",
-        "link": "https://openlibrary.org/works/OL76350W"
-      },
-      {
-        "editora": "Eichborn",
-        "ano": 1923,
-        "isbn": "9781976090042",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9781976090042-M.jpg",
-        "link": "https://openlibrary.org/works/OL76350W"
+        "editora": "Ecclesiae",
+        "ano": 2013,
+        "isbn": "9788563160249",
+        "capa_url": "/capas/10.webp"
       }
     ],
-    "sinopse_editorial": "<p><i>Orthodoxy</i> is <a href=\"https://standardebooks.org/ebooks/g-k-chesterton\">G. K. Chesterton’s</a> response to his critics’ assertion that his earlier collection of essays, <i><a href=\"https://standardebooks.org/ebooks/g-k-chesterton/heretics\">Heretics</a></i>, had “merely criticised current philosophies without offering any alternative philosophy.” In his intellectual journey from pagan to agnostic to positivist philosopher, he had attempted to build a philosophy “some ten minutes in advance of the truth.” But when he compared his modern philosophy with Christian theology, he realized that he was “the man who with the utmost daring discovered what had been discovered before.” Thus, <i>Orthodoxy</i> is a work of Christian apologetics, where Chesterton tries to show that Christianity is a universal answer to the everyday needs of humanity, and not just an arbitrary philosophy handed down from on high.</p>",
-    "status_busca": "parcial"
+    "sinopse_editorial": "Obra-prima apologética e ensaística em que Chesterton expõe sua jornada intelectual rumo à fé cristã, celebrando o espanto diante da existência, o bom senso e o milagre da realidade contra o ceticismo cinzento da modernidade.",
+    "status_busca": "ok",
+    "capa_url": "/capas/10.webp"
   },
   {
     "id": 11,
@@ -411,29 +341,15 @@
     "isbn": "9780517548233",
     "edicoes_pt": [
       {
-        "editora": "Pocket Books",
-        "ano": 2020,
-        "isbn": "9780517548233",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9780517548233-M.jpg",
-        "link": "https://openlibrary.org/works/OL541970W"
-      },
-      {
-        "editora": "Harper & Brothers",
-        "ano": 1988,
-        "isbn": "9780983541462",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9780983541462-M.jpg",
-        "link": "https://openlibrary.org/works/OL541970W"
-      },
-      {
-        "editora": "Tandem Library",
-        "ano": 1962,
-        "isbn": "0786199172",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/0786199172-M.jpg",
-        "link": "https://openlibrary.org/works/OL541970W"
+        "editora": "Instituto Ludwig von Mises Brasil",
+        "ano": 2010,
+        "isbn": "9788562816185",
+        "capa_url": "/capas/11.webp"
       }
     ],
-    "sinopse_editorial": "An introduction to free-market economics.",
-    "status_busca": "parcial"
+    "sinopse_editorial": "Uma exposição límpida e didática dos fundamentos do livre mercado e da teoria econômica austríaca, centrada no princípio bastiatiano de examinar as consequências de longo prazo de cada política pública para todos os grupos, e não apenas seus efeitos imediatos para grupos particulares.",
+    "status_busca": "ok",
+    "capa_url": "/capas/11.webp"
   },
   {
     "id": 12,
@@ -475,7 +391,7 @@
         "link": "https://openlibrary.org/works/OL629052W"
       }
     ],
-    "sinopse_editorial": "Available under a Creative Commons Attribution-ShareAlike License:\r\nhttp://www.marxists.org/archive/marx/works/1848/communist-manifesto/\r\n\r\nOne of the most influential political tracts ever published this short book succinctly explains the aims and purpose of the Communist League of the 19th century, giving the author’s theories of the class struggle which they assumed would inevitably lead to world wide communism.  \r\n\r\nFull text available at Project Gutenberg too:\r\nhttp://www.gutenberg.org/files/61/61.txt",
+    "sinopse_editorial": "O texto incendiário de 1848 que delineou a interpretação materialista da história como uma sucessão de lutas de classes, conclamando o proletariado internacional a tomar consciência de sua condição e revolucionar as bases da sociedade burguesa.",
     "status_busca": "ok"
   },
   {
@@ -497,28 +413,13 @@
     "isbn": "9780394700755",
     "edicoes_pt": [
       {
-        "editora": "Vintage",
-        "ano": 1955,
-        "isbn": "9780394700755",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9780394700755-M.jpg",
-        "link": "https://openlibrary.org/works/OL1230690W"
-      },
-      {
-        "editora": "University Press",
-        "ano": 2019,
-        "isbn": "0394437608",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/0394437608-M.jpg",
-        "link": "https://openlibrary.org/works/OL1230690W"
-      },
-      {
-        "editora": "Hamilton",
-        "ano": 1957,
-        "isbn": "1664477411",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/1664477411-M.jpg",
-        "link": "https://openlibrary.org/works/OL1230690W"
+        "editora": "Editora Record",
+        "ano": 2018,
+        "isbn": "9788501115591",
+        "capa_url": "https://covers.openlibrary.org/b/isbn/9788501115591-L.jpg"
       }
     ],
-    "sinopse_editorial": "One of the most influential works of this century, this is a crucial exposition of existentialist thought. Influenced by works such as Don Juan and the novels of Kafka, these essays begin with a meditation on suicide: the question of living or not living in an absurd universe devoid of order or meaning. With lyric eloquence, Camus posits a way out of despair, reaffirming the value of personal existence, and the possibility of life lived with dignity and authenticity.--From publisher description.",
+    "sinopse_editorial": "Ensaio filosófico basilar sobre o sentimento do absurdo que nasce do confronto entre o desejo humano de sentido e o silêncio irracional do universo. Camus rejeita o suicídio e o salto na fé, propondo a revolta lúcida e o viver apaixonado: é preciso imaginar Sísifo feliz.",
     "status_busca": "ok"
   },
   {
@@ -539,21 +440,15 @@
     "isbn": "9780385002141",
     "edicoes_pt": [
       {
-        "editora": "DoubleDay",
-        "ano": 2000,
-        "isbn": "9780385002141",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9780385002141-M.jpg",
-        "link": "https://openlibrary.org/works/OL3902056W"
-      },
-      {
-        "editora": "Anchor Books",
-        "ano": 1972,
-        "isbn": "0385002149",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/0385002149-M.jpg",
-        "link": "https://openlibrary.org/works/OL3902056W"
+        "editora": "Editora Vozes de Bolso",
+        "ano": 2014,
+        "isbn": "9788532647894",
+        "capa_url": "/capas/14.webp"
       }
     ],
-    "status_busca": "parcial"
+    "status_busca": "ok",
+    "capa_url": "/capas/14.webp",
+    "sinopse_editorial": "Conferência histórica proferida em Paris em 1945, na qual Sartre sintetiza a premissa central de sua filosofia — a existência precede a essência — e defende o existencialismo das acusações de pessimismo e niilismo, afirmando a responsabilidade radical e a liberdade do ser humano."
   },
   {
     "id": 15,
@@ -595,7 +490,7 @@
         "link": "https://openlibrary.org/works/OL267174W"
       }
     ],
-    "sinopse_editorial": "This satirical novella tells the story of the life and early death of a high court judge. Ivan Ilych is proud of his achievements and his status in society, despite his poor relations with his wife which renders his home life bleak and joyless. When he becomes hopelessly ill he begins to realize that he has not after all lived the good life he had supposed he was enjoying.",
+    "sinopse_editorial": "Novela sublime que retrata a agonia física e espiritual de um magistrado bem-sucedido que, diante da morte iminente, é forçado a confrontar o vazio, a falsidade e a superficialidade de toda a sua vida burguesa pregressa.",
     "status_busca": "ok"
   },
   {
@@ -638,7 +533,7 @@
         "link": "https://openlibrary.org/works/OL1003017W"
       }
     ],
-    "sinopse_editorial": "**Memórias póstumas de Brás Cubas** é um romance escrito por Machado de Assis, desenvolvido em princípio como folhetim, de março a dezembro de 1880, na Revista Brasileira, para, no ano seguinte, ser publicado como livro, pela então Tipografia Nacional como Memorias Posthumas de Braz Cubas.\r\n\r\nO livro tem como marcas um tom cáustico e novo estilo na obra de Machado de Assis, bem como audácia e inovação temática no cenário literário nacional, que o fez receber, à época, resenhas estranhadas. Confessando adotar a \"forma livre\" de Laurence Sterne em seu Tristram Shandy (1759–67), ou de Xavier de Maistre, em Memórias Póstumas rompe com a narração linear e objetivista de autores proeminentes da época, como Flaubert e Zola, para retratar o Rio de Janeiro e sua época em geral com pessimismo, ironia e indiferença — um dos fatores que fizeram com que fosse amplamente considerada a obra que iniciou o Realismo no Brasil, ainda que com elementos livres e próprios a Machado de Assis.\r\n\r\n— [Wikipedia](https://pt.wikipedia.org/wiki/Mem%C3%B3rias_P%C3%B3stumas_de_Br%C3%A1s_Cubas) (CC BY-SA 4.0)",
+    "sinopse_editorial": "Romance revolucionário da literatura brasileira narrado por um 'defunto autor', que com ironia corrosiva, pessimismo cósmico e virtuosismo estilístico desmascara a hipocrisia das elites do Segundo Reinado.",
     "status_busca": "ok"
   },
   {
@@ -674,7 +569,8 @@
         "link": "https://openlibrary.org/works/OL10959245W"
       }
     ],
-    "status_busca": "ok"
+    "status_busca": "ok",
+    "sinopse_editorial": "Ensaio clássico da sociologia e historiografia brasileira que cunha o conceito seminal de 'homem cordial', analisando a transição difícil da ordem patriarcal e personalista para a esfera pública e democrática impessoal."
   },
   {
     "id": 18,
@@ -709,7 +605,8 @@
         "link": "https://openlibrary.org/works/OL1755883W"
       }
     ],
-    "status_busca": "ok"
+    "status_busca": "ok",
+    "sinopse_editorial": "Síntese antropológica monumental sobre a gestação do povo brasileiro como uma nova identidade civilizatória mestiça, forjada pelo choque e confluência de matrizes indígenas, africanas e europeias no caldeirão dos trópicos."
   },
   {
     "id": 19,
@@ -730,28 +627,13 @@
     "isbn": "9788413524641",
     "edicoes_pt": [
       {
-        "editora": "Putman",
-        "ano": 1949,
-        "isbn": "9788413524641",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9788413524641-M.jpg",
-        "link": "https://openlibrary.org/works/OL1184062W"
-      },
-      {
-        "editora": "Vintage Books",
-        "ano": 1952,
-        "isbn": "9781982984663",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9781982984663-M.jpg",
-        "link": "https://openlibrary.org/works/OL1184062W"
-      },
-      {
-        "editora": "Armand Colin",
-        "ano": 1953,
-        "isbn": "220021295X",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/220021295X-M.jpg",
-        "link": "https://openlibrary.org/works/OL1184062W"
+        "editora": "Zahar",
+        "ano": 2001,
+        "isbn": "9788571106093",
+        "capa_url": "https://covers.openlibrary.org/b/isbn/9788571106093-L.jpg"
       }
     ],
-    "sinopse_editorial": "*Apologie pour l'histoire ou Métier d'historien* est un essai de Marc Bloch rédigé entre la fin de 1940 et les premiers mois de 1943. Inachevé, il est publié de manière posthume en 1949, à l’initiative de Lucien Febvre. Marc Bloch s'interroge sur ce qu'est l’histoire, et plus particulièrement sur le rôle et les méthodes de l’historien dans la construction de cette science.",
+    "sinopse_editorial": "Ensaio póstumo e testamento metodológico do cofundador da Escola dos Annales, escrito na clandestinidade da Resistência Francesa, definindo a história como a 'ciência dos homens no tempo' e resgatando seu valor humano e científico.",
     "status_busca": "ok"
   },
   {
@@ -794,7 +676,7 @@
         "link": "https://openlibrary.org/works/OL15992072W"
       }
     ],
-    "sinopse_editorial": "In his mega bestseller, Thinking, Fast and Slow, Daniel Kahneman, world-famous psychologist and winner of the Nobel Prize in Economics, takes us on a groundbreaking tour of the mind and explains the two systems that drive the way we think.\r\n\r\nSystem 1 is fast, intuitive, and emotional; System 2 is slower, more deliberative, and more logical. The impact of overconfidence on corporate strategies, the difficulties of predicting what will make us happy in the future, the profound effect of cognitive biases on everything from playing the stock market to planning our next vacation―each of these can be understood only by knowing how the two systems shape our judgments and decisions.\r\n\r\nEngaging the reader in a lively conversation about how we think, Kahneman reveals where we can and cannot trust our intuitions and how we can tap into the benefits of slow thinking. He offers practical and enlightening insights into how choices are made in both our business and our personal lives―and how we can use different techniques to guard against the mental glitches that often get us into trouble. Topping bestseller lists for almost ten years, Thinking, Fast and Slow is a contemporary classic, an essential book that has changed the lives of millions of readers.",
+    "sinopse_editorial": "Síntese das pesquisas pioneiras em psicologia cognitiva e economia comportamental conduzidas por Kahneman e Tversky, apresentando o Sistema 1 (rápido, intuitivo e suscetível a vieses) e o Sistema 2 (lento, deliberativo e analítico) na tomada de decisões humanas.",
     "status_busca": "ok"
   },
   {
@@ -815,29 +697,15 @@
     "isbn": "9780440351832",
     "edicoes_pt": [
       {
-        "editora": "Dell",
+        "editora": "HarperCollins Brasil",
         "ano": 2016,
-        "isbn": "9780440351832",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9780440351832-M.jpg",
-        "link": "https://openlibrary.org/works/OL95157W"
-      },
-      {
-        "editora": "Tandem Library",
-        "ano": 1993,
-        "isbn": "8449301610",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/8449301610-M.jpg",
-        "link": "https://openlibrary.org/works/OL95157W"
-      },
-      {
-        "editora": "Doubleday",
-        "ano": 1994,
-        "isbn": "1879557177",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/1879557177-M.jpg",
-        "link": "https://openlibrary.org/works/OL95157W"
+        "isbn": "9788569809609",
+        "capa_url": "/capas/21.webp"
       }
     ],
-    "sinopse_editorial": "Excerpt from back cover:\r\n\r\n\"This book, which was the last piece of work undertaken by Jung before his death in 1961, provides a unique opportunity to assess his contribution to the life and thought of our time, for it was also his first attempt to present his life-work in psychology to a non-technical public...What emerges with great clarity from the book is that Jung has done immense service both to psychology as a science and to our general understanding of man in society, by insisting that imaginative life must be taken seriously in its own right, as the most distinctive characteristic of human beings.\" \r\n-Guardian-",
-    "status_busca": "parcial"
+    "sinopse_editorial": "Última obra concebida por Jung antes de sua morte, voltada para o público leigo, expondo com riqueza ilustrativa o papel do inconsciente coletivo, dos arquétipos e do mundo dos sonhos no processo de individuação e autorrealização espiritual.",
+    "status_busca": "ok",
+    "capa_url": "/capas/21.webp"
   },
   {
     "id": 22,
@@ -856,13 +724,15 @@
     "por_que_antes_do_proximo": "Entra antes de Chang para dar vocabulário político à discussão econômica.",
     "edicoes_pt": [
       {
-        "editora": "Fortress Press",
-        "ano": 1972,
-        "capa_url": "https://covers.openlibrary.org/b/id/12977771-M.jpg",
-        "link": "https://openlibrary.org/works/OL1362868W"
+        "editora": "Martin Claret",
+        "ano": 2003,
+        "isbn": "9788572325370",
+        "capa_url": "/capas/22.jpg"
       }
     ],
-    "status_busca": "parcial"
+    "status_busca": "ok",
+    "capa_url": "/capas/22.jpg",
+    "sinopse_editorial": "Duas célebres conferências proferidas na Universidade de Munique em 1917 e 1919, examinando as exigências éticas do cientista frente aos julgamentos de valor e a tensão irreconciliável entre a ética da convicção e a ética da responsabilidade na ação política."
   },
   {
     "id": 23,
@@ -882,14 +752,15 @@
     "isbn": "9798822503380",
     "edicoes_pt": [
       {
-        "editora": "IRB MEDIA",
-        "ano": 2022,
-        "isbn": "9798822503380",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9798822503380-M.jpg",
-        "link": "https://openlibrary.org/works/OL28064979W"
+        "editora": "Editora Pensamento",
+        "ano": 2011,
+        "isbn": "9788531517440",
+        "capa_url": "/capas/23.webp"
       }
     ],
-    "status_busca": "parcial"
+    "status_busca": "ok",
+    "capa_url": "/capas/23.webp",
+    "sinopse_editorial": "Análise crítica provocadora das premissas ortodoxas do neoliberalismo por um dos maiores economistas do desenvolvimento contemporâneos, desmistificando temas como livre comércio, mobilidade de capitais e regulação dos mercados."
   },
   {
     "id": 24,
@@ -931,7 +802,7 @@
         "link": "https://openlibrary.org/works/OL349392W"
       }
     ],
-    "sinopse_editorial": "The catechism draws on the Bible, the Mass, the sacraments, church tradition and teaching, and the lives of the saints.",
+    "sinopse_editorial": "Exposição orgânica e sistemática da doutrina, moral, liturgia e espiritualidade católica universal, fundamentada nas Escrituras Sagradas, nos Padres da Igreja e no Concílio Vaticano II.",
     "status_busca": "ok"
   },
   {
@@ -952,29 +823,15 @@
     "isbn": "9780521093590",
     "edicoes_pt": [
       {
-        "editora": "Insel, Frankfurt",
-        "ano": 1554,
-        "isbn": "0429608411",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/0429608411-M.jpg",
-        "link": "https://openlibrary.org/works/OL51831W"
-      },
-      {
-        "editora": "K. Tauchnitz",
-        "ano": 1555,
-        "isbn": "9780521093590",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9780521093590-M.jpg",
-        "link": "https://openlibrary.org/works/OL51831W"
-      },
-      {
-        "editora": "C.E. Tuttle Co.",
-        "ano": 1726,
-        "isbn": "0342097024",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/0342097024-M.jpg",
-        "link": "https://openlibrary.org/works/OL51831W"
+        "editora": "Editora Perspectiva",
+        "ano": 2006,
+        "isbn": "9788527301053",
+        "capa_url": "/capas/25.jpg"
       }
     ],
-    "sinopse_editorial": "The Republic is Plato's most famous work and one of the seminal texts of Western philosophy and politics. The characters in this Socratic dialogue - including Socrates himself - discuss whether the just or unjust man is happier. They are the philosopher-kings of imagined cities and they also discuss the nature of philosophy and the soul among other things.",
-    "status_busca": "parcial"
+    "sinopse_editorial": "Diálogo ápice de Platão sobre a natureza da justiça na alma humana e na pólis ideal (Calípolis), contendo a famosa Alegoria da Caverna, a analogia da Linha Dividida e a teoria dos reis-filósofos.",
+    "status_busca": "ok",
+    "capa_url": "/capas/25.jpg"
   },
   {
     "id": 26,
@@ -994,29 +851,15 @@
     "isbn": "9780672602566",
     "edicoes_pt": [
       {
-        "editora": "W. Scott",
-        "ano": 1558,
-        "isbn": "1624661173",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/1624661173-M.jpg",
-        "link": "https://openlibrary.org/works/OL8273964W"
-      },
-      {
-        "editora": "Digireads.com",
-        "ano": 1560,
-        "isbn": "9780672602566",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9780672602566-M.jpg",
-        "link": "https://openlibrary.org/works/OL8273964W"
-      },
-      {
-        "editora": "E.P. Dutton & co.",
-        "ano": 1579,
-        "isbn": "0521635462",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/0521635462-M.jpg",
-        "link": "https://openlibrary.org/works/OL8273964W"
+        "editora": "Edipro",
+        "ano": 2014,
+        "isbn": "9788577532469",
+        "capa_url": "/capas/26.jpg"
       }
     ],
-    "sinopse_editorial": "An detailed examination of what the best life might be for human beings.  In order to anwer this question, Aristotle finds he also has to examine what virtue itself is and all of the various virtues that might make up the best life.",
-    "status_busca": "parcial"
+    "sinopse_editorial": "O mais influente tratado de ética da Antiguidade, no qual Aristóteles investiga o fim supremo da existência humana — a felicidade (eudaimonia) — alcançada pelo exercício deliberado das virtudes morais como justa medida entre extremos.",
+    "status_busca": "ok",
+    "capa_url": "/capas/26.jpg"
   },
   {
     "id": 27,
@@ -1036,29 +879,15 @@
     "isbn": "9781576469316",
     "edicoes_pt": [
       {
-        "editora": "in aedibus B. G. Teubneri",
-        "ano": 1555,
-        "isbn": "0451608992",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/0451608992-M.jpg",
-        "link": "https://openlibrary.org/works/OL137872W"
-      },
-      {
-        "editora": "Encyclopedia Britannica",
-        "ano": 1556,
-        "isbn": "1105851001",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/1105851001-M.jpg",
-        "link": "https://openlibrary.org/works/OL137872W"
-      },
-      {
-        "editora": "D. Lothrop and Co.",
-        "ano": 1569,
-        "isbn": "1795248408",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/1795248408-M.jpg",
-        "link": "https://openlibrary.org/works/OL137872W"
+        "editora": "Penguin-Companhia",
+        "ano": 2017,
+        "isbn": "9788563560643",
+        "capa_url": "/capas/27.jpg"
       }
     ],
-    "sinopse_editorial": "Garry Wills’s complete translation of Saint Augustine’s spiritual masterpiece—available now for the first time Garry Wills is an exceptionally gifted translator and one of our best writers on religion today. His bestselling translations of individual chapters of Saint Augustine’s Confessions have received widespread and glowing reviews. Now for the first time, Wills’s translation of the entire work is being published as a Penguin Classics Deluxe Edition. Removed by time and place but not by spiritual relevance, Augustine’s Confessions continues to influence contemporary religion, language, and thought. Reading with fresh, keen eyes, Wills brings his superb gifts of analysis and insight to this ambitious translation of the entire book. “[Wills] renders Augustine’s famous and influential text in direct language with all the spirited wordplay and poetic strength intact.”—Los Angeles Times“[Wills’s] translations . . . are meant to bring Augustine straight into our own minds; and they succeed. Well-known passages, over which my eyes have often gazed, spring to life again from Wills’s pages.”—Peter Brown, The New York Review of Books“Augustine flourishes in Wills’s hand.”—James Wood“A masterful synthesis of classical philosophy and scriptural erudition.”—Chicago Tribune",
-    "status_busca": "parcial"
+    "sinopse_editorial": "Marco inaugural da autobiografia espiritual e introspectiva do Ocidente, narrando a conversão de Agostinho do maniqueísmo ao cristianismo, entrelaçada a reflexões teológicas e filosóficas imorredouras sobre o tempo, a memória e a graça divina.",
+    "status_busca": "ok",
+    "capa_url": "/capas/27.jpg"
   },
   {
     "id": 28,
@@ -1078,29 +907,15 @@
     "isbn": "9781299463684",
     "edicoes_pt": [
       {
-        "editora": "Yale University Press",
-        "ano": 1997,
-        "isbn": "9781299463684",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9781299463684-M.jpg",
-        "link": "https://openlibrary.org/works/OL2758048W"
-      },
-      {
-        "editora": "Yale University Press, in association with S4C",
-        "ano": 1999,
-        "isbn": "9780300175035",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9780300175035-M.jpg",
-        "link": "https://openlibrary.org/works/OL2758048W"
-      },
-      {
-        "editora": "The Folio Society",
-        "ano": 2001,
-        "isbn": "9780300073324",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9780300073324-M.jpg",
-        "link": "https://openlibrary.org/works/OL2758048W"
+        "editora": "Edições 70",
+        "ano": 2005,
+        "isbn": "9789724412610",
+        "capa_url": "/capas/28.webp"
       }
     ],
-    "sinopse_editorial": "This engrossing book encompasses the extraordinary history of the papacy, from its beginnings to the present day. This new edition covers the unprecedented resignation of Benedict XVI and the election of the first Argentinian pope.",
-    "status_busca": "parcial"
+    "sinopse_editorial": "História abrangente e equilibrada de uma das mais antigas instituições do mundo, desde São Pedro até o século XXI, examinando o papel do papado na moldagem da civilização ocidental entre crises mundanas e renovações espirituais.",
+    "status_busca": "ok",
+    "capa_url": "/capas/28.webp"
   },
   {
     "id": 29,
@@ -1120,29 +935,15 @@
     "isbn": "9780203994320",
     "edicoes_pt": [
       {
-        "editora": "The Free Press",
-        "ano": 1930,
-        "isbn": "0415045878",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/0415045878-M.jpg",
-        "link": "https://openlibrary.org/works/OL606917W"
-      },
-      {
-        "editora": "Penguin Classics",
-        "ano": 1951,
-        "isbn": "0140449671",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/0140449671-M.jpg",
-        "link": "https://openlibrary.org/works/OL606917W"
-      },
-      {
-        "editora": "Simon & Schuster, Limited",
-        "ano": 1952,
-        "isbn": "9780203994320",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9780203994320-M.jpg",
-        "link": "https://openlibrary.org/works/OL606917W"
+        "editora": "Edipro",
+        "ano": 2019,
+        "isbn": "9788577534166",
+        "capa_url": "/capas/29.webp"
       }
     ],
-    "sinopse_editorial": "Originally published in 1897, this is Durkheim's pioneering attempt to offer a sociological explanation for a phenomenon regarded until then as exclusively psychological and individualistic.",
-    "status_busca": "parcial"
+    "sinopse_editorial": "Obra de referência fundadora da sociologia empírica, demonstrando como um ato aparentemente íntimo e individual é influenciado por correntes sociais de integração e regulação, classificando o suicídio em egoísta, altruísta e anômico.",
+    "status_busca": "ok",
+    "capa_url": "/capas/29.webp"
   },
   {
     "id": 30,
@@ -1162,29 +963,15 @@
     "isbn": "9781013535253",
     "edicoes_pt": [
       {
-        "editora": "Dover Publications",
-        "ano": 1928,
-        "isbn": "9781013535253",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9781013535253-M.jpg",
-        "link": "https://openlibrary.org/works/OL1069670W"
-      },
-      {
-        "editora": "Liveright Publishing Co",
-        "ano": 1934,
-        "isbn": "9781614270867",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9781614270867-M.jpg",
-        "link": "https://openlibrary.org/works/OL1069670W"
-      },
-      {
-        "editora": "Norton",
-        "ano": 1949,
-        "isbn": "1013396715",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/1013396715-M.jpg",
-        "link": "https://openlibrary.org/works/OL1069670W"
+        "editora": "Companhia das Letras",
+        "ano": 2014,
+        "isbn": "9788535924732",
+        "capa_url": "/capas/30.jpg"
       }
     ],
-    "sinopse_editorial": "In what is considered one of his greatest contributions to psychology, Austrian psychiatrist, Sigmund Freud describes his perspectives on the development and origins of religion - religion as an illusion, wishes that are the \"fulfillments of the oldest, strongest, and most urgent wishes of mankind.\" He goes on to explain and illustrate, \"what is characteristic of illusions is that they are derived from human wishes.\"",
-    "status_busca": "parcial"
+    "sinopse_editorial": "Ensaio psicanalítico provocador no qual Freud examina as origens psíquicas das crenças religiosas, interpretando-as como ilusões alimentadas pelo desamparo infantil perante as forças esmagadoras da natureza e o medo da morte.",
+    "status_busca": "ok",
+    "capa_url": "/capas/30.jpg"
   },
   {
     "id": 31,
@@ -1203,25 +990,15 @@
     "por_que_antes_do_proximo": "Vem antes de Hobbes pelo determinismo comum.",
     "edicoes_pt": [
       {
-        "editora": "Free Press",
-        "ano": 1960,
-        "capa_url": "https://covers.openlibrary.org/b/id/10008655-M.jpg",
-        "link": "https://openlibrary.org/works/OL1725508W"
-      },
-      {
-        "editora": "Macmillan",
-        "ano": 1953,
-        "capa_url": "https://covers.openlibrary.org/b/id/10008655-M.jpg",
-        "link": "https://openlibrary.org/works/OL1725508W"
-      },
-      {
-        "editora": "Collier Macmillan",
-        "ano": 1965,
-        "capa_url": "https://covers.openlibrary.org/b/id/10008655-M.jpg",
-        "link": "https://openlibrary.org/works/OL1725508W"
+        "editora": "Martins Fontes",
+        "ano": 2003,
+        "isbn": "9788533617988",
+        "capa_url": "/capas/31.webp"
       }
     ],
-    "status_busca": "parcial"
+    "status_busca": "ok",
+    "capa_url": "/capas/31.webp",
+    "sinopse_editorial": "O texto basilar do behaviorismo radical skinneriano, propondo a análise experimental do comportamento operante e demonstrando como o ambiente e o reforço modelam as ações individuais, as instituições e a organização social."
   },
   {
     "id": 32,
@@ -1241,29 +1018,15 @@
     "isbn": "9781596980815",
     "edicoes_pt": [
       {
-        "editora": "G. Routledge & sons, limited",
-        "ano": 1667,
-        "isbn": "9781596980815",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9781596980815-M.jpg",
-        "link": "https://openlibrary.org/works/OL653987W"
-      },
-      {
-        "editora": "Dutton Adult",
-        "ano": 1676,
-        "isbn": "0140400028",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/0140400028-M.jpg",
-        "link": "https://openlibrary.org/works/OL653987W"
-      },
-      {
-        "editora": "Touchstone",
-        "ano": 1678,
-        "isbn": "9780521567978",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9780521567978-M.jpg",
-        "link": "https://openlibrary.org/works/OL653987W"
+        "editora": "Martin Claret",
+        "ano": 2014,
+        "isbn": "9788572329774",
+        "capa_url": "/capas/32.webp"
       }
     ],
-    "sinopse_editorial": "Thomas Hobbes' Leviathan, from 1651, is one of the first and most influential arguments towards social contract. Written in the midst of the English Civil War, it concerns the structure of government and society and argues for strong central governance and the rule of an absolute sovereign as the way to avoid civil war and chaos.",
-    "status_busca": "parcial"
+    "sinopse_editorial": "Tratado maior da teoria política moderna que concebe o pacto social para escapar do violento estado de natureza — uma guerra de todos contra todos em que a vida é 'solitária, pobre, sórdida, brutal e curta' —, erigindo o poder soberano absoluto.",
+    "status_busca": "ok",
+    "capa_url": "/capas/32.webp"
   },
   {
     "id": 33,
@@ -1283,14 +1046,15 @@
     "isbn": "9781718621466",
     "edicoes_pt": [
       {
-        "editora": "CreateSpace Independent Publishing Platform",
-        "ano": 2016,
-        "isbn": "1502773147",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/1502773147-M.jpg",
-        "link": "https://openlibrary.org/works/OL40621111W"
+        "editora": "L&PM Pocket",
+        "ano": 2008,
+        "isbn": "9788525418104",
+        "capa_url": "/capas/33.webp"
       }
     ],
-    "status_busca": "parcial"
+    "status_busca": "ok",
+    "capa_url": "/capas/33.webp",
+    "sinopse_editorial": "Investigação seminal sobre a passagem do estado de natureza, onde o homem vivia em inocência e piedade originárias, para o estado civil marcado pela propriedade privada, pela corrupção moral e pelas desigualdades artificiais."
   },
   {
     "id": 34,
@@ -1332,7 +1096,8 @@
         "link": "https://openlibrary.org/works/OL1183191W"
       }
     ],
-    "status_busca": "ok"
+    "status_busca": "ok",
+    "sinopse_editorial": "Obra-prima fundadora dos estudos sociais brasileiros modernos, analisando a formação da sociedade patriarcal colonial a partir da família extensa, da casa-grande de engenho e da senzala, enfatizando o papel assimilador e cultural do elemento indígena e africano."
   },
   {
     "id": 35,
@@ -1374,7 +1139,7 @@
         "link": "https://openlibrary.org/works/OL8261409W"
       }
     ],
-    "sinopse_editorial": "Tristes Tropiques was an immensely popular bestseller when it was first published in France in 1955.\n\nClaude Levi-Strauss's groundbreaking study of the societies of a number of Amazonian peoples is a cornerstone of structural anthropology and an exploration by the author of his own intellectual roots as a professor of philosophy in Brazil before the Second World War, as a Jewish exile from Nazi-occupied Europe, and later as a world-renowned academic (he taught at New York's New School for Social Research and was French cultural attache to the United States). Levi-Strauss's central journey leads from the Amazon basin through the dense upland jungles of Brazil.\n\nThere, among the Amerindian tribes - the Caduveo, Bororo, Nambikwara, and Tupi-Kawahib - he found \"a human society reduced to its most basic expression.\" Levi-Strauss's discussion of his fieldwork in Tristes Tropiques endures as a milestone of anthropology, but the book is also, in its brilliant diversions on other, more familiar cultures, a great work of literature, a vivid travelogue, and an engaging memoir - a demonstration of the marvelous mental agility of one of the century's most important thinkers.\n\nPresented here is the translation by John and Doreen Weightman of the complete text of the revised French edition of 1968, together with the original photographs and illustrations.",
+    "sinopse_editorial": "Relato etnográfico e autobiográfico lírico das viagens e pesquisas de Lévi-Strauss entre tribos indígenas do interior do Brasil nos anos 1930, fundindo antropologia estrutural, meditação filosófica sobre o sentido do progresso e reflexão sobre a decadência civilizatória.",
     "status_busca": "ok"
   },
   {
@@ -1417,7 +1182,7 @@
         "link": "https://openlibrary.org/works/OL1168083W"
       }
     ],
-    "sinopse_editorial": "Nineteen Eighty-Four: A Novel, often referred to as 1984, is a dystopian social science fiction novel by the English novelist George Orwell (the pen name of Eric Arthur Blair). It was published on 8 June 1949 by Secker & Warburg as Orwell's ninth and final book completed in his lifetime. Thematically, Nineteen Eighty-Four centres on the consequences of totalitarianism, mass surveillance, and repressive regimentation of persons and behaviours within society. Orwell, himself a democratic socialist, modelled the authoritarian government in the novel after Stalinist Russia. More broadly, the novel examines the role of truth and facts within politics and the ways in which they are manipulated.\r\n\r\n----------\t\t\r\nAlso contained in:\t\t\r\n[Novels (Animal Farm / Burmese Days / Clergyman's Daughter / Coming Up for Air / Keep the Aspidistra Flying / Nineteen Eighty-Four)](https://openlibrary.org/works/OL1168045W)\t\t\r\n[Novels (Animal Farm / Nineteen Eighty-Four)](https://openlibrary.org/works/OL1167981W)\r\n[Orwell's Nineteen Eighty-Four: Text, Sources, Criticism](https://openlibrary.org/works/OL1168095W)",
+    "sinopse_editorial": "Dois dos ensaios literários e políticos mais incisivos de Orwell, dissecando a degradação da linguagem como instrumento de embotamento mental e opressão autoritária, além de expor as motivações existenciais, estéticas e políticas do ato de escrever.",
     "status_busca": "ok"
   },
   {
@@ -1438,29 +1203,15 @@
     "isbn": "9780274757121",
     "edicoes_pt": [
       {
-        "editora": "Pinnacle Press",
-        "ano": 1670,
-        "isbn": "7500462956",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/7500462956-M.jpg",
-        "link": "https://openlibrary.org/works/OL1262495W"
-      },
-      {
-        "editora": "SEUIL",
-        "ano": 1672,
-        "isbn": "1490394087",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/1490394087-M.jpg",
-        "link": "https://openlibrary.org/works/OL1262495W"
-      },
-      {
-        "editora": "Librairie de Firmin Didot Frères",
-        "ano": 1688,
-        "isbn": "9780274757121",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9780274757121-M.jpg",
-        "link": "https://openlibrary.org/works/OL1262495W"
+        "editora": "Kírion",
+        "ano": 2021,
+        "isbn": "9786587404400",
+        "capa_url": "/capas/37.webp"
       }
     ],
-    "sinopse_editorial": "\"Blaise Pascal, the precociously brilliant contemporary of Descartes, was a gifted mathematician and physicist, but it is his unfinished apologia for the Christian religion upon which his reputation now rests. The Pensees is a collection of philosophical fragments, notes and essays in which he explores the contradictions of human nature in psychological, social, metaphysical and, above all, theological terms. Mankind emerges from Pascal's analysis as a wretched and desolate creature within an impersonal universe, but also as a being whose existence can be transformed through faith in God's grace. This masterly translation conveys Pascal's disarmingly personal tone and captures all the fire and passion of the original. Also contained in this volume are a comparison between different editions, appendices and a bibliography.\". - Back Cover.",
-    "status_busca": "parcial"
+    "sinopse_editorial": "Coleção monumental de fragmentos e aforismos apologéticos concebidos para convencer o cético moderno sobre as misérias e grandezas do homem sem Deus, culminando na famosa aposta da fé e na constatação de que 'o coração tem razões que a própria razão desconhece'.",
+    "status_busca": "ok",
+    "capa_url": "/capas/37.webp"
   },
   {
     "id": 38,
@@ -1502,7 +1253,7 @@
         "link": "https://openlibrary.org/works/OL10432709W"
       }
     ],
-    "sinopse_editorial": "The Brothers Karamazov, Dostoevsky’s crowning achievement, is a tale of patricide and family rivalry that embodies the moral and spiritual dissolution of an entire society (Russia in the 1870s). It created a national furor comparable only to the excitement stirred by the publication, in 1866, of Crime and Punishment. To Dostoevsky, The Brothers Karamazov captured the quintessence of Russian character in all its exaltation, compassion, and profligacy. Significantly, the book was on Tolstoy’s bedside table when he died. Readers in every language have since accepted Dostoevsky’s own evaluation of this work and have gone further by proclaiming it one of the few great novels of all ages and countries.\r\n([source][1])",
+    "sinopse_editorial": "Cume da literatura universal, romance polifônico que retrata o parricídio de Fiódor Karamázov e debate as angústias do livre-arbítrio, do mal no mundo, da redenção e da fé, imortalizado pela parábola d'O Grande Inquisidor.",
     "status_busca": "ok"
   },
   {
@@ -1531,7 +1282,7 @@
         "link": "https://openlibrary.org/works/OL15391655W"
       }
     ],
-    "sinopse_editorial": "An historical novel by Japanese writer Shusaku Endo telling the story of a young Portuguese missionary in 17th Century Japan. After being smuggled into the country a Jesuit missionary fresh from the seminary finds the Christian population have been forced underground by a government eager to stamp out foreign interference and values. Consequently he quickly finds himself a fugitive in a strange and frightening land and begins to doubt his mission due to the silence of his god.",
+    "sinopse_editorial": "Romance histórico pungente sobre missionários jesuítas portugueses perseguidos no Japão do século XVII, explorando o silêncio de Deus diante do sofrimento dos mártires, a compaixão cósmica e os dilemas morais da apostasia.",
     "status_busca": "ok"
   },
   {
@@ -1551,13 +1302,15 @@
     "por_que_antes_do_proximo": "Fica antes de Smith para você ter a pergunta moral antes da técnica.",
     "edicoes_pt": [
       {
-        "editora": "St. Paul",
-        "ano": 1942,
-        "capa_url": "https://covers.openlibrary.org/b/id/15051629-M.jpg",
-        "link": "https://openlibrary.org/works/OL34597732W"
+        "editora": "Paulus Editora",
+        "ano": 2012,
+        "isbn": "9788534907965",
+        "capa_url": "/capas/40.webp"
       }
     ],
-    "status_busca": "parcial"
+    "status_busca": "ok",
+    "capa_url": "/capas/40.webp",
+    "sinopse_editorial": "Encíclica papal histórica de 1891 que inaugurou a Doutrina Social da Igreja contemporânea, criticando tanto os abusos desumanos do capitalismo laissez-faire quanto as teses coletivistas do socialismo, em defesa da dignidade do trabalhador, do salário justo e do direito à propriedade privada."
   },
   {
     "id": 41,
@@ -1577,29 +1330,15 @@
     "isbn": "9783406053931",
     "edicoes_pt": [
       {
-        "editora": "F.F. Collier and Son",
-        "ano": 1920,
-        "isbn": "0679424733",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/0679424733-M.jpg",
-        "link": "https://openlibrary.org/works/OL76827W"
-      },
-      {
-        "editora": "Encyclopædia Britannica",
-        "ano": 1793,
-        "isbn": "9783406053931",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9783406053931-M.jpg",
-        "link": "https://openlibrary.org/works/OL76827W"
-      },
-      {
-        "editora": "Cosimo Classics",
-        "ano": 1796,
-        "isbn": "9562919056",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9562919056-M.jpg",
-        "link": "https://openlibrary.org/works/OL76827W"
+        "editora": "Ediouro",
+        "ano": 2006,
+        "isbn": "9788500010996",
+        "capa_url": "/capas/41.webp"
       }
     ],
-    "sinopse_editorial": "Adam Smith's The Wealth of Nations was recognized as a landmark of human thought upon its publication in 1776. As the first scientific argument for the principles of political economy, it is the point of departure for all subsequent economic thought. Smith's theories of capital accumulation, growth, and secular change, among others, continue to be influential in modern economics. This reprint of Edwin Cannan's definitive 1904 edition of The Wealth of Nations includes Cannan's famous introduction, notes, and a full index, as well as a new preface written especially for this edition by the distinguished economist George J. Stigler. Mr. Stigler's preface will be of value for anyone wishing to see the contemporary relevance of Adam Smith's thought.",
-    "status_busca": "parcial"
+    "sinopse_editorial": "Tratado monumental que estabeleceu a economia política clássica como ciência autônoma, analisando a divisão do trabalho, o mecanismo de formação dos preços, o acúmulo de capital e o princípio da 'mão invisível' que harmoniza interesses individuais no bem comum.",
+    "status_busca": "ok",
+    "capa_url": "/capas/41.webp"
   },
   {
     "id": 42,
@@ -1619,29 +1358,15 @@
     "isbn": "9780226320779",
     "edicoes_pt": [
       {
-        "editora": "Inst of Economic Affairs",
-        "ano": 1944,
-        "isbn": "9780226320779",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9780226320779-M.jpg",
-        "link": "https://openlibrary.org/works/OL1165001W"
-      },
-      {
-        "editora": "Books on Tape, Inc.",
-        "ano": 1945,
-        "isbn": "9780255365765",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9780255365765-M.jpg",
-        "link": "https://openlibrary.org/works/OL1165001W"
-      },
-      {
-        "editora": "The University of Chicago Press",
-        "ano": 1946,
-        "isbn": "9732804149",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9732804149-M.jpg",
-        "link": "https://openlibrary.org/works/OL1165001W"
+        "editora": "LVM Editora",
+        "ano": 2017,
+        "isbn": "9788593751004",
+        "capa_url": "/capas/42.webp"
       }
     ],
-    "sinopse_editorial": "A classic work in political philosophy, intellectual and cultural history, and economics, The Road to Serfdom has inspired and infuriated politicians, scholars, and general readers for half a century. Originally published in England in the spring of 1944 - when the Labour party ruled in Britain, Eleanor Roosevelt supported the efforts of Stalin, and Albert Einstein subscribed to the socialist program - The Road to Serfdom was seen as heretical for its passionate warning against the dangers of state control over the means of production. For F.A. Hayek, the collectivist idea of empowering government with increasing economic control would inevitably lead not to a utopia but to the horrors of Nazi Germany and Fascist Italy.\n\nAfter thirty-two printings in the United States, The Road to Serfdom has established itself alongside the works of de Tocqueville, Mill, and Orwell for its timeless meditation on the relation between individual liberty and government authority. This fiftieth anniversary edition, with a new introduction by Milton Friedman, commemorates the enduring influence of The Road to Serfdom on the ever-changing political and social climates of the twentieth century - from the rise of socialism after World War II to the Reagan and Thatcher \"revolutions\" in the 1980s and the transitions in Eastern Europe from communism to capitalism in the 1990s.",
-    "status_busca": "parcial"
+    "sinopse_editorial": "Alerta clássico contra os perigos do planejamento econômico centralizado e do totalitarismo emergente no século XX, argumentando que a intervenção estatal desmedida e a abolição do mecanismo de preços inevitavelmente suprimem a liberdade individual e o Estado de Direito.",
+    "status_busca": "ok",
+    "capa_url": "/capas/42.webp"
   },
   {
     "id": 43,
@@ -1661,29 +1386,15 @@
     "isbn": "9788535250763",
     "edicoes_pt": [
       {
-        "editora": "Campus",
-        "ano": 1944,
-        "isbn": "080705643X",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/080705643X-M.jpg",
-        "link": "https://openlibrary.org/works/OL3617884W"
-      },
-      {
-        "editora": "Gollancz",
-        "ano": 1945,
-        "isbn": "0848817117",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/0848817117-M.jpg",
-        "link": "https://openlibrary.org/works/OL3617884W"
-      },
-      {
-        "editora": "Farrar & Rinehart, inc.",
-        "ano": 1946,
-        "isbn": "129992235X",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/129992235X-M.jpg",
-        "link": "https://openlibrary.org/works/OL3617884W"
+        "editora": "Contraponto",
+        "ano": 2012,
+        "isbn": "9788585910341",
+        "capa_url": "/capas/43.webp"
       }
     ],
-    "sinopse_editorial": "\"In this classic work of economic history and social theory, Karl Polonyi analyzes the economic and social changes brought about by the \"great transformation\" of the Industrial Revolution. His analysis explains not only the deficiencies of the self-regulating market, but the potentially dire social consequences of untempered market capitalism. New introductory material reveals the renewed importance of Polanyi's seminal analysis in an era of globalization and free trade.\"--BOOK JACKET.",
-    "status_busca": "parcial"
+    "sinopse_editorial": "Obra histórica clássica que disseca as origens e contradições do mercado autorregulado do século XIX, demonstrando que a mercantilização fictícia da terra, do trabalho e da moeda provocou crises catastróficas e reações protetivas da sociedade civil.",
+    "status_busca": "ok",
+    "capa_url": "/capas/43.webp"
   },
   {
     "id": 44,
@@ -1703,29 +1414,15 @@
     "isbn": "9780872200210",
     "edicoes_pt": [
       {
-        "editora": "London: printed: New-York: re-printed by Hugh Gaine, at the Bible, in Hanover-Square",
-        "ano": 1793,
-        "isbn": "0300099797",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/0300099797-M.jpg",
-        "link": "https://openlibrary.org/works/OL843379W"
-      },
-      {
-        "editora": "Library of Liberal Arts",
-        "ano": 1930,
-        "isbn": "0300099789",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/0300099789-M.jpg",
-        "link": "https://openlibrary.org/works/OL843379W"
-      },
-      {
-        "editora": "Printed for J. F. Dove, Piccadilly, opposite Burlington House",
-        "ano": 1813,
-        "isbn": "9780872200210",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9780872200210-M.jpg",
-        "link": "https://openlibrary.org/works/OL843379W"
+        "editora": "Vide Editorial",
+        "ano": 2014,
+        "isbn": "9788567394336",
+        "capa_url": "/capas/44.webp"
       }
     ],
-    "sinopse_editorial": "Edmund Burke's Reflections on the Revolution in France, written and published during 1789-90, has become a classic of English conservatism, and that is the reason it is still being read nearly two hundred years later. John Pocock's edition of Burke's Reflections is two classics in one: Burke's Reflections and Pocock's reflections on Burke and the eighteenth century. - Publisher.",
-    "status_busca": "parcial"
+    "sinopse_editorial": "A fundação do pensamento conservador moderno, em que Burke adverte contra as abstrações metafísicas utópicas da Revolução Francesa, defendendo a sabedoria acumulada pelas tradições, pelas instituições consagradas e pela continuidade histórica.",
+    "status_busca": "ok",
+    "capa_url": "/capas/44.webp"
   },
   {
     "id": 45,
@@ -1745,29 +1442,15 @@
     "isbn": "9781134521890",
     "edicoes_pt": [
       {
-        "editora": "Roxbury Pub. Co",
-        "ano": 1930,
-        "isbn": "1521306761",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/1521306761-M.jpg",
-        "link": "https://openlibrary.org/works/OL1362905W"
-      },
-      {
         "editora": "Martin Claret",
-        "ano": 1934,
-        "isbn": "1603866043",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/1603866043-M.jpg",
-        "link": "https://openlibrary.org/works/OL1362905W"
-      },
-      {
-        "editora": "Brand: CreateSpace Independent Publishing Platform",
-        "ano": 1948,
-        "isbn": "0935732683",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/0935732683-M.jpg",
-        "link": "https://openlibrary.org/works/OL1362905W"
+        "ano": 2013,
+        "isbn": "9788572329385",
+        "capa_url": "/capas/45.jpg"
       }
     ],
-    "sinopse_editorial": "In The Protestant Ethic, Max Weber opposes the Marxist concept of dialectical materialism and relates the rise of the capitalist economy to the Calvinist belief in the moral value of hard work and the fulfillment of one's worldly duties. Based on the original 1905 edition, this volume includes, along with Weber's treatise, an illuminating introduction, a wealth of explanatory notes, and exemplary responses and remarks-both from Weber and his critics-sparked by publication of The Protestant Ethic and the Spirit of Capitalism. This is the first English translation of the 1905 German text and the first volume to include Weber's unexpurgated responses to his critics, which reveal important developments in and clarifications of Weber's argument.",
-    "status_busca": "parcial"
+    "sinopse_editorial": "Ensaio sociológico clássico que investiga as afinidades eletivas entre a teologia calvinista — em especial a doutrina da predestinação e o conceito de vocação terrena (Beruf) — e o surgimento do espírito racional e disciplinado do capitalismo moderno.",
+    "status_busca": "ok",
+    "capa_url": "/capas/45.jpg"
   },
   {
     "id": 46,
@@ -1808,7 +1491,8 @@
         "link": "https://openlibrary.org/works/OL33368565W"
       }
     ],
-    "status_busca": "ok"
+    "status_busca": "ok",
+    "sinopse_editorial": "Interpretação estruturalista magna da evolução econômica brasileira, desde a economia açucareira e a mineração colonial até o complexo cafeeiro paulista e a industrialização por substituição de importações no século XX."
   },
   {
     "id": 47,
@@ -1828,29 +1512,15 @@
     "isbn": "9780745624105",
     "edicoes_pt": [
       {
-        "editora": "Polity Press",
-        "ano": 2000,
-        "isbn": "9780745624105",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9780745624105-M.jpg",
-        "link": "https://openlibrary.org/works/OL527224W"
-      },
-      {
-        "editora": "Blackwell",
-        "ano": 2012,
-        "isbn": "074562409X",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/074562409X-M.jpg",
-        "link": "https://openlibrary.org/works/OL527224W"
-      },
-      {
-        "editora": "polity",
-        "ano": 2013,
-        "isbn": "0745624103",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/0745624103-M.jpg",
-        "link": "https://openlibrary.org/works/OL527224W"
+        "editora": "Zahar",
+        "ano": 2001,
+        "isbn": "9788571105959",
+        "capa_url": "/capas/47.webp"
       }
     ],
-    "sinopse_editorial": "In this text, Bauman examines how we have moved away from a \"heavy\" and \"solid\", hardware-focused modernity to a \"light\" and \"liquid\", software-based modernity. This passage, he argues, has brought profound change to all aspects of the human condition.",
-    "status_busca": "parcial"
+    "sinopse_editorial": "Diagnóstico perspicaz da transição contemporânea de uma fase sólida e estruturada da modernidade para uma condição líquida, caracterizada pela fluidez dos vínculos sociais, pela precariedade do trabalho, pelo consumo desenfreado e pela efemeridade das relações humanas.",
+    "status_busca": "ok",
+    "capa_url": "/capas/47.webp"
   },
   {
     "id": 48,
@@ -1892,7 +1562,7 @@
         "link": "https://openlibrary.org/works/OL10460638W"
       }
     ],
-    "sinopse_editorial": "A work of striking originality bursting with unexpected insights, The Human condition is in many respects more relevant now than when it first appeared in 1958. In her study of the state of modern humanity, Hannah Arendt considers humankind from the perspective of the actions of which it is capable. The problems Arendt identified then--diminishing human agency and political freedom, the paradox that as human powers increase through technological and humanistic inquiry, we are less equipped to control the consequences of our actions--continue to confront us today. This new edition, published to coincide with the fortieth anniversary of its original publication, contains an improved and expanded index and a new introduction by noted Arendt scholar Margaret Canovan which incisively analyzes the book's argument and examines its present relevance. A classic in political and social theory, The Human condition is a work that has proved both timeless and perpetually timely.",
+    "sinopse_editorial": "Reflexão filosófica vigorosa sobre as três dimensões constitutivas da vida ativa humana — o labor, o trabalho (fabricação) e a ação política —, alertando contra o declínio da esfera pública e a perda da pluralidade no mundo moderno.",
     "status_busca": "ok"
   },
   {
@@ -1913,29 +1583,15 @@
     "isbn": "9781412176170",
     "edicoes_pt": [
       {
-        "editora": "Excudebat S. Collingwood",
-        "ano": 1550,
-        "isbn": "9781412176170",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9781412176170-M.jpg",
-        "link": "https://openlibrary.org/works/OL16200353W"
-      },
-      {
-        "editora": "Ginn & company",
-        "ano": 1594,
-        "isbn": "193425505X",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/193425505X-M.jpg",
-        "link": "https://openlibrary.org/works/OL16200353W"
-      },
-      {
-        "editora": "Basic Books",
-        "ano": 1753,
-        "isbn": "1412137241",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/1412137241-M.jpg",
-        "link": "https://openlibrary.org/works/OL16200353W"
+        "editora": "WMF Martins Fontes",
+        "ano": 2008,
+        "isbn": "9788578270155",
+        "capa_url": "/capas/49.webp"
       }
     ],
-    "sinopse_editorial": "Written four hundred years before the birth of Christ, this detailed contemporary account of the long life-and-death struggle between Athens and Sparta stands an excellent chance of fulfilling its author's ambitious claim. Thucydides himself (c.460-400 BC) was an Athenian and achieved the rank of general in the earlier stages of the war. He applied thereafter a passion for accuracy and a contempt for myth and romance in compiling this factual record of a disastrous conflict.",
-    "status_busca": "parcial"
+    "sinopse_editorial": "A obra inaugural da historiografia científica e do realismo político, analisando as três décadas do conflito fratricida entre a democracia ateniense e a oligarquia espartana, célebre pelo Diálogo dos Mélios e pela Oração Fúnebre de Péricles.",
+    "status_busca": "ok",
+    "capa_url": "/capas/49.webp"
   },
   {
     "id": 50,
@@ -1955,29 +1611,15 @@
     "isbn": "9789652235244",
     "edicoes_pt": [
       {
-        "editora": "Routledge",
-        "ano": 1920,
-        "isbn": "9652235245",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9652235245-M.jpg",
-        "link": "https://openlibrary.org/works/OL99843W"
-      },
-      {
-        "editora": "Vandenhoeck & Ruprecht",
-        "ano": 1925,
-        "isbn": "9789652235244",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9789652235244-M.jpg",
-        "link": "https://openlibrary.org/works/OL99843W"
-      },
-      {
-        "editora": "Meiner",
-        "ano": 1927,
-        "isbn": "9789700772837",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9789700772837-M.jpg",
-        "link": "https://openlibrary.org/works/OL99843W"
+        "editora": "Martin Claret",
+        "ano": 2005,
+        "isbn": "9788572326759",
+        "capa_url": "/capas/50.webp"
       }
     ],
-    "sinopse_editorial": "Immanuel Kant: 1724-1804\r\nGrundlegung Zur Metaphysik Der Sitten was originally published in 1785",
-    "status_busca": "parcial"
+    "sinopse_editorial": "Tratado definitivo de ética deontológica, em que Kant busca o princípio supremo da moralidade independente de inclinações e consequências, formulando o célebre Imperativo Categórico e a dignidade humana como um fim em si mesmo.",
+    "status_busca": "ok",
+    "capa_url": "/capas/50.webp"
   },
   {
     "id": 51,
@@ -1997,29 +1639,15 @@
     "isbn": "9781491282281",
     "edicoes_pt": [
       {
-        "editora": "Simon & Brown",
-        "ano": 1939,
-        "isbn": "9781491282281",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9781491282281-M.jpg",
-        "link": "https://openlibrary.org/works/OL112736W"
-      },
-      {
-        "editora": "Cambridge University Press",
-        "ano": 1941,
-        "isbn": "9781613824047",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9781613824047-M.jpg",
-        "link": "https://openlibrary.org/works/OL112736W"
-      },
-      {
-        "editora": "Alianza",
-        "ano": 1945,
-        "isbn": "9781647921750",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9781647921750-M.jpg",
-        "link": "https://openlibrary.org/works/OL112736W"
+        "editora": "Relógio D'Água",
+        "ano": 2009,
+        "isbn": "9789727089987",
+        "capa_url": "/capas/51.jpg"
       }
     ],
-    "sinopse_editorial": "*Frygt og Bæven* er et filosofisk værk af Søren Kierkegaard, udgivet 16. oktober 1843 under pseudonymet Johannes de Silentio. Værket er en udvidet meditation over Mosebog 22, også kendt som Isaks binding. Kierkegaard forsøger at forstå Abrahams indre psykologiske tilstand under hans tre og en halv dag lange rejse til Moriah. Teksten forsøger at vise, hvordan det ikke er let at forstå Abrahams handlinger gennem etiske kategorier som Sittlichkeit eller det universelle. I stedet hævder Silentio, at Abraham kun kan forstås gennem en ny kategori kaldet tro.",
-    "status_busca": "parcial"
+    "sinopse_editorial": "Ensaio vertiginoso publicado sob o pseudônimo Johannes de Silentio sobre a provação bíblica de Abraão no monte Moriá, concebendo o 'salto da fé' e a 'suspensão teleológica do ético' na experiência existencial com o absoluto.",
+    "status_busca": "ok",
+    "capa_url": "/capas/51.jpg"
   },
   {
     "id": 52,
@@ -2040,28 +1668,13 @@
     "isbn": "9781420928761",
     "edicoes_pt": [
       {
-        "editora": "OXFORD PAPERBACKS",
-        "ano": 1920,
-        "isbn": "9781420928761",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9781420928761-M.jpg",
-        "link": "https://openlibrary.org/works/OL98169W"
-      },
-      {
-        "editora": "Foulis",
-        "ano": 1923,
-        "isbn": "3150071232",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/3150071232-M.jpg",
-        "link": "https://openlibrary.org/works/OL98169W"
-      },
-      {
-        "editora": "Carlton House",
-        "ano": 1967,
-        "isbn": "9780872202832",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9780872202832-M.jpg",
-        "link": "https://openlibrary.org/works/OL98169W"
+        "editora": "Companhia das Letras",
+        "ano": 1998,
+        "isbn": "9788571648050",
+        "capa_url": "https://covers.openlibrary.org/b/isbn/9788571648050-L.jpg"
       }
     ],
-    "sinopse_editorial": "On the Genealogy of Morals (1887) is a book about the history of ethics and about interpretation. Nietzsche rewrites the former as a history of cruelty, exposing the central values of the Judaeo-Christian and liberal traditions - compassion, equality, justice - as the product of a brutal process of conditioning designed to domesticate the animal vitality of earlier cultures. The result is a book which raises profoundly disquieting issues about the violence of both ethics and interpretation.\n\nNietzsche questions moral certainties by showing that religion and science have no claim to absolute truth, before turning on his own arguments in order to call their very presuppositions into question. The Genealogy is the most sustained of Nietzsche's later works and offers one of the fullest expressions of his characteristic concerns. This edition places his ideas within the cultural context of his own time and stresses the relevance of his work for a contemporary audience.",
+    "sinopse_editorial": "Crítica radical dos valores morais ocidentais dividida em três dissertações, que investiga a origem psicológica e linguística de 'bom' e 'mau', o ressentimento na moral dos escravos, a má consciência e o ideal ascético.",
     "status_busca": "ok"
   },
   {
@@ -2082,29 +1695,15 @@
     "isbn": "9780521393829",
     "edicoes_pt": [
       {
-        "editora": "Great Books Foundation",
-        "ano": 1920,
-        "isbn": "9780521393829",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9780521393829-M.jpg",
-        "link": "https://openlibrary.org/works/OL15314568W"
-      },
-      {
-        "editora": "apud Anissonios, Joan. Possuel, & Claud. Rigaud",
-        "ano": 1925,
-        "isbn": "1116218208",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/1116218208-M.jpg",
-        "link": "https://openlibrary.org/works/OL15314568W"
-      },
-      {
-        "editora": "Marietti",
-        "ano": 1926,
-        "isbn": "0872206645",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/0872206645-M.jpg",
-        "link": "https://openlibrary.org/works/OL15314568W"
+        "editora": "Ecclesiae",
+        "ano": 2016,
+        "isbn": "9788584910403",
+        "capa_url": "/capas/53.webp"
       }
     ],
-    "sinopse_editorial": "Thomas's magnum opus, comprising a systematic integration of Aristotelian philosophy with Christianity. Covers topics such as the nature and existence of God, human nature, law and morality and the relationship of God, world and humans.",
-    "status_busca": "parcial"
+    "sinopse_editorial": "Cume da escolástica medieval e síntese grandiosa entre a filosofia aristotélica e a teologia cristã, articulando fé e razão, as cinco vias para a demonstração da existência de Deus, a lei natural e as virtudes teologais.",
+    "status_busca": "ok",
+    "capa_url": "/capas/53.webp"
   },
   {
     "id": 54,
@@ -2146,7 +1745,7 @@
         "link": "https://openlibrary.org/works/OL93082W"
       }
     ],
-    "sinopse_editorial": "De goddelijke komedie is de beschrijving van een denkbeeldige tocht door het hiernamaals. Zij heeft drie delen: de hel, het vagevuur en het paradijs en ieder van deze delen heeft drieëndertig zangen van niet geheel gelijke lengte, terwijl aan het eerste deel nog een inleidende zang voorafgaat, waardoor het totale aantal van de zang honderd bedraagt. Dit aantal is geen toevalligheid. Het getal honderd gold in de middeleeuwse getallensymboliek, waarvan ook Dante een naarstig beoefenaar was, als het zinnebeeld van de volmaaktheid. Drie is het getal van de personen der heilige drie-eenheid, drieëndertig is het aantal jaren van Jezus' aardse leven. \r\n\r\nIn de eerste zang van De goddelijke komedie is Dante verdwaald in een donker woud en terwijl hij wanhopig naar hulp uitziet ontmoet hij daar de Latijnse dichter Vergilius. Samen verlaten zij het aardoppervlak en dalen af naar de hel, die voorgesteld wordt als een systeem van concentrische, zich steeds verder vernauwende kringen, een soort geringde trechter, die tenslotte in het middelpunt van de aarde eindigt. Daar zit Lucifer in het ijs, met zijn hoofd naar ons halfrond toe en met zijn voeten naar het zuidelijk halfrond gekeerd. \r\n\r\nTussen het ijs en Lucifer vinden Dante en Vergilius een weg langs het middelpunt van de aarde en stijgen dan weer op naar het zuidelijk halfrond. Zij bereiken een eiland, waar zich een hoge berg verheft, de louteringsberg van het vagevuur, waar de zielen die in staat van genade zijn gestorven, maar hun aardse schulden nog niet hebben uitgeboet, geleidelijk gelouterd worden en opstijgen naar de hemelse zaligheid. Deze berg, een soort tegenbeeld van de hel, heeft langs zijn flanken steeds nauwer wordende gaanderijen. Daarlangs stijgen Dante en Vergilius opwaarts naar de top, waar zich het aardse paradijs bevindt. \r\n\r\nWanneer zij daar zijn aangekomen, wordt Vergilius als Dante's geleider afgelost door Beatrice. Samen met Beatrice stijgt Dante nu opwaarts naar het paradijs. De eeuwige woonplaats van de zaligen bestraald door het licht van God.",
+    "sinopse_editorial": "Monumento supremo da literatura ocidental, poema épico alegórico em que o poeta peregrino atravessa o Inferno, o Purgatório e o Paraíso, guiado por Virgílio e Beatriz, representando a jornada de redenção espiritual da alma humana rumo à contemplação do Amor Divino.",
     "status_busca": "ok"
   },
   {
@@ -2167,29 +1766,15 @@
     "isbn": "9780717800186",
     "edicoes_pt": [
       {
-        "editora": "International Publishers",
-        "ano": 1867,
-        "isbn": "9780717800186",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9780717800186-M.jpg",
-        "link": "https://openlibrary.org/works/OL628450W"
-      },
-      {
-        "editora": "Ernest Flammarion",
-        "ano": 1872,
-        "isbn": "0140445706",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/0140445706-M.jpg",
-        "link": "https://openlibrary.org/works/OL628450W"
-      },
-      {
-        "editora": "Yordam Yay♯łnlar♯ł",
-        "ano": 1875,
-        "isbn": "9789757399322",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9789757399322-M.jpg",
-        "link": "https://openlibrary.org/works/OL628450W"
+        "editora": "Boitempo",
+        "ano": 2013,
+        "isbn": "9788575593127",
+        "capa_url": "/capas/55.webp"
       }
     ],
-    "sinopse_editorial": "Das Kapital, Karl Marx's seminal work, is the book that above all others formed the twentieth century. From Kapital sprung the economic and political systems that at one time dominated half the earth and for nearly a century kept the world on the brink of war.",
-    "status_busca": "parcial"
+    "sinopse_editorial": "A obra magna de Karl Marx que analisa criticamente o modo de produção capitalista, desvendando o fetichismo da mercadoria, a extração de mais-valia no processo de trabalho, o valor de troca e as leis intrínsecas da acumulação de capital.",
+    "status_busca": "ok",
+    "capa_url": "/capas/55.webp"
   },
   {
     "id": 56,
@@ -2210,28 +1795,13 @@
     "isbn": "9788412471670",
     "edicoes_pt": [
       {
-        "editora": "Siglo XXI",
-        "ano": 2019,
-        "isbn": "9788412471670",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9788412471670-M.jpg",
-        "link": "https://openlibrary.org/works/OL26841W"
-      },
-      {
-        "editora": "Gallimard French",
-        "ano": 2020,
-        "isbn": "0241386012",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/0241386012-M.jpg",
-        "link": "https://openlibrary.org/works/OL26841W"
-      },
-      {
-        "editora": "Vintage eBooks",
-        "ano": 2022,
-        "isbn": "9781452665566",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9781452665566-M.jpg",
-        "link": "https://openlibrary.org/works/OL26841W"
+        "editora": "Editora Vozes",
+        "ano": 2014,
+        "isbn": "9788532605085",
+        "capa_url": "https://covers.openlibrary.org/b/isbn/9788532605085-L.jpg"
       }
     ],
-    "sinopse_editorial": "English version of \"Surveiller et punir : naissance de la prison\"",
+    "sinopse_editorial": "Estudo genealógico influente sobre a transição dos suplícios corporais públicos no Antigo Regime para os mecanismos disciplinares de vigilância silenciosa da modernidade, simbolizados pelo modelo arquitetônico do Panóptico.",
     "status_busca": "ok"
   },
   {
@@ -2252,29 +1822,15 @@
     "isbn": "9780942299878",
     "edicoes_pt": [
       {
-        "editora": "Éditions de minuit",
-        "ano": 2010,
-        "isbn": "0942299019",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/0942299019-M.jpg",
-        "link": "https://openlibrary.org/works/OL2677206W"
-      },
-      {
-        "editora": "Ayrinti Yayinlari",
-        "ano": 1987,
-        "isbn": "8540501872",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/8540501872-M.jpg",
-        "link": "https://openlibrary.org/works/OL2677206W"
-      },
-      {
-        "editora": "Distributed by the MIT Press",
-        "ano": 2020,
-        "isbn": "9780942299878",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9780942299878-M.jpg",
-        "link": "https://openlibrary.org/works/OL2677206W"
+        "editora": "Ubu Editora",
+        "ano": 2018,
+        "isbn": "9788568684788",
+        "capa_url": "/capas/57.webp"
       }
     ],
-    "sinopse_editorial": "\"The thesis is radical,\" writes Marshall Sahlins of this landmark text in anthropology and political science. \"We conventionally define the state as the regulation of violence; it may be the origin of it. Clastres's thesis is that economic expropriation and political coercion are inconsistent with the character of tribal society - which is to say, with the greater part of human history.\" Can there be a society that is not divided into oppressors and oppressed, or that refuses coercive state apparatuses? In this beautifully written book, Pierre Clastres offers examples of South American Indian groups that, although without hierarchical leadership, were both affluent and complex. In so doing he refutes the usual negative definition of tribal society and poses its order as a radical critique of our own Western state of power.",
-    "status_busca": "parcial"
+    "sinopse_editorial": "Ensaio antropológico pioneiro baseado na convivência com povos indígenas sul-americanos, sustentando que as sociedades primitivas não são 'sem Estado' por carência, mas sim estruturadas ativamente contra a emergência de qualquer poder soberano coercitivo.",
+    "status_busca": "ok",
+    "capa_url": "/capas/57.webp"
   },
   {
     "id": 58,
@@ -2316,7 +1872,8 @@
         "link": "https://openlibrary.org/works/OL3709959W"
       }
     ],
-    "status_busca": "ok"
+    "status_busca": "ok",
+    "sinopse_editorial": "Obra fundamental do pensamento político brasileiro que examina a formação do patronato político e do estamento burocrático desde as origens feudais portuguesas, perpetuando o patrimonialismo e a apropriação do Estado pelas elites."
   },
   {
     "id": 59,
@@ -2358,7 +1915,8 @@
         "link": "https://openlibrary.org/works/OL1756937W"
       }
     ],
-    "status_busca": "ok"
+    "status_busca": "ok",
+    "sinopse_editorial": "Monumento da literatura brasileira narrado pelo ex-jagunço Riobaldo Tatarana, que reflete sobre o amor por Diadorim, as batalhas no sertão e o pacto com o Diabo, numa prosa inovadora que eleva o regionalismo à metafísica universal da alma humana."
   },
   {
     "id": 60,
@@ -2378,27 +1936,14 @@
     "isbn": "9798617590366",
     "edicoes_pt": [
       {
-        "editora": "Lulu Press, Inc.",
-        "ano": 1921,
-        "isbn": "9798617590366",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9798617590366-M.jpg",
-        "link": "https://openlibrary.org/works/OL1069300W"
-      },
-      {
-        "editora": "Buccaneer Books",
-        "ano": 1922,
-        "isbn": "9780486453194",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/9780486453194-M.jpg",
-        "link": "https://openlibrary.org/works/OL1069300W"
-      },
-      {
-        "editora": "Basic Books A Member of the Perseus Books Group",
-        "ano": 1923,
-        "isbn": "2130455662",
-        "capa_url": "https://covers.openlibrary.org/b/isbn/2130455662-M.jpg",
-        "link": "https://openlibrary.org/works/OL1069300W"
+        "editora": "L&PM Pocket",
+        "ano": 2012,
+        "isbn": "9788525426178",
+        "capa_url": "/capas/60.jpg"
       }
     ],
-    "status_busca": "parcial"
+    "status_busca": "ok",
+    "capa_url": "/capas/60.jpg",
+    "sinopse_editorial": "A obra fundadora da psicanálise, na qual Freud formula a primeira tópica do aparelho psíquico e demonstra que os sonhos não são caprichos somáticos, mas a 'estrada real' para o inconsciente, atuando como realizações disfarçadas de desejos reprimidos."
   }
 ]
