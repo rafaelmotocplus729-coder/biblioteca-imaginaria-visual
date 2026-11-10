@@ -6,6 +6,7 @@ interface ModalBackupProps {
   onImportarJSON: (jsonString: string) => boolean;
   onExportarMarkdown: () => string;
   onExportarCSV: () => string;
+  onExportarZettelkasten?: () => string;
   onClose: () => void;
 }
 
@@ -14,6 +15,7 @@ export const ModalBackup: React.FC<ModalBackupProps> = ({
   onImportarJSON,
   onExportarMarkdown,
   onExportarCSV,
+  onExportarZettelkasten,
   onClose
 }) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -51,6 +53,14 @@ export const ModalBackup: React.FC<ModalBackupProps> = ({
     const csv = onExportarCSV();
     baixarArquivo(csv, `biblioteca-imaginaria-${new Date().toISOString().split('T')[0]}.csv`, 'text/csv');
     setMensagemSucesso('Tabela exportada em CSV com sucesso!');
+    setTimeout(() => setMensagemSucesso(null), 3000);
+  };
+
+  const handleDownloadZettelkasten = () => {
+    if (!onExportarZettelkasten) return;
+    const md = onExportarZettelkasten();
+    baixarArquivo(md, `zettelkasten-obsidian-${new Date().toISOString().split('T')[0]}.md`, 'text/markdown');
+    setMensagemSucesso('Zettelkasten exportado em Markdown com sucesso!');
     setTimeout(() => setMensagemSucesso(null), 3000);
   };
 
@@ -156,6 +166,19 @@ export const ModalBackup: React.FC<ModalBackupProps> = ({
                 <div className="text-[10px] text-slate-500">Para Excel / Sheets</div>
               </div>
             </button>
+
+            {onExportarZettelkasten && (
+              <button
+                onClick={handleDownloadZettelkasten}
+                className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-emerald-500 dark:hover:border-emerald-500 bg-white dark:bg-slate-900 flex flex-col items-center gap-2 text-center transition-all group col-span-2 sm:col-span-1"
+              >
+                <FileText className="w-5 h-5 text-emerald-600 group-hover:scale-110 transition-transform" />
+                <div>
+                  <div className="font-bold text-xs text-slate-800 dark:text-slate-200">Zettelkasten (.md)</div>
+                  <div className="text-[10px] text-slate-500">Notas em rede (YAML)</div>
+                </div>
+              </button>
+            )}
           </div>
 
           <button

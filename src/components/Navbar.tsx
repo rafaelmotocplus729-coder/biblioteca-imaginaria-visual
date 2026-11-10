@@ -11,12 +11,13 @@ import {
   BookMarked,
   Search,
   Scale,
-  NotebookPen
+  NotebookPen,
+  Lightbulb
 } from 'lucide-react';
 
 interface NavbarProps {
-  visaoAtiva: 'estante' | 'grafo';
-  onMudarVisao: (visao: 'estante' | 'grafo') => void;
+  visaoAtiva: 'estante' | 'grafo' | 'zettelkasten';
+  onMudarVisao: (visao: 'estante' | 'grafo' | 'zettelkasten') => void;
   modoVisualizacao: 'capa' | 'lombada';
   onMudarModoVisualizacao: (modo: 'capa' | 'lombada') => void;
   modoEscuro: boolean;
@@ -54,12 +55,12 @@ export const Navbar: React.FC<NavbarProps> = ({
               Biblioteca Imaginária
             </h1>
             <p className="text-[10px] text-slate-500 tracking-widest uppercase font-sans">
-              Grafo Visual dos 60 Livros
+              Grafo Visual & Zettelkasten
             </p>
           </div>
         </div>
 
-        {/* Alternador Central: Estante vs Grafo */}
+        {/* Alternador Central: Estante vs Grafo vs Zettelkasten */}
         <div className="flex items-center bg-slate-100 dark:bg-slate-800 p-1 rounded-xl border border-slate-200 dark:border-slate-700">
           <button
             onClick={() => onMudarVisao('estante')}
@@ -81,7 +82,19 @@ export const Navbar: React.FC<NavbarProps> = ({
             }`}
           >
             <Share2 className="w-3.5 h-3.5" />
-            <span>Grafo em Rede</span>
+            <span>Grafo</span>
+          </button>
+          <button
+            onClick={() => onMudarVisao('zettelkasten')}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+              visaoAtiva === 'zettelkasten'
+                ? 'bg-emerald-700 text-white shadow-sm'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
+            }`}
+            title="Abrir Zettelkasten de Estudos (Método Luhmann/Ahrens)"
+          >
+            <Lightbulb className="w-3.5 h-3.5 text-emerald-400" />
+            <span>Zettelkasten</span>
           </button>
         </div>
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Livro, Progresso, Relacao } from '../types';
 import { CORES_AREAS, LEGENDA_RESUMO, obterPaginasLivro } from '../constants/theme';
+import { useBibliotecaStore } from '../store/useBibliotecaStore';
 import {
   X,
   Star,
@@ -12,7 +13,9 @@ import {
   FileText,
   Bookmark,
   Share2,
-  Scale
+  Scale,
+  Lightbulb,
+  ArrowRight
 } from 'lucide-react';
 
 interface ModalLivroProps {
@@ -58,6 +61,20 @@ export const ModalLivro: React.FC<ModalLivroProps> = ({
   // Relações em que este livro participa
   const relacoesOrigem = todasRelacoes.filter((r) => r.de === livro.id);
   const relacoesDestino = todasRelacoes.filter((r) => r.para === livro.id);
+
+  // Zettelkasten: busca nota de referência e notas permanentes vinculadas
+  const { notasZettel, criarNotaReferenciaDeLivro, selecionarNotaZettel } = useBibliotecaStore();
+
+  const notaReferenciaExistente = notasZettel.find(
+    (n) => n.tipo === 'referencia' && (n.livroId === livro.id || n.titulo.toLowerCase().includes(livro.titulo.toLowerCase()))
+  );
+
+  const notasPermanentesDoLivro = notasZettel.filter(
+    (n) => n.tipo === 'permanente' && (
+      (notaReferenciaExistente && n.referencia?.includes(notaReferenciaExistente.titulo)) ||
+      n.conteudo.toLowerCase().includes(livro.titulo.toLowerCase())
+    )
+  );
 
   // Manipulador de abandono conforme Seção 7.4:
   // "Contador de tentativas: ao marcar 'abandonar', incrementar tentativas. Mostrar a mensagem: 'abandonar sem culpa é parte do método'."
@@ -523,6 +540,88 @@ export const ModalLivro: React.FC<ModalLivroProps> = ({
               rows={4}
               className="w-full p-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm font-sans focus:ring-2 focus:ring-amber-500 focus:outline-none"
             />
+          </div>
+
+          {/* 12: Zettelkasten de Estudos (Método Luhmann / Ahrens) */}
+          <div className="space-y-3 border-t border-slate-100 dark:border-slate-800 pt-5">
+            <div className="flex items-center justify-between">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-400 flex items-center gap-1.5">
+                <Lightbulb className="w-3.5 h-3.5" />
+                Zettelkasten de Estudos (Notas em Rede)
+              </h3>
+              {notaReferenciaExistente ? (
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-sky-100 text-sky-800 dark:bg-sky-950 dark:text-sky-300">
+                  Fichamento Ativo
+                </span>
+              ) : (
+                <span className="text-[10px] text-slate-500">
+                  Ainda não fichado no Zettelkasten
+                </span>
+              )}
+            </div>
+
+            {notaReferenciaExistente ? (
+              <div className="p-3.5 rounded-xl bg-sky-50/70 dark:bg-sky-950/30 border border-sky-200 dark:border-sky-800 space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <span className="text-[10px] font-bold uppercase text-sky-700 dark:text-sky-400">
+                      Nota de Referência
+                    </span>
+                    <h4 className="font-serif font-bold text-xs sm:text-sm text-slate-900 dark:text-slate-100">
+                      {notaReferenciaExistente.titulo}
+                    </h4>
+                  </div>
+                  <button
+                    onClick={() => {
+                      selecionarNotaZettel(notaReferenciaExistente.id);
+                      onClose();
+                    }}
+                    className="flex items-center gap-1 text-xs font-bold text-sky-700 dark:text-sky-400 hover:underline"
+                  >
+                    <span>Abrir no Zettelkasten</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+
+                {notasPermanentesDoLivro.length > 0 && (
+                  <div className="pt-2 border-t border-sky-200 dark:border-sky-800/60 space-y-1.5">
+                    <span className="text-[10px] font-bold uppercase text-emerald-700 dark:text-emerald-400">
+                      Ideias Permanentes Geradas ({notasPermanentesDoLivro.length})
+                    </span>
+                    <div className="flex flex-wrap gap-1.5">
+                      {notasPermanentesDoLivro.map((perm) => (
+                        <button
+                          key={perm.id}
+                          onClick={() => {
+                            selecionarNotaZettel(perm.id);
+                            onClose();
+                          }}
+                          className="px-2 py-0.5 rounded text-xs bg-emerald-100 dark:bg-emerald-950/80 text-emerald-900 dark:text-emerald-200 border border-emerald-300 dark:border-emerald-800 hover:border-emerald-500 transition truncate max-w-xs"
+                          title={perm.titulo}
+                        >
+                          💡 {perm.titulo}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="p-3.5 rounded-xl bg-stone-50 dark:bg-stone-900/40 border border-stone-200 dark:border-stone-800 flex items-center justify-between gap-3">
+                <p className="text-xs text-stone-600 dark:text-stone-400">
+                  Gere a Nota de Referência oficial com normas ABNT, justificativa de relevância e espaço de síntese em 1 clique.
+                </p>
+                <button
+                  onClick={() => {
+                    const nova = criarNotaReferenciaDeLivro(livro.id);
+                    selecionarNotaZettel(nova.id);
+                  }}
+                  className="px-3 py-1.5 rounded-lg text-xs font-bold bg-sky-700 hover:bg-sky-600 text-white shrink-0 shadow-xs transition"
+                >
+                  Fichar no Zettelkasten
+                </button>
+              </div>
+            )}
           </div>
         </div>
 

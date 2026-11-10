@@ -11,6 +11,7 @@ import { ModalBackup } from './components/ModalBackup';
 import { CommandPalette } from './components/CommandPalette';
 import { ComparadorDialetico } from './components/ComparadorDialetico';
 import { CadernoNotasModal } from './components/CadernoNotasModal';
+import { ZettelkastenView } from './components/ZettelkastenView';
 
 export const App: React.FC = () => {
   const {
@@ -43,10 +44,11 @@ export const App: React.FC = () => {
     exportarJSON,
     importarJSON,
     exportarMarkdown,
-    exportarCSV
+    exportarCSV,
+    exportarZettelkastenMarkdown
   } = useBibliotecaStore();
 
-  const [visaoAtiva, setVisaoAtiva] = useState<'estante' | 'grafo'>('estante');
+  const [visaoAtiva, setVisaoAtiva] = useState<'estante' | 'grafo' | 'zettelkasten'>('estante');
   const [modalRevisaoAberto, setModalRevisaoAberto] = useState(false);
   const [modalBackupAberto, setModalBackupAberto] = useState(false);
   const [modalBuscaAberto, setModalBuscaAberto] = useState(false);
@@ -85,6 +87,8 @@ export const App: React.FC = () => {
         setVisaoAtiva('estante');
       } else if (e.key === 'g' || e.key === 'G') {
         setVisaoAtiva('grafo');
+      } else if (e.key === 'z' || e.key === 'Z') {
+        setVisaoAtiva('zettelkasten');
       } else if (e.key === 'c' || e.key === 'C') {
         setModoVisualizacao(modoVisualizacao === 'capa' ? 'lombada' : 'capa');
       } else if (e.key === 'd' || e.key === 'D') {
@@ -207,7 +211,7 @@ export const App: React.FC = () => {
               filtroNivel={filtros.nivel}
             />
           </>
-        ) : (
+        ) : visaoAtiva === 'grafo' ? (
           /* Grafo em Rede Interativo com D3 */
           <div className="space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
@@ -232,6 +236,9 @@ export const App: React.FC = () => {
               onSelecionarLivro={selecionarLivro}
             />
           </div>
+        ) : (
+          /* Zettelkasten de Estudos (Método Luhmann / Ahrens / Rodrigo Leão) */
+          <ZettelkastenView onSelecionarLivroEstante={selecionarLivro} />
         )}
       </main>
 
@@ -270,6 +277,7 @@ export const App: React.FC = () => {
           onImportarJSON={importarJSON}
           onExportarMarkdown={exportarMarkdown}
           onExportarCSV={exportarCSV}
+          onExportarZettelkasten={exportarZettelkastenMarkdown}
           onClose={() => setModalBackupAberto(false)}
         />
       )}

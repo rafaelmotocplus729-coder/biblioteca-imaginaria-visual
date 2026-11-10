@@ -1,13 +1,34 @@
 import { create } from 'zustand';
-import { Livro, Progresso, Relacao, Filtros, EstadoLeitura, SessaoRevisao } from '../types';
+import {
+  Livro,
+  Progresso,
+  Relacao,
+  Filtros,
+  EstadoLeitura,
+  SessaoRevisao,
+  NotaZettel,
+  NotaTemporaria,
+  CanvasZettel
+} from '../types';
 import livrosEnriquecidos from '../../data/enriquecido.json';
 import relacoesPadrao from '../../data/relacoes.json';
+import {
+  NOTAS_ZETTEL_INICIAIS,
+  NOTAS_TEMPORARIAS_INICIAIS,
+  CANVAS_ZETTEL_INICIAL
+} from '../data/zettelkastenPadrao';
 
 interface BibliotecaState {
   livros: Livro[];
   relacoes: Relacao[];
   progressos: Record<number, Progresso>;
   sessoesRevisao: SessaoRevisao[];
+  
+  // Zettelkasten
+  notasZettel: NotaZettel[];
+  notasTemporarias: NotaTemporaria[];
+  canvasZettel: CanvasZettel[];
+  notaZettelSelecionadaId: string | null;
   
   // UI & Filtros
   filtros: Filtros;
@@ -46,6 +67,19 @@ interface BibliotecaState {
 
   // Revisão Semestral
   salvarSessaoRevisao: (sessao: SessaoRevisao) => void;
+
+  // Ações do Zettelkasten
+  adicionarNotaZettel: (nota: NotaZettel) => void;
+  atualizarNotaZettel: (id: string, atualizacao: Partial<NotaZettel>) => void;
+  removerNotaZettel: (id: string) => void;
+  selecionarNotaZettel: (id: string | null) => void;
+  adicionarNotaTemporaria: (nota: Omit<NotaTemporaria, 'id' | 'dataCriacao' | 'processada'>) => void;
+  marcarNotaTemporariaProcessada: (id: string) => void;
+  removerNotaTemporaria: (id: string) => void;
+  criarNotaReferenciaDeLivro: (livroId: number) => NotaZettel;
+  criarNotaPermanenteRapida: (numTema: number, titulo: string, referencia: string, pagina?: number | string, relacao?: string) => NotaZettel;
+  salvarCanvasZettel: (canvas: CanvasZettel) => void;
+  exportarZettelkastenMarkdown: () => string;
 
   // Exportar / Importar
   exportarJSON: () => string;
@@ -102,6 +136,9 @@ function salvarNoLocalStorage(estado: {
   sessoesRevisao: SessaoRevisao[];
   horasPorSemana: number;
   modoEscuro: boolean;
+  notasZettel?: NotaZettel[];
+  notasTemporarias?: NotaTemporaria[];
+  canvasZettel?: CanvasZettel[];
 }) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(estado));
@@ -142,6 +179,12 @@ export const useBibliotecaStore = create<BibliotecaState>((set, get) => ({
   progressos: salvo?.progressos || getProgressosIniciais(),
   sessoesRevisao: salvo?.sessoesRevisao || [],
   
+  // Zettelkasten
+  notasZettel: salvo?.notasZettel || NOTAS_ZETTEL_INICIAIS,
+  notasTemporarias: salvo?.notasTemporarias || NOTAS_TEMPORARIAS_INICIAIS,
+  canvasZettel: salvo?.canvasZettel || [CANVAS_ZETTEL_INICIAL],
+  notaZettelSelecionadaId: null,
+
   filtros: {
     textoBusca: ''
   },
@@ -555,6 +598,257 @@ export const useBibliotecaStore = create<BibliotecaState>((set, get) => ({
       ].join(',');
     });
     return [headers.join(','), ...rows].join('\n');
+  },
+
+  // Ações do Zettelkasten
+  adicionarNotaZettel: (nota) => {
+    const novasNotas = [nota, ...get().notasZettel];
+    set({ notasZettel: novasNotas, notaZettelSelecionadaId: nota.id });
+    salvarNoLocalStorage({
+      livros: get().livros,
+      relacoes: get().relacoes,
+      progressos: get().progressos,
+      sessoesRevisao: get().sessoesRevisao,
+      horasPorSemana: get().horasPorSemana,
+      modoEscuro: get().modoEscuro,
+      notasZettel: novasNotas,
+      notasTemporarias: get().notasTemporarias,
+      canvasZettel: get().canvasZettel
+    });
+  },
+
+  atualizarNotaZettel: (id, atualizacao) => {
+    const agora = new Date().toISOString();
+    const novasNotas = get().notasZettel.map((n) =>
+      n.id === id ? { ...n, ...atualizacao, dataAtualizacao: agora } : n
+    );
+    set({ notasZettel: novasNotas });
+    salvarNoLocalStorage({
+      livros: get().livros,
+      relacoes: get().relacoes,
+      progressos: get().progressos,
+      sessoesRevisao: get().sessoesRevisao,
+      horasPorSemana: get().horasPorSemana,
+      modoEscuro: get().modoEscuro,
+      notasZettel: novasNotas,
+      notasTemporarias: get().notasTemporarias,
+      canvasZettel: get().canvasZettel
+    });
+  },
+
+  removerNotaZettel: (id) => {
+    const novasNotas = get().notasZettel.filter((n) => n.id !== id);
+    const novoSelecionado = get().notaZettelSelecionadaId === id ? null : get().notaZettelSelecionadaId;
+    set({ notasZettel: novasNotas, notaZettelSelecionadaId: novoSelecionado });
+    salvarNoLocalStorage({
+      livros: get().livros,
+      relacoes: get().relacoes,
+      progressos: get().progressos,
+      sessoesRevisao: get().sessoesRevisao,
+      horasPorSemana: get().horasPorSemana,
+      modoEscuro: get().modoEscuro,
+      notasZettel: novasNotas,
+      notasTemporarias: get().notasTemporarias,
+      canvasZettel: get().canvasZettel
+    });
+  },
+
+  selecionarNotaZettel: (id) => {
+    set({ notaZettelSelecionadaId: id });
+  },
+
+  adicionarNotaTemporaria: (nota) => {
+    const nova: NotaTemporaria = {
+      ...nota,
+      id: `temp-${Date.now()}`,
+      dataCriacao: new Date().toISOString(),
+      processada: false
+    };
+    const novasTemporarias = [nova, ...get().notasTemporarias];
+    set({ notasTemporarias: novasTemporarias });
+    salvarNoLocalStorage({
+      livros: get().livros,
+      relacoes: get().relacoes,
+      progressos: get().progressos,
+      sessoesRevisao: get().sessoesRevisao,
+      horasPorSemana: get().horasPorSemana,
+      modoEscuro: get().modoEscuro,
+      notasZettel: get().notasZettel,
+      notasTemporarias: novasTemporarias,
+      canvasZettel: get().canvasZettel
+    });
+  },
+
+  marcarNotaTemporariaProcessada: (id) => {
+    const novas = get().notasTemporarias.map((t) =>
+      t.id === id ? { ...t, processada: true } : t
+    );
+    set({ notasTemporarias: novas });
+    salvarNoLocalStorage({
+      livros: get().livros,
+      relacoes: get().relacoes,
+      progressos: get().progressos,
+      sessoesRevisao: get().sessoesRevisao,
+      horasPorSemana: get().horasPorSemana,
+      modoEscuro: get().modoEscuro,
+      notasZettel: get().notasZettel,
+      notasTemporarias: novas,
+      canvasZettel: get().canvasZettel
+    });
+  },
+
+  removerNotaTemporaria: (id) => {
+    const novas = get().notasTemporarias.filter((t) => t.id !== id);
+    set({ notasTemporarias: novas });
+    salvarNoLocalStorage({
+      livros: get().livros,
+      relacoes: get().relacoes,
+      progressos: get().progressos,
+      sessoesRevisao: get().sessoesRevisao,
+      horasPorSemana: get().horasPorSemana,
+      modoEscuro: get().modoEscuro,
+      notasZettel: get().notasZettel,
+      notasTemporarias: novas,
+      canvasZettel: get().canvasZettel
+    });
+  },
+
+  criarNotaReferenciaDeLivro: (livroId) => {
+    const livro = get().livros.find((l) => l.id === livroId);
+    if (!livro) throw new Error('Livro não encontrado');
+
+    const agora = new Date();
+    const stamp = agora.getFullYear().toString() +
+      String(agora.getMonth() + 1).padStart(2, '0') +
+      String(agora.getDate()).padStart(2, '0') +
+      String(agora.getHours()).padStart(2, '0') +
+      String(agora.getMinutes()).padStart(2, '0');
+
+    let temaNumero = '1';
+    let temaNome = '1 Literatura';
+    if (['Filosofia', 'Metafísica', 'Moral'].includes(livro.area)) {
+      temaNumero = '2';
+      temaNome = '2 Filosofia';
+    } else if (['Método', 'Gramática', 'Lógica', 'Psicologia'].includes(livro.area)) {
+      temaNumero = '3';
+      temaNome = '3 Método e Produtividade Intelectual';
+    }
+
+    const edicao = livro.edicoes_pt?.[0];
+    const editora = edicao?.editora || 'Editora Nacional';
+    const ano = edicao?.ano || livro.ano;
+    const isbnStr = livro.isbn ? ` ISBN ${livro.isbn}.` : '';
+
+    const tituloNota = `${temaNumero}-${stamp} - ${livro.titulo}`;
+    const conteudo = `## Referência
+${livro.autor.toUpperCase()}. ${livro.titulo}. ${editora}, ${ano}.${isbnStr}
+
+## Relevância
+Obra de Nível ${livro.nivel} (Área: ${livro.area}). ${livro.acrescenta}
+
+## Notas Relacionadas
+- 
+
+## Resumo
+${livro.sinopse_editorial || livro.tese}
+
+## Citações e Comentários
+- #síntese p. 1: ${livro.tese}`;
+
+    const novaNota: NotaZettel = {
+      id: stamp,
+      titulo: tituloNota,
+      tipo: 'referencia',
+      pasta: '02 referências',
+      tags: ['nota de referência'],
+      tema: `[[${temaNome}]]`,
+      livroId: livro.id,
+      conteudo,
+      dataCriacao: agora.toISOString(),
+      dataAtualizacao: agora.toISOString()
+    };
+
+    get().adicionarNotaZettel(novaNota);
+    return novaNota;
+  },
+
+  criarNotaPermanenteRapida: (numTema, titulo, referencia, pagina, relacao) => {
+    const agora = new Date();
+    const stamp = agora.getFullYear().toString() +
+      String(agora.getMonth() + 1).padStart(2, '0') +
+      String(agora.getDate()).padStart(2, '0') +
+      String(agora.getHours()).padStart(2, '0') +
+      String(agora.getMinutes()).padStart(2, '0');
+
+    const tituloNota = `${numTema}-${stamp} - ${titulo}`;
+    const temaNome = numTema === 1 ? '1 Literatura' : (numTema === 2 ? '2 Filosofia' : '3 Método e Produtividade Intelectual');
+
+    const novaNota: NotaZettel = {
+      id: stamp,
+      titulo: tituloNota,
+      tipo: 'permanente',
+      pasta: '03 permanentes',
+      tags: ['nota permanente'],
+      referencia: referencia ? (referencia.startsWith('[[') ? referencia : `[[${referencia}]]`) : undefined,
+      pagina: pagina || undefined,
+      relacao: relacao ? (relacao.startsWith('[[') ? relacao : `[[${relacao}]]`) : undefined,
+      tema: `[[${temaNome}]]`,
+      conteudo: `# ${titulo}\n\nTexto autônomo, claro e sintético, com minhas palavras. Uma única ideia.`,
+      dataCriacao: agora.toISOString(),
+      dataAtualizacao: agora.toISOString()
+    };
+
+    get().adicionarNotaZettel(novaNota);
+    return novaNota;
+  },
+
+  salvarCanvasZettel: (canvas) => {
+    const existentes = get().canvasZettel;
+    const index = existentes.findIndex((c) => c.id === canvas.id);
+    let novosCanvas: CanvasZettel[];
+    if (index >= 0) {
+      novosCanvas = existentes.map((c) => (c.id === canvas.id ? canvas : c));
+    } else {
+      novosCanvas = [...existentes, canvas];
+    }
+    set({ canvasZettel: novosCanvas });
+    salvarNoLocalStorage({
+      livros: get().livros,
+      relacoes: get().relacoes,
+      progressos: get().progressos,
+      sessoesRevisao: get().sessoesRevisao,
+      horasPorSemana: get().horasPorSemana,
+      modoEscuro: get().modoEscuro,
+      notasZettel: get().notasZettel,
+      notasTemporarias: get().notasTemporarias,
+      canvasZettel: novosCanvas
+    });
+  },
+
+  exportarZettelkastenMarkdown: () => {
+    const { notasZettel } = get();
+    let exportText = `# Exportação Zettelkasten — Formato Obsidian\n\n`;
+    exportText += `*Gerado em ${new Date().toLocaleDateString('pt-BR')}*\n\n---\n\n`;
+
+    notasZettel.forEach((nota) => {
+      exportText += `### Arquivo: ${nota.pasta}/${nota.titulo}.md\n\n`;
+      exportText += `\`\`\`markdown\n`;
+      exportText += `---\n`;
+      exportText += `id: ${nota.id}\n`;
+      exportText += `tags:\n`;
+      nota.tags.forEach((t) => {
+        exportText += `  - ${t}\n`;
+      });
+      if (nota.tema) exportText += `tema: "${nota.tema}"\n`;
+      if (nota.referencia) exportText += `referência: "${nota.referencia}"\n`;
+      if (nota.pagina) exportText += `página: ${nota.pagina}\n`;
+      if (nota.relacao) exportText += `relação: "${nota.relacao}"\n`;
+      exportText += `---\n\n`;
+      exportText += `${nota.conteudo}\n`;
+      exportText += `\`\`\`\n\n---\n\n`;
+    });
+
+    return exportText;
   },
 
   recarregarDadosComEnriquecidos: (enriquecidos) => {

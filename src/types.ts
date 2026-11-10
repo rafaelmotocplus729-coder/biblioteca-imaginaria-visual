@@ -88,3 +88,66 @@ export interface Filtros {
   apenasObraDeVida?: boolean;
   idioma?: IdiomaLeitura;
 }
+
+// ==========================================
+// ESTRUTURA ZETTELKASTEN (MÉTODO OBSIDIAN)
+// ==========================================
+export type TipoNotaZettel = 'indice' | 'referencia' | 'permanente';
+
+export interface NotaZettel {
+  id: string; // Ex: "202501152223"
+  titulo: string; // Nome da nota (sem extensão .md)
+  tipo: TipoNotaZettel;
+  pasta: '01 índice' | '02 referências' | '03 permanentes';
+  tags: string[]; // ['nota índice'], ['nota de referência'], ['nota permanente'], ['revisar']
+  
+  // Metadados do frontmatter
+  tema?: string; // Link [[Nome da Nota Índice]]
+  referencia?: string; // Link [[Nome da Nota de Referência]]
+  livroId?: number; // Vínculo com um dos 60 livros da Biblioteca Imaginária
+  pagina?: number | string;
+  relacao?: string; // Link [[Outra Nota Permanente]]
+  
+  conteudo: string; // Texto Markdown com #síntese, #comentário, #citação e [[Wikilinks]]
+  dataCriacao: string;
+  dataAtualizacao: string;
+  revisar?: boolean;
+}
+
+export interface NotaTemporaria {
+  id: string;
+  pensamento: string;
+  fonte: string;
+  livroId?: number;
+  pagina?: string | number;
+  dataCriacao: string;
+  processada: boolean;
+}
+
+export interface NodeCanvasZettel {
+  id: string;
+  tipo: 'nota' | 'texto';
+  notaId?: string;
+  texto?: string;
+  x: number;
+  y: number;
+  largura: number;
+  altura: number;
+  cor?: string;
+}
+
+export interface EdgeCanvasZettel {
+  id: string;
+  de: string;
+  para: string;
+  label?: string;
+}
+
+export interface CanvasZettel {
+  id: string;
+  titulo: string;
+  descricao?: string;
+  nodes: NodeCanvasZettel[];
+  edges: EdgeCanvasZettel[];
+}
+

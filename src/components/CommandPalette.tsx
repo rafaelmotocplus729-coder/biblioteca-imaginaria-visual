@@ -15,7 +15,8 @@ import {
   Download,
   Layers,
   CornerDownLeft,
-  X
+  X,
+  Lightbulb
 } from 'lucide-react';
 
 interface CommandPaletteProps {
@@ -24,8 +25,8 @@ interface CommandPaletteProps {
   livros: Livro[];
   progressos: Record<number, Progresso>;
   onSelecionarLivro: (id: number) => void;
-  visaoAtiva: 'estante' | 'grafo';
-  onMudarVisao: (visao: 'estante' | 'grafo') => void;
+  visaoAtiva: 'estante' | 'grafo' | 'zettelkasten';
+  onMudarVisao: (visao: 'estante' | 'grafo' | 'zettelkasten') => void;
   modoVisualizacao: 'capa' | 'lombada';
   onMudarModoVisualizacao: (modo: 'capa' | 'lombada') => void;
   modoEscuro: boolean;
@@ -104,6 +105,18 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       icone: <Share2 className="w-4 h-4 text-sky-600 dark:text-sky-400" />,
       acao: () => {
         onMudarVisao('grafo');
+        onClose();
+      }
+    },
+    {
+      id: 'cmd-visao-zettelkasten',
+      tipo: 'acao',
+      titulo: 'Abrir Zettelkasten de Estudos',
+      subtitulo: 'Sistema pessoal de notas atômicas em rede (Luhmann / Ahrens)',
+      badge: 'Tecla Z',
+      icone: <Lightbulb className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />,
+      acao: () => {
+        onMudarVisao('zettelkasten');
         onClose();
       }
     },
