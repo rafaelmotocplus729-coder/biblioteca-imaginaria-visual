@@ -1,4 +1,4 @@
-﻿---
+---
 name: deploy
 description: Deployment command for production releases. Pre-flight checks and deployment execution.
 ---

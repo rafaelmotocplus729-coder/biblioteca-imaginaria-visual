@@ -1,55 +1,62 @@
 ---
 name: env-vars
-description: Vercel environment variable expert guidance. Use when working with .env files, vercel env commands, Secret or Config variable types, OIDC tokens, or managing environment-specific configuration.
+description: Vercel environment variable expert guidance. Use when working with .env files, vercel
+  env commands, Secret or Config variable types, OIDC tokens, or managing environment-specific
+  configuration.
+...
+---
+
+## Specification Metadata
+```yaml
 metadata:
   priority: 7
   docs:
-    - "https://vercel.com/docs/environment-variables"
-    - "https://vercel.com/docs/environment-variables/sensitive-environment-variables"
-  sitemap: "https://vercel.com/sitemap.xml"
+  - https://vercel.com/docs/environment-variables
+  - https://vercel.com/docs/environment-variables/sensitive-environment-variables
+  sitemap: https://vercel.com/sitemap.xml
   pathPatterns:
-    - '.env'
-    - '.env.*'
-    - '.env.local'
-    - '.env.production'
-    - '.env.development'
-    - '.env.test'
-    - '.env.production.local'
-    - '.env.development.local'
-    - '.env.test.local'
-    - '.env.example'
+  - .env
+  - .env.*
+  - .env.local
+  - .env.production
+  - .env.development
+  - .env.test
+  - .env.production.local
+  - .env.development.local
+  - .env.test.local
+  - .env.example
   bashPatterns:
-    - '\bvercel\s+env\s+pull\b'
-    - '\bvercel\s+env\s+add\b'
-    - '\bvercel\s+env\s+rm\b'
-    - '\bvercel\s+env\s+ls\b'
-    - '\bvercel\s+env\s+update\b'
-    - '\bvercel\s+env\s+run\b'
+  - \bvercel\s+env\s+pull\b
+  - \bvercel\s+env\s+add\b
+  - \bvercel\s+env\s+rm\b
+  - \bvercel\s+env\s+ls\b
+  - \bvercel\s+env\s+update\b
+  - \bvercel\s+env\s+run\b
 chainTo:
-  -
-    pattern: '\b(OPENAI_API_KEY|ANTHROPIC_API_KEY|GOOGLE_API_KEY)\b'
-    targetSkill: ai-gateway
-    message: 'Direct provider API key detected — loading AI Gateway guidance for OIDC auth (no manual keys needed on Vercel).'
+- pattern: \b(OPENAI_API_KEY|ANTHROPIC_API_KEY|GOOGLE_API_KEY)\b
+  targetSkill: ai-gateway
+  message: "Direct provider API key detected \u2014 loading AI Gateway guidance for\
+    \ OIDC auth (no manual keys needed on Vercel)."
 retrieval:
   aliases:
-    - environment variables
-    - env file
-    - secrets
-    - config vars
-    - secret env var
-    - sensitive env var
+  - environment variables
+  - env file
+  - secrets
+  - config vars
+  - secret env var
+  - sensitive env var
   intents:
-    - set env var
-    - manage secrets
-    - pull env vars
-    - configure environment
+  - set env var
+  - manage secrets
+  - pull env vars
+  - configure environment
   entities:
-    - .env
-    - vercel env
-    - OIDC
-    - environment variable
+  - .env
+  - vercel env
+  - OIDC
+  - environment variable
+```
 
----
 
 # Vercel Environment Variables
 

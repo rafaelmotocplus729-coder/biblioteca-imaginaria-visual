@@ -1,61 +1,74 @@
 ---
 name: create-a-backend
-description: Backend architecture guidance. Use when planning, building, or migrating an API or backend; choosing between Functions, Services, containers, Daemons, Workflow, Queues, and Marketplace databases; or selecting a supported backend framework or runtime.
+description: Backend architecture guidance. Use when planning, building, or migrating an API or
+  backend; choosing between Functions, Services, containers, Daemons, Workflow, Queues,
+  and Marketplace databases; or selecting a supported backend framework or runtime.
+...
+---
+
+## Specification Metadata
+```yaml
 summary: Match backend workloads to the right architecture
 metadata:
   priority: 7
   docs:
-    - "https://vercel.com/docs/frameworks/backend"
-    - "https://vercel.com/docs/functions"
-    - "https://vercel.com/docs/services"
-    - "https://vercel.com/docs/queues"
-    - "https://vercel.com/docs/daemons"
-    - "https://vercel.com/docs/workflows"
-    - "https://vercel.com/docs/storage"
-  sitemap: "https://vercel.com/sitemap.xml"
+  - https://vercel.com/docs/frameworks/backend
+  - https://vercel.com/docs/functions
+  - https://vercel.com/docs/services
+  - https://vercel.com/docs/queues
+  - https://vercel.com/docs/daemons
+  - https://vercel.com/docs/workflows
+  - https://vercel.com/docs/storage
+  sitemap: https://vercel.com/sitemap.xml
   pathPatterns:
-    - 'Dockerfile.vercel'
-    - 'Containerfile.vercel'
+  - Dockerfile.vercel
+  - Containerfile.vercel
   promptSignals:
     phrases:
-      - "backend on vercel"
-      - "vercel backend"
-      - "build a backend"
-      - "create a backend"
-      - "deploy my backend"
-      - "backend architecture"
+    - backend on vercel
+    - vercel backend
+    - build a backend
+    - create a backend
+    - deploy my backend
+    - backend architecture
     allOf:
-      - [backend, vercel]
-      - [backend, docker]
-      - [backend, node]
-      - [backend, python]
-      - [backend, queue]
+    - - backend
+      - vercel
+    - - backend
+      - docker
+    - - backend
+      - node
+    - - backend
+      - python
+    - - backend
+      - queue
     anyOf:
-      - "api"
-      - "database"
-      - "service"
-      - "workflow"
+    - api
+    - database
+    - service
+    - workflow
     noneOf: []
     minScore: 6
 retrieval:
   aliases:
-    - Vercel backend
-    - backend architecture
-    - backend framework
+  - Vercel backend
+  - backend architecture
+  - backend framework
   intents:
-    - build a backend
-    - choose backend products
-    - deploy an existing API or server
-    - select a Node.js or Python backend framework
+  - build a backend
+  - choose backend products
+  - deploy an existing API or server
+  - select a Node.js or Python backend framework
   entities:
-    - Vercel Functions
-    - Vercel Services
-    - Vercel Queues
-    - Vercel Daemons
-    - Vercel Workflow
-    - Vercel Marketplace
-    - container images
----
+  - Vercel Functions
+  - Vercel Services
+  - Vercel Queues
+  - Vercel Daemons
+  - Vercel Workflow
+  - Vercel Marketplace
+  - container images
+```
+
 
 # Create a Backend
 

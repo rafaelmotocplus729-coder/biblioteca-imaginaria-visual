@@ -1,8 +1,17 @@
 ---
 name: awesome-design-skills
-description: Curated registry of 67+ design system skills from bergside/awesome-design-skills and TypeUI. Use when applying design themes (Bento, Brutalism, Claymorphism, Agentic, Claude, Bold, Neo-Brutalism, etc.), pulling design tokens with typeui.sh, or integrating TypeUI MCP.
-allowed-tools: Read, Write, Edit, Glob, Grep, Bash
+description: Curated registry of 67+ design system skills from bergside/awesome-design-skills and
+  TypeUI. Use when applying design themes (Bento, Brutalism, Claymorphism, Agentic,
+  Claude, Bold, Neo-Brutalism, etc.), pulling design tokens with typeui.sh, or integrating
+  TypeUI MCP.
+...
 ---
+
+## Specification Metadata
+```yaml
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash
+```
+
 
 # Awesome Design Skills & TypeUI Integration
 
