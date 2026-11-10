@@ -11,6 +11,7 @@
     "enriquecer": "node scripts/enriquecer-acervo.js"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.119.0",
     "d3": "^7.9.0",
     "d3-force": "^3.0.0",
     "lucide-react": "^0.475.0",

@@ -17,6 +17,17 @@ import {
   NOTAS_TEMPORARIAS_INICIAIS,
   CANVAS_ZETTEL_INICIAL
 } from '../data/zettelkastenPadrao';
+import {
+  isSupabaseConfigured,
+  sincronizarDoSupabase,
+  salvarNotaNoSupabase,
+  removerNotaDoSupabase,
+  salvarTemporariaNoSupabase,
+  removerTemporariaDoSupabase,
+  saveSupabaseConfig,
+  clearSupabaseConfig,
+  testarConexaoSupabase
+} from '../lib/supabase';
 
 interface BibliotecaState {
   livros: Livro[];
@@ -29,6 +40,14 @@ interface BibliotecaState {
   notasTemporarias: NotaTemporaria[];
   canvasZettel: CanvasZettel[];
   notaZettelSelecionadaId: string | null;
+  
+  // Supabase Backend de Dados
+  supabaseStatus: 'conectado' | 'desconectado' | 'sincronizando' | 'erro';
+  supabaseMensagem: string;
+  sincronizarSupabase: () => Promise<boolean>;
+  conectarSupabase: (url: string, anonKey: string) => Promise<{ ok: boolean; mensagem: string }>;
+  desconectarSupabase: () => void;
+  limparMockupsZettelkasten: () => void;
   
   // UI & Filtros
   filtros: Filtros;
@@ -158,6 +177,29 @@ function salvarNoLocalStorage(estado: {
   }
 }
 
+const IDS_MOCKUPS = new Set([
+  '1-261220251138', '1-202608191430', '1-310720251003', '2-131020261827',
+  '3-280920252153', '1-202501152223', '2-202501161015', '3-202501161110',
+  '1-202528122325', '1-202531071144', '1-310720251134', '3-280920252156',
+  '1-202501152230', '1-202501152240', '1-202501152250', '2-202501161025',
+  '2-202501161035', '3-202501161120', '3-202501161130', 'ATALHOS'
+]);
+
+function filtrarMockupsZettel(salvas?: NotaZettel[]): NotaZettel[] {
+  if (!salvas || salvas.length === 0) return NOTAS_ZETTEL_INICIAIS;
+  const reais = salvas.filter((n) => !IDS_MOCKUPS.has(n.id));
+  if (reais.length === 0) return NOTAS_ZETTEL_INICIAIS;
+  // Garantir que os 5 índices fundamentais existam
+  const indicesExistentes = new Set(reais.filter((n) => n.tipo === 'indice').map((n) => n.id));
+  const faltantes = NOTAS_ZETTEL_INICIAIS.filter((idx) => !indicesExistentes.has(idx.id));
+  return [...faltantes, ...reais];
+}
+
+function filtrarMockupsTemporarias(salvas?: NotaTemporaria[]): NotaTemporaria[] {
+  if (!salvas || salvas.length === 0) return NOTAS_TEMPORARIAS_INICIAIS;
+  return salvas.filter((t) => !['temp-1', 'temp-2', 'temp-3'].includes(t.id));
+}
+
 const salvo = carregarDoLocalStorage();
 
 // Sincronizar livros enriquecidos com capas atualizadas em português
@@ -190,11 +232,15 @@ export const useBibliotecaStore = create<BibliotecaState>((set, get) => ({
   progressos: salvo?.progressos || getProgressosIniciais(),
   sessoesRevisao: salvo?.sessoesRevisao || [],
   
-  // Zettelkasten
-  notasZettel: salvo?.notasZettel || NOTAS_ZETTEL_INICIAIS,
-  notasTemporarias: salvo?.notasTemporarias || NOTAS_TEMPORARIAS_INICIAIS,
+  // Zettelkasten Real (Sem mockups)
+  notasZettel: filtrarMockupsZettel(salvo?.notasZettel),
+  notasTemporarias: filtrarMockupsTemporarias(salvo?.notasTemporarias),
   canvasZettel: salvo?.canvasZettel || [CANVAS_ZETTEL_INICIAL],
   notaZettelSelecionadaId: null,
+
+  // Supabase Backend de Dados
+  supabaseStatus: isSupabaseConfigured() ? 'conectado' : 'desconectado',
+  supabaseMensagem: isSupabaseConfigured() ? 'Supabase configurado e pronto para sincronizar.' : 'Modo local (armazenamento no navegador).',
 
   // Wallpaper / Fundo do Zettelkasten
   fundoZettelkasten: salvo?.fundoZettelkasten || 'caravaggio',
@@ -617,6 +663,104 @@ export const useBibliotecaStore = create<BibliotecaState>((set, get) => ({
   },
 
   // Ações do Zettelkasten
+  sincronizarSupabase: async () => {
+    if (!isSupabaseConfigured()) {
+      set({ supabaseStatus: 'desconectado', supabaseMensagem: 'Supabase não configurado. Dados salvos apenas localmente.' });
+      return false;
+    }
+
+    set({ supabaseStatus: 'sincronizando', supabaseMensagem: 'Conectando ao Supabase e baixando notas...' });
+    try {
+      const dados = await sincronizarDoSupabase();
+      if (dados && dados.notas.length > 0) {
+        // Mesclar garantindo os 5 índices fundamentais
+        const indicesExistentes = new Set(dados.notas.filter((n) => n.tipo === 'indice').map((n) => n.id));
+        const faltantes = NOTAS_ZETTEL_INICIAIS.filter((idx) => !indicesExistentes.has(idx.id));
+        const notasFinais = [...faltantes, ...dados.notas];
+
+        set({
+          notasZettel: notasFinais,
+          notasTemporarias: dados.temporarias,
+          supabaseStatus: 'conectado',
+          supabaseMensagem: `Sincronizado com a nuvem às ${new Date().toLocaleTimeString('pt-BR')} (${notasFinais.length} notas).`
+        });
+
+        salvarNoLocalStorage({
+          livros: get().livros,
+          relacoes: get().relacoes,
+          progressos: get().progressos,
+          sessoesRevisao: get().sessoesRevisao,
+          horasPorSemana: get().horasPorSemana,
+          modoEscuro: get().modoEscuro,
+          notasZettel: notasFinais,
+          notasTemporarias: dados.temporarias,
+          canvasZettel: get().canvasZettel
+        });
+        return true;
+      } else {
+        // Se a tabela do Supabase estiver vazia, sobe as notas locais
+        const notasLocais = get().notasZettel;
+        for (const nota of notasLocais) {
+          await salvarNotaNoSupabase(nota);
+        }
+        set({
+          supabaseStatus: 'conectado',
+          supabaseMensagem: `Banco nuvem inicializado com sucesso (${notasLocais.length} notas enviadas).`
+        });
+        return true;
+      }
+    } catch (e: any) {
+      set({
+        supabaseStatus: 'erro',
+        supabaseMensagem: `Erro de sincronização: ${e.message || 'Falha de rede'}`
+      });
+      return false;
+    }
+  },
+
+  conectarSupabase: async (url: string, anonKey: string) => {
+    set({ supabaseStatus: 'sincronizando', supabaseMensagem: 'Testando conexão com o Supabase...' });
+    const teste = await testarConexaoSupabase(url, anonKey);
+    if (!teste.ok) {
+      set({ supabaseStatus: 'erro', supabaseMensagem: teste.mensagem });
+      return teste;
+    }
+
+    saveSupabaseConfig(url, anonKey);
+    set({ supabaseStatus: 'conectado', supabaseMensagem: 'Conectado ao Supabase com sucesso!' });
+    await get().sincronizarSupabase();
+    return teste;
+  },
+
+  desconectarSupabase: () => {
+    clearSupabaseConfig();
+    set({
+      supabaseStatus: 'desconectado',
+      supabaseMensagem: 'Supabase desconectado. O sistema está operando em modo local seguro.'
+    });
+  },
+
+  limparMockupsZettelkasten: () => {
+    const notasLimpos = NOTAS_ZETTEL_INICIAIS;
+    const temporariasLimpos: NotaTemporaria[] = [];
+    set({
+      notasZettel: notasLimpos,
+      notasTemporarias: temporariasLimpos,
+      notaZettelSelecionadaId: null
+    });
+    salvarNoLocalStorage({
+      livros: get().livros,
+      relacoes: get().relacoes,
+      progressos: get().progressos,
+      sessoesRevisao: get().sessoesRevisao,
+      horasPorSemana: get().horasPorSemana,
+      modoEscuro: get().modoEscuro,
+      notasZettel: notasLimpos,
+      notasTemporarias: temporariasLimpos,
+      canvasZettel: get().canvasZettel
+    });
+  },
+
   adicionarNotaZettel: (nota) => {
     const novasNotas = [nota, ...get().notasZettel];
     set({ notasZettel: novasNotas, notaZettelSelecionadaId: nota.id });
@@ -631,13 +775,21 @@ export const useBibliotecaStore = create<BibliotecaState>((set, get) => ({
       notasTemporarias: get().notasTemporarias,
       canvasZettel: get().canvasZettel
     });
+    // Persistência assíncrona no Supabase
+    salvarNotaNoSupabase(nota).catch((e) => console.warn('Supabase offline/erro:', e));
   },
 
   atualizarNotaZettel: (id, atualizacao) => {
     const agora = new Date().toISOString();
-    const novasNotas = get().notasZettel.map((n) =>
-      n.id === id ? { ...n, ...atualizacao, dataAtualizacao: agora } : n
-    );
+    let notaAtualizada: NotaZettel | null = null;
+    const novasNotas = get().notasZettel.map((n) => {
+      if (n.id === id) {
+        notaAtualizada = { ...n, ...atualizacao, dataAtualizacao: agora };
+        return notaAtualizada;
+      }
+      return n;
+    });
+
     set({ notasZettel: novasNotas });
     salvarNoLocalStorage({
       livros: get().livros,
@@ -650,6 +802,10 @@ export const useBibliotecaStore = create<BibliotecaState>((set, get) => ({
       notasTemporarias: get().notasTemporarias,
       canvasZettel: get().canvasZettel
     });
+
+    if (notaAtualizada) {
+      salvarNotaNoSupabase(notaAtualizada).catch((e) => console.warn('Supabase offline/erro:', e));
+    }
   },
 
   removerNotaZettel: (id) => {
@@ -667,6 +823,7 @@ export const useBibliotecaStore = create<BibliotecaState>((set, get) => ({
       notasTemporarias: get().notasTemporarias,
       canvasZettel: get().canvasZettel
     });
+    removerNotaDoSupabase(id).catch((e) => console.warn('Supabase offline/erro:', e));
   },
 
   selecionarNotaZettel: (id) => {
@@ -693,12 +850,18 @@ export const useBibliotecaStore = create<BibliotecaState>((set, get) => ({
       notasTemporarias: novasTemporarias,
       canvasZettel: get().canvasZettel
     });
+    salvarTemporariaNoSupabase(nova).catch((e) => console.warn('Supabase offline/erro:', e));
   },
 
   marcarNotaTemporariaProcessada: (id) => {
-    const novas = get().notasTemporarias.map((t) =>
-      t.id === id ? { ...t, processada: true } : t
-    );
+    let tempProcessada: NotaTemporaria | null = null;
+    const novas = get().notasTemporarias.map((t) => {
+      if (t.id === id) {
+        tempProcessada = { ...t, processada: true };
+        return tempProcessada;
+      }
+      return t;
+    });
     set({ notasTemporarias: novas });
     salvarNoLocalStorage({
       livros: get().livros,
@@ -711,6 +874,9 @@ export const useBibliotecaStore = create<BibliotecaState>((set, get) => ({
       notasTemporarias: novas,
       canvasZettel: get().canvasZettel
     });
+    if (tempProcessada) {
+      salvarTemporariaNoSupabase(tempProcessada).catch((e) => console.warn('Supabase offline/erro:', e));
+    }
   },
 
   removerNotaTemporaria: (id) => {
@@ -727,6 +893,7 @@ export const useBibliotecaStore = create<BibliotecaState>((set, get) => ({
       notasTemporarias: novas,
       canvasZettel: get().canvasZettel
     });
+    removerTemporariaDoSupabase(id).catch((e) => console.warn('Supabase offline/erro:', e));
   },
 
   criarNotaReferenciaDeLivro: (livroId) => {

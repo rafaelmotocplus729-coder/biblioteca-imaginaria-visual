@@ -4,6 +4,7 @@ import {
   NotaTemporaria
 } from '../types';
 import { useBibliotecaStore } from '../store/useBibliotecaStore';
+import { getStoredSupabaseConfig } from '../lib/supabase';
 import {
   Folder,
   Search,
@@ -31,7 +32,12 @@ import {
   PanelLeftClose,
   PanelLeft,
   Compass,
-  Clock
+  Clock,
+  Cloud,
+  CloudOff,
+  RefreshCw,
+  Database,
+  Plus
 } from 'lucide-react';
 
 interface ZettelkastenViewProps {
@@ -111,6 +117,8 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
     fundoZettelkasten,
     opacidadeFundoZettelkasten,
     desfoqueFundoZettelkasten,
+    supabaseStatus,
+    supabaseMensagem,
     adicionarNotaZettel,
     atualizarNotaZettel,
     removerNotaZettel,
@@ -123,7 +131,11 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
     removerNotaTemporaria,
     criarNotaReferenciaDeLivro,
     criarNotaPermanenteRapida,
-    exportarZettelkastenMarkdown
+    exportarZettelkastenMarkdown,
+    sincronizarSupabase,
+    conectarSupabase,
+    desconectarSupabase,
+    limparMockupsZettelkasten
   } = useBibliotecaStore();
 
   // Estados de layout e visão
@@ -145,23 +157,46 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
     Rascunho: false
   });
 
-  // Modo de edição
+  // Modo de edição de conteúdo e título
   const [modoEdicao, setModoEdicao] = useState(false);
   const [conteudoEditando, setConteudoEditando] = useState('');
   const [tituloEditando, setTituloEditando] = useState('');
+  const [salvoFeedback, setSalvoFeedback] = useState(false);
+
+  // Edição direta de propriedades (Frontmatter)
+  const [editandoPropriedades, setEditandoPropriedades] = useState(false);
+  const [propTema, setPropTema] = useState('');
+  const [propRef, setPropRef] = useState('');
+  const [propRelacao, setPropRelacao] = useState('');
+  const [propPagina, setPropPagina] = useState('');
+  const [propTagsStr, setPropTagsStr] = useState('');
 
   // Modal de Personalização de Fundo / Wallpaper
   const [modalFundoAberto, setModalFundoAberto] = useState(false);
   const [customFundoUrl, setCustomFundoUrl] = useState('');
 
-  // Modais de Criação
-  const [modalNovoTipo, setModalNovoTipo] = useState<'permanente' | 'referencia' | 'indice' | null>(null);
+  // Modal de Conexão com o Supabase
+  const [modalSupabaseAberto, setModalSupabaseAberto] = useState(false);
+  const [supabaseUrlInput, setSupabaseUrlInput] = useState('');
+  const [supabaseKeyInput, setSupabaseKeyInput] = useState('');
+  const [supabaseTestando, setSupabaseTestando] = useState(false);
+  const [supabaseFeedback, setSupabaseFeedback] = useState<{ ok: boolean; msg: string } | null>(null);
+  const [abaSupabase, setAbaSupabase] = useState<'conexao' | 'sql'>('conexao');
+  const [sqlCopiado, setSqlCopiado] = useState(false);
+
+  // Modais de Criação Rápida e Objetiva
+  const [modalNovoAberto, setModalNovoAberto] = useState(false);
+  const [modalNovoTipo, setModalNovoTipo] = useState<'permanente' | 'referencia' | 'indice'>('permanente');
   const [modalNovoTitulo, setModalNovoTitulo] = useState('');
   const [modalNovoTemaNum, setModalNovoTemaNum] = useState<number>(1);
   const [modalNovoLivroId, setModalNovoLivroId] = useState<number | ''>('');
   const [modalNovoRef, setModalNovoRef] = useState('');
   const [modalNovoPagina, setModalNovoPagina] = useState('');
   const [modalNovoRelacao, setModalNovoRelacao] = useState('');
+
+  // Modal rápido de conectar com outra permanente
+  const [modalConectarAberto, setModalConectarAberto] = useState(false);
+  const [notaConectarId, setNotaConectarId] = useState('');
 
   // Formulário de Captura Rápida (Inbox 48h)
   const [inboxPensamento, setInboxPensamento] = useState('');
@@ -174,6 +209,16 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
   // Ref do upload de arquivo
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Carregar credenciais salvas ao abrir o modal do Supabase
+  useEffect(() => {
+    if (modalSupabaseAberto) {
+      const cfg = getStoredSupabaseConfig();
+      setSupabaseUrlInput(cfg.url);
+      setSupabaseKeyInput(cfg.anonKey);
+      setSupabaseFeedback(null);
+    }
+  }, [modalSupabaseAberto]);
+
   // URL ativa do Wallpaper selecionado
   const urlFundoAtivo = useMemo(() => {
     if (!fundoZettelkasten || fundoZettelkasten === 'solido') return '';
@@ -182,17 +227,18 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
     return fundoZettelkasten;
   }, [fundoZettelkasten]);
 
-  // Nota ativa selecionada (prioriza a nota de Meursault ou Dom Casmurro)
+  // Nota ativa selecionada (prioriza a nota selecionada ou a primeira disponível no cofre)
   const notaAtiva = useMemo(() => {
-    if (!notaZettelSelecionadaId && notasZettel.length > 0) {
-      const estrangeiro = notasZettel.find(
-        (n) => n.titulo.includes('O estrangeiro') || n.id === '1-261220251138' || n.id === '1-202528122325'
-      );
-      if (estrangeiro) return estrangeiro;
-      const primeiraPerm = notasZettel.find((n) => n.tipo === 'permanente');
-      return primeiraPerm || notasZettel[0];
+    if (notaZettelSelecionadaId) {
+      const encontrada = notasZettel.find((n) => n.id === notaZettelSelecionadaId);
+      if (encontrada) return encontrada;
     }
-    return notasZettel.find((n) => n.id === notaZettelSelecionadaId) || null;
+    // Se não houver seleção, abre a primeira permanente ou primeira referência ou primeiro índice
+    const perm = notasZettel.find((n) => n.tipo === 'permanente');
+    if (perm) return perm;
+    const ref = notasZettel.find((n) => n.tipo === 'referencia');
+    if (ref) return ref;
+    return notasZettel[0] || null;
   }, [notasZettel, notaZettelSelecionadaId]);
 
   // Sincroniza estado de edição ao mudar a nota ativa
@@ -200,7 +246,13 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
     if (notaAtiva) {
       setConteudoEditando(notaAtiva.conteudo);
       setTituloEditando(notaAtiva.titulo);
+      setPropTema(notaAtiva.tema ? notaAtiva.tema.replace(/\[\[|\]\]/g, '') : '');
+      setPropRef(notaAtiva.referencia ? notaAtiva.referencia.replace(/\[\[|\]\]/g, '') : '');
+      setPropRelacao(notaAtiva.relacao ? notaAtiva.relacao.replace(/\[\[|\]\]/g, '') : '');
+      setPropPagina(notaAtiva.pagina ? String(notaAtiva.pagina) : '');
+      setPropTagsStr((notaAtiva.tags || []).join(', '));
       setModoEdicao(false);
+      setEditandoPropriedades(false);
     }
   }, [notaAtiva?.id]);
 
@@ -228,7 +280,20 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
     return { indices, referencias, permanentes };
   }, [notasZettel, busca]);
 
-  // Backlinks
+  // Listas de apoio para selects
+  const todasReferencias = useMemo(() => {
+    return notasZettel.filter((n) => n.tipo === 'referencia');
+  }, [notasZettel]);
+
+  const todasPermanentes = useMemo(() => {
+    return notasZettel.filter((n) => n.tipo === 'permanente');
+  }, [notasZettel]);
+
+  const todosIndices = useMemo(() => {
+    return notasZettel.filter((n) => n.tipo === 'indice');
+  }, [notasZettel]);
+
+  // Backlinks (Conexões Reversas)
   const backlinks = useMemo(() => {
     if (!notaAtiva) return [];
     const nomeOuLink = notaAtiva.titulo;
@@ -252,7 +317,7 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
     return { palavras, caracteres };
   }, [notaAtiva]);
 
-  // Salvar edição
+  // Salvar edição de texto
   const handleSalvarEdicao = () => {
     if (!notaAtiva) return;
     atualizarNotaZettel(notaAtiva.id, {
@@ -260,6 +325,28 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
       conteudo: conteudoEditando
     });
     setModoEdicao(false);
+    setSalvoFeedback(true);
+    setTimeout(() => setSalvoFeedback(false), 2000);
+  };
+
+  // Salvar propriedades editadas
+  const handleSalvarPropriedades = () => {
+    if (!notaAtiva) return;
+    const tagsArray = propTagsStr
+      .split(',')
+      .map((t) => t.trim())
+      .filter(Boolean);
+
+    atualizarNotaZettel(notaAtiva.id, {
+      tema: propTema.trim() ? `[[${propTema.trim()}]]` : undefined,
+      referencia: propRef.trim() ? `[[${propRef.trim()}]]` : undefined,
+      relacao: propRelacao.trim() ? `[[${propRelacao.trim()}]]` : undefined,
+      pagina: propPagina.trim() || undefined,
+      tags: tagsArray.length > 0 ? tagsArray : notaAtiva.tags
+    });
+    setEditandoPropriedades(false);
+    setSalvoFeedback(true);
+    setTimeout(() => setSalvoFeedback(false), 2000);
   };
 
   // Alternar tag #revisar
@@ -361,7 +448,24 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
     setModalNovoPagina(temp.pagina ? String(temp.pagina) : '');
     setModalNovoRef(temp.fonte);
     setModalNovoTipo('permanente');
+    setModalNovoAberto(true);
     marcarNotaTemporariaProcessada(temp.id);
+  };
+
+  // Iniciar criação de permanente a partir da referência ativa
+  const handleCriarPermanenteDeReferenciaAtiva = () => {
+    if (!notaAtiva) return;
+    setModalNovoTipo('permanente');
+    setModalNovoRef(notaAtiva.titulo);
+    setModalNovoTitulo('');
+    setModalNovoPagina('');
+    setModalNovoRelacao('');
+    // Extrai o número do tema se houver no título
+    const matchNum = notaAtiva.titulo.match(/^(\d)/);
+    if (matchNum) {
+      setModalNovoTemaNum(Number(matchNum[1]));
+    }
+    setModalNovoAberto(true);
   };
 
   // Criar permanente pelo modal
@@ -377,13 +481,15 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
       modalNovoRelacao.trim()
     );
 
-    setModalNovoTipo(null);
+    setModalNovoAberto(false);
     setModalNovoTitulo('');
     setModalNovoRef('');
     setModalNovoPagina('');
     setModalNovoRelacao('');
     setVisaoAtiva('acervo');
     selecionarNotaZettel(nova.id);
+    // Abre já em modo de edição para o usuário começar a escrever direto
+    setModoEdicao(true);
   };
 
   // Criar referência pelo modal
@@ -391,7 +497,7 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
     e.preventDefault();
     if (modalNovoLivroId !== '') {
       const nova = criarNotaReferenciaDeLivro(Number(modalNovoLivroId));
-      setModalNovoTipo(null);
+      setModalNovoAberto(false);
       setModalNovoLivroId('');
       setVisaoAtiva('acervo');
       selecionarNotaZettel(nova.id);
@@ -432,7 +538,7 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
     };
 
     adicionarNotaZettel(novaNota);
-    setModalNovoTipo(null);
+    setModalNovoAberto(false);
     setModalNovoTitulo('');
     setVisaoAtiva('acervo');
     selecionarNotaZettel(novaNota.id);
@@ -463,10 +569,43 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
     };
 
     adicionarNotaZettel(novaNota);
-    setModalNovoTipo(null);
+    setModalNovoAberto(false);
     setModalNovoTitulo('');
     setVisaoAtiva('acervo');
     selecionarNotaZettel(novaNota.id);
+  };
+
+  // Conectar com outra nota permanente existente
+  const handleSalvarConexaoPermanente = () => {
+    if (!notaAtiva || !notaConectarId) return;
+    const outra = notasZettel.find((n) => n.id === notaConectarId);
+    if (!outra) return;
+
+    atualizarNotaZettel(notaAtiva.id, {
+      relacao: `[[${outra.titulo}]]`
+    });
+
+    // Se a outra nota não tiver relação, adiciona de volta para link bidirecional
+    if (!outra.relacao) {
+      atualizarNotaZettel(outra.id, {
+        relacao: `[[${notaAtiva.titulo}]]`
+      });
+    }
+
+    setModalConectarAberto(false);
+    setNotaConectarId('');
+    setSalvoFeedback(true);
+    setTimeout(() => setSalvoFeedback(false), 2000);
+  };
+
+  // Testar e conectar Supabase
+  const handleConectarSupabaseSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSupabaseTestando(true);
+    setSupabaseFeedback(null);
+    const resultado = await conectarSupabase(supabaseUrlInput, supabaseKeyInput);
+    setSupabaseTestando(false);
+    setSupabaseFeedback({ ok: resultado.ok, msg: resultado.mensagem });
   };
 
   // Exportar markdown
@@ -478,122 +617,46 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
     });
   };
 
-  // Renderizador de Markdown com suporte a ==marca-texto amarelo==, #síntese, #comentário, #citação e [[wikilinks]]
-  const renderizarTextoFormatado = (texto: string) => {
-    const linhas = texto.split('\n');
-    return (
-      <div className="space-y-4 font-serif leading-relaxed text-stone-800 dark:text-stone-200 text-sm sm:text-base">
-        {linhas.map((linha, idx) => {
-          // Título H1
-          if (linha.startsWith('# ')) {
-            return (
-              <h1
-                key={idx}
-                className="text-xl sm:text-2xl font-serif font-bold text-stone-900 dark:text-stone-100 pt-4 pb-2 border-b border-stone-200 dark:border-stone-800 tracking-tight"
-              >
-                {linha.replace('# ', '')}
-              </h1>
-            );
-          }
-          // Título H2 (como em image.png: REFERÊNCIAS, RELEVÂNCIAS, NOTAS RELACIONADAS)
-          if (linha.startsWith('## ')) {
-            return (
-              <h2
-                key={idx}
-                className="text-xs sm:text-sm font-bold uppercase tracking-wider text-amber-900 dark:text-amber-300 pt-5 pb-1 font-sans flex items-center gap-2"
-              >
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-600"></span>
-                <span>{linha.replace('## ', '')}</span>
-              </h2>
-            );
-          }
-          // Título H3
-          if (linha.startsWith('### ')) {
-            return (
-              <h3 key={idx} className="text-sm font-bold font-serif text-stone-900 dark:text-stone-200 pt-2">
-                {linha.replace('### ', '')}
-              </h3>
-            );
-          }
+  // Copiar script SQL
+  const handleCopiarSQL = () => {
+    const sql = `-- Script do Supabase para Zettelkasten
+CREATE TABLE IF NOT EXISTS public.notas_zettel (
+  id TEXT PRIMARY KEY,
+  titulo TEXT NOT NULL,
+  tipo TEXT NOT NULL CHECK (tipo IN ('indice', 'referencia', 'permanente')),
+  pasta TEXT NOT NULL CHECK (pasta IN ('01 índice', '02 referências', '03 permanentes')),
+  tags TEXT[] DEFAULT '{}',
+  tema TEXT,
+  referencia TEXT,
+  pagina TEXT,
+  relacao TEXT,
+  livro_id INTEGER,
+  revisar BOOLEAN DEFAULT FALSE,
+  conteudo TEXT NOT NULL,
+  data_criacao TIMESTAMPTZ DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL,
+  data_atualizacao TIMESTAMPTZ DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
+);
 
-          // Destaque de #síntese
-          if (linha.includes('#síntese')) {
-            const partes = linha.split('#síntese');
-            return (
-              <div
-                key={idx}
-                className="p-3 rounded-xl bg-emerald-50/80 dark:bg-emerald-950/40 border-l-3 border-emerald-600 text-xs sm:text-sm font-sans flex items-start gap-2.5 shadow-2xs"
-              >
-                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-700 text-white shrink-0">
-                  #síntese
-                </span>
-                <span className="flex-1 font-serif text-stone-900 dark:text-emerald-100">
-                  {renderizarMarcacoesNaLinha(partes[1] || partes[0])}
-                </span>
-              </div>
-            );
-          }
+CREATE TABLE IF NOT EXISTS public.notas_temporarias (
+  id TEXT PRIMARY KEY,
+  pensamento TEXT NOT NULL,
+  fonte TEXT NOT NULL,
+  livro_id INTEGER,
+  pagina TEXT,
+  processada BOOLEAN DEFAULT FALSE,
+  data_criacao TIMESTAMPTZ DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
+);
 
-          // Destaque de #comentário
-          if (linha.includes('#comentário')) {
-            const partes = linha.split('#comentário');
-            return (
-              <div
-                key={idx}
-                className="p-3 rounded-xl bg-sky-50/80 dark:bg-sky-950/40 border-l-3 border-sky-600 text-xs sm:text-sm font-sans flex items-start gap-2.5 shadow-2xs"
-              >
-                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-sky-700 text-white shrink-0">
-                  #comentário
-                </span>
-                <span className="flex-1 font-serif text-stone-900 dark:text-sky-100">
-                  {renderizarMarcacoesNaLinha(partes[1] || partes[0])}
-                </span>
-              </div>
-            );
-          }
+ALTER TABLE public.notas_zettel ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.notas_temporarias ENABLE ROW LEVEL SECURITY;
 
-          // Destaque de #citação
-          if (linha.includes('#citação')) {
-            const partes = linha.split('#citação');
-            return (
-              <div
-                key={idx}
-                className="p-3 rounded-xl bg-amber-50/80 dark:bg-amber-950/40 border-l-3 border-amber-600 text-xs sm:text-sm italic flex items-start gap-2.5 shadow-2xs"
-              >
-                <span className="px-2 py-0.5 rounded text-[10px] font-bold not-italic bg-amber-700 text-white shrink-0 font-sans">
-                  #citação
-                </span>
-                <span className="flex-1 font-serif text-stone-900 dark:text-amber-100">
-                  {renderizarMarcacoesNaLinha(partes[1] || partes[0])}
-                </span>
-              </div>
-            );
-          }
-
-          // Lista de itens
-          if (linha.startsWith('- ')) {
-            return (
-              <div key={idx} className="flex items-start gap-2 text-xs sm:text-sm pl-2">
-                <span className="text-amber-700 dark:text-amber-400 font-bold select-none">•</span>
-                <span className="flex-1">{renderizarMarcacoesNaLinha(linha.replace('- ', ''))}</span>
-              </div>
-            );
-          }
-
-          // Linha em branco
-          if (!linha.trim()) {
-            return <div key={idx} className="h-2" />;
-          }
-
-          // Parágrafo regular
-          return (
-            <p key={idx} className="text-xs sm:text-sm leading-relaxed text-stone-800 dark:text-stone-300">
-              {renderizarMarcacoesNaLinha(linha)}
-            </p>
-          );
-        })}
-      </div>
-    );
+CREATE POLICY "Acesso Livre Zettel" ON public.notas_zettel FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (true) WITH CHECK (true);
+`;
+    navigator.clipboard.writeText(sql).then(() => {
+      setSqlCopiado(true);
+      setTimeout(() => setSqlCopiado(false), 2000);
+    });
   };
 
   // Parser combinado de ==marca-texto amarelo== e [[Wikilinks]]
@@ -610,7 +673,7 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
 
       const token = match[1];
 
-      // Caso 1: Marca-texto amarelo ==texto== (como em image_4.png)
+      // Caso 1: Marca-texto amarelo ==texto==
       if (token.startsWith('==') && token.endsWith('==')) {
         const textoDestacado = token.slice(2, -2);
         parts.push(
@@ -648,11 +711,118 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
     return parts;
   };
 
+  // Renderizador de Markdown
+  const renderizarTextoFormatado = (texto: string) => {
+    const linhas = texto.split('\n');
+    return (
+      <div className="space-y-4 font-serif leading-relaxed text-stone-800 dark:text-stone-200 text-sm sm:text-base">
+        {linhas.map((linha, idx) => {
+          if (linha.startsWith('# ')) {
+            return (
+              <h1
+                key={idx}
+                className="text-xl sm:text-2xl font-serif font-bold text-stone-900 dark:text-stone-100 pt-4 pb-2 border-b border-stone-200 dark:border-stone-800 tracking-tight"
+              >
+                {linha.replace('# ', '')}
+              </h1>
+            );
+          }
+          if (linha.startsWith('## ')) {
+            return (
+              <h2
+                key={idx}
+                className="text-xs sm:text-sm font-bold uppercase tracking-wider text-amber-900 dark:text-amber-300 pt-5 pb-1 font-sans flex items-center gap-2"
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-600"></span>
+                <span>{linha.replace('## ', '')}</span>
+              </h2>
+            );
+          }
+          if (linha.startsWith('### ')) {
+            return (
+              <h3 key={idx} className="text-sm font-bold font-serif text-stone-900 dark:text-stone-200 pt-2">
+                {linha.replace('### ', '')}
+              </h3>
+            );
+          }
+
+          if (linha.includes('#síntese')) {
+            const partes = linha.split('#síntese');
+            return (
+              <div
+                key={idx}
+                className="p-3 rounded-xl bg-emerald-50/80 dark:bg-emerald-950/40 border-l-3 border-emerald-600 text-xs sm:text-sm font-sans flex items-start gap-2.5 shadow-2xs"
+              >
+                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-700 text-white shrink-0">
+                  #síntese
+                </span>
+                <span className="flex-1 font-serif text-stone-900 dark:text-emerald-100">
+                  {renderizarMarcacoesNaLinha(partes[1] || partes[0])}
+                </span>
+              </div>
+            );
+          }
+
+          if (linha.includes('#comentário')) {
+            const partes = linha.split('#comentário');
+            return (
+              <div
+                key={idx}
+                className="p-3 rounded-xl bg-sky-50/80 dark:bg-sky-950/40 border-l-3 border-sky-600 text-xs sm:text-sm font-sans flex items-start gap-2.5 shadow-2xs"
+              >
+                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-sky-700 text-white shrink-0">
+                  #comentário
+                </span>
+                <span className="flex-1 font-serif text-stone-900 dark:text-sky-100">
+                  {renderizarMarcacoesNaLinha(partes[1] || partes[0])}
+                </span>
+              </div>
+            );
+          }
+
+          if (linha.includes('#citação')) {
+            const partes = linha.split('#citação');
+            return (
+              <div
+                key={idx}
+                className="p-3 rounded-xl bg-amber-50/80 dark:bg-amber-950/40 border-l-3 border-amber-600 text-xs sm:text-sm italic flex items-start gap-2.5 shadow-2xs"
+              >
+                <span className="px-2 py-0.5 rounded text-[10px] font-bold not-italic bg-amber-700 text-white shrink-0 font-sans">
+                  #citação
+                </span>
+                <span className="flex-1 font-serif text-stone-900 dark:text-amber-100">
+                  {renderizarMarcacoesNaLinha(partes[1] || partes[0])}
+                </span>
+              </div>
+            );
+          }
+
+          if (linha.startsWith('- ')) {
+            return (
+              <div key={idx} className="flex items-start gap-2 text-xs sm:text-sm pl-2">
+                <span className="text-amber-700 dark:text-amber-400 font-bold select-none">•</span>
+                <span className="flex-1">{renderizarMarcacoesNaLinha(linha.replace('- ', ''))}</span>
+              </div>
+            );
+          }
+
+          if (!linha.trim()) {
+            return <div key={idx} className="h-2" />;
+          }
+
+          return (
+            <p key={idx} className="text-xs sm:text-sm leading-relaxed text-stone-800 dark:text-stone-300">
+              {renderizarMarcacoesNaLinha(linha)}
+            </p>
+          );
+        })}
+      </div>
+    );
+  };
+
   return (
     <div className="relative rounded-2xl overflow-hidden border border-stone-200 dark:border-stone-800 bg-white dark:bg-[#16171b] text-stone-900 dark:text-stone-100 shadow-sm transition-colors min-h-[840px] flex flex-col">
-      {/* =========================================================================
-          CAMADA DE FUNDO / WALLPAPER (COM REGULADOR DE OPACIDADE E DESFOQUE)
-         ========================================================================= */}
+      {/* CAMADA DE FUNDO / WALLPAPER */}
       {urlFundoAtivo && (
         <div
           className="absolute inset-0 pointer-events-none transition-all duration-700 bg-cover bg-center z-0"
@@ -663,18 +833,14 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
           }}
         />
       )}
-      {/* Véu suave de transição que harmoniza o papel de parede com o tema ativo */}
       {urlFundoAtivo && (
         <div className="absolute inset-0 pointer-events-none bg-white/75 dark:bg-[#141518]/85 backdrop-blur-[0.5px] z-0" />
       )}
 
-      {/* =========================================================================
-          BARRA DE FERRAMENTAS SUPERIOR (HARMONIOSA COM O HEADER DA BIBLIOTECA)
-         ========================================================================= */}
+      {/* BARRA DE FERRAMENTAS SUPERIOR */}
       <div className="relative z-10 flex flex-wrap items-center justify-between border-b border-stone-200 dark:border-stone-800 bg-stone-50/90 dark:bg-[#121316]/90 backdrop-blur px-3 py-2 text-xs gap-2">
-        {/* Lado Esquerdo: Toggle da Sidebar + Alternador de Visão */}
+        {/* Lado Esquerdo */}
         <div className="flex items-center gap-2">
-          {/* Botão de recolher/expandir sidebar */}
           <button
             onClick={() => setSidebarAberta((prev) => !prev)}
             className="p-1.5 rounded-lg text-stone-600 dark:text-stone-400 hover:bg-stone-200/60 dark:hover:bg-stone-800 transition cursor-pointer"
@@ -683,7 +849,7 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
             {sidebarAberta ? <PanelLeftClose className="w-4 h-4" /> : <PanelLeft className="w-4 h-4" />}
           </button>
 
-          {/* Abas de Navegação Integradas */}
+          {/* Abas */}
           <div className="flex items-center bg-stone-200/70 dark:bg-stone-800 p-0.5 rounded-lg text-xs">
             <button
               onClick={() => setVisaoAtiva('acervo')}
@@ -722,32 +888,89 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
               <span>Canvas</span>
             </button>
           </div>
+
+          {/* Botão Principal de Inserção Rápida */}
+          <button
+            onClick={() => {
+              setModalNovoTipo('permanente');
+              setModalNovoTitulo('');
+              setModalNovoRef('');
+              setModalNovoPagina('');
+              setModalNovoRelacao('');
+              setModalNovoAberto(true);
+            }}
+            className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-amber-700 hover:bg-amber-600 text-white font-bold text-xs shadow-xs transition cursor-pointer"
+            title="Criar nova nota permanente ou de referência"
+          >
+            <Plus className="w-3.5 h-3.5" />
+            <span>Nova Nota</span>
+          </button>
         </div>
 
-        {/* Lado Direito: Ações Rápidas & Personalização */}
+        {/* Lado Direito: Status Supabase, Fundo, Edição, etc. */}
         <div className="flex items-center gap-1.5 shrink-0">
-          {/* Botão Personalizar Imagem de Fundo */}
+          {/* Indicador de Status do Supabase */}
+          <button
+            onClick={() => setModalSupabaseAberto(true)}
+            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border text-xs transition cursor-pointer ${
+              supabaseStatus === 'conectado'
+                ? 'bg-emerald-50 dark:bg-emerald-950/50 border-emerald-300 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300'
+                : supabaseStatus === 'sincronizando'
+                ? 'bg-sky-50 dark:bg-sky-950/50 border-sky-300 dark:border-sky-800 text-sky-800 dark:text-sky-300'
+                : supabaseStatus === 'erro'
+                ? 'bg-rose-50 dark:bg-rose-950/50 border-rose-300 dark:border-rose-800 text-rose-800 dark:text-rose-300'
+                : 'bg-stone-100 dark:bg-stone-800 border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-300 hover:bg-stone-200'
+            }`}
+            title={supabaseMensagem || 'Configurar conexão Supabase'}
+          >
+            {supabaseStatus === 'conectado' ? (
+              <Cloud className="w-3.5 h-3.5 text-emerald-600" />
+            ) : supabaseStatus === 'sincronizando' ? (
+              <RefreshCw className="w-3.5 h-3.5 text-sky-600 animate-spin" />
+            ) : supabaseStatus === 'erro' ? (
+              <CloudOff className="w-3.5 h-3.5 text-rose-600" />
+            ) : (
+              <Database className="w-3.5 h-3.5 text-stone-500" />
+            )}
+            <span className="hidden sm:inline font-medium">
+              {supabaseStatus === 'conectado' ? 'Supabase Nuvem' : 'Conectar Supabase'}
+            </span>
+          </button>
+
+          {/* Sincronizar Agora */}
+          {supabaseStatus === 'conectado' && (
+            <button
+              onClick={() => sincronizarSupabase()}
+              className="p-1.5 rounded-lg bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-300 transition cursor-pointer"
+              title="Sincronizar com o Supabase agora"
+            >
+              <RefreshCw className="w-3.5 h-3.5 text-stone-600 dark:text-stone-400" />
+            </button>
+          )}
+
+          {/* Imagem de Fundo */}
           <button
             onClick={() => setModalFundoAberto(true)}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-300 text-xs transition cursor-pointer"
-            title="Escolher Imagem de Fundo (Pintura Barroca Chiaroscuro / Clássica)"
+            className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-300 text-xs transition cursor-pointer"
+            title="Escolher Imagem de Fundo (Pintura Clássica)"
           >
             <ImageIcon className="w-3.5 h-3.5 text-amber-600" />
-            <span className="hidden sm:inline">Imagem de Fundo</span>
           </button>
 
           {/* Alternar Modo Leitura / Edição */}
-          <button
-            onClick={() => setModoEdicao((prev) => !prev)}
-            className={`p-1.5 rounded-lg border transition cursor-pointer ${
-              modoEdicao
-                ? 'bg-amber-700 text-white border-amber-600'
-                : 'bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-stone-700 border-stone-200 dark:border-stone-700'
-            }`}
-            title={modoEdicao ? 'Alternar para Modo Leitura' : 'Alternar para Modo Edição'}
-          >
-            {modoEdicao ? <Book className="w-3.5 h-3.5" /> : <Edit3 className="w-3.5 h-3.5" />}
-          </button>
+          {notaAtiva && (
+            <button
+              onClick={() => setModoEdicao((prev) => !prev)}
+              className={`p-1.5 rounded-lg border transition cursor-pointer ${
+                modoEdicao
+                  ? 'bg-amber-700 text-white border-amber-600'
+                  : 'bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-stone-700 border-stone-200 dark:border-stone-700'
+              }`}
+              title={modoEdicao ? 'Alternar para Modo Leitura' : 'Alternar para Modo Edição'}
+            >
+              {modoEdicao ? <Book className="w-3.5 h-3.5" /> : <Edit3 className="w-3.5 h-3.5" />}
+            </button>
+          )}
 
           {/* Copiar Wikilink [[Título]] */}
           {notaAtiva && (
@@ -805,13 +1028,9 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
         </div>
       </div>
 
-      {/* =========================================================================
-          CORPO PRINCIPAL: SIDEBAR RETRÁTIL + ÁREA EDITORIAL DO DOCUMENTO
-         ========================================================================= */}
+      {/* CORPO PRINCIPAL */}
       <div className="relative z-10 flex-1 flex overflow-hidden min-h-[760px]">
-        {/* -------------------------------------------------------------
-            COLUNA DA ESQUERDA: ÁRVORE HIERÁRQUICA (EXPANSÍVEL / RETRÁTIL)
-           ------------------------------------------------------------- */}
+        {/* SIDEBAR RETRÁTIL */}
         {sidebarAberta && (
           <aside className="w-64 sm:w-72 shrink-0 border-r border-stone-200 dark:border-stone-800 bg-stone-50/70 dark:bg-[#131417]/95 backdrop-blur flex flex-col transition-all">
             {/* Topo da Sidebar com Ações */}
@@ -825,6 +1044,7 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
                   onClick={() => {
                     setModalNovoTipo('permanente');
                     setModalNovoTitulo('');
+                    setModalNovoAberto(true);
                   }}
                   className="p-1 rounded hover:bg-stone-200 dark:hover:bg-stone-800 hover:text-stone-900 dark:hover:text-stone-100 cursor-pointer"
                   title="Nova Nota Permanente"
@@ -835,6 +1055,7 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
                   onClick={() => {
                     setModalNovoTipo('indice');
                     setModalNovoTitulo('');
+                    setModalNovoAberto(true);
                   }}
                   className="p-1 rounded hover:bg-stone-200 dark:hover:bg-stone-800 hover:text-stone-900 dark:hover:text-stone-100 cursor-pointer"
                   title="Novo Macrotema"
@@ -949,26 +1170,32 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
 
                   {pastasAbertas['02 - REFERÊNCIAS'] && (
                     <div className="pl-4 space-y-0.5 mt-0.5">
-                      {notasPorPasta.referencias.map((nota) => {
-                        const isSel = notaAtiva?.id === nota.id;
-                        return (
-                          <div
-                            key={nota.id}
-                            onClick={() => {
-                              selecionarNotaZettel(nota.id);
-                              setVisaoAtiva('acervo');
-                            }}
-                            className={`px-2 py-1 rounded hover:bg-stone-200/70 dark:hover:bg-stone-800 cursor-pointer truncate flex items-center gap-1.5 ${
-                              isSel
-                                ? 'bg-sky-100 text-sky-900 dark:bg-sky-950/70 dark:text-sky-300 font-bold'
-                                : 'text-stone-600 dark:text-stone-400'
-                            }`}
-                          >
-                            <span className="w-1.5 h-1.5 rounded-full bg-sky-500 shrink-0"></span>
-                            <span className="truncate">{nota.titulo}</span>
-                          </div>
-                        );
-                      })}
+                      {notasPorPasta.referencias.length === 0 ? (
+                        <div className="px-2 py-1 text-[11px] text-stone-400 italic">
+                          Nenhuma fonte fichada ainda.
+                        </div>
+                      ) : (
+                        notasPorPasta.referencias.map((nota) => {
+                          const isSel = notaAtiva?.id === nota.id;
+                          return (
+                            <div
+                              key={nota.id}
+                              onClick={() => {
+                                selecionarNotaZettel(nota.id);
+                                setVisaoAtiva('acervo');
+                              }}
+                              className={`px-2 py-1 rounded hover:bg-stone-200/70 dark:hover:bg-stone-800 cursor-pointer truncate flex items-center gap-1.5 ${
+                                isSel
+                                  ? 'bg-sky-100 text-sky-900 dark:bg-sky-950/70 dark:text-sky-300 font-bold'
+                                  : 'text-stone-600 dark:text-stone-400'
+                              }`}
+                            >
+                              <span className="w-1.5 h-1.5 rounded-full bg-sky-500 shrink-0"></span>
+                              <span className="truncate">{nota.titulo}</span>
+                            </div>
+                          );
+                        })
+                      )}
                     </div>
                   )}
                 </div>
@@ -992,26 +1219,32 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
 
                   {pastasAbertas['03 - PERMANENTES'] && (
                     <div className="pl-4 space-y-0.5 mt-0.5 max-h-60 overflow-y-auto">
-                      {notasPorPasta.permanentes.map((nota) => {
-                        const isSel = notaAtiva?.id === nota.id;
-                        return (
-                          <div
-                            key={nota.id}
-                            onClick={() => {
-                              selecionarNotaZettel(nota.id);
-                              setVisaoAtiva('acervo');
-                            }}
-                            className={`px-2 py-1 rounded hover:bg-stone-200/70 dark:hover:bg-stone-800 cursor-pointer truncate flex items-center gap-1.5 ${
-                              isSel
-                                ? 'bg-emerald-100 text-emerald-900 dark:bg-emerald-950/70 dark:text-emerald-300 font-bold'
-                                : 'text-stone-600 dark:text-stone-400'
-                            }`}
-                          >
-                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0"></span>
-                            <span className="truncate">{nota.titulo}</span>
-                          </div>
-                        );
-                      })}
+                      {notasPorPasta.permanentes.length === 0 ? (
+                        <div className="px-2 py-1 text-[11px] text-stone-400 italic">
+                          Nenhuma nota permanente criada ainda.
+                        </div>
+                      ) : (
+                        notasPorPasta.permanentes.map((nota) => {
+                          const isSel = notaAtiva?.id === nota.id;
+                          return (
+                            <div
+                              key={nota.id}
+                              onClick={() => {
+                                selecionarNotaZettel(nota.id);
+                                setVisaoAtiva('acervo');
+                              }}
+                              className={`px-2 py-1 rounded hover:bg-stone-200/70 dark:hover:bg-stone-800 cursor-pointer truncate flex items-center gap-1.5 ${
+                                isSel
+                                  ? 'bg-emerald-100 text-emerald-900 dark:bg-emerald-950/70 dark:text-emerald-300 font-bold'
+                                  : 'text-stone-600 dark:text-stone-400'
+                              }`}
+                            >
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0"></span>
+                              <span className="truncate">{nota.titulo}</span>
+                            </div>
+                          );
+                        })
+                      )}
                     </div>
                   )}
                 </div>
@@ -1056,6 +1289,7 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
                         onClick={() => {
                           setModalNovoTipo('indice');
                           setModalNovoTitulo('');
+                          setModalNovoAberto(true);
                         }}
                         className="hover:text-stone-800 dark:hover:text-stone-200 cursor-pointer py-0.5"
                       >
@@ -1065,6 +1299,7 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
                         onClick={() => {
                           setModalNovoTipo('referencia');
                           setModalNovoTitulo('');
+                          setModalNovoAberto(true);
                         }}
                         className="hover:text-stone-800 dark:hover:text-stone-200 cursor-pointer py-0.5"
                       >
@@ -1074,6 +1309,7 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
                         onClick={() => {
                           setModalNovoTipo('permanente');
                           setModalNovoTitulo('');
+                          setModalNovoAberto(true);
                         }}
                         className="hover:text-stone-800 dark:hover:text-stone-200 cursor-pointer py-0.5"
                       >
@@ -1103,14 +1339,10 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
           </aside>
         )}
 
-        {/* -------------------------------------------------------------
-            ÁREA DO DOCUMENTO / WORKSPACE CENTRAL (RESPIRAÇÃO EDITORIAL)
-           ------------------------------------------------------------- */}
+        {/* ÁREA DO DOCUMENTO / WORKSPACE CENTRAL */}
         <main className="flex-1 flex flex-col justify-between overflow-y-auto">
           {visaoAtiva === 'inbox' ? (
-            /* =========================================================
-               VISÃO DIÁRIO INTELECTUAL (INBOX 48H)
-               ========================================================= */
+            /* VISÃO DIÁRIO INTELECTUAL (INBOX 48H) */
             <div className="max-w-4xl mx-auto w-full p-6 sm:p-10 space-y-6">
               <div className="border-b border-stone-200 dark:border-stone-800 pb-4">
                 <span className="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
@@ -1192,66 +1424,70 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
                   Fila de Processamento Ativa ({notasTemporarias.filter((t) => !t.processada).length})
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
-                  {notasTemporarias.map((t) => (
-                    <div
-                      key={t.id}
-                      className={`p-4 rounded-xl border transition flex flex-col justify-between ${
-                        t.processada
-                          ? 'bg-stone-100/60 dark:bg-stone-900/30 border-stone-200 dark:border-stone-800 opacity-60'
-                          : 'bg-white dark:bg-[#18191d] border-stone-200 dark:border-stone-700 shadow-2xs hover:border-amber-400'
-                      }`}
-                    >
-                      <div>
-                        <div className="flex items-center justify-between text-xs text-stone-500 mb-2">
-                          <span className="font-semibold text-stone-700 dark:text-stone-300">
-                            {t.fonte} {t.pagina ? `· p. ${t.pagina}` : ''}
-                          </span>
-                          {!t.processada && (
-                            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-200">
-                              &le; 48h
+                {notasTemporarias.length === 0 ? (
+                  <div className="p-8 text-center text-stone-400 text-xs italic bg-stone-50 dark:bg-stone-900/40 rounded-xl border border-dashed border-stone-200 dark:border-stone-800">
+                    Sua caixa de entrada está limpa! Ao estudar, anote pensamentos rápidos aqui e processe em até 48 horas.
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                    {notasTemporarias.map((t) => (
+                      <div
+                        key={t.id}
+                        className={`p-4 rounded-xl border transition flex flex-col justify-between ${
+                          t.processada
+                            ? 'bg-stone-100/60 dark:bg-stone-900/30 border-stone-200 dark:border-stone-800 opacity-60'
+                            : 'bg-white dark:bg-[#18191d] border-stone-200 dark:border-stone-700 shadow-2xs hover:border-amber-400'
+                        }`}
+                      >
+                        <div>
+                          <div className="flex items-center justify-between text-xs text-stone-500 mb-2">
+                            <span className="font-semibold text-stone-700 dark:text-stone-300">
+                              {t.fonte} {t.pagina ? `· p. ${t.pagina}` : ''}
                             </span>
+                            {!t.processada && (
+                              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-200">
+                                &le; 48h
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-xs sm:text-sm font-serif text-stone-900 dark:text-stone-100 italic leading-relaxed">
+                            "{t.pensamento}"
+                          </p>
+                        </div>
+
+                        <div className="mt-4 pt-3 border-t border-stone-100 dark:border-stone-800 flex items-center justify-between">
+                          {!t.processada ? (
+                            <>
+                              <button
+                                onClick={() => handleConverterEmPermanente(t)}
+                                className="text-xs font-bold text-emerald-700 dark:text-emerald-400 hover:underline flex items-center gap-1 cursor-pointer"
+                              >
+                                <ArrowRight className="w-3.5 h-3.5" />
+                                <span>Sintetizar em Permanente</span>
+                              </button>
+                              <button
+                                onClick={() => removerNotaTemporaria(t.id)}
+                                className="p-1 rounded text-stone-400 hover:text-rose-600 transition"
+                                title="Descartar nota (Lixo)"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            </>
+                          ) : (
+                            <div className="text-xs text-emerald-600 flex items-center gap-1">
+                              <CheckCircle2 className="w-3.5 h-3.5" />
+                              <span>Processada em Permanente</span>
+                            </div>
                           )}
                         </div>
-                        <p className="text-xs sm:text-sm font-serif text-stone-900 dark:text-stone-100 italic leading-relaxed">
-                          "{t.pensamento}"
-                        </p>
                       </div>
-
-                      <div className="mt-4 pt-3 border-t border-stone-100 dark:border-stone-800 flex items-center justify-between">
-                        {!t.processada ? (
-                          <>
-                            <button
-                              onClick={() => handleConverterEmPermanente(t)}
-                              className="text-xs font-bold text-emerald-700 dark:text-emerald-400 hover:underline flex items-center gap-1 cursor-pointer"
-                            >
-                              <ArrowRight className="w-3.5 h-3.5" />
-                              <span>Sintetizar em Permanente</span>
-                            </button>
-                            <button
-                              onClick={() => removerNotaTemporaria(t.id)}
-                              className="p-1 rounded text-stone-400 hover:text-rose-600 transition"
-                              title="Descartar nota (Lixo)"
-                            >
-                              <Trash2 className="w-3.5 h-3.5" />
-                            </button>
-                          </>
-                        ) : (
-                          <div className="text-xs text-emerald-600 flex items-center gap-1">
-                            <CheckCircle2 className="w-3.5 h-3.5" />
-                            <span>Processada em Permanente</span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           ) : visaoAtiva === 'canvas' ? (
-            /* =========================================================
-               VISÃO CANVAS DE ARTICULAÇÃO
-               ========================================================= */
+            /* VISÃO CANVAS DE ARTICULAÇÃO */
             <div className="max-w-5xl mx-auto w-full p-6 sm:p-10 space-y-6">
               <div className="border-b border-stone-200 dark:border-stone-800 pb-4 flex items-center justify-between">
                 <div>
@@ -1272,157 +1508,357 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                 <div className="p-4 rounded-xl bg-sky-50/70 dark:bg-sky-950/20 border border-sky-200 dark:border-sky-900 space-y-2.5">
-                  <div className="text-xs font-bold text-sky-800 dark:text-sky-300 uppercase">1. Fontes Fichadas</div>
-                  <div className="p-3 rounded-lg bg-white dark:bg-stone-900 border border-sky-200 dark:border-sky-800 shadow-2xs">
-                    <div className="font-bold text-xs text-stone-900 dark:text-stone-100">100 anos de solidão</div>
-                    <div className="text-[11px] text-stone-500">Gabriel García Márquez</div>
-                  </div>
-                  <div className="p-3 rounded-lg bg-white dark:bg-stone-900 border border-sky-200 dark:border-sky-800 shadow-2xs">
-                    <div className="font-bold text-xs text-stone-900 dark:text-stone-100">O estrangeiro</div>
-                    <div className="text-[11px] text-stone-500">Albert Camus</div>
-                  </div>
+                  <div className="text-xs font-bold text-sky-800 dark:text-sky-300 uppercase">1. Fontes Fichadas ({todasReferencias.length})</div>
+                  {todasReferencias.slice(0, 3).map((r) => (
+                    <div
+                      key={r.id}
+                      onClick={() => {
+                        selecionarNotaZettel(r.id);
+                        setVisaoAtiva('acervo');
+                      }}
+                      className="p-3 rounded-lg bg-white dark:bg-stone-900 border border-sky-200 dark:border-sky-800 shadow-2xs cursor-pointer hover:border-sky-400"
+                    >
+                      <div className="font-bold text-xs text-stone-900 dark:text-stone-100 truncate">{r.titulo}</div>
+                      <div className="text-[11px] text-stone-500">Nota de Referência</div>
+                    </div>
+                  ))}
+                  {todasReferencias.length === 0 && (
+                    <div className="text-xs text-stone-400 italic">Nenhuma fonte fichada ainda.</div>
+                  )}
                 </div>
 
                 <div className="p-4 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900 space-y-2.5">
-                  <div className="text-xs font-bold text-emerald-800 dark:text-emerald-300 uppercase">2. Ideias Conectadas</div>
-                  <div className="p-3 rounded-lg bg-white dark:bg-stone-900 border border-emerald-200 dark:border-emerald-800 shadow-2xs">
-                    <div className="font-bold text-xs text-emerald-800 dark:text-emerald-300">Tempo circular como prisão</div>
-                    <div className="text-[11px] text-stone-500">Repetição mecânica dos erros.</div>
-                  </div>
-                  <div className="p-3 rounded-lg bg-white dark:bg-stone-900 border border-emerald-200 dark:border-emerald-800 shadow-2xs">
-                    <div className="font-bold text-xs text-emerald-800 dark:text-emerald-300">O absurdo como experiência</div>
-                    <div className="text-[11px] text-stone-500">A ausência de sentido e a consciência.</div>
-                  </div>
+                  <div className="text-xs font-bold text-emerald-800 dark:text-emerald-300 uppercase">2. Ideias Conectadas ({todasPermanentes.length})</div>
+                  {todasPermanentes.slice(0, 3).map((p) => (
+                    <div
+                      key={p.id}
+                      onClick={() => {
+                        selecionarNotaZettel(p.id);
+                        setVisaoAtiva('acervo');
+                      }}
+                      className="p-3 rounded-lg bg-white dark:bg-stone-900 border border-emerald-200 dark:border-emerald-800 shadow-2xs cursor-pointer hover:border-emerald-400"
+                    >
+                      <div className="font-bold text-xs text-emerald-800 dark:text-emerald-300 truncate">{p.titulo}</div>
+                      <div className="text-[11px] text-stone-500 truncate">{p.relacao || 'Sem relação direta'}</div>
+                    </div>
+                  ))}
+                  {todasPermanentes.length === 0 && (
+                    <div className="text-xs text-stone-400 italic">Nenhuma ideia permanente ainda.</div>
+                  )}
                 </div>
 
                 <div className="p-4 rounded-xl bg-amber-50/80 dark:bg-amber-950/30 border border-amber-300 dark:border-amber-800 space-y-2.5">
                   <div className="text-xs font-bold text-amber-900 dark:text-amber-300 uppercase">3. Tese Emergente</div>
                   <p className="text-xs sm:text-sm text-stone-800 dark:text-stone-200 font-serif leading-relaxed">
-                    "A ruptura lúcida do absurdo camusiano é a única vacina contra a amnésia trágica de Macondo."
+                    Conforme você cria notas permanentes e as conecta, use este espaço para organizar argumentos e teses para artigos, resumos e produções intelectuais.
                   </p>
                 </div>
               </div>
             </div>
           ) : notaAtiva ? (
-            /* =========================================================
-               VISÃO PRINCIPAL DA NOTA (EDITORIAL & FOCADA)
-               ========================================================= */
+            /* VISÃO PRINCIPAL DA NOTA */
             <div className="max-w-3xl mx-auto w-full px-6 sm:px-10 py-8 space-y-6">
-              {/* Breadcrumb idêntico ao Obsidian */}
-              <div className="text-xs font-sans text-stone-400 dark:text-stone-500 flex items-center gap-1.5 overflow-x-auto pb-1">
-                <span>Biblioteca</span>
-                <span>/</span>
-                <span className="uppercase font-medium text-stone-600 dark:text-stone-400">{notaAtiva.pasta}</span>
-                <span>/</span>
-                <span className="text-stone-800 dark:text-stone-200 font-semibold truncate">{notaAtiva.titulo}</span>
+              {/* Breadcrumb */}
+              <div className="text-xs font-sans text-stone-400 dark:text-stone-500 flex items-center justify-between pb-1">
+                <div className="flex items-center gap-1.5 overflow-x-auto">
+                  <span>Biblioteca</span>
+                  <span>/</span>
+                  <span className="uppercase font-medium text-stone-600 dark:text-stone-400">{notaAtiva.pasta}</span>
+                  <span>/</span>
+                  <span className="text-stone-800 dark:text-stone-200 font-semibold truncate">{notaAtiva.titulo}</span>
+                </div>
+
+                {salvoFeedback && (
+                  <span className="text-[11px] font-bold text-emerald-600 flex items-center gap-1 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded">
+                    <Check className="w-3 h-3" /> Salvo com sucesso!
+                  </span>
+                )}
               </div>
 
-              {/* Título Principal */}
-              <div>
+              {/* Título Principal com Edição Direta */}
+              <div className="space-y-2">
                 {modoEdicao ? (
-                  <input
-                    type="text"
-                    value={tituloEditando}
-                    onChange={(e) => setTituloEditando(e.target.value)}
-                    className="w-full text-2xl sm:text-3xl font-serif font-bold p-2 rounded-xl bg-stone-100 dark:bg-stone-900 border border-stone-300 dark:border-stone-700 text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-amber-500/40"
-                  />
+                  <div>
+                    <label className="text-[11px] font-bold text-stone-500 uppercase tracking-wider block mb-1">
+                      Título do Arquivo / Conceito
+                    </label>
+                    <input
+                      type="text"
+                      value={tituloEditando}
+                      onChange={(e) => setTituloEditando(e.target.value)}
+                      className="w-full text-xl sm:text-2xl font-serif font-bold p-2.5 rounded-xl bg-stone-100 dark:bg-stone-900 border border-stone-300 dark:border-stone-700 text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-amber-500/40"
+                    />
+                  </div>
                 ) : (
-                  <h1 className="text-2xl sm:text-3xl font-serif font-bold text-stone-900 dark:text-stone-100 tracking-tight leading-snug">
-                    {notaAtiva.titulo}
-                  </h1>
+                  <div className="flex items-start justify-between gap-4">
+                    <h1 className="text-2xl sm:text-3xl font-serif font-bold text-stone-900 dark:text-stone-100 tracking-tight leading-snug">
+                      {notaAtiva.titulo}
+                    </h1>
+                    <button
+                      onClick={() => setModoEdicao(true)}
+                      className="shrink-0 text-xs text-amber-700 dark:text-amber-400 hover:underline flex items-center gap-1 pt-1 cursor-pointer font-bold"
+                    >
+                      <Edit3 className="w-3.5 h-3.5" />
+                      <span>Editar</span>
+                    </button>
+                  </div>
                 )}
+
+                {/* Ações contextuais de fluxo rápido dependendo do tipo da nota */}
+                <div className="flex flex-wrap items-center gap-2 pt-1">
+                  {notaAtiva.tipo === 'referencia' && (
+                    <button
+                      onClick={handleCriarPermanenteDeReferenciaAtiva}
+                      className="px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-900 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800 text-xs font-bold hover:bg-emerald-200 transition flex items-center gap-1 cursor-pointer"
+                    >
+                      <Plus className="w-3 h-3" />
+                      <span>+ Nova Permanente desta Fonte</span>
+                    </button>
+                  )}
+
+                  {notaAtiva.tipo === 'permanente' && (
+                    <button
+                      onClick={() => setModalConectarAberto(true)}
+                      className="px-2.5 py-1 rounded-lg bg-purple-100 text-purple-900 dark:bg-purple-950 dark:text-purple-300 border border-purple-300 dark:border-purple-800 text-xs font-bold hover:bg-purple-200 transition flex items-center gap-1 cursor-pointer"
+                    >
+                      <LinkIcon className="w-3 h-3" />
+                      <span>+ Conectar com Outra Permanente</span>
+                    </button>
+                  )}
+
+                  {notaAtiva.tipo === 'indice' && (
+                    <>
+                      <button
+                        onClick={() => {
+                          setModalNovoTipo('referencia');
+                          setModalNovoAberto(true);
+                        }}
+                        className="px-2.5 py-1 rounded-lg bg-sky-100 text-sky-900 dark:bg-sky-950 dark:text-sky-300 border border-sky-300 dark:border-sky-800 text-xs font-bold hover:bg-sky-200 transition flex items-center gap-1 cursor-pointer"
+                      >
+                        <Plus className="w-3 h-3" />
+                        <span>+ Nova Referência</span>
+                      </button>
+                      <button
+                        onClick={() => {
+                          setModalNovoTipo('permanente');
+                          setModalNovoAberto(true);
+                        }}
+                        className="px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-900 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800 text-xs font-bold hover:bg-emerald-200 transition flex items-center gap-1 cursor-pointer"
+                      >
+                        <Plus className="w-3 h-3" />
+                        <span>+ Nova Permanente</span>
+                      </button>
+                    </>
+                  )}
+                </div>
               </div>
 
               {/* Caixa "Propriedades" do Obsidian */}
               <div className="border border-stone-200/90 dark:border-stone-800/90 bg-stone-50/80 dark:bg-[#1a1c22]/80 rounded-xl p-3.5 space-y-2 font-sans text-xs shadow-2xs">
-                <div
-                  onClick={() => setPropriedadesAberta((prev) => !prev)}
-                  className="flex items-center justify-between text-stone-500 dark:text-stone-400 cursor-pointer font-bold hover:text-stone-800 dark:hover:text-stone-200"
-                >
-                  <div className="flex items-center gap-1.5">
+                <div className="flex items-center justify-between text-stone-500 dark:text-stone-400 font-bold">
+                  <div
+                    onClick={() => setPropriedadesAberta((prev) => !prev)}
+                    className="flex items-center gap-1.5 cursor-pointer hover:text-stone-800 dark:hover:text-stone-200"
+                  >
                     {propriedadesAberta ? <ChevronDown className="w-3.5 h-3.5" /> : <ChevronRight className="w-3.5 h-3.5" />}
-                    <span>Propriedades</span>
+                    <span>Propriedades (Frontmatter)</span>
                   </div>
+
+                  <button
+                    onClick={() => setEditandoPropriedades((prev) => !prev)}
+                    className="text-[11px] text-amber-700 dark:text-amber-400 hover:underline cursor-pointer"
+                  >
+                    {editandoPropriedades ? 'Cancelar' : 'Alterar Propriedades'}
+                  </button>
                 </div>
 
                 {propriedadesAberta && (
-                  <div className="pt-2 space-y-2 text-stone-700 dark:text-stone-300">
-                    {/* Linha ID */}
-                    <div className="flex items-center gap-4 text-xs">
-                      <div className="w-24 text-stone-400 flex items-center gap-1.5 shrink-0 font-medium">
-                        <span className="font-mono text-stone-400">≡</span>
-                        <span>ID</span>
-                      </div>
-                      <div className="font-mono text-stone-800 dark:text-stone-200">{notaAtiva.id}</div>
-                    </div>
+                  <>
+                    {editandoPropriedades ? (
+                      /* Formulário de Edição Direta de Propriedades */
+                      <div className="pt-2 space-y-2.5 text-stone-700 dark:text-stone-300 border-t border-stone-200 dark:border-stone-800">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                          <div>
+                            <label className="block text-[11px] font-bold text-stone-500 mb-0.5">Tema</label>
+                            <select
+                              value={propTema}
+                              onChange={(e) => setPropTema(e.target.value)}
+                              className="w-full p-1.5 text-xs rounded bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700"
+                            >
+                              <option value="">Sem tema associado</option>
+                              {todosIndices.map((idx) => (
+                                <option key={idx.id} value={idx.titulo}>
+                                  {idx.titulo}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
 
-                    {/* Linha Tags */}
-                    <div className="flex items-center gap-4 text-xs">
-                      <div className="w-24 text-stone-400 flex items-center gap-1.5 shrink-0 font-medium">
-                        <Tag className="w-3 h-3 text-stone-400" />
-                        <span>tags</span>
-                      </div>
-                      <div className="flex flex-wrap items-center gap-1.5">
-                        {notaAtiva.tags.map((t) => (
-                          <span
-                            key={t}
-                            className="px-2 py-0.5 rounded-full text-[11px] bg-stone-200/70 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border border-stone-300 dark:border-stone-700 flex items-center gap-1"
+                          <div>
+                            <label className="block text-[11px] font-bold text-stone-500 mb-0.5">Página</label>
+                            <input
+                              type="text"
+                              value={propPagina}
+                              onChange={(e) => setPropPagina(e.target.value)}
+                              placeholder="Ex: 84"
+                              className="w-full p-1.5 text-xs rounded bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700"
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className="block text-[11px] font-bold text-stone-500 mb-0.5">Referência (Fonte)</label>
+                          <select
+                            value={propRef}
+                            onChange={(e) => setPropRef(e.target.value)}
+                            className="w-full p-1.5 text-xs rounded bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700"
                           >
-                            <span>{t}</span>
-                            <span className="text-stone-400 hover:text-stone-600 cursor-pointer text-[10px]">×</span>
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Linha Tema */}
-                    {notaAtiva.tema && (
-                      <div className="flex items-center gap-4 text-xs">
-                        <div className="w-24 text-stone-400 flex items-center gap-1.5 shrink-0 font-medium">
-                          <Folder className="w-3 h-3 text-stone-400" />
-                          <span>Tema</span>
+                            <option value="">Nenhuma / Outra</option>
+                            {todasReferencias.map((ref) => (
+                              <option key={ref.id} value={ref.titulo}>
+                                {ref.titulo}
+                              </option>
+                            ))}
+                          </select>
                         </div>
-                        <button
-                          onClick={() => handleClicarWikilink(notaAtiva.tema || '')}
-                          className="font-semibold text-purple-700 dark:text-purple-400 underline hover:text-purple-900 cursor-pointer"
-                        >
-                          {notaAtiva.tema.replace(/\[\[|\]\]/g, '')}
-                        </button>
+
+                        <div>
+                          <label className="block text-[11px] font-bold text-stone-500 mb-0.5">Relação Afim</label>
+                          <select
+                            value={propRelacao}
+                            onChange={(e) => setPropRelacao(e.target.value)}
+                            className="w-full p-1.5 text-xs rounded bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700"
+                          >
+                            <option value="">Nenhuma conexão direta</option>
+                            {todasPermanentes
+                              .filter((p) => p.id !== notaAtiva.id)
+                              .map((p) => (
+                                <option key={p.id} value={p.titulo}>
+                                  {p.titulo}
+                                </option>
+                              ))}
+                          </select>
+                        </div>
+
+                        <div>
+                          <label className="block text-[11px] font-bold text-stone-500 mb-0.5">Tags (separadas por vírgula)</label>
+                          <input
+                            type="text"
+                            value={propTagsStr}
+                            onChange={(e) => setPropTagsStr(e.target.value)}
+                            placeholder="nota permanente, síntese, revisar"
+                            className="w-full p-1.5 text-xs rounded bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700"
+                          />
+                        </div>
+
+                        <div className="flex justify-end gap-2 pt-1">
+                          <button
+                            type="button"
+                            onClick={() => setEditandoPropriedades(false)}
+                            className="px-3 py-1 rounded text-stone-500 hover:bg-stone-200 dark:hover:bg-stone-800"
+                          >
+                            Cancelar
+                          </button>
+                          <button
+                            type="button"
+                            onClick={handleSalvarPropriedades}
+                            className="px-3 py-1 rounded bg-amber-700 hover:bg-amber-600 text-white font-bold"
+                          >
+                            Salvar Propriedades
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      /* Exibição Normal de Propriedades */
+                      <div className="pt-2 space-y-2 text-stone-700 dark:text-stone-300">
+                        {/* Linha ID */}
+                        <div className="flex items-center gap-4 text-xs">
+                          <div className="w-24 text-stone-400 flex items-center gap-1.5 shrink-0 font-medium">
+                            <span className="font-mono text-stone-400">≡</span>
+                            <span>ID</span>
+                          </div>
+                          <div className="font-mono text-stone-800 dark:text-stone-200">{notaAtiva.id}</div>
+                        </div>
+
+                        {/* Linha Tags */}
+                        <div className="flex items-center gap-4 text-xs">
+                          <div className="w-24 text-stone-400 flex items-center gap-1.5 shrink-0 font-medium">
+                            <Tag className="w-3 h-3 text-stone-400" />
+                            <span>tags</span>
+                          </div>
+                          <div className="flex flex-wrap items-center gap-1.5">
+                            {notaAtiva.tags.map((t) => (
+                              <span
+                                key={t}
+                                className="px-2 py-0.5 rounded-full text-[11px] bg-stone-200/70 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border border-stone-300 dark:border-stone-700"
+                              >
+                                {t}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Linha Tema */}
+                        {notaAtiva.tema && (
+                          <div className="flex items-center gap-4 text-xs">
+                            <div className="w-24 text-stone-400 flex items-center gap-1.5 shrink-0 font-medium">
+                              <Folder className="w-3 h-3 text-stone-400" />
+                              <span>Tema</span>
+                            </div>
+                            <button
+                              onClick={() => handleClicarWikilink(notaAtiva.tema || '')}
+                              className="font-semibold text-purple-700 dark:text-purple-400 underline hover:text-purple-900 cursor-pointer"
+                            >
+                              {notaAtiva.tema.replace(/\[\[|\]\]/g, '')}
+                            </button>
+                          </div>
+                        )}
+
+                        {/* Linha Referência */}
+                        {notaAtiva.referencia && (
+                          <div className="flex items-center gap-4 text-xs">
+                            <div className="w-24 text-stone-400 flex items-center gap-1.5 shrink-0 font-medium">
+                              <BookOpen className="w-3 h-3 text-stone-400" />
+                              <span>Referência</span>
+                            </div>
+                            <button
+                              onClick={() => handleClicarWikilink(notaAtiva.referencia || '')}
+                              className="font-semibold text-sky-700 dark:text-sky-400 underline hover:text-sky-900 cursor-pointer truncate max-w-md"
+                            >
+                              {notaAtiva.referencia.replace(/\[\[|\]\]/g, '')}
+                            </button>
+                          </div>
+                        )}
+
+                        {/* Linha Página */}
+                        {notaAtiva.pagina && (
+                          <div className="flex items-center gap-4 text-xs">
+                            <div className="w-24 text-stone-400 flex items-center gap-1.5 shrink-0 font-medium">
+                              <span className="font-mono text-stone-400">p.</span>
+                              <span>Página</span>
+                            </div>
+                            <div className="font-bold text-stone-800 dark:text-stone-200">{notaAtiva.pagina}</div>
+                          </div>
+                        )}
+
+                        {/* Linha Relação Afim */}
+                        {notaAtiva.relacao && (
+                          <div className="flex items-center gap-4 text-xs">
+                            <div className="w-24 text-stone-400 flex items-center gap-1.5 shrink-0 font-medium">
+                              <Lightbulb className="w-3 h-3 text-stone-400" />
+                              <span>Relação</span>
+                            </div>
+                            <button
+                              onClick={() => handleClicarWikilink(notaAtiva.relacao || '')}
+                              className="font-semibold text-emerald-700 dark:text-emerald-400 underline hover:text-emerald-900 cursor-pointer truncate max-w-md"
+                            >
+                              {notaAtiva.relacao.replace(/\[\[|\]\]/g, '')}
+                            </button>
+                          </div>
+                        )}
                       </div>
                     )}
-
-                    {/* Linha Referência */}
-                    {notaAtiva.referencia && (
-                      <div className="flex items-center gap-4 text-xs">
-                        <div className="w-24 text-stone-400 flex items-center gap-1.5 shrink-0 font-medium">
-                          <BookOpen className="w-3 h-3 text-stone-400" />
-                          <span>Referência</span>
-                        </div>
-                        <button
-                          onClick={() => handleClicarWikilink(notaAtiva.referencia || '')}
-                          className="font-semibold text-sky-700 dark:text-sky-400 underline hover:text-sky-900 cursor-pointer truncate max-w-md"
-                        >
-                          {notaAtiva.referencia.replace(/\[\[|\]\]/g, '')}
-                        </button>
-                      </div>
-                    )}
-
-                    {/* Linha Relação Afim */}
-                    {notaAtiva.relacao && (
-                      <div className="flex items-center gap-4 text-xs">
-                        <div className="w-24 text-stone-400 flex items-center gap-1.5 shrink-0 font-medium">
-                          <Lightbulb className="w-3 h-3 text-stone-400" />
-                          <span>Relação</span>
-                        </div>
-                        <button
-                          onClick={() => handleClicarWikilink(notaAtiva.relacao || '')}
-                          className="font-semibold text-emerald-700 dark:text-emerald-400 underline hover:text-emerald-900 cursor-pointer truncate max-w-md"
-                        >
-                          {notaAtiva.relacao.replace(/\[\[|\]\]/g, '')}
-                        </button>
-                      </div>
-                    )}
-                  </div>
+                  </>
                 )}
               </div>
 
@@ -1480,13 +1916,13 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
                     <div className="flex justify-end gap-2">
                       <button
                         onClick={() => setModoEdicao(false)}
-                        className="px-4 py-1.5 rounded-lg text-xs font-medium text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
+                        className="px-4 py-1.5 rounded-lg text-xs font-medium text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800 cursor-pointer"
                       >
                         Cancelar
                       </button>
                       <button
                         onClick={handleSalvarEdicao}
-                        className="px-4 py-1.5 rounded-lg text-xs font-bold bg-amber-700 hover:bg-amber-600 text-white shadow-xs"
+                        className="px-4 py-1.5 rounded-lg text-xs font-bold bg-amber-700 hover:bg-amber-600 text-white shadow-xs cursor-pointer"
                       >
                         Salvar Alterações
                       </button>
@@ -1498,17 +1934,29 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
               </div>
             </div>
           ) : (
-            <div className="p-16 text-center text-stone-400 text-sm space-y-2">
-              <Lightbulb className="w-8 h-8 mx-auto text-stone-300 dark:text-stone-600" />
-              <div>Selecione uma nota na árvore de diretórios ao lado para visualizar.</div>
+            <div className="p-16 text-center text-stone-400 text-sm space-y-4 max-w-md mx-auto">
+              <Lightbulb className="w-10 h-10 mx-auto text-amber-600/60" />
+              <div className="font-serif text-lg font-bold text-stone-800 dark:text-stone-200">
+                Seu Cofre Zettelkasten Está Pronto
+              </div>
+              <p className="text-xs text-stone-500">
+                Selecione uma nota na árvore de diretórios ou clique no botão abaixo para criar sua primeira nota permanente com suas próprias palavras.
+              </p>
+              <button
+                onClick={() => {
+                  setModalNovoTipo('permanente');
+                  setModalNovoTitulo('');
+                  setModalNovoAberto(true);
+                }}
+                className="px-4 py-2 rounded-xl bg-amber-700 hover:bg-amber-600 text-white font-bold text-xs shadow-xs"
+              >
+                + Criar Primeira Nota Permanente
+              </button>
             </div>
           )}
 
-          {/* =========================================================
-              BARRA INFERIOR DE STATUS DO OBSIDIAN
-             ========================================================= */}
+          {/* BARRA INFERIOR DE STATUS */}
           <div className="border-t border-stone-200 dark:border-stone-800 bg-stone-50/80 dark:bg-[#121316]/90 px-4 py-2 flex items-center justify-between text-[11px] text-stone-500 font-sans z-10">
-            {/* Esquerda: Links inversos */}
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setBacklinksAberto((prev) => !prev)}
@@ -1522,7 +1970,6 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
               </button>
             </div>
 
-            {/* Direita: Contadores */}
             <div className="flex items-center gap-3 font-mono text-[11px]">
               <span>{statsNota.palavras.toLocaleString('pt-BR')} palavras</span>
               <span className="text-stone-300 dark:text-stone-700">|</span>
@@ -1530,16 +1977,14 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
               <span className="text-stone-300 dark:text-stone-700">|</span>
               <span className="flex items-center gap-1 text-stone-600 dark:text-stone-400 font-sans">
                 <LayoutGrid className="w-3 h-3 text-purple-600" />
-                <span>Canvas: 80</span>
+                <span>Canvas</span>
               </span>
             </div>
           </div>
         </main>
       </div>
 
-      {/* =========================================================================
-          GAVETA DE BACKLINKS RETRÁTIL
-         ========================================================================= */}
+      {/* GAVETA DE BACKLINKS RETRÁTIL */}
       {backlinksAberto && notaAtiva && (
         <div className="fixed bottom-12 right-6 w-80 sm:w-96 rounded-2xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 shadow-2xl p-4 z-40 space-y-3 animate-fadeIn">
           <div className="flex items-center justify-between border-b border-stone-200 dark:border-stone-800 pb-2">
@@ -1549,7 +1994,7 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
             </div>
             <button
               onClick={() => setBacklinksAberto(false)}
-              className="text-stone-400 hover:text-stone-600 dark:hover:text-stone-200"
+              className="text-stone-400 hover:text-stone-600 dark:hover:text-stone-200 cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -1579,13 +2024,550 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
         </div>
       )}
 
-      {/* =========================================================================
-          MODAL DE PERSONALIZAÇÃO DA IMAGEM DE FUNDO
-         ========================================================================= */}
+      {/* MODAL DE CRIAÇÃO RÁPIDA E OBJETIVA DE NOTA */}
+      {modalNovoAberto && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-[#18191d] border border-stone-200 dark:border-stone-700 rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl text-stone-800 dark:text-stone-200">
+            {/* Cabeçalho com Abas */}
+            <div className="flex items-center justify-between border-b border-stone-200 dark:border-stone-800 pb-3">
+              <div className="flex items-center gap-1 bg-stone-100 dark:bg-stone-800 p-1 rounded-xl text-xs">
+                <button
+                  type="button"
+                  onClick={() => setModalNovoTipo('permanente')}
+                  className={`px-3 py-1.5 rounded-lg font-bold transition cursor-pointer ${
+                    modalNovoTipo === 'permanente'
+                      ? 'bg-emerald-700 text-white shadow-2xs'
+                      : 'text-stone-600 dark:text-stone-400 hover:text-stone-900'
+                  }`}
+                >
+                  Minha Ideia (Permanente)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setModalNovoTipo('referencia')}
+                  className={`px-3 py-1.5 rounded-lg font-bold transition cursor-pointer ${
+                    modalNovoTipo === 'referencia'
+                      ? 'bg-sky-700 text-white shadow-2xs'
+                      : 'text-stone-600 dark:text-stone-400 hover:text-stone-900'
+                  }`}
+                >
+                  Fonte / Livro (Referência)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setModalNovoTipo('indice')}
+                  className={`px-3 py-1.5 rounded-lg font-bold transition cursor-pointer ${
+                    modalNovoTipo === 'indice'
+                      ? 'bg-purple-700 text-white shadow-2xs'
+                      : 'text-stone-600 dark:text-stone-400 hover:text-stone-900'
+                  }`}
+                >
+                  Macrotema
+                </button>
+              </div>
+
+              <button
+                onClick={() => setModalNovoAberto(false)}
+                className="text-stone-400 hover:text-stone-600 dark:hover:text-white cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Formulário: Permanente */}
+            {modalNovoTipo === 'permanente' && (
+              <form onSubmit={handleCriarPermanenteSubmit} className="space-y-3.5">
+                <div>
+                  <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">
+                    Título Sintético do Conceito (1 Ideia com suas palavras) *
+                  </label>
+                  <input
+                    type="text"
+                    value={modalNovoTitulo}
+                    onChange={(e) => setModalNovoTitulo(e.target.value)}
+                    placeholder="Ex: O ciúme retrospectivo como tribunal paranoico"
+                    className="w-full p-2.5 text-xs rounded-lg bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 text-stone-900 dark:text-stone-100 focus:outline-none focus:border-emerald-600"
+                    autoFocus
+                    required
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-2.5">
+                  <div>
+                    <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">Macrotema</label>
+                    <select
+                      value={modalNovoTemaNum}
+                      onChange={(e) => setModalNovoTemaNum(Number(e.target.value))}
+                      className="w-full p-2.5 text-xs rounded-lg bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 text-stone-900 dark:text-stone-100"
+                    >
+                      <option value={1}>1 - LITERATURA</option>
+                      <option value={2}>2 - HISTÓRIA</option>
+                      <option value={3}>3 - PSICOLOGIA</option>
+                      <option value={4}>4 - RELIGIÃO</option>
+                      <option value={5}>5 - FILOSOFIA</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">Página da Fonte</label>
+                    <input
+                      type="text"
+                      value={modalNovoPagina}
+                      onChange={(e) => setModalNovoPagina(e.target.value)}
+                      placeholder="Ex: 84"
+                      className="w-full p-2.5 text-xs rounded-lg bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 text-stone-900 dark:text-stone-100"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">
+                    Fonte de Referência (Onde você leu isso?)
+                  </label>
+                  {todasReferencias.length > 0 ? (
+                    <select
+                      value={modalNovoRef}
+                      onChange={(e) => setModalNovoRef(e.target.value)}
+                      className="w-full p-2.5 text-xs rounded-lg bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 text-stone-900 dark:text-stone-100"
+                    >
+                      <option value="">Selecionar fonte existente no acervo...</option>
+                      {todasReferencias.map((ref) => (
+                        <option key={ref.id} value={ref.titulo}>
+                          {ref.titulo}
+                        </option>
+                      ))}
+                    </select>
+                  ) : (
+                    <input
+                      type="text"
+                      value={modalNovoRef}
+                      onChange={(e) => setModalNovoRef(e.target.value)}
+                      placeholder="Ex: [[1 - 202608191430 - Dom Casmurro]] ou nome do livro"
+                      className="w-full p-2.5 text-xs rounded-lg bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 text-stone-900 dark:text-stone-100"
+                    />
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">
+                    Conectar com outra Nota Permanente (Opcional)
+                  </label>
+                  {todasPermanentes.length > 0 ? (
+                    <select
+                      value={modalNovoRelacao}
+                      onChange={(e) => setModalNovoRelacao(e.target.value)}
+                      className="w-full p-2.5 text-xs rounded-lg bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 text-stone-900 dark:text-stone-100"
+                    >
+                      <option value="">Selecionar ideia afim para interligar...</option>
+                      {todasPermanentes.map((perm) => (
+                        <option key={perm.id} value={perm.titulo}>
+                          {perm.titulo}
+                        </option>
+                      ))}
+                    </select>
+                  ) : (
+                    <input
+                      type="text"
+                      value={modalNovoRelacao}
+                      onChange={(e) => setModalNovoRelacao(e.target.value)}
+                      placeholder="Ex: [[Título de outra permanente]]"
+                      className="w-full p-2.5 text-xs rounded-lg bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 text-stone-900 dark:text-stone-100"
+                    />
+                  )}
+                </div>
+
+                <div className="pt-2 flex justify-end gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setModalNovoAberto(false)}
+                    className="px-4 py-2 rounded-lg text-xs font-medium text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800 cursor-pointer"
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-4 py-2 rounded-lg text-xs font-bold bg-emerald-700 hover:bg-emerald-600 text-white shadow-xs cursor-pointer"
+                  >
+                    Criar e Começar a Escrever
+                  </button>
+                </div>
+              </form>
+            )}
+
+            {/* Formulário: Referência */}
+            {modalNovoTipo === 'referencia' && (
+              <form onSubmit={handleCriarReferenciaSubmit} className="space-y-3.5">
+                <div>
+                  <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">
+                    Fichar Livro da Biblioteca (1 Clique)
+                  </label>
+                  <select
+                    value={modalNovoLivroId}
+                    onChange={(e) => setModalNovoLivroId(e.target.value === '' ? '' : Number(e.target.value))}
+                    className="w-full p-2.5 text-xs rounded-lg bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 text-stone-900 dark:text-stone-100"
+                  >
+                    <option value="">Ou digitar fonte / artigo externo manualmente abaixo...</option>
+                    {livros.map((l) => (
+                      <option key={l.id} value={l.id}>
+                        Nível {l.nivel} · #{l.id} {l.titulo} — {l.autor}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {modalNovoLivroId === '' && (
+                  <div>
+                    <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">
+                      Título da Fonte Externa *
+                    </label>
+                    <input
+                      type="text"
+                      value={modalNovoTitulo}
+                      onChange={(e) => setModalNovoTitulo(e.target.value)}
+                      placeholder="Ex: Dostoiévski - Memórias do Subsolo"
+                      className="w-full p-2.5 text-xs rounded-lg bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 text-stone-900 dark:text-stone-100"
+                      required
+                    />
+                  </div>
+                )}
+
+                <div>
+                  <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">Macrotema</label>
+                  <select
+                    value={modalNovoTemaNum}
+                    onChange={(e) => setModalNovoTemaNum(Number(e.target.value))}
+                    className="w-full p-2.5 text-xs rounded-lg bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 text-stone-900 dark:text-stone-100"
+                  >
+                    <option value={1}>1 - LITERATURA</option>
+                    <option value={2}>2 - HISTÓRIA</option>
+                    <option value={3}>3 - PSICOLOGIA</option>
+                    <option value={4}>4 - RELIGIÃO</option>
+                    <option value={5}>5 - FILOSOFIA</option>
+                  </select>
+                </div>
+
+                <div className="pt-2 flex justify-end gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setModalNovoAberto(false)}
+                    className="px-4 py-2 rounded-lg text-xs font-medium text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800 cursor-pointer"
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-4 py-2 rounded-lg text-xs font-bold bg-sky-700 hover:bg-sky-600 text-white cursor-pointer"
+                  >
+                    Criar Ficha de Referência
+                  </button>
+                </div>
+              </form>
+            )}
+
+            {/* Formulário: Índice */}
+            {modalNovoTipo === 'indice' && (
+              <form onSubmit={handleCriarIndiceSubmit} className="space-y-3.5">
+                <div>
+                  <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">
+                    Nome do Macrotema / Índice *
+                  </label>
+                  <input
+                    type="text"
+                    value={modalNovoTitulo}
+                    onChange={(e) => setModalNovoTitulo(e.target.value)}
+                    placeholder="Ex: 6 - SOCIOLOGIA ou 7 - POLÍTICA"
+                    className="w-full p-2.5 text-xs rounded-lg bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 text-stone-900 dark:text-stone-100"
+                    required
+                  />
+                </div>
+
+                <div className="pt-2 flex justify-end gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setModalNovoAberto(false)}
+                    className="px-4 py-2 rounded-lg text-xs font-medium text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800 cursor-pointer"
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-4 py-2 rounded-lg text-xs font-bold bg-purple-700 hover:bg-purple-600 text-white cursor-pointer"
+                  >
+                    Criar Nota Índice
+                  </button>
+                </div>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* MODAL RÁPIDO DE CONEXÃO COM OUTRA PERMANENTE */}
+      {modalConectarAberto && notaAtiva && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-[#18191d] border border-stone-200 dark:border-stone-700 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl text-stone-800 dark:text-stone-200">
+            <div className="flex items-center justify-between border-b border-stone-200 dark:border-stone-800 pb-2">
+              <div className="flex items-center gap-2">
+                <LinkIcon className="w-4 h-4 text-purple-600" />
+                <h3 className="font-serif font-bold text-base text-stone-900 dark:text-white">
+                  Conectar a outra Ideia Permanente
+                </h3>
+              </div>
+              <button
+                onClick={() => setModalConectarAberto(false)}
+                className="text-stone-400 hover:text-stone-600 dark:hover:text-white cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <p className="text-xs text-stone-500 font-serif">
+              Selecione uma nota permanente afim para estabelecer a ligação hipertextual direta entre ambas.
+            </p>
+
+            <div className="space-y-3">
+              <select
+                value={notaConectarId}
+                onChange={(e) => setNotaConectarId(e.target.value)}
+                className="w-full p-2.5 text-xs rounded-lg bg-stone-50 dark:bg-stone-950 border border-stone-300 dark:border-stone-700"
+              >
+                <option value="">Selecione uma nota permanente...</option>
+                {todasPermanentes
+                  .filter((p) => p.id !== notaAtiva.id)
+                  .map((p) => (
+                    <option key={p.id} value={p.id}>
+                      {p.titulo}
+                    </option>
+                  ))}
+              </select>
+
+              <div className="flex justify-end gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setModalConectarAberto(false)}
+                  className="px-4 py-2 rounded-lg text-xs font-medium text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800 cursor-pointer"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="button"
+                  disabled={!notaConectarId}
+                  onClick={handleSalvarConexaoPermanente}
+                  className="px-4 py-2 rounded-lg text-xs font-bold bg-purple-700 hover:bg-purple-600 text-white disabled:opacity-50 cursor-pointer"
+                >
+                  Criar Conexão
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL DE CONFIGURAÇÃO E SINCRONIZAÇÃO DO SUPABASE */}
+      {modalSupabaseAberto && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-[#18191d] border border-stone-200 dark:border-stone-700 rounded-2xl max-w-xl w-full p-6 space-y-4 shadow-2xl text-stone-800 dark:text-stone-200">
+            <div className="flex items-center justify-between border-b border-stone-200 dark:border-stone-800 pb-3">
+              <div className="flex items-center gap-2">
+                <Database className="w-5 h-5 text-emerald-600" />
+                <h3 className="font-serif font-bold text-lg text-stone-900 dark:text-white">
+                  Backend de Dados na Nuvem (Supabase)
+                </h3>
+              </div>
+              <button
+                onClick={() => setModalSupabaseAberto(false)}
+                className="text-stone-400 hover:text-stone-600 dark:hover:text-white cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Abas */}
+            <div className="flex items-center gap-2 border-b border-stone-200 dark:border-stone-800 pb-2 text-xs">
+              <button
+                onClick={() => setAbaSupabase('conexao')}
+                className={`px-3 py-1.5 rounded-lg font-bold transition cursor-pointer ${
+                  abaSupabase === 'conexao'
+                    ? 'bg-emerald-100 text-emerald-900 dark:bg-emerald-950 dark:text-emerald-300'
+                    : 'text-stone-500 hover:text-stone-900'
+                }`}
+              >
+                Conexão & Credenciais
+              </button>
+              <button
+                onClick={() => setAbaSupabase('sql')}
+                className={`px-3 py-1.5 rounded-lg font-bold transition cursor-pointer ${
+                  abaSupabase === 'sql'
+                    ? 'bg-emerald-100 text-emerald-900 dark:bg-emerald-950 dark:text-emerald-300'
+                    : 'text-stone-500 hover:text-stone-900'
+                }`}
+              >
+                Script SQL das Tabelas
+              </button>
+            </div>
+
+            {abaSupabase === 'conexao' ? (
+              <form onSubmit={handleConectarSupabaseSubmit} className="space-y-3.5">
+                <p className="text-xs text-stone-600 dark:text-stone-400">
+                  Insira o URL do seu projeto e a chave anônima (anon public key) do Supabase para salvar e sincronizar suas notas em tempo real.
+                </p>
+
+                <div>
+                  <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">
+                    Project URL do Supabase
+                  </label>
+                  <input
+                    type="url"
+                    value={supabaseUrlInput}
+                    onChange={(e) => setSupabaseUrlInput(e.target.value)}
+                    placeholder="https://xyzabcdefg.supabase.co"
+                    className="w-full p-2.5 text-xs rounded-lg bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 text-stone-900 dark:text-stone-100 font-mono"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">
+                    Anon Public Key (API Key)
+                  </label>
+                  <input
+                    type="password"
+                    value={supabaseKeyInput}
+                    onChange={(e) => setSupabaseKeyInput(e.target.value)}
+                    placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                    className="w-full p-2.5 text-xs rounded-lg bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 text-stone-900 dark:text-stone-100 font-mono"
+                    required
+                  />
+                </div>
+
+                {supabaseFeedback && (
+                  <div
+                    className={`p-3 rounded-lg text-xs font-medium ${
+                      supabaseFeedback.ok
+                        ? 'bg-emerald-100 text-emerald-900 dark:bg-emerald-950 dark:text-emerald-300'
+                        : 'bg-rose-100 text-rose-900 dark:bg-rose-950 dark:text-rose-300'
+                    }`}
+                  >
+                    {supabaseFeedback.msg}
+                  </div>
+                )}
+
+                <div className="flex items-center justify-between pt-3 border-t border-stone-200 dark:border-stone-800">
+                  <div>
+                    {supabaseStatus === 'conectado' && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (confirm('Desconectar do Supabase e voltar para o armazenamento local?')) {
+                            desconectarSupabase();
+                            setSupabaseFeedback(null);
+                          }
+                        }}
+                        className="text-xs text-rose-600 hover:underline cursor-pointer"
+                      >
+                        Desconectar Supabase
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setModalSupabaseAberto(false)}
+                      className="px-4 py-2 rounded-lg text-xs font-medium text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800 cursor-pointer"
+                    >
+                      Fechar
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={supabaseTestando}
+                      className="px-5 py-2 rounded-lg text-xs font-bold bg-emerald-700 hover:bg-emerald-600 text-white shadow-xs disabled:opacity-50 cursor-pointer"
+                    >
+                      {supabaseTestando ? 'Conectando...' : 'Testar e Salvar'}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Zona de Limpeza de Mockups */}
+                <div className="pt-3 border-t border-stone-200 dark:border-stone-800">
+                  <div className="flex items-center justify-between text-xs text-stone-500">
+                    <span>Deseja resetar e limpar todos os dados de teste?</span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (
+                          confirm(
+                            'Tem certeza que deseja limpar todos os dados de teste e começar com o cofre zerado (apenas os 5 macrotemas fundamentais)?'
+                          )
+                        ) {
+                          limparMockupsZettelkasten();
+                          alert('Cofre resetado com dados reais limpos!');
+                        }
+                      }}
+                      className="text-rose-600 hover:underline font-bold cursor-pointer"
+                    >
+                      Limpar dados de exemplo
+                    </button>
+                  </div>
+                </div>
+              </form>
+            ) : (
+              <div className="space-y-3">
+                <p className="text-xs text-stone-600 dark:text-stone-400">
+                  Copie o script abaixo e execute no <strong>SQL Editor</strong> do seu painel do Supabase para criar as tabelas com RLS:
+                </p>
+
+                <div className="relative">
+                  <pre className="p-3 rounded-xl bg-stone-900 text-stone-200 font-mono text-[11px] max-h-56 overflow-y-auto">
+                    {`CREATE TABLE public.notas_zettel (
+  id TEXT PRIMARY KEY,
+  titulo TEXT NOT NULL,
+  tipo TEXT NOT NULL,
+  pasta TEXT NOT NULL,
+  tags TEXT[] DEFAULT '{}',
+  tema TEXT,
+  referencia TEXT,
+  pagina TEXT,
+  relacao TEXT,
+  livro_id INTEGER,
+  revisar BOOLEAN DEFAULT FALSE,
+  conteudo TEXT NOT NULL,
+  data_criacao TIMESTAMPTZ DEFAULT NOW(),
+  data_atualizacao TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE public.notas_temporarias (
+  id TEXT PRIMARY KEY,
+  pensamento TEXT NOT NULL,
+  fonte TEXT NOT NULL,
+  livro_id INTEGER,
+  pagina TEXT,
+  processada BOOLEAN DEFAULT FALSE,
+  data_criacao TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE public.notas_zettel ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.notas_temporarias ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Livre" ON public.notas_zettel FOR ALL USING (true);
+CREATE POLICY "Livre Temp" ON public.notas_temporarias FOR ALL USING (true);`}
+                  </pre>
+                  <button
+                    onClick={handleCopiarSQL}
+                    className="absolute top-2 right-2 px-2.5 py-1 rounded bg-stone-800 hover:bg-stone-700 text-stone-100 text-[10px] font-bold flex items-center gap-1 border border-stone-700 cursor-pointer"
+                  >
+                    {sqlCopiado ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                    <span>{sqlCopiado ? 'Copiado!' : 'Copiar SQL'}</span>
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* MODAL DE PERSONALIZAÇÃO DA IMAGEM DE FUNDO */}
       {modalFundoAberto && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-white dark:bg-[#18191d] border border-stone-200 dark:border-stone-700 rounded-2xl max-w-xl w-full p-6 space-y-5 shadow-2xl text-stone-800 dark:text-stone-200">
-            {/* Cabeçalho */}
             <div className="flex items-center justify-between border-b border-stone-200 dark:border-stone-800 pb-3">
               <div className="flex items-center gap-2">
                 <ImageIcon className="w-5 h-5 text-amber-600" />
@@ -1601,7 +2583,6 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
               </button>
             </div>
 
-            {/* Presets */}
             <div className="space-y-2">
               <div className="text-xs font-bold uppercase text-stone-500 tracking-wider">
                 Obras Clássicas Disponíveis:
@@ -1639,7 +2620,6 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
               </div>
             </div>
 
-            {/* URL Personalizada ou Upload */}
             <div className="space-y-2 pt-2 border-t border-stone-200 dark:border-stone-800">
               <div className="text-xs font-bold uppercase text-stone-500 tracking-wider">
                 Ou use Imagem Própria:
@@ -1659,7 +2639,7 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
                       setFundoZettelkasten(customFundoUrl.trim());
                     }
                   }}
-                  className="px-3 py-1.5 rounded-lg bg-stone-200 dark:bg-stone-800 hover:bg-stone-300 text-xs font-bold text-stone-800 dark:text-stone-200"
+                  className="px-3 py-1.5 rounded-lg bg-stone-200 dark:bg-stone-800 hover:bg-stone-300 text-xs font-bold text-stone-800 dark:text-stone-200 cursor-pointer"
                 >
                   Aplicar URL
                 </button>
@@ -1682,7 +2662,6 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
               </div>
             </div>
 
-            {/* Ajustes de Opacidade e Desfoque */}
             <div className="grid grid-cols-2 gap-4 pt-3 border-t border-stone-200 dark:border-stone-800">
               <div>
                 <div className="flex justify-between text-xs text-stone-500 mb-1">
@@ -1717,7 +2696,6 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
               </div>
             </div>
 
-            {/* Fechar */}
             <div className="pt-3 border-t border-stone-200 dark:border-stone-800 flex justify-end">
               <button
                 onClick={() => setModalFundoAberto(false)}
@@ -1726,197 +2704,6 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
                 Concluir
               </button>
             </div>
-          </div>
-        </div>
-      )}
-
-      {/* =========================================================================
-          MODAIS DE CRIAÇÃO (PERMANENTE / REFERÊNCIA / ÍNDICE)
-         ========================================================================= */}
-      {modalNovoTipo && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-[#18191d] border border-stone-200 dark:border-stone-700 rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl text-stone-800 dark:text-stone-200">
-            <div className="flex items-center justify-between border-b border-stone-200 dark:border-stone-800 pb-3">
-              <h3 className="font-serif font-bold text-lg text-stone-900 dark:text-white">
-                {modalNovoTipo === 'permanente' && 'Nova Nota Permanente (1 Ideia Atômica)'}
-                {modalNovoTipo === 'referencia' && 'Nova Nota de Referência (Fonte/Livro)'}
-                {modalNovoTipo === 'indice' && 'Nova Nota de Índice (Macrotema)'}
-              </h3>
-              <button onClick={() => setModalNovoTipo(null)} className="text-stone-400 hover:text-stone-600 dark:hover:text-white cursor-pointer">
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            {modalNovoTipo === 'permanente' && (
-              <form onSubmit={handleCriarPermanenteSubmit} className="space-y-3.5">
-                <div>
-                  <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">
-                    Título Sintético do Conceito
-                  </label>
-                  <input
-                    type="text"
-                    value={modalNovoTitulo}
-                    onChange={(e) => setModalNovoTitulo(e.target.value)}
-                    placeholder="Ex: O absurdo como divórcio entre sentido e o mundo"
-                    className="w-full p-2.5 text-xs rounded-lg bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 text-stone-900 dark:text-stone-100 focus:outline-none focus:border-emerald-600"
-                    required
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-2.5">
-                  <div>
-                    <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">Macrotema</label>
-                    <select
-                      value={modalNovoTemaNum}
-                      onChange={(e) => setModalNovoTemaNum(Number(e.target.value))}
-                      className="w-full p-2.5 text-xs rounded-lg bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 text-stone-900 dark:text-stone-100"
-                    >
-                      <option value={1}>1 - LITERATURA</option>
-                      <option value={2}>2 - HISTÓRIA</option>
-                      <option value={3}>3 - PSICOLOGIA</option>
-                      <option value={4}>4 - RELIGIÃO</option>
-                      <option value={5}>5 - FILOSOFIA</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">Página</label>
-                    <input
-                      type="text"
-                      value={modalNovoPagina}
-                      onChange={(e) => setModalNovoPagina(e.target.value)}
-                      placeholder="Ex: 84"
-                      className="w-full p-2.5 text-xs rounded-lg bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 text-stone-900 dark:text-stone-100"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">Referência (Fonte)</label>
-                  <input
-                    type="text"
-                    value={modalNovoRef}
-                    onChange={(e) => setModalNovoRef(e.target.value)}
-                    placeholder="Ex: [[1 - 261220251138 - O estrangeiro]]"
-                    className="w-full p-2.5 text-xs rounded-lg bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 text-stone-900 dark:text-stone-100"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">Relação Afim</label>
-                  <input
-                    type="text"
-                    value={modalNovoRelacao}
-                    onChange={(e) => setModalNovoRelacao(e.target.value)}
-                    placeholder="Ex: [[Outra Nota Permanente]]"
-                    className="w-full p-2.5 text-xs rounded-lg bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 text-stone-900 dark:text-stone-100"
-                  />
-                </div>
-
-                <div className="pt-2 flex justify-end gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setModalNovoTipo(null)}
-                    className="px-4 py-2 rounded-lg text-xs font-medium text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
-                  >
-                    Cancelar
-                  </button>
-                  <button
-                    type="submit"
-                    className="px-4 py-2 rounded-lg text-xs font-bold bg-emerald-700 hover:bg-emerald-600 text-white"
-                  >
-                    Criar Nota Permanente
-                  </button>
-                </div>
-              </form>
-            )}
-
-            {modalNovoTipo === 'referencia' && (
-              <form onSubmit={handleCriarReferenciaSubmit} className="space-y-3.5">
-                <div>
-                  <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">
-                    Fichar Livro da Estante (1 Clique)
-                  </label>
-                  <select
-                    value={modalNovoLivroId}
-                    onChange={(e) => setModalNovoLivroId(e.target.value === '' ? '' : Number(e.target.value))}
-                    className="w-full p-2.5 text-xs rounded-lg bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 text-stone-900 dark:text-stone-100"
-                  >
-                    <option value="">Digitar título / fonte manualmente abaixo...</option>
-                    {livros.map((l) => (
-                      <option key={l.id} value={l.id}>
-                        Nível {l.nivel} · #{l.id} {l.titulo} — {l.autor}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                {modalNovoLivroId === '' && (
-                  <div>
-                    <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">
-                      Título da Fonte Externa
-                    </label>
-                    <input
-                      type="text"
-                      value={modalNovoTitulo}
-                      onChange={(e) => setModalNovoTitulo(e.target.value)}
-                      placeholder="Ex: Crime e Castigo ou Ensaio sobre a Cegueira"
-                      className="w-full p-2.5 text-xs rounded-lg bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 text-stone-900 dark:text-stone-100"
-                      required
-                    />
-                  </div>
-                )}
-
-                <div className="pt-2 flex justify-end gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setModalNovoTipo(null)}
-                    className="px-4 py-2 rounded-lg text-xs font-medium text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
-                  >
-                    Cancelar
-                  </button>
-                  <button
-                    type="submit"
-                    className="px-4 py-2 rounded-lg text-xs font-bold bg-sky-700 hover:bg-sky-600 text-white"
-                  >
-                    Criar Nota de Referência
-                  </button>
-                </div>
-              </form>
-            )}
-
-            {modalNovoTipo === 'indice' && (
-              <form onSubmit={handleCriarIndiceSubmit} className="space-y-3.5">
-                <div>
-                  <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">
-                    Nome do Macrotema / Índice
-                  </label>
-                  <input
-                    type="text"
-                    value={modalNovoTitulo}
-                    onChange={(e) => setModalNovoTitulo(e.target.value)}
-                    placeholder="Ex: 6 - SOCIOLOGIA ou 7 - POLÍTICA"
-                    className="w-full p-2.5 text-xs rounded-lg bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 text-stone-900 dark:text-stone-100"
-                    required
-                  />
-                </div>
-
-                <div className="pt-2 flex justify-end gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setModalNovoTipo(null)}
-                    className="px-4 py-2 rounded-lg text-xs font-medium text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
-                  >
-                    Cancelar
-                  </button>
-                  <button
-                    type="submit"
-                    className="px-4 py-2 rounded-lg text-xs font-bold bg-purple-700 hover:bg-purple-600 text-white"
-                  >
-                    Criar Nota Índice
-                  </button>
-                </div>
-              </form>
-            )}
           </div>
         </div>
       )}
