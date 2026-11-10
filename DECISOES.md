@@ -19,3 +19,13 @@ Este documento registra as decisões de arquitetura e produto adotadas na implem
 - **Grafo:** Implementação interativa com D3 (Force Simulation), com nós coloridos por área, espessura e destaque de contrapontos e sequência de preparação.
 - **Integridade dos Dados:** Dados estruturais em `data/livros.json` e `data/relacoes.json`. Enriquecimento cacheado em `data/enriquecido.json` e pendências catalogadas em `data/pendencias.json`.
 - **Regra do Resumo:** Obras com `resumo_permitido = "nao"` contam com o selo rígido *"Resumo trairia o argumento"* e disponibilizam campo editável para *"Guia de Leitura"* pessoal do usuário, nunca gerando paráfrases artificiais.
+
+## 3. Padrões de UX, Design Antiquarian & Produtividade
+
+- **Atmosfera 'Classical Editorial & Antiquarian':** Tons pergaminho suave, dark mode estilo sala de leitura noturna, tipografia serifada e toques em ouro envelhecido.
+- **Lombadas Físicas Proporcionais:** Espessura dinâmica calculada a partir do número real de páginas de cada obra (44px a 84px), com nervuras clássicas de encadernação, cabeceado de tecido e leitura vertical no padrão latino/ABNT de cima para baixo.
+- **Prateleira 3D & Abas Mobile:** Estrutura em madeira nobre com moldura e placas de latão escovado gravadas em algarismos romanos para os níveis I a V, acompanhadas de navegação horizontal ágil em dispositivos móveis e selo comemorativo *Ex-Libris* para cada nível completado.
+- **Paleta de Comandos Global (`Cmd+K` / `Ctrl+K`):** Busca instantânea por qualquer livro, autor, conceito de tese ou ação do sistema com navegação 100% via teclado (`E`, `G`, `C`, `D`, `1`–`5`, `Esc`).
+- **Confronto Dialético Lado a Lado:** Painel comparativo hermenêutico frente a frente de obras em contraponto (ex: Hayek vs Polanyi, Hobbes vs Rousseau), permitindo ao leitor registrar e salvar sua síntese pessoal nas notas de estudo.
+- **Caderno Geral de Estudos & Citações:** Centralizador de todas as anotações, perguntas abertas e reflexões com busca textual e exportação consolidada em arquivo `.md`.
+
