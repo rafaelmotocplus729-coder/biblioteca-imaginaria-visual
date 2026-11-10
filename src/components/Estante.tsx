@@ -105,74 +105,97 @@ export const Estante: React.FC<EstanteProps> = ({
 
   return (
     <div className="space-y-12 pb-20">
-      {/* Barra de Seletores de Nível e Trilhas (Canônica A vs Expansão B) */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-library-paper/80 dark:bg-library-darkPaper/80 p-3 rounded-xl border border-stone-200 dark:border-stone-800 backdrop-blur-md">
-        {/* Seletor de Níveis em Abas Nobres */}
+      {/* Barra Nobre de Navegação: Níveis, Trilhas & Organização da Estante */}
+      <div className="bg-library-paper/95 dark:bg-library-darkPaper/95 backdrop-blur-md p-3.5 sm:p-4 rounded-2xl border border-stone-200/90 dark:border-stone-800/90 shadow-sm space-y-3.5">
+        {/* Tier 1: Seletor de Níveis em Abas Nobres */}
         {!filtroNivel && (
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none">
-            <button
-              onClick={() => setTabNivelMobile('todos')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-cinzel font-semibold transition-all shrink-0 flex items-center gap-1.5 border ${
-                tabNivelMobile === 'todos'
-                  ? 'bg-amber-900 text-amber-100 border-amber-700 shadow-sm'
-                  : 'bg-library-paper/90 dark:bg-library-darkPaper text-stone-700 dark:text-stone-300 border-stone-200 dark:border-stone-800 hover:border-amber-500'
-              }`}
-            >
-              <Layers className="w-3.5 h-3.5" />
-              <span>Todos os Níveis</span>
-            </button>
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between text-[11px] font-cinzel font-bold text-stone-500 dark:text-stone-400 px-0.5">
+              <span className="flex items-center gap-1.5 uppercase tracking-wider">
+                <Layers className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
+                Níveis do Plano de Estudos
+              </span>
+              <span className="text-[10px] font-mono text-stone-400 dark:text-stone-500 hidden sm:inline">
+                Atalhos numéricos [1] a [5] no teclado
+              </span>
+            </div>
 
-            {[1, 2, 3, 4, 5].map((lvl) => {
-              const livrosNivel = livros.filter((l) => l.nivel === lvl);
-              const lidos = livrosNivel.filter((l) => progressos[l.id]?.estado === 'lido').length;
-              const completo = livrosNivel.length > 0 && lidos === livrosNivel.length;
-              const isActive = tabNivelMobile === lvl;
+            <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+              <button
+                onClick={() => setTabNivelMobile('todos')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-cinzel font-bold transition-all shrink-0 flex items-center gap-2 border ${
+                  tabNivelMobile === 'todos'
+                    ? 'bg-amber-900 dark:bg-amber-800 text-amber-50 border-amber-700 shadow-xs'
+                    : 'bg-stone-50/80 dark:bg-stone-900/80 text-stone-700 dark:text-stone-300 border-stone-200/90 dark:border-stone-800 hover:border-amber-500/60'
+                }`}
+              >
+                <span>Todos os Níveis</span>
+                <span className={`text-[10px] px-1.5 py-0.2 rounded font-mono ${
+                  tabNivelMobile === 'todos'
+                    ? 'bg-amber-950/60 text-amber-200'
+                    : 'bg-stone-200/60 dark:bg-stone-800 text-stone-500 dark:text-stone-400'
+                }`}>
+                  120
+                </span>
+              </button>
 
-              return (
-                <button
-                  key={lvl}
-                  onClick={() => setTabNivelMobile(lvl)}
-                  className={`px-2.5 py-1.5 rounded-lg text-xs font-cinzel font-semibold transition-all shrink-0 flex items-center gap-1.5 border ${
-                    isActive
-                      ? 'bg-amber-900 text-amber-100 border-amber-700 shadow-sm'
-                      : 'bg-library-paper/90 dark:bg-library-darkPaper text-stone-700 dark:text-stone-300 border-stone-200 dark:border-stone-800 hover:border-amber-500'
-                  }`}
-                >
-                  <span>Nível {algarismosRomanos[lvl]}</span>
-                  {completo ? (
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
-                  ) : (
-                    <span className="text-[10px] opacity-75 font-mono">
-                      ({lidos}/{livrosNivel.length})
-                    </span>
-                  )}
-                </button>
-              );
-            })}
+              {[1, 2, 3, 4, 5].map((lvl) => {
+                const livrosNivel = livros.filter((l) => l.nivel === lvl);
+                const lidos = livrosNivel.filter((l) => progressos[l.id]?.estado === 'lido').length;
+                const completo = livrosNivel.length > 0 && lidos === livrosNivel.length;
+                const isActive = tabNivelMobile === lvl;
+
+                return (
+                  <button
+                    key={lvl}
+                    onClick={() => setTabNivelMobile(lvl)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-cinzel font-bold transition-all shrink-0 flex items-center gap-2 border ${
+                      isActive
+                        ? 'bg-amber-900 dark:bg-amber-800 text-amber-50 border-amber-700 shadow-xs'
+                        : 'bg-stone-50/80 dark:bg-stone-900/80 text-stone-700 dark:text-stone-300 border-stone-200/90 dark:border-stone-800 hover:border-amber-500/60'
+                    }`}
+                  >
+                    <span>Nível {algarismosRomanos[lvl]}</span>
+                    {completo ? (
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                    ) : (
+                      <span className={`text-[10px] px-1.5 py-0.2 rounded font-mono ${
+                        isActive
+                          ? 'bg-amber-950/60 text-amber-200'
+                          : 'bg-stone-200/60 dark:bg-stone-800 text-stone-500 dark:text-stone-400'
+                      }`}>
+                        {lidos}/{livrosNivel.length}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
           </div>
         )}
 
-        {/* Alternador de Trilhas (Trilha A · Canônica vs Trilha B · Expansão vs Ambas) */}
-        <div className="flex items-center gap-2 self-start sm:self-auto overflow-x-auto">
-          <div className="flex items-center bg-stone-100 dark:bg-stone-900/90 p-1 rounded-lg border border-stone-200 dark:border-stone-800 shrink-0">
+        {/* Tier 2: Alternador de Trilhas e Modos de Exibição da Estante */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pt-2.5 border-t border-stone-200/70 dark:border-stone-800/70">
+          {/* Alternador de Trilhas (Canônica A vs Expansão B vs Ambas) */}
+          <div className="flex items-center gap-1.5 bg-stone-100/90 dark:bg-stone-900/90 p-1 rounded-xl border border-stone-200/90 dark:border-stone-800 shadow-2xs self-start sm:self-auto overflow-x-auto scrollbar-none">
             <button
               onClick={() => setFiltroTrilha('todas')}
-              className={`px-2.5 py-1 rounded text-xs font-cinzel font-semibold transition-all flex items-center gap-1 ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-cinzel font-bold transition-all flex items-center gap-1.5 shrink-0 ${
                 filtroTrilha === 'todas'
-                  ? 'bg-white dark:bg-stone-800 text-amber-900 dark:text-amber-200 shadow-xs'
-                  : 'text-stone-600 dark:text-stone-400 hover:text-stone-900'
+                  ? 'bg-white dark:bg-stone-800 text-amber-900 dark:text-amber-200 shadow-xs border border-stone-200/60 dark:border-stone-700/60'
+                  : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
               }`}
               title="Exibir todas as 24 obras de cada nível (12 canônicas + 12 expansão)"
             >
-              <Compass className="w-3 h-3" />
-              <span>24 Obras</span>
+              <Compass className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
+              <span>✦ Todas as 24 Obras</span>
             </button>
             <button
               onClick={() => setFiltroTrilha('a')}
-              className={`px-2.5 py-1 rounded text-xs font-cinzel font-semibold transition-all ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-cinzel font-bold transition-all shrink-0 ${
                 filtroTrilha === 'a'
-                  ? 'bg-amber-900 text-amber-100 shadow-xs'
-                  : 'text-stone-600 dark:text-stone-400 hover:text-stone-900'
+                  ? 'bg-amber-900 dark:bg-amber-800 text-amber-50 shadow-xs'
+                  : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
               }`}
               title="Exibir apenas a Trilha A (Obras Canônicas originais 1 a 60)"
             >
@@ -180,10 +203,10 @@ export const Estante: React.FC<EstanteProps> = ({
             </button>
             <button
               onClick={() => setFiltroTrilha('b')}
-              className={`px-2.5 py-1 rounded text-xs font-cinzel font-semibold transition-all ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-cinzel font-bold transition-all shrink-0 ${
                 filtroTrilha === 'b'
-                  ? 'bg-amber-800 text-amber-100 shadow-xs'
-                  : 'text-stone-600 dark:text-stone-400 hover:text-stone-900'
+                  ? 'bg-amber-900 dark:bg-amber-800 text-amber-50 shadow-xs'
+                  : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
               }`}
               title="Exibir apenas a Trilha B (Segunda leva de obras complementares 61 a 120)"
             >
@@ -193,30 +216,33 @@ export const Estante: React.FC<EstanteProps> = ({
 
           {/* Quando 'todas' estiver ativo, permitir alternar entre Prateleiras Divididas ou Intercaladas */}
           {filtroTrilha === 'todas' && (
-            <div className="hidden sm:flex items-center bg-stone-100 dark:bg-stone-900/90 p-1 rounded-lg border border-stone-200 dark:border-stone-800 shrink-0">
+            <div className="flex items-center gap-1 bg-stone-100/90 dark:bg-stone-900/90 p-1 rounded-xl border border-stone-200/90 dark:border-stone-800 shadow-2xs self-start sm:self-auto shrink-0">
+              <span className="text-[10px] font-cinzel text-stone-400 px-2 hidden md:inline uppercase">
+                Exibição:
+              </span>
               <button
                 onClick={() => setModoAgrupamento('subtrilhas')}
-                className={`p-1.5 rounded text-xs transition-all flex items-center gap-1 ${
+                className={`px-2.5 py-1 rounded-lg text-xs font-cinzel font-semibold transition-all flex items-center gap-1.5 ${
                   modoAgrupamento === 'subtrilhas'
-                    ? 'bg-white dark:bg-stone-800 text-amber-900 dark:text-amber-200 shadow-xs font-bold'
+                    ? 'bg-white dark:bg-stone-800 text-amber-900 dark:text-amber-200 shadow-xs border border-stone-200/60 dark:border-stone-700/60 font-bold'
                     : 'text-stone-500 hover:text-stone-800 dark:hover:text-stone-200'
                 }`}
                 title="Separar visualmente em duas prateleiras por nível: Trilha A e Trilha B"
               >
-                <SplitSquareVertical className="w-3.5 h-3.5" />
-                <span className="text-[10px] font-cinzel">Por Trilha</span>
+                <SplitSquareVertical className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
+                <span>Por Trilha</span>
               </button>
               <button
                 onClick={() => setModoAgrupamento('intercalado')}
-                className={`p-1.5 rounded text-xs transition-all flex items-center gap-1 ${
+                className={`px-2.5 py-1 rounded-lg text-xs font-cinzel font-semibold transition-all flex items-center gap-1.5 ${
                   modoAgrupamento === 'intercalado'
-                    ? 'bg-white dark:bg-stone-800 text-amber-900 dark:text-amber-200 shadow-xs font-bold'
+                    ? 'bg-white dark:bg-stone-800 text-amber-900 dark:text-amber-200 shadow-xs border border-stone-200/60 dark:border-stone-700/60 font-bold'
                     : 'text-stone-500 hover:text-stone-800 dark:hover:text-stone-200'
                 }`}
                 title="Intercalar os livros lado a lado (1A, 1B, 2A, 2B...)"
               >
-                <ArrowRightLeft className="w-3.5 h-3.5" />
-                <span className="text-[10px] font-cinzel">Intercaladas</span>
+                <ArrowRightLeft className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
+                <span>Intercaladas</span>
               </button>
             </div>
           )}

@@ -29,22 +29,22 @@ export const BarraFiltros: React.FC<BarraFiltrosProps> = ({
     Boolean(filtros.idioma);
 
   return (
-    <div className="bg-library-paper dark:bg-library-darkPaper rounded-xl p-4 shadow-sm border border-slate-200 dark:border-library-darkBorder mb-6 space-y-3">
+    <div className="bg-library-paper/95 dark:bg-library-darkPaper/95 backdrop-blur-md rounded-2xl p-4 shadow-xs border border-stone-200/90 dark:border-stone-800/90 mb-6 space-y-3">
       {/* Linha Principal: Busca Textual */}
       <div className="flex flex-col sm:flex-row gap-3 items-center">
         <div className="relative flex-1 w-full">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-amber-700/60 dark:text-amber-400/60 absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             value={filtros.textoBusca}
             onChange={(e) => onAtualizarFiltros({ textoBusca: e.target.value })}
             placeholder="Pesquisar por título, autor ou conceito da tese (ex: Camus, suicídio, mercado, virtude)..."
-            className="w-full pl-10 pr-9 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none placeholder:text-slate-400"
+            className="w-full pl-10 pr-9 py-2 rounded-xl border border-stone-300/80 dark:border-stone-700 bg-white/90 dark:bg-stone-900 text-sm focus:ring-2 focus:ring-amber-500/40 focus:border-amber-500 focus:outline-none placeholder:text-stone-400 transition-all shadow-2xs"
           />
           {filtros.textoBusca && (
             <button
               onClick={() => onAtualizarFiltros({ textoBusca: '' })}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600 dark:hover:text-stone-200 p-0.5"
             >
               <X className="w-4 h-4" />
             </button>
@@ -52,14 +52,14 @@ export const BarraFiltros: React.FC<BarraFiltrosProps> = ({
         </div>
 
         {/* Contador e Botão de Limpar */}
-        <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 shrink-0 w-full sm:w-auto justify-between sm:justify-end">
-          <span>
-            Mostrando <strong>{livrosFiltrados}</strong> de {totalLivros} obras
+        <div className="flex items-center gap-2.5 text-xs text-stone-500 dark:text-stone-400 shrink-0 w-full sm:w-auto justify-between sm:justify-end">
+          <span className="font-serif">
+            Mostrando <strong className="font-mono text-stone-800 dark:text-stone-200">{livrosFiltrados}</strong> de {totalLivros} obras
           </span>
           {temFiltroAtivo && (
             <button
               onClick={onLimparFiltros}
-              className="flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-amber-700 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950/40 rounded border border-amber-300 dark:border-amber-800 transition-colors"
+              className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-cinzel font-bold text-amber-800 dark:text-amber-300 hover:bg-amber-100/70 dark:hover:bg-amber-950/50 rounded-lg border border-amber-300 dark:border-amber-800 transition-all shadow-2xs"
             >
               <RotateCcw className="w-3 h-3" />
               Limpar
@@ -69,12 +69,12 @@ export const BarraFiltros: React.FC<BarraFiltrosProps> = ({
       </div>
 
       {/* Linha Secundária: Filtros Dropdown Combináveis */}
-      <div className="flex flex-wrap gap-2 pt-1 border-t border-slate-100 dark:border-slate-800 text-xs">
+      <div className="flex flex-wrap gap-2 pt-2.5 border-t border-stone-200/70 dark:border-stone-800/70 text-xs">
         {/* Nível */}
         <select
           value={filtros.nivel ?? ''}
           onChange={(e) => onAtualizarFiltros({ nivel: e.target.value ? Number(e.target.value) : undefined })}
-          className="p-1.5 rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-medium focus:ring-1 focus:ring-amber-500"
+          className="px-2.5 py-1.5 rounded-lg border border-stone-200/90 dark:border-stone-700 bg-white dark:bg-stone-900 text-stone-700 dark:text-stone-300 font-cinzel text-xs font-semibold focus:ring-1 focus:ring-amber-500 shadow-2xs"
         >
           <option value="">Todos os Níveis (1 a 5)</option>
           <option value="1">Nível 1 (Propedêutica)</option>
@@ -88,7 +88,7 @@ export const BarraFiltros: React.FC<BarraFiltrosProps> = ({
         <select
           value={filtros.area ?? ''}
           onChange={(e) => onAtualizarFiltros({ area: e.target.value || undefined })}
-          className="p-1.5 rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-medium focus:ring-1 focus:ring-amber-500"
+          className="px-2.5 py-1.5 rounded-lg border border-stone-200/90 dark:border-stone-700 bg-white dark:bg-stone-900 text-stone-700 dark:text-stone-300 font-serif text-xs font-medium focus:ring-1 focus:ring-amber-500 shadow-2xs"
         >
           <option value="">Todas as Áreas ({todasAreas.length})</option>
           {todasAreas.map((area) => (
@@ -102,7 +102,7 @@ export const BarraFiltros: React.FC<BarraFiltrosProps> = ({
         <select
           value={filtros.classe ?? ''}
           onChange={(e) => onAtualizarFiltros({ classe: (e.target.value as ClasseLivro) || undefined })}
-          className="p-1.5 rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-medium focus:ring-1 focus:ring-amber-500"
+          className="px-2.5 py-1.5 rounded-lg border border-stone-200/90 dark:border-stone-700 bg-white dark:bg-stone-900 text-stone-700 dark:text-stone-300 font-cinzel text-xs font-semibold focus:ring-1 focus:ring-amber-500 shadow-2xs"
         >
           <option value="">Todas as Classes</option>
           <option value="OBRA">OBRA (Leitura Integral)</option>
@@ -114,7 +114,7 @@ export const BarraFiltros: React.FC<BarraFiltrosProps> = ({
         <select
           value={filtros.estado ?? ''}
           onChange={(e) => onAtualizarFiltros({ estado: (e.target.value as EstadoLeitura) || undefined })}
-          className="p-1.5 rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-medium focus:ring-1 focus:ring-amber-500"
+          className="px-2.5 py-1.5 rounded-lg border border-stone-200/90 dark:border-stone-700 bg-white dark:bg-stone-900 text-stone-700 dark:text-stone-300 font-serif text-xs font-medium focus:ring-1 focus:ring-amber-500 shadow-2xs"
         >
           <option value="">Todos os Estados</option>
           <option value="lendo">Lendo Agora</option>
@@ -128,7 +128,7 @@ export const BarraFiltros: React.FC<BarraFiltrosProps> = ({
         <select
           value={filtros.idioma ?? ''}
           onChange={(e) => onAtualizarFiltros({ idioma: (e.target.value as IdiomaLeitura) || undefined })}
-          className="p-1.5 rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-medium focus:ring-1 focus:ring-amber-500"
+          className="px-2.5 py-1.5 rounded-lg border border-stone-200/90 dark:border-stone-700 bg-white dark:bg-stone-900 text-stone-700 dark:text-stone-300 font-serif text-xs font-medium focus:ring-1 focus:ring-amber-500 shadow-2xs"
         >
           <option value="">Todos os Idiomas</option>
           <option value="pt">Português (PT)</option>
@@ -138,10 +138,10 @@ export const BarraFiltros: React.FC<BarraFiltrosProps> = ({
         {/* Obra de Vida */}
         <button
           onClick={() => onAtualizarFiltros({ apenasObraDeVida: !filtros.apenasObraDeVida })}
-          className={`px-2.5 py-1 rounded border font-medium transition-colors ${
+          className={`px-3 py-1.5 rounded-lg border font-cinzel text-xs font-bold transition-all shadow-2xs ${
             filtros.apenasObraDeVida
-              ? 'bg-amber-100 dark:bg-amber-950 text-amber-900 dark:text-amber-200 border-amber-400'
-              : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400'
+              ? 'bg-amber-100 dark:bg-amber-950 text-amber-900 dark:text-amber-200 border-amber-400 shadow-xs'
+              : 'border-stone-200/90 dark:border-stone-700 bg-white dark:bg-stone-900 text-stone-600 dark:text-stone-400 hover:border-amber-400'
           }`}
         >
           ★ Obras de Vida (5)

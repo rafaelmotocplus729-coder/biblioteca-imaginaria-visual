@@ -16,7 +16,8 @@ import {
   Layers,
   CornerDownLeft,
   X,
-  Lightbulb
+  Lightbulb,
+  Hourglass
 } from 'lucide-react';
 
 interface CommandPaletteProps {
@@ -25,8 +26,8 @@ interface CommandPaletteProps {
   livros: Livro[];
   progressos: Record<number, Progresso>;
   onSelecionarLivro: (id: number) => void;
-  visaoAtiva: 'estante' | 'grafo' | 'zettelkasten';
-  onMudarVisao: (visao: 'estante' | 'grafo' | 'zettelkasten') => void;
+  visaoAtiva: 'estante' | 'grafo' | 'linha-tempo' | 'zettelkasten';
+  onMudarVisao: (visao: 'estante' | 'grafo' | 'linha-tempo' | 'zettelkasten') => void;
   modoVisualizacao: 'capa' | 'lombada';
   onMudarModoVisualizacao: (modo: 'capa' | 'lombada') => void;
   modoEscuro: boolean;
@@ -105,6 +106,18 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       icone: <Share2 className="w-4 h-4 text-sky-600 dark:text-sky-400" />,
       acao: () => {
         onMudarVisao('grafo');
+        onClose();
+      }
+    },
+    {
+      id: 'cmd-visao-linha-tempo',
+      tipo: 'acao',
+      titulo: 'Ver Linha do Tempo Cronológica',
+      subtitulo: 'Régua histórica interativa de 441 a.C. a 2013',
+      badge: 'Tecla T',
+      icone: <Hourglass className="w-4 h-4 text-amber-600 dark:text-amber-400" />,
+      acao: () => {
+        onMudarVisao('linha-tempo');
         onClose();
       }
     },

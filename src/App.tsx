@@ -12,6 +12,7 @@ import { CommandPalette } from './components/CommandPalette';
 import { ComparadorDialetico } from './components/ComparadorDialetico';
 import { CadernoNotasModal } from './components/CadernoNotasModal';
 import { ZettelkastenView } from './components/ZettelkastenView';
+import { LinhaDoTempo } from './components/LinhaDoTempo';
 
 export const App: React.FC = () => {
   const {
@@ -48,7 +49,7 @@ export const App: React.FC = () => {
     exportarZettelkastenMarkdown
   } = useBibliotecaStore();
 
-  const [visaoAtiva, setVisaoAtiva] = useState<'estante' | 'grafo' | 'zettelkasten'>('estante');
+  const [visaoAtiva, setVisaoAtiva] = useState<'estante' | 'grafo' | 'linha-tempo' | 'zettelkasten'>('estante');
   const [modalRevisaoAberto, setModalRevisaoAberto] = useState(false);
   const [modalBackupAberto, setModalBackupAberto] = useState(false);
   const [modalBuscaAberto, setModalBuscaAberto] = useState(false);
@@ -87,6 +88,8 @@ export const App: React.FC = () => {
         setVisaoAtiva('estante');
       } else if (e.key === 'g' || e.key === 'G') {
         setVisaoAtiva('grafo');
+      } else if (e.key === 't' || e.key === 'T') {
+        setVisaoAtiva('linha-tempo');
       } else if (e.key === 'z' || e.key === 'Z') {
         setVisaoAtiva('zettelkasten');
       } else if (e.key === 'c' || e.key === 'C') {
@@ -240,6 +243,13 @@ export const App: React.FC = () => {
               onSelecionarLivro={selecionarLivro}
             />
           </div>
+        ) : visaoAtiva === 'linha-tempo' ? (
+          /* Linha do Tempo Cronológica Histórica & Régua das 6 Grandes Eras */
+          <LinhaDoTempo
+            livros={livros}
+            progressos={progressos}
+            onSelecionarLivro={selecionarLivro}
+          />
         ) : (
           /* Zettelkasten de Estudos (Método Luhmann / Ahrens / Rodrigo Leão) */
           <ZettelkastenView onSelecionarLivroEstante={selecionarLivro} />
