@@ -2,33 +2,83 @@ import { NotaZettel, NotaTemporaria, CanvasZettel } from '../types';
 
 export const NOTAS_ZETTEL_INICIAIS: NotaZettel[] = [
   // -------------------------------------------------------------
-  // 01 ÍNDICE
+  // 01 ÍNDICE (Macrotemas organizadores conforme Obsidian)
   // -------------------------------------------------------------
   {
-    id: '202501152200',
-    titulo: '1 Literatura',
+    id: '1-LITERATURA',
+    titulo: '1 - LITERATURA',
     tipo: 'indice',
     pasta: '01 índice',
     tags: ['nota índice'],
     conteudo: `# Referências
+- [[1 - 261220251138 - O estrangeiro]]
+- [[1 - 202608191430 - Dom Casmurro]]
+- [[1 - 310720251003 - Noite Brancas]]
 - [[1-202501152223 - 100 anos de solidão]]
 
 # Notas Relacionadas
+- [[1 - 202528122325 - O que acontece quando o mundo deixa de ter o sentido que esperamos dele]]
+- [[1 - 202531071144 - Ela nunca perdoou o ciúme que destruiu a verdade dos fatos]]
+- [[1 - 310720251134 - A solidão mesmo acompanhada no devaneio romântico]]
 - [[1-202501152230 - Tempo circular como prisão da repetição histórica]]
 - [[1-202501152240 - Solidão como incapacidade de amar e comunicar]]
-- [[1-202501152250 - Realismo mágico como lente de revelação da realidade]]
-- [[1-202501161200 - Paralelo entre o eterno retorno e a condenação de Macondo]]`,
+- [[1-202501152250 - Realismo mágico como lente de revelação da realidade]]`,
     dataCriacao: '2025-01-15T22:00:00.000Z',
     dataAtualizacao: '2025-01-15T22:00:00.000Z'
   },
   {
-    id: '202501161000',
-    titulo: '2 Filosofia',
+    id: '2-HISTORIA',
+    titulo: '2 - HISTÓRIA',
+    tipo: 'indice',
+    pasta: '01 índice',
+    tags: ['nota índice'],
+    conteudo: `# Referências
+- [[2 - 131020261827 - História Concisa do Brasil]]
+
+# Notas Relacionadas
+- [[1-202501152230 - Tempo circular como prisão da repetição histórica]]
+- [[2-202501161035 - A revolta como resposta lúcida ao absurdo sem apelo à ilusão]]`,
+    dataCriacao: '2025-01-16T09:00:00.000Z',
+    dataAtualizacao: '2025-01-16T09:00:00.000Z'
+  },
+  {
+    id: '3-PSICOLOGIA',
+    titulo: '3 - PSICOLOGIA',
+    tipo: 'indice',
+    pasta: '01 índice',
+    tags: ['nota índice'],
+    conteudo: `# Referências
+- [[3 - 280920252153 - Emoções]]
+
+# Notas Relacionadas
+- [[3 - 280920252156 - Chantagem emocional e a corrosão da autonomia moral]]
+- [[1 - 202531071144 - Ela nunca perdoou o ciúme que destruiu a verdade dos fatos]]`,
+    dataCriacao: '2025-01-16T09:30:00.000Z',
+    dataAtualizacao: '2025-01-16T09:30:00.000Z'
+  },
+  {
+    id: '4-RELIGIAO',
+    titulo: '4 - RELIGIÃO',
     tipo: 'indice',
     pasta: '01 índice',
     tags: ['nota índice'],
     conteudo: `# Referências
 - [[2-202501161015 - O Mito de Sísifo]]
+
+# Notas Relacionadas
+- [[2-202501161025 - O absurdo como divórcio entre o desejo de sentido e a indiferença do mundo]]`,
+    dataCriacao: '2025-01-16T09:45:00.000Z',
+    dataAtualizacao: '2025-01-16T09:45:00.000Z'
+  },
+  {
+    id: '5-FILOSOFIA',
+    titulo: '5 - FILOSOFIA',
+    tipo: 'indice',
+    pasta: '01 índice',
+    tags: ['nota índice'],
+    conteudo: `# Referências
+- [[2-202501161015 - O Mito de Sísifo]]
+- [[3-202501161110 - How to Take Smart Notes]]
 
 # Notas Relacionadas
 - [[2-202501161025 - O absurdo como divórcio entre o desejo de sentido e a indiferença do mundo]]
@@ -38,123 +88,300 @@ export const NOTAS_ZETTEL_INICIAIS: NotaZettel[] = [
     dataAtualizacao: '2025-01-16T10:00:00.000Z'
   },
   {
-    id: '202501161100',
-    titulo: '3 Método e Produtividade Intelectual',
+    id: 'ATALHOS',
+    titulo: 'ATALHOS',
     tipo: 'indice',
     pasta: '01 índice',
     tags: ['nota índice'],
-    conteudo: `# Referências
+    conteudo: `# Atalhos do Cofre
+- [[1 - 261220251138 - O estrangeiro]]
+- [[1 - 202528122325 - O que acontece quando o mundo deixa de ter o sentido que esperamos dele]]
 - [[3-202501161110 - How to Take Smart Notes]]
-
-# Notas Relacionadas
-- [[3-202501161120 - A escrita como meio de pensamento e não apenas registro]]
-- [[3-202501161130 - Conexões em rede superam a hierarquia de pastas]]`,
-    dataCriacao: '2025-01-16T11:00:00.000Z',
-    dataAtualizacao: '2025-01-16T11:00:00.000Z'
+- [[Canvas de Articulação]]`,
+    dataCriacao: '2025-01-16T10:10:00.000Z',
+    dataAtualizacao: '2025-01-16T10:10:00.000Z'
   },
 
   // -------------------------------------------------------------
-  // 02 REFERÊNCIAS
+  // 02 REFERÊNCIAS (Fontes Fichadas com ABNT e Sínteses)
   // -------------------------------------------------------------
   {
-    id: '202501152223',
+    id: '1-261220251138',
+    titulo: '1 - 261220251138 - O estrangeiro',
+    tipo: 'referencia',
+    pasta: '02 referências',
+    tags: ['nota de referência'],
+    tema: '[[1 - LITERATURA]]',
+    livroId: 13,
+    conteudo: `## REFERÊNCIAS
+CAMUS, Albert. O estrangeiro. Trad. Valerie Rumjanek. Rio de janeiro, RJ: Editora Record, 2021.
+
+## RELEVÂNCIAS
+Obra seminal sobre o sentimento do absurdo e a ruptura com as convenções sociais hipócritas. Mersault encarna a recusa absoluta à teatralização moral do luto e dos sentimentos pré-fabricados.
+
+## NOTAS RELACIONADAS
+- [[1 - 202528122325 - O que acontece quando o mundo deixa de ter o sentido que esperamos dele]]
+- [[2-202501161025 - O absurdo como divórcio entre o desejo de sentido e a indiferença do mundo]]
+- [[2-202501161035 - A revolta como resposta lúcida ao absurdo sem apelo à ilusão]]
+
+## RESUMO
+O romance narra a trajetória de Meursault, um homem comum em Argel que recebe a notícia da morte da mãe sem demonstrar a dor convencional exigida pela sociedade. Ao assassinar um árabe em uma praia sob o sol ofuscante, é julgado e condenado à guilhotina não pelo homicídio em si, mas pela sua incapacidade de fingir arrependimento e de chorar no enterro de sua mãe.
+
+## CITAÇÕES E COMENTÁRIOS
+- #síntese p. 9: "Hoje, a mãe morreu. Ou talvez ontem, não sei bem." A frase inaugural elimina qualquer sentimentalismo protocolar e instaura o absurdo como fato bruto.
+- #síntese p. 48: Meursault recusa a mentira das formalidades burguesas; prefere o silêncio verdadeiro ao conforto da hipocrisia.
+- #comentário p. 84: O sol ardente do meio-dia funciona quase como um carrasco sensorial que precipita o disparo, anulando a vontade deliberada.
+- #citação p. 118: "Para que tudo seja consumado, para que eu me sinta menos só, restava-me desejar que haja muitos espectadores no dia da minha execução e que me acolham com gritos de ódio."`,
+    dataCriacao: '2025-12-26T11:38:00.000Z',
+    dataAtualizacao: '2025-12-26T11:38:00.000Z'
+  },
+  {
+    id: '1-202608191430',
+    titulo: '1 - 202608191430 - Dom Casmurro',
+    tipo: 'referencia',
+    pasta: '02 referências',
+    tags: ['nota de referência'],
+    tema: '[[1 - LITERATURA]]',
+    livroId: 1,
+    conteudo: `## REFERÊNCIAS
+ASSIS, Machado de. Dom Casmurro. Rio de Janeiro: Garnier, 1899.
+
+## RELEVÂNCIAS
+Obra-prima do realismo psicológico brasileiro e estudo definitivo sobre o ciúme retrospectivo, o narrador não-confiável e a construção paranoica da culpa.
+
+## NOTAS RELACIONADAS
+- [[1 - 202531071144 - Ela nunca perdoou o ciúme que destruiu a verdade dos fatos]]
+- [[3 - 280920252156 - Chantagem emocional e a corrosão da autonomia moral]]
+
+## RESUMO
+Bento Santiago escreve suas memórias na velhice tentando atar as duas pontas da vida: o idílio amoroso da adolescência com Capitu e o desmoronamento solitário no casarão de Engenho Novo, convencido da traição da esposa com o melhor amigo Escobar através dos olhos do filho Ezequiel.
+
+## CITAÇÕES E COMENTÁRIOS
+- #síntese p. 32: Olhos de cigana oblíqua e dissimulada: a caracterização de Capitu diz muito mais sobre as inseguranças de Bentinho do que sobre a jovem.
+- #síntese p. 145: A memória de Casmurro não é um registro imparcial, mas um tribunal montado para justificar o próprio ressentimento e o abandono da família.
+- #citação p. 210: "Capitu, apesar daqueles olhos que o diabo lhe deu... você já reparou nos olhos dela? São assim de cigana oblíqua e dissimulada."`,
+    dataCriacao: '2025-08-19T14:30:00.000Z',
+    dataAtualizacao: '2025-08-19T14:30:00.000Z'
+  },
+  {
+    id: '1-310720251003',
+    titulo: '1 - 310720251003 - Noite Brancas',
+    tipo: 'referencia',
+    pasta: '02 referências',
+    tags: ['nota de referência'],
+    tema: '[[1 - LITERATURA]]',
+    livroId: 2,
+    conteudo: `## REFERÊNCIAS
+DOSTOIÉVSKI, Fiódor. Noites Brancas: romance sentimental das memórias de um sonhador. São Paulo: Editora 34, 2005.
+
+## RELEVÂNCIAS
+Exame lírico sobre o tipo psicológico do "sonhador" petersburguês, o contraste entre a fantasia solitária e o amor vivo, e a brevidade da plenitude afetiva.
+
+## NOTAS RELACIONADAS
+- [[1 - 310720251134 - A solidão mesmo acompanhada no devaneio romântico]]
+- [[1-202501152240 - Solidão como incapacidade de amar e comunicar]]
+
+## RESUMO
+Durante quatro noites de verão em São Petersburgo, quando a noite nunca escurece de todo, um jovem solitário conhece Nástenka chorando em uma ponte. Estabelece-se entre eles uma cumplicidade profunda enquanto ela aguarda o retorno do seu noivo, culminando em uma efêmera esperança de amor que se desfaz diante do retorno do amado.
+
+## CITAÇÕES E COMENTÁRIOS
+- #síntese p. 18: O sonhador vive em castelos mentais porque o mundo real exige atrito e riscos que a imaginação poupa.
+- #síntese p. 74: Bastou um instante de encontro autêntico para justificar toda uma vida de isolamento.
+- #citação p. 95: "Um minuto inteiro de beatitude! Mas isso não é o bastante para toda a vida de um homem?"`,
+    dataCriacao: '2025-07-31T10:03:00.000Z',
+    dataAtualizacao: '2025-07-31T10:03:00.000Z'
+  },
+  {
+    id: '2-131020261827',
+    titulo: '2 - 131020261827 - História Concisa do Brasil',
+    tipo: 'referencia',
+    pasta: '02 referências',
+    tags: ['nota de referência'],
+    tema: '[[2 - HISTÓRIA]]',
+    conteudo: `## REFERÊNCIAS
+FAUSTO, Boris. História Concisa do Brasil. São Paulo: Edusp, 2018.
+
+## RELEVÂNCIAS
+Síntese crítica e rigorosa dos ciclos políticos, sociais e econômicos do Brasil, essencial para o mapa histórico da formação nacional.
+
+## NOTAS RELACIONADAS
+- [[1-202501152230 - Tempo circular como prisão da repetição histórica]]
+
+## RESUMO
+Fausto percorre desde a colonização portuguesa, passando pelo Império e a República Velha, até a redemocratização recente, destacando a conciliação de elites e a persistência de desigualdades estruturais.`,
+    dataCriacao: '2025-10-13T18:27:00.000Z',
+    dataAtualizacao: '2025-10-13T18:27:00.000Z'
+  },
+  {
+    id: '3-280920252153',
+    titulo: '3 - 280920252153 - Emoções',
+    tipo: 'referencia',
+    pasta: '02 referências',
+    tags: ['nota de referência'],
+    tema: '[[3 - PSICOLOGIA]]',
+    conteudo: `## REFERÊNCIAS
+GOLEMAN, Daniel. Inteligência Emocional: a teoria revolucionária que redefine o que é ser inteligente. Rio de Janeiro: Objetiva, 2012.
+
+## RELEVÂNCIAS
+Fundamentação da neurociência afetiva e do papel da regulação emocional na autonomia pessoal e nos relacionamentos sociais.
+
+## NOTAS RELACIONADAS
+- [[3 - 280920252156 - Chantagem emocional e a corrosão da autonomia moral]]
+
+## RESUMO
+O livro demonstra que o quociente intelectual (QI) contribui com apenas uma fração do sucesso e equilíbrio na vida; a autoconsciência, a gestão das emoções e a empatia são as forças determinantes do comportamento humano.`,
+    dataCriacao: '2025-09-28T21:53:00.000Z',
+    dataAtualizacao: '2025-09-28T21:53:00.000Z'
+  },
+  {
+    id: '1-202501152223',
     titulo: '1-202501152223 - 100 anos de solidão',
     tipo: 'referencia',
     pasta: '02 referências',
     tags: ['nota de referência'],
-    tema: '[[1 Literatura]]',
-    conteudo: `## Referência
-GARCÍA MÁRQUEZ, Gabriel. Cem anos de solidão. Tradução de Eric Nepomuceno. Rio de Janeiro: Record, 1995. ISBN 978-85-01-01229-6.
+    tema: '[[1 - LITERATURA]]',
+    conteudo: `## REFERÊNCIAS
+GARCÍA MÁRQUEZ, Gabriel. Cem anos de solidão. Tradução de Eric Nepomuceno. Rio de Janeiro: Record, 1995.
 
-## Relevância
+## RELEVÂNCIAS
 Obra máxima do realismo mágico latino-americano. Fundamental para analisar a circularidade temporal na tragédia histórica e a solidão como incapacidade de comunhão humana.
 
-## Notas Relacionadas
+## NOTAS RELACIONADAS
 - [[1-202501152230 - Tempo circular como prisão da repetição histórica]]
 - [[1-202501152240 - Solidão como incapacidade de amar e comunicar]]
 - [[1-202501152250 - Realismo mágico como lente de revelação da realidade]]
-- [[1-202501161200 - Paralelo entre o eterno retorno e a condenação de Macondo]]
 
-## Resumo
-A saga da família Buendía na aldeia fictícia de Macondo narra sete gerações marcadas por um destino inescapável de isolamento, repetição de nomes e tragédias, incestos e prodígios cotidianos, até a aniquilação final pelo vento apocalíptico ao ser decifrado o pergaminho de Melquíades.
-
-## Citações e Comentários
-- #síntese p. 11: A fundação de Macondo nasce do esquecimento do mundo exterior e da necessidade de nomear as coisas que ainda não tinham nome.
-- #síntese p. 84: A repetição contínua dos nomes Aureliano e José Arcadio molda o temperamento e os erros dos homens da família, tornando o tempo uma espiral viciosa.
-- #síntese p. 195: A guerra interminável do Coronel Aureliano Buendía perde qualquer ideologia ou sentido e transforma-se em pura inércia mecânica de poder.
-- #comentário p. 248: A peste da insônia e do esquecimento antecipa a amnésia histórica imposta após o massacre dos operários da companhia bananeira.
-- #síntese p. 332: Amaranta tece e desmancha a própria mortalha, materializando a solidão como uma recusa voluntária e estéril de qualquer entrega afetiva.
-- #citação p. 418: "porque as estirpes condenadas a cem anos de solidão não tinham uma segunda oportunidade sobre a terra."`,
+## RESUMO
+A saga da família Buendía na aldeia fictícia de Macondo narra sete gerações marcadas por um destino inescapável de isolamento, repetição de nomes e tragédias, incestos e prodígios cotidianos, até a aniquilação final pelo vento apocalíptico ao ser decifrado o pergaminho de Melquíades.`,
     dataCriacao: '2025-01-15T22:23:00.000Z',
     dataAtualizacao: '2025-01-15T22:23:00.000Z'
   },
   {
-    id: '202501161015',
+    id: '2-202501161015',
     titulo: '2-202501161015 - O Mito de Sísifo',
     tipo: 'referencia',
     pasta: '02 referências',
     tags: ['nota de referência'],
-    tema: '[[2 Filosofia]]',
-    livroId: 13, // Albert Camus na biblioteca dos 60 livros!
-    conteudo: `## Referência
-CAMUS, Albert. O mito de Sísifo: ensaio sobre o absurdo. Tradução de Ari Roitman e Paulina Watch. Rio de Janeiro: Record, 2010. ISBN 978-85-01-08655-6.
+    tema: '[[5 - FILOSOFIA]]',
+    livroId: 13,
+    conteudo: `## REFERÊNCIAS
+CAMUS, Albert. O mito de Sísifo: ensaio sobre o absurdo. Tradução de Ari Roitman. Rio de Janeiro: Record, 2010.
 
-## Relevância
+## RELEVÂNCIAS
 Obra-chave da filosofia existencialista e do pensamento sobre a condição humana. Essencial para compreender o enfrentamento lúcido da falta de sentido da existência sem recorrer ao suicídio físico ou filosófico.
 
-## Notas Relacionadas
+## NOTAS RELACIONADAS
 - [[2-202501161025 - O absurdo como divórcio entre o desejo de sentido e a indiferença do mundo]]
 - [[2-202501161035 - A revolta como resposta lúcida ao absurdo sem apelo à ilusão]]
 - [[2-202501161045 - A criação artística como afirmação máxima da consciência absurda]]
 
-## Resumo
-Camus parte da premissa de que a única questão filosófica verdadeiramente séria é o suicídio. Ao examinar a ruptura entre o anseio humano por clareza e razão e a opacidade silenciosa do universo, postula que o absurdo só existe enquanto houver uma consciência lúcida que se recusa tanto à autodestruição quanto ao salto da fé, transformando o próprio esforço contínuo de viver e criar (como o suplício de Sísifo) na vitória da liberdade humana.
-
-## Citações e Comentários
-- #síntese p. 17: O sentimento do absurdo surge no colapso da rotina mecânica cotidiana («acordar, bonde, quatro horas no escritório...»), quando irrompe a pergunta: «Por quê?».
-- #síntese p. 43: O absurdo não está no homem nem no mundo isolados, mas na colisão inevitável entre a demanda humana de unidade e o silêncio irracional das coisas.
-- #comentário p. 61: O suicídio filosófico ocorre quando pensadores apelam a uma transcendência inexplicável para escapar da angústia da falta de respostas definitivas.
-- #síntese p. 88: Viver o absurdo exige manter acesa a revolta permanente, a paixão pela quantidade de experiências e a recusa voluntária a qualquer esperança compensatória de pós-vida.
-- #síntese p. 129: O criador absurdo escreve ou pinta sem a pretensão de explicar ou edificar um sistema totalizante; a obra é apenas a reprodução lúcida da experiência.
-- #citação p. 142: "É preciso imaginar Sísifo feliz."`,
+## RESUMO
+Camus parte da premissa de que a única questão filosófica verdadeiramente séria é o suicídio. Ao examinar a ruptura entre o anseio humano por clareza e razão e a opacidade silenciosa do universo, postula que o absurdo só existe enquanto houver uma consciência lúcida que se recusa tanto à autodestruição quanto ao salto da fé, transformando o próprio esforço contínuo de viver e criar (como o suplício de Sísifo) na vitória da liberdade humana.`,
     dataCriacao: '2025-01-16T10:15:00.000Z',
     dataAtualizacao: '2025-01-16T10:15:00.000Z'
   },
   {
-    id: '202501161110',
+    id: '3-202501161110',
     titulo: '3-202501161110 - How to Take Smart Notes',
     tipo: 'referencia',
     pasta: '02 referências',
     tags: ['nota de referência'],
-    tema: '[[3 Método e Produtividade Intelectual]]',
-    conteudo: `## Referência
-AHRENS, Sönke. How to Take Smart Notes: One Simple Technique to Boost Writing, Learning and Thinking. North Charleston: CreateSpace, 2017. ISBN 978-15-42-86650-7.
+    tema: '[[3 - PSICOLOGIA]]',
+    conteudo: `## REFERÊNCIAS
+AHRENS, Sönke. How to Take Smart Notes: One Simple Technique to Boost Writing, Learning and Thinking. North Charleston: CreateSpace, 2017.
 
-## Relevância
+## RELEVÂNCIAS
 Fundamento teórico e prático do método Zettelkasten contemporâneo. Explica como desacoplar a captura da organização em rede e como a escrita com as próprias palavras é a principal ferramenta de compreensão.
 
-## Notas Relacionadas
+## NOTAS RELACIONADAS
 - [[3-202501161120 - A escrita como meio de pensamento e não apenas registro]]
 - [[3-202501161130 - Conexões em rede superam a hierarquia de pastas]]
 
-## Resumo
-Ahrens desconstrói a ilusão de que pensar precede a escrita. Mostra que o cérebro humano é excelente para ter ideias imediatas e péssimo para armazená-las de forma confiável e estruturada. Ao separar notas fugazes, notas de literatura (referência) e notas permanentes autônomas com conexões explícitas, o Zettelkasten cria um segundo cérebro que pensa em diálogo com o pesquisador e faz o conhecimento acumular juros compostos.
-
-## Citações e Comentários
-- #síntese p. 23: Tentar aprender sem escrever é acreditar ingenuamente que compreendemos algo só porque reconhecemos o texto ao reler.
-- #síntese p. 45: A organização por tópicos e pastas obriga a prever antecipadamente onde uma nota será útil, bloqueando descobertas inesperadas entre campos distintos.
-- #comentário p. 72: A chave da produtividade não é força de vontade ou rotinas rígidas, mas um ambiente de trabalho que elimine o atrito entre ter uma ideia e integrá-la ao acervo.
-- #síntese p. 91: Uma nota permanente precisa ter contexto suficiente para ser lida e compreendida daqui a dez anos sem que seja necessário consultar a fonte original.
-- #citação p. 118: "Notes are not a record of my thinking process. They are my thinking process."`,
+## RESUMO
+Ahrens desconstrói a ilusão de que pensar precede a escrita. Ao separar notas fugazes, notas de literatura e notas permanentes autônomas com conexões explícitas, o Zettelkasten cria um segundo cérebro que pensa em diálogo com o pesquisador.`,
     dataCriacao: '2025-01-16T11:10:00.000Z',
     dataAtualizacao: '2025-01-16T11:10:00.000Z'
   },
 
   // -------------------------------------------------------------
-  // 03 PERMANENTES
+  // 03 PERMANENTES (Ideias Atômicas Originais com Realce Amarelo)
   // -------------------------------------------------------------
   {
-    id: '202501152230',
+    id: '1-202528122325',
+    titulo: '1 - 202528122325 - O que acontece quando o mundo deixa de ter o sentido que esperamos dele',
+    tipo: 'permanente',
+    pasta: '03 permanentes',
+    tags: ['nota permanente'],
+    referencia: '[[1 - 261220251138 - O estrangeiro]]',
+    pagina: 9,
+    relacao: '[[2-202501161025 - O absurdo como divórcio entre o desejo de sentido e a indiferença do mundo]]',
+    tema: '[[1 - LITERATURA]]',
+    conteudo: `Camus começa O Estrangeiro quebrando uma expectativa básica: ==a de que a morte da mãe seja narrada com emoção, luto ou, ao menos, solenidade.== Em vez disso, o narrador inicia com uma frase quase administrativa: "Hoje, a mãe morreu. Ou talvez ontem, não sei bem." Não há metáfora, não há explicação psicológica, não há dor explícita. Há apenas um fato — e a incerteza da data. Isso já nos coloca imediatamente diante do **absurdo**, não como teoria, mas como experiência direta.
+
+O que chama atenção não é só a possível indiferença, mas a **naturalidade** com que essa indiferença aparece. O narrador não se justifica. Ele não tenta parecer frio nem sensível. Ele simplesmente constata. ==Quando diz "isto não quer dizer nada", referindo-se ao telegrama, ele não está fazendo uma provocação moral; ele está dizendo, literalmente, que aquela informação não carrega sentido além do que é: um comunicado. A linguagem é funcional, quase burocrática.==
+
+Em seguida, o texto passa rapidamente para dados práticos: a distância do asilo, o horário do ônibus, a chegada à tarde. Aqui, Camus faz algo decisivo: ele coloca **o cotidiano e a morte no mesmo plano**. Não há hierarquia entre o evento existencial (a morte da mãe) e o evento logístico (pegar o ônibus das duas). Ambos são narrados com o mesmo peso — ou, melhor, com a mesma ausência de peso.
+
+Isso não significa, necessariamente, que o personagem "não se importe". Esse é um ponto importante para evitar uma leitura moral apressada. O que o texto mostra não é desprezo consciente, mas uma forma de estar no mundo em que os acontecimentos **não são organizados por valores emocionais tradicionais**. O narrador não dramatiza, não simboliza, não espiritualiza. Ele apenas descreve.`,
+    dataCriacao: '2025-12-28T23:25:00.000Z',
+    dataAtualizacao: '2025-12-28T23:25:00.000Z'
+  },
+  {
+    id: '1-202531071144',
+    titulo: '1 - 202531071144 - Ela nunca perdoou o ciúme que destruiu a verdade dos fatos',
+    tipo: 'permanente',
+    pasta: '03 permanentes',
+    tags: ['nota permanente'],
+    referencia: '[[1 - 202608191430 - Dom Casmurro]]',
+    pagina: 145,
+    relacao: '[[3 - 280920252156 - Chantagem emocional e a corrosão da autonomia moral]]',
+    tema: '[[1 - LITERATURA]]',
+    conteudo: `# Ela nunca perdoou o ciúme que destruiu a verdade dos fatos
+
+O ciúme obsessivo opera como uma profecia autorrealizável: ele projeta a traição sobre o outro até forçar a ruptura real da convivência.
+
+==Em Dom Casmurro, Bento Santiago não julga Capitu com base em evidências materiais, mas com base no espelho de suas próprias inseguranças doentias.== Quando o ciúme substitui a confiança, qualquer olhar ou gesto torna-se prova cabal na mente do acusador. Capitu aceita o exílio na Suíça com dignidade silenciosa não por culpa, mas porque compreende que é impossível provar inocência a quem já decidiu condenar por necessidade psicológica de se vitimizar.`,
+    dataCriacao: '2025-07-31T11:44:00.000Z',
+    dataAtualizacao: '2025-07-31T11:44:00.000Z'
+  },
+  {
+    id: '1-310720251134',
+    titulo: '1 - 310720251134 - A solidão mesmo acompanhada no devaneio romântico',
+    tipo: 'permanente',
+    pasta: '03 permanentes',
+    tags: ['nota permanente'],
+    referencia: '[[1 - 310720251003 - Noite Brancas]]',
+    pagina: 18,
+    relacao: '[[1-202501152240 - Solidão como incapacidade de amar e comunicar]]',
+    tema: '[[1 - LITERATURA]]',
+    conteudo: `# A solidão mesmo acompanhada no devaneio romântico
+
+O refúgio na fantasia idealizada cria uma armadilha afetiva: o indivíduo acostuma-se tanto à perfeição indolor dos seus sonhos que o encontro com uma pessoa real provoca medo e desajuste.
+
+==O sonhador dostoievskiano caminha pelas ruas de São Petersburgo conversando com os edifícios e inventando paixões completas em silêncio.== Quando a oportunidade de um amor de carne e osso se apresenta, ele oscila entre o deslumbramento absoluto e a impotência prática de agir, revelando que a idealização romântica extrema é, no fundo, uma defesa contra os riscos do afeto autêntico.`,
+    dataCriacao: '2025-07-31T11:34:00.000Z',
+    dataAtualizacao: '2025-07-31T11:34:00.000Z'
+  },
+  {
+    id: '3-280920252156',
+    titulo: '3 - 280920252156 - Chantagem emocional e a corrosão da autonomia moral',
+    tipo: 'permanente',
+    pasta: '03 permanentes',
+    tags: ['nota permanente'],
+    referencia: '[[3 - 280920252153 - Emoções]]',
+    pagina: 112,
+    relacao: '[[1 - 202531071144 - Ela nunca perdoou o ciúme que destruiu a verdade dos fatos]]',
+    tema: '[[3 - PSICOLOGIA]]',
+    conteudo: `# Chantagem emocional e a corrosão da autonomia moral
+
+A chantagem emocional baseia-se na exploração sistemática do medo, da culpa e do senso de obrigação da vítima para impor controle e conformidade.
+
+==Quem manipula emocionalmente não precisa usar de violência aberta; basta ameaçar retirar o afeto, cultivar o silêncio punitivo ou se colocar como vítima das ações do outro.== A resistência a esse padrão exige clareza lúcida sobre onde terminam as nossas responsabilidades morais e onde começam as projeções e expectativas indevidas alheias.`,
+    dataCriacao: '2025-09-28T21:56:00.000Z',
+    dataAtualizacao: '2025-09-28T21:56:00.000Z'
+  },
+  {
+    id: '1-202501152230',
     titulo: '1-202501152230 - Tempo circular como prisão da repetição histórica',
     tipo: 'permanente',
     pasta: '03 permanentes',
@@ -162,17 +389,17 @@ Ahrens desconstrói a ilusão de que pensar precede a escrita. Mostra que o cér
     referencia: '[[1-202501152223 - 100 anos de solidão]]',
     pagina: 84,
     relacao: '[[1-202501152240 - Solidão como incapacidade de amar e comunicar]]',
-    tema: '[[1 Literatura]]',
+    tema: '[[1 - LITERATURA]]',
     conteudo: `# Tempo circular como prisão da repetição histórica
 
 Quando uma comunidade ou indivíduo perde a capacidade de elaborar criticamente o seu passado, o tempo deixa de ser uma linha de progresso e converte-se em um círculo vicioso de erros repetidos. 
 
-Nessa dinâmica, as novas gerações não inauguram novos caminhos: elas apenas reencenam sob nova roupagem os mesmos vícios, paixões cegas e desastres daqueles que as antecederam. A amnésia voluntária ou forçada condena o homem a girar eternamente na mesma órbita trágica, acreditando falsamente que está avançando quando está apenas repetindo.`,
+==Nessa dinâmica, as novas gerações não inauguram novos caminhos: elas apenas reencenam sob nova roupagem os mesmos vícios, paixões cegas e desastres daqueles que as antecederam.== A amnésia voluntária ou forçada condena o homem a girar eternamente na mesma órbita trágica, acreditando falsamente que está avançando quando está apenas repetindo.`,
     dataCriacao: '2025-01-15T22:30:00.000Z',
     dataAtualizacao: '2025-01-15T22:30:00.000Z'
   },
   {
-    id: '202501152240',
+    id: '1-202501152240',
     titulo: '1-202501152240 - Solidão como incapacidade de amar e comunicar',
     tipo: 'permanente',
     pasta: '03 permanentes',
@@ -180,17 +407,17 @@ Nessa dinâmica, as novas gerações não inauguram novos caminhos: elas apenas 
     referencia: '[[1-202501152223 - 100 anos de solidão]]',
     pagina: 332,
     relacao: '[[1-202501152230 - Tempo circular como prisão da repetição histórica]]',
-    tema: '[[1 Literatura]]',
+    tema: '[[1 - LITERATURA]]',
     conteudo: `# Solidão como incapacidade de amar e comunicar
 
 A solidão mais profunda não decorre do isolamento geográfico ou da falta de companhia física, mas da incapacidade congênita ou adquirida de entrega mútua e vulnerabilidade emocional.
 
-Quando o indivíduo se fecha em torno do próprio orgulho, de mágoas fossilizadas ou de projetos megalomaníacos egoístas, todos os vínculos com os outros tornam-se instrumentais ou ilusórios. A convivência sob o mesmo teto passa a ser apenas a soma de vários confinamentos individuais, onde cada um tece e desmancha a sua própria mortalha emocional em silêncio absoluto.`,
+==Quando o indivíduo se fecha em torno do próprio orgulho, de mágoas fossilizadas ou de projetos megalomaníacos egoístas, todos os vínculos com os outros tornam-se instrumentais ou ilusórios.== A convivência sob o mesmo teto passa a ser apenas a soma de vários confinamentos individuais.`,
     dataCriacao: '2025-01-15T22:40:00.000Z',
     dataAtualizacao: '2025-01-15T22:40:00.000Z'
   },
   {
-    id: '202501152250',
+    id: '1-202501152250',
     titulo: '1-202501152250 - Realismo mágico como lente de revelação da realidade',
     tipo: 'permanente',
     pasta: '03 permanentes',
@@ -198,36 +425,17 @@ Quando o indivíduo se fecha em torno do próprio orgulho, de mágoas fossilizad
     referencia: '[[1-202501152223 - 100 anos de solidão]]',
     pagina: 11,
     relacao: '[[2-202501161045 - A criação artística como afirmação máxima da consciência absurda]]',
-    tema: '[[1 Literatura]]',
+    tema: '[[1 - LITERATURA]]',
     conteudo: `# Realismo mágico como lente de revelação da realidade
 
 A introdução de elementos fantásticos na narrativa não serve para escapar da realidade concreta, mas para capturar dimensões da experiência humana que a racionalidade empírica estrita é incapaz de descrever.
 
-O assombro, o milagre diário e a hipérbole operam como espelhos aumentados das contradições sociais e psicológicas. Ao tratar o extraordinário com naturalidade documental e o banal com estupefação mítica, a arte desnaturaliza o conformismo e força a percepção a enxergar a densidade poética e violenta do mundo real.`,
+==Ao tratar o extraordinário com naturalidade documental e o banal com estupefação mítica, a arte desnaturaliza o conformismo e força a percepção a enxergar a densidade poética e violenta do mundo real.==`,
     dataCriacao: '2025-01-15T22:50:00.000Z',
     dataAtualizacao: '2025-01-15T22:50:00.000Z'
   },
   {
-    id: '202501161200',
-    titulo: '1-202501161200 - Paralelo entre o eterno retorno e a condenação de Macondo',
-    tipo: 'permanente',
-    pasta: '03 permanentes',
-    tags: ['nota permanente', 'revisar'],
-    referencia: '[[1-202501152223 - 100 anos de solidão]]',
-    pagina: 418,
-    relacao: '[[1-202501152230 - Tempo circular como prisão da repetição histórica]]',
-    tema: '[[1 Literatura]]',
-    revisar: true,
-    conteudo: `# Paralelo entre o eterno retorno e a condenação de Macondo
-
-Existe uma afinidade tensa entre a ideia nietzschiana de eterno retorno e a circularidade fatalista que assola a família Buendía até sua extinção. 
-
-Contudo, enquanto em Nietzsche o eterno retorno funciona como a pedra de toque suprema para afirmar o amor fati (querer a repetição de cada dor e alegria com entusiasmo heroico), em García Márquez a circularidade surge como uma tragédia melancólica da qual os personagens não conseguem despertar, revelando a diferença entre a superação trágica e o destino inexorável.`,
-    dataCriacao: '2025-01-16T12:00:00.000Z',
-    dataAtualizacao: '2025-01-16T12:00:00.000Z'
-  },
-  {
-    id: '202501161025',
+    id: '2-202501161025',
     titulo: '2-202501161025 - O absurdo como divórcio entre o desejo de sentido e a indiferença do mundo',
     tipo: 'permanente',
     pasta: '03 permanentes',
@@ -235,53 +443,35 @@ Contudo, enquanto em Nietzsche o eterno retorno funciona como a pedra de toque s
     referencia: '[[2-202501161015 - O Mito de Sísifo]]',
     pagina: 43,
     relacao: '[[2-202501161035 - A revolta como resposta lúcida ao absurdo sem apelo à ilusão]]',
-    tema: '[[2 Filosofia]]',
+    tema: '[[5 - FILOSOFIA]]',
     conteudo: `# O absurdo como divórcio entre o desejo de sentido e a indiferença do mundo
 
 O absurdo não é uma propriedade intrínseca das coisas nem uma fraqueza psicológica do indivíduo, mas o atrito inevitável gerado pela colisão entre duas forças opostas: a sede humana irredutível por clareza, razão e propósito e o silêncio opaco e irracional do cosmos.
 
-Eliminar qualquer um dos dois polos — seja pelo aniquilamento do sujeito (suicídio físico), seja pelo amortecimento da razão mediante saltos de fé transcendentes (suicídio filosófico) — destrói a própria condição de consciência. Manter o absurdo vivo exige preservar essa tensão insolúvel a cada instante, sem concessões nem consolo artificial.`,
+==Eliminar qualquer um dos dois polos destrói a própria condição de consciência. Manter o absurdo vivo exige preservar essa tensão insolúvel a cada instante, sem concessões nem consolo artificial.==`,
     dataCriacao: '2025-01-16T10:25:00.000Z',
     dataAtualizacao: '2025-01-16T10:25:00.000Z'
   },
   {
-    id: '202501161035',
+    id: '2-202501161035',
     titulo: '2-202501161035 - A revolta como resposta lúcida ao absurdo sem apelo à ilusão',
     tipo: 'permanente',
     pasta: '03 permanentes',
     tags: ['nota permanente'],
     referencia: '[[2-202501161015 - O Mito de Sísifo]]',
     pagina: 88,
-    relacao: '[[2-202501161045 - A criação artística como afirmação máxima da consciência absurda]]',
-    tema: '[[2 Filosofia]]',
+    relacao: '[[2-202501161025 - O absurdo como divórcio entre o desejo de sentido e a indiferença do mundo]]',
+    tema: '[[5 - FILOSOFIA]]',
     conteudo: `# A revolta como resposta lúcida ao absurdo sem apelo à ilusão
 
-A revolta permanente é a recusa firme em render-se à resignação passiva ou à tentação de criar esperanças pós-morte compensatórias para justificar as dores do presente.
+A revolta autêntica não consiste na rebeldia cega contra a realidade, mas na aceitação corajosa da finitude sem ceder à resignação ou à fuga mística.
 
-Revoltar-se contra a falta de sentido do universo confere ao homem o seu valor mais nobre. Ao aceitar o destino trágico com os olhos abertos e continuar agindo com intensidade e clareza, a própria ação consciente torna-se um triunfo diário contra a nulidade. Sísifo, ao descer a montanha para buscar sua rocha novamente, é superior ao castigo dos deuses justamente porque conhece plenamente a sua condição e ainda assim a assume.`,
+==Sísifo empurrando eternamente a pedra até o cume da montanha representa o ápice da dignidade humana quando tem plena consciência de sua sina e ainda assim recusa o desespero.== Sua vitória sobre os deuses reside precisamente na ausência de ilusões: ao assumir o peso da rocha como coisa sua, ele transforma a punição em afirmação existencial.`,
     dataCriacao: '2025-01-16T10:35:00.000Z',
     dataAtualizacao: '2025-01-16T10:35:00.000Z'
   },
   {
-    id: '202501161045',
-    titulo: '2-202501161045 - A criação artística como afirmação máxima da consciência absurda',
-    tipo: 'permanente',
-    pasta: '03 permanentes',
-    tags: ['nota permanente'],
-    referencia: '[[2-202501161015 - O Mito de Sísifo]]',
-    pagina: 129,
-    relacao: '[[1-202501152250 - Realismo mágico como lente de revelação da realidade]]',
-    tema: '[[2 Filosofia]]',
-    conteudo: `# A criação artística como afirmação máxima da consciência absurda
-
-A arte autêntica no horizonte do absurdo não visa doutrinar, moralizar ou oferecer soluções salvíficas para os dilemas da existência, mas sim descrever a experiência do viver com rigor impiedoso e beleza formal.
-
-Criar é multiplicar a própria consciência e dar forma ao efêmero. O artista não busca construir um refúgio seguro contra a morte, mas celebrar a intensidade de cada instante. Ao moldar sua obra sem ilusões de eternidade ou mensagens dogmáticas, o ato criador torna-se a manifestação mais plena da liberdade e dignidade humanas frente ao vazio.`,
-    dataCriacao: '2025-01-16T10:45:00.000Z',
-    dataAtualizacao: '2025-01-16T10:45:00.000Z'
-  },
-  {
-    id: '202501161120',
+    id: '3-202501161120',
     titulo: '3-202501161120 - A escrita como meio de pensamento e não apenas registro',
     tipo: 'permanente',
     pasta: '03 permanentes',
@@ -289,17 +479,17 @@ Criar é multiplicar a própria consciência e dar forma ao efêmero. O artista 
     referencia: '[[3-202501161110 - How to Take Smart Notes]]',
     pagina: 23,
     relacao: '[[3-202501161130 - Conexões em rede superam a hierarquia de pastas]]',
-    tema: '[[3 Método e Produtividade Intelectual]]',
+    tema: '[[3 - PSICOLOGIA]]',
     conteudo: `# A escrita como meio de pensamento e não apenas registro
 
-Pensar com rigor e escrever não são dois atos sequenciais, mas o mesmo processo operando em sincronia. A tentativa de compreender profundamente um conceito sem colocá-lo em palavras próprias é uma ilusão cognitiva alimentada pela mera familiaridade de releitura.
+Escrever não é a etapa final que documenta um pensamento previamente acabado na mente, mas o próprio instrumento material através do qual o pensamento ganha consistência, clareza e rigor.
 
-Ao traduzir uma ideia de um autor em termos próprios e em uma nota atômica e autônoma, o estudante é forçado a confrontar lacunas de raciocínio, contradições e ambiguidades que passariam despercebidas na leitura passiva. A escrita atua como o laboratório onde o pensamento ganha contorno tangível e solidez.`,
+==Ao tentar traduzir uma ideia para as próprias palavras em uma nota atômica, somos confrontados imediatamente com as lacunas do nosso entendimento.== A folha em branco atua como um parceiro de diálogo implacável que desmascara a falsa sensação de fluência que temos durante a leitura passiva.`,
     dataCriacao: '2025-01-16T11:20:00.000Z',
     dataAtualizacao: '2025-01-16T11:20:00.000Z'
   },
   {
-    id: '202501161130',
+    id: '3-202501161130',
     titulo: '3-202501161130 - Conexões em rede superam a hierarquia de pastas',
     tipo: 'permanente',
     pasta: '03 permanentes',
@@ -307,12 +497,12 @@ Ao traduzir uma ideia de um autor em termos próprios e em uma nota atômica e a
     referencia: '[[3-202501161110 - How to Take Smart Notes]]',
     pagina: 45,
     relacao: '[[3-202501161120 - A escrita como meio de pensamento e não apenas registro]]',
-    tema: '[[3 Método e Produtividade Intelectual]]',
+    tema: '[[3 - PSICOLOGIA]]',
     conteudo: `# Conexões em rede superam a hierarquia de pastas
 
-Organizar notas em pastas rígidas por assunto força o pesquisador a decidir antecipadamente o único contexto em que aquela nota será relevante, bloqueando conexões laterais e descobertas fortuitas entre disciplinas.
+Estruturar o conhecimento em pastas rígidas por assunto força o cérebro a classificar previamente uma nota em um único compartimento fechado, esterilizando o surgimento de conexões interdisciplinares inesperadas.
 
-Em contrapartida, uma estrutura em malha — baseada em IDs únicos, notas de índice e links bidirecionais diretos entre ideias — permite que o mesmo conceito participe simultaneamente de discussões literárias, filosóficas e práticas. A ordem deixa de ser imposta do topo para a base (top-down) e passa a emergir organicamente das relações acumuladas entre os nós da rede (bottom-up).`,
+==Em um sistema hipertextual como o Zettelkasten, as notas permanecem livres e adquirem significado pelas pontes que constroem com ideias afins.== O acervo deixa de ser um arquivo morto e passa a comportar-se como um grafo orgânico em constante reorganização.`,
     dataCriacao: '2025-01-16T11:30:00.000Z',
     dataAtualizacao: '2025-01-16T11:30:00.000Z'
   }
@@ -321,84 +511,81 @@ Em contrapartida, uma estrutura em malha — baseada em IDs únicos, notas de í
 export const NOTAS_TEMPORARIAS_INICIAIS: NotaTemporaria[] = [
   {
     id: 'temp-1',
-    pensamento: 'A analogia da rocha de Sísifo se aplica perfeitamente ao estudo: sem notas conectadas, empurramos a pedra até o topo e esquecemos tudo ao descer.',
-    fonte: 'O Mito de Sísifo',
+    pensamento: 'A indiferença de Meursault é uma recusa da encenação moral e não falta de afeto.',
+    fonte: 'O Estrangeiro',
     livroId: 13,
-    pagina: 122,
-    dataCriacao: new Date(Date.now() - 1000 * 60 * 60 * 18).toISOString(), // 18 horas atrás
+    pagina: 9,
+    dataCriacao: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
     processada: false
   },
   {
     id: 'temp-2',
-    pensamento: 'A técnica de Adler sobre leitura sintópica exige um sistema onde teses de múltiplos livros se cruzem sobre o mesmo problema.',
-    fonte: 'Como Ler Livros',
+    pensamento: 'O ciúme retrospectivo de Bentinho funciona como um tribunal paranoico que condena sem provas.',
+    fonte: 'Dom Casmurro',
     livroId: 1,
-    pagina: 312,
-    dataCriacao: new Date(Date.now() - 1000 * 60 * 60 * 8).toISOString(), // 8 horas atrás
+    pagina: 145,
+    dataCriacao: new Date(Date.now() - 18 * 60 * 60 * 1000).toISOString(),
+    processada: false
+  },
+  {
+    id: 'temp-3',
+    pensamento: 'O tempo circular em Macondo aprisiona porque ninguém se lembra do passado criticamente.',
+    fonte: 'Cem Anos de Solidão',
+    pagina: 84,
+    dataCriacao: new Date(Date.now() - 40 * 60 * 60 * 1000).toISOString(),
     processada: false
   }
 ];
 
 export const CANVAS_ZETTEL_INICIAL: CanvasZettel = {
   id: 'canvas-1',
-  titulo: 'Articulação Literatura e Absurdo',
-  descricao: 'Demonstração de como ensaios e roteiros emergem da rede de notas permanentes sem precisar reler as fontes.',
+  titulo: 'Mesa de Articulação: O Absurdo e a Repetição Histórica',
+  descricao: 'Conexão entre o estranhamento existencial de Camus e a circularidade trágica de García Márquez para composição de ensaio.',
   nodes: [
     {
-      id: 'c-node-1',
+      id: 'node-1',
       tipo: 'nota',
-      notaId: '1-202501152223 - 100 anos de solidão',
+      notaId: '1-261220251138',
       x: 50,
-      y: 60,
+      y: 50,
       largura: 260,
       altura: 160,
-      cor: '#38bdf8'
+      cor: '#0284c7'
     },
     {
-      id: 'c-node-2',
+      id: 'node-2',
       tipo: 'nota',
-      notaId: '2-202501161015 - O Mito de Sísifo',
-      x: 50,
-      y: 260,
-      largura: 260,
-      altura: 160,
-      cor: '#38bdf8'
-    },
-    {
-      id: 'c-node-3',
-      tipo: 'nota',
-      notaId: '1-202501152230 - Tempo circular como prisão da repetição histórica',
+      notaId: '1-202528122325',
       x: 360,
-      y: 60,
+      y: 50,
       largura: 280,
-      altura: 150,
-      cor: '#10b981'
+      altura: 180,
+      cor: '#059669'
     },
     {
-      id: 'c-node-4',
+      id: 'node-3',
       tipo: 'nota',
-      notaId: '2-202501161035 - A revolta como resposta lúcida ao absurdo sem apelo à ilusão',
+      notaId: '1-202501152230',
       x: 360,
       y: 260,
       largura: 280,
-      altura: 150,
-      cor: '#10b981'
+      altura: 180,
+      cor: '#059669'
     },
     {
-      id: 'c-node-5',
+      id: 'node-4',
       tipo: 'texto',
-      texto: '### Roteiro Emergente: A Consciência do Ciclo\n\n1. Em Macondo, o ciclo é inconsciente e aniquila o homem.\n2. Em Sísifo, o ciclo é assumido com lucidez e revolta.\n3. A arte é o único veículo que converte o absurdo em liberdade.',
-      x: 690,
-      y: 120,
-      largura: 320,
-      altura: 220,
-      cor: '#f59e0b'
+      texto: 'Tese Central do Ensaio: Viver o absurdo com consciência lúcida é a única maneira de quebrar o ciclo mecânico da repetição histórica.',
+      x: 680,
+      y: 140,
+      largura: 300,
+      altura: 200,
+      cor: '#d97706'
     }
   ],
   edges: [
-    { id: 'c-edge-1', de: 'c-node-1', para: 'c-node-3', label: 'origina' },
-    { id: 'c-edge-2', de: 'c-node-2', para: 'c-node-4', label: 'origina' },
-    { id: 'c-edge-3', de: 'c-node-3', para: 'c-node-4', label: 'contraponto' },
-    { id: 'c-edge-4', de: 'c-node-4', para: 'c-node-5', label: 'síntese do ensaio' }
+    { id: 'edge-1', de: 'node-1', para: 'node-2', label: 'gera insight' },
+    { id: 'edge-2', de: 'node-2', para: 'node-4', label: 'articula tese' },
+    { id: 'edge-3', de: 'node-3', para: 'node-4', label: 'fundamenta' }
   ]
 };

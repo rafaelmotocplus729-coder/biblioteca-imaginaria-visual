@@ -81,6 +81,14 @@ interface BibliotecaState {
   salvarCanvasZettel: (canvas: CanvasZettel) => void;
   exportarZettelkastenMarkdown: () => string;
 
+  // Personalização visual do Zettelkasten (Fundo / Wallpaper)
+  fundoZettelkasten: string;
+  opacidadeFundoZettelkasten: number;
+  desfoqueFundoZettelkasten: number;
+  setFundoZettelkasten: (fundo: string) => void;
+  setOpacidadeFundoZettelkasten: (opacidade: number) => void;
+  setDesfoqueFundoZettelkasten: (desfoque: number) => void;
+
   // Exportar / Importar
   exportarJSON: () => string;
   importarJSON: (jsonString: string) => boolean;
@@ -139,6 +147,9 @@ function salvarNoLocalStorage(estado: {
   notasZettel?: NotaZettel[];
   notasTemporarias?: NotaTemporaria[];
   canvasZettel?: CanvasZettel[];
+  fundoZettelkasten?: string;
+  opacidadeFundoZettelkasten?: number;
+  desfoqueFundoZettelkasten?: number;
 }) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(estado));
@@ -184,6 +195,11 @@ export const useBibliotecaStore = create<BibliotecaState>((set, get) => ({
   notasTemporarias: salvo?.notasTemporarias || NOTAS_TEMPORARIAS_INICIAIS,
   canvasZettel: salvo?.canvasZettel || [CANVAS_ZETTEL_INICIAL],
   notaZettelSelecionadaId: null,
+
+  // Wallpaper / Fundo do Zettelkasten
+  fundoZettelkasten: salvo?.fundoZettelkasten || 'caravaggio',
+  opacidadeFundoZettelkasten: salvo?.opacidadeFundoZettelkasten ?? 25,
+  desfoqueFundoZettelkasten: salvo?.desfoqueFundoZettelkasten ?? 1,
 
   filtros: {
     textoBusca: ''
@@ -849,6 +865,60 @@ ${livro.sinopse_editorial || livro.tese}
     });
 
     return exportText;
+  },
+
+  setFundoZettelkasten: (fundo: string) => {
+    set({ fundoZettelkasten: fundo });
+    salvarNoLocalStorage({
+      livros: get().livros,
+      relacoes: get().relacoes,
+      progressos: get().progressos,
+      sessoesRevisao: get().sessoesRevisao,
+      horasPorSemana: get().horasPorSemana,
+      modoEscuro: get().modoEscuro,
+      notasZettel: get().notasZettel,
+      notasTemporarias: get().notasTemporarias,
+      canvasZettel: get().canvasZettel,
+      fundoZettelkasten: fundo,
+      opacidadeFundoZettelkasten: get().opacidadeFundoZettelkasten,
+      desfoqueFundoZettelkasten: get().desfoqueFundoZettelkasten
+    });
+  },
+
+  setOpacidadeFundoZettelkasten: (opacidade: number) => {
+    set({ opacidadeFundoZettelkasten: opacidade });
+    salvarNoLocalStorage({
+      livros: get().livros,
+      relacoes: get().relacoes,
+      progressos: get().progressos,
+      sessoesRevisao: get().sessoesRevisao,
+      horasPorSemana: get().horasPorSemana,
+      modoEscuro: get().modoEscuro,
+      notasZettel: get().notasZettel,
+      notasTemporarias: get().notasTemporarias,
+      canvasZettel: get().canvasZettel,
+      fundoZettelkasten: get().fundoZettelkasten,
+      opacidadeFundoZettelkasten: opacidade,
+      desfoqueFundoZettelkasten: get().desfoqueFundoZettelkasten
+    });
+  },
+
+  setDesfoqueFundoZettelkasten: (desfoque: number) => {
+    set({ desfoqueFundoZettelkasten: desfoque });
+    salvarNoLocalStorage({
+      livros: get().livros,
+      relacoes: get().relacoes,
+      progressos: get().progressos,
+      sessoesRevisao: get().sessoesRevisao,
+      horasPorSemana: get().horasPorSemana,
+      modoEscuro: get().modoEscuro,
+      notasZettel: get().notasZettel,
+      notasTemporarias: get().notasTemporarias,
+      canvasZettel: get().canvasZettel,
+      fundoZettelkasten: get().fundoZettelkasten,
+      opacidadeFundoZettelkasten: get().opacidadeFundoZettelkasten,
+      desfoqueFundoZettelkasten: desfoque
+    });
   },
 
   recarregarDadosComEnriquecidos: (enriquecidos) => {
