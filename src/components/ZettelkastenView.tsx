@@ -209,6 +209,11 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
   // Ref do upload de arquivo
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Sincronização automática com Supabase ao carregar a visão
+  useEffect(() => {
+    sincronizarSupabase();
+  }, []);
+
   // Carregar credenciais salvas ao abrir o modal do Supabase
   useEffect(() => {
     if (modalSupabaseAberto) {
