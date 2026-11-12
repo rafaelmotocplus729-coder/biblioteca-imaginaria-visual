@@ -9,7 +9,14 @@ import {
   NotaZettel,
   NotaTemporaria,
   CanvasZettel,
-  TipoRelacaoDialetica
+  TipoRelacaoDialetica,
+  CadernoVolume,
+  ItemDailyLog,
+  DiaLog,
+  CheckinSemanal,
+  CheckoutSemanal,
+  PaginaLivreCaderno,
+  TipoItemDaily
 } from '../types';
 import livrosEnriquecidos from '../../data/enriquecido.json';
 import relacoesPadrao from '../../data/relacoes.json';
@@ -18,6 +25,13 @@ import {
   NOTAS_TEMPORARIAS_INICIAIS,
   CANVAS_ZETTEL_INICIAL
 } from '../data/zettelkastenPadrao';
+import {
+  CADERNO_VOLUME_INICIAL,
+  CHECKIN_SEMANAL_INICIAL,
+  DIAS_LOGS_INICIAIS,
+  CHECKOUT_SEMANAL_INICIAL,
+  PAGINAS_LIVRES_INICIAIS
+} from '../data/diarioPadrao';
 import {
   isSupabaseConfigured,
   sincronizarDoSupabase,
@@ -41,6 +55,16 @@ interface BibliotecaState {
   notasTemporarias: NotaTemporaria[];
   canvasZettel: CanvasZettel[];
   notaZettelSelecionadaId: string | null;
+
+  // Caderno Real / Diário Intelectual (PRD)
+  cadernosVolumes: CadernoVolume[];
+  cadernoAtivoId: string;
+  checkinsSemanais: CheckinSemanal[];
+  diasLogs: Record<string, DiaLog>;
+  checkoutsSemanais: CheckoutSemanal[];
+  paginasLivresCaderno: PaginaLivreCaderno[];
+  legendaSimbolosVisivel: boolean;
+  estiloDotGridAtivo: boolean;
   
   // Supabase Backend de Dados
   supabaseStatus: 'conectado' | 'desconectado' | 'sincronizando' | 'erro';
@@ -111,6 +135,27 @@ interface BibliotecaState {
   salvarCanvasZettel: (canvas: CanvasZettel) => void;
   exportarZettelkastenMarkdown: () => string;
 
+  // Ações do Caderno Real (Diário Intelectual)
+  criarCadernoVolume: (titulo?: string, dataInicio?: string) => string;
+  concluirCadernoVolume: (cadernoId: string) => void;
+  setCadernoAtivoId: (cadernoId: string) => void;
+  salvarCheckinSemanal: (checkin: CheckinSemanal) => void;
+  salvarCheckoutSemanal: (checkout: CheckoutSemanal) => void;
+  adicionarItemDiaLog: (dataStr: string, item: Omit<ItemDailyLog, 'id' | 'criadoEm'>) => void;
+  atualizarItemDiaLog: (dataStr: string, itemId: string, patch: Partial<ItemDailyLog>) => void;
+  removerItemDiaLog: (dataStr: string, itemId: string) => void;
+  reordenarItensDiaLog: (dataStr: string, novosItens: ItemDailyLog[]) => void;
+  atualizarTermometroDia: (dataStr: string, texto: string, humor?: string) => void;
+  revisarFecharDia: (
+    dataStr: string,
+    acoesPendentes?: Record<string, { acao: 'concluir' | 'migrar' | 'cancelar'; dataDestino?: string }>
+  ) => void;
+  salvarPaginaLivre: (pagina: PaginaLivreCaderno) => void;
+  removerPaginaLivre: (id: string) => void;
+  toggleLegendaSimbolos: () => void;
+  toggleEstiloDotGrid: () => void;
+  converterNotaTemporariaParaDiario: (notaTempId: string, tipo: TipoItemDaily, dataStr?: string) => void;
+
   // Personalização visual do Zettelkasten (Fundo / Wallpaper)
   fundoZettelkasten: string;
   opacidadeFundoZettelkasten: number;
@@ -180,6 +225,15 @@ function salvarNoLocalStorage(estado: {
   fundoZettelkasten?: string;
   opacidadeFundoZettelkasten?: number;
   desfoqueFundoZettelkasten?: number;
+  // Caderno Real / Diário Intelectual
+  cadernosVolumes?: CadernoVolume[];
+  cadernoAtivoId?: string;
+  checkinsSemanais?: CheckinSemanal[];
+  diasLogs?: Record<string, DiaLog>;
+  checkoutsSemanais?: CheckoutSemanal[];
+  paginasLivresCaderno?: PaginaLivreCaderno[];
+  legendaSimbolosVisivel?: boolean;
+  estiloDotGridAtivo?: boolean;
 }) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(estado));
@@ -261,6 +315,26 @@ export const useBibliotecaStore = create<BibliotecaState>((set, get) => ({
   notasTemporarias: filtrarMockupsTemporarias(salvo?.notasTemporarias),
   canvasZettel: salvo?.canvasZettel || [CANVAS_ZETTEL_INICIAL],
   notaZettelSelecionadaId: null,
+
+  // Caderno Real / Diário Intelectual (PRD)
+  cadernosVolumes: salvo?.cadernosVolumes && salvo.cadernosVolumes.length > 0
+    ? salvo.cadernosVolumes
+    : [CADERNO_VOLUME_INICIAL],
+  cadernoAtivoId: salvo?.cadernoAtivoId || CADERNO_VOLUME_INICIAL.id,
+  checkinsSemanais: salvo?.checkinsSemanais && salvo.checkinsSemanais.length > 0
+    ? salvo.checkinsSemanais
+    : [CHECKIN_SEMANAL_INICIAL],
+  diasLogs: salvo?.diasLogs && Object.keys(salvo.diasLogs).length > 0
+    ? salvo.diasLogs
+    : DIAS_LOGS_INICIAIS,
+  checkoutsSemanais: salvo?.checkoutsSemanais && salvo.checkoutsSemanais.length > 0
+    ? salvo.checkoutsSemanais
+    : [CHECKOUT_SEMANAL_INICIAL],
+  paginasLivresCaderno: salvo?.paginasLivresCaderno && salvo.paginasLivresCaderno.length > 0
+    ? salvo.paginasLivresCaderno
+    : PAGINAS_LIVRES_INICIAIS,
+  legendaSimbolosVisivel: salvo?.legendaSimbolosVisivel ?? true,
+  estiloDotGridAtivo: salvo?.estiloDotGridAtivo ?? true,
 
   // Supabase Backend de Dados
   supabaseStatus: isSupabaseConfigured() ? 'conectado' : 'desconectado',
@@ -591,13 +665,24 @@ export const useBibliotecaStore = create<BibliotecaState>((set, get) => ({
 
   exportarJSON: () => {
     const backup = {
-      versao: '0.1.0',
+      versao: '0.2.0',
       data_exportacao: new Date().toISOString(),
       livros: get().livros,
       relacoes: get().relacoes,
       progressos: get().progressos,
       sessoesRevisao: get().sessoesRevisao,
-      horasPorSemana: get().horasPorSemana
+      horasPorSemana: get().horasPorSemana,
+      notasZettel: get().notasZettel,
+      notasTemporarias: get().notasTemporarias,
+      canvasZettel: get().canvasZettel,
+      cadernosVolumes: get().cadernosVolumes,
+      cadernoAtivoId: get().cadernoAtivoId,
+      checkinsSemanais: get().checkinsSemanais,
+      diasLogs: get().diasLogs,
+      checkoutsSemanais: get().checkoutsSemanais,
+      paginasLivresCaderno: get().paginasLivresCaderno,
+      legendaSimbolosVisivel: get().legendaSimbolosVisivel,
+      estiloDotGridAtivo: get().estiloDotGridAtivo
     };
     return JSON.stringify(backup, null, 2);
   },
@@ -606,20 +691,31 @@ export const useBibliotecaStore = create<BibliotecaState>((set, get) => ({
     try {
       const backup = JSON.parse(jsonString);
       if (backup && Array.isArray(backup.livros)) {
-        set({
-          livros: backup.livros,
-          relacoes: backup.relacoes || get().relacoes,
-          progressos: backup.progressos || get().progressos,
-          sessoesRevisao: backup.sessoesRevisao || [],
-          horasPorSemana: backup.horasPorSemana || 6
-        });
-        salvarNoLocalStorage({
+        const novosDados = {
           livros: backup.livros,
           relacoes: backup.relacoes || get().relacoes,
           progressos: backup.progressos || get().progressos,
           sessoesRevisao: backup.sessoesRevisao || [],
           horasPorSemana: backup.horasPorSemana || 6,
-          modoEscuro: get().modoEscuro
+          notasZettel: backup.notasZettel || get().notasZettel,
+          notasTemporarias: backup.notasTemporarias || get().notasTemporarias,
+          canvasZettel: backup.canvasZettel || get().canvasZettel,
+          cadernosVolumes: backup.cadernosVolumes || get().cadernosVolumes,
+          cadernoAtivoId: backup.cadernoAtivoId || get().cadernoAtivoId,
+          checkinsSemanais: backup.checkinsSemanais || get().checkinsSemanais,
+          diasLogs: backup.diasLogs || get().diasLogs,
+          checkoutsSemanais: backup.checkoutsSemanais || get().checkoutsSemanais,
+          paginasLivresCaderno: backup.paginasLivresCaderno || get().paginasLivresCaderno,
+          legendaSimbolosVisivel: backup.legendaSimbolosVisivel ?? get().legendaSimbolosVisivel,
+          estiloDotGridAtivo: backup.estiloDotGridAtivo ?? get().estiloDotGridAtivo
+        };
+        set(novosDados);
+        salvarNoLocalStorage({
+          ...novosDados,
+          modoEscuro: get().modoEscuro,
+          fundoZettelkasten: get().fundoZettelkasten,
+          opacidadeFundoZettelkasten: get().opacidadeFundoZettelkasten,
+          desfoqueFundoZettelkasten: get().desfoqueFundoZettelkasten
         });
         return true;
       }
@@ -1147,5 +1243,544 @@ ${livro.sinopse_editorial || livro.tese}
       horasPorSemana: get().horasPorSemana,
       modoEscuro: get().modoEscuro
     });
+  },
+
+  // ==========================================
+  // AÇÕES DO CADERNO REAL (DIÁRIO INTELECTUAL)
+  // ==========================================
+  criarCadernoVolume: (titulo, dataInicio) => {
+    const id = `vol-${Date.now()}`;
+    const hoje = new Date().toISOString().split('T')[0];
+    const novoVolume: CadernoVolume = {
+      id,
+      titulo: titulo?.trim() || `Caderno Real — Vol. ${get().cadernosVolumes.length + 1}`,
+      dataInicio: dataInicio || hoje,
+      dataFim: null,
+      ativo: true,
+      criadoEm: new Date().toISOString()
+    };
+    const novosVolumes = [
+      ...get().cadernosVolumes.map((v) => ({ ...v, ativo: false })),
+      novoVolume
+    ];
+    set({ cadernosVolumes: novosVolumes, cadernoAtivoId: id });
+    salvarNoLocalStorage({
+      livros: get().livros,
+      relacoes: get().relacoes,
+      progressos: get().progressos,
+      sessoesRevisao: get().sessoesRevisao,
+      horasPorSemana: get().horasPorSemana,
+      modoEscuro: get().modoEscuro,
+      notasZettel: get().notasZettel,
+      notasTemporarias: get().notasTemporarias,
+      canvasZettel: get().canvasZettel,
+      fundoZettelkasten: get().fundoZettelkasten,
+      opacidadeFundoZettelkasten: get().opacidadeFundoZettelkasten,
+      desfoqueFundoZettelkasten: get().desfoqueFundoZettelkasten,
+      cadernosVolumes: novosVolumes,
+      cadernoAtivoId: id,
+      checkinsSemanais: get().checkinsSemanais,
+      diasLogs: get().diasLogs,
+      checkoutsSemanais: get().checkoutsSemanais,
+      paginasLivresCaderno: get().paginasLivresCaderno,
+      legendaSimbolosVisivel: get().legendaSimbolosVisivel,
+      estiloDotGridAtivo: get().estiloDotGridAtivo
+    });
+    return id;
+  },
+
+  concluirCadernoVolume: (cadernoId) => {
+    const hoje = new Date().toISOString().split('T')[0];
+    const novosVolumes = get().cadernosVolumes.map((v) =>
+      v.id === cadernoId ? { ...v, ativo: false, dataFim: hoje } : v
+    );
+    set({ cadernosVolumes: novosVolumes });
+    salvarNoLocalStorage({
+      livros: get().livros,
+      relacoes: get().relacoes,
+      progressos: get().progressos,
+      sessoesRevisao: get().sessoesRevisao,
+      horasPorSemana: get().horasPorSemana,
+      modoEscuro: get().modoEscuro,
+      notasZettel: get().notasZettel,
+      notasTemporarias: get().notasTemporarias,
+      canvasZettel: get().canvasZettel,
+      cadernosVolumes: novosVolumes,
+      cadernoAtivoId: get().cadernoAtivoId,
+      checkinsSemanais: get().checkinsSemanais,
+      diasLogs: get().diasLogs,
+      checkoutsSemanais: get().checkoutsSemanais,
+      paginasLivresCaderno: get().paginasLivresCaderno,
+      legendaSimbolosVisivel: get().legendaSimbolosVisivel,
+      estiloDotGridAtivo: get().estiloDotGridAtivo
+    });
+  },
+
+  setCadernoAtivoId: (cadernoId) => {
+    set({ cadernoAtivoId: cadernoId });
+    salvarNoLocalStorage({
+      livros: get().livros,
+      relacoes: get().relacoes,
+      progressos: get().progressos,
+      sessoesRevisao: get().sessoesRevisao,
+      horasPorSemana: get().horasPorSemana,
+      modoEscuro: get().modoEscuro,
+      notasZettel: get().notasZettel,
+      notasTemporarias: get().notasTemporarias,
+      canvasZettel: get().canvasZettel,
+      cadernosVolumes: get().cadernosVolumes,
+      cadernoAtivoId: cadernoId,
+      checkinsSemanais: get().checkinsSemanais,
+      diasLogs: get().diasLogs,
+      checkoutsSemanais: get().checkoutsSemanais,
+      paginasLivresCaderno: get().paginasLivresCaderno,
+      legendaSimbolosVisivel: get().legendaSimbolosVisivel,
+      estiloDotGridAtivo: get().estiloDotGridAtivo
+    });
+  },
+
+  salvarCheckinSemanal: (checkin) => {
+    const existentes = get().checkinsSemanais;
+    const index = existentes.findIndex((c) => c.id === checkin.id);
+    const novos = index >= 0
+      ? existentes.map((c) => (c.id === checkin.id ? checkin : c))
+      : [...existentes, checkin];
+    set({ checkinsSemanais: novos });
+    salvarNoLocalStorage({
+      livros: get().livros,
+      relacoes: get().relacoes,
+      progressos: get().progressos,
+      sessoesRevisao: get().sessoesRevisao,
+      horasPorSemana: get().horasPorSemana,
+      modoEscuro: get().modoEscuro,
+      notasZettel: get().notasZettel,
+      notasTemporarias: get().notasTemporarias,
+      canvasZettel: get().canvasZettel,
+      cadernosVolumes: get().cadernosVolumes,
+      cadernoAtivoId: get().cadernoAtivoId,
+      checkinsSemanais: novos,
+      diasLogs: get().diasLogs,
+      checkoutsSemanais: get().checkoutsSemanais,
+      paginasLivresCaderno: get().paginasLivresCaderno,
+      legendaSimbolosVisivel: get().legendaSimbolosVisivel,
+      estiloDotGridAtivo: get().estiloDotGridAtivo
+    });
+  },
+
+  salvarCheckoutSemanal: (checkout) => {
+    const existentes = get().checkoutsSemanais;
+    const index = existentes.findIndex((c) => c.id === checkout.id);
+    const novos = index >= 0
+      ? existentes.map((c) => (c.id === checkout.id ? checkout : c))
+      : [...existentes, checkout];
+    set({ checkoutsSemanais: novos });
+    salvarNoLocalStorage({
+      livros: get().livros,
+      relacoes: get().relacoes,
+      progressos: get().progressos,
+      sessoesRevisao: get().sessoesRevisao,
+      horasPorSemana: get().horasPorSemana,
+      modoEscuro: get().modoEscuro,
+      notasZettel: get().notasZettel,
+      notasTemporarias: get().notasTemporarias,
+      canvasZettel: get().canvasZettel,
+      cadernosVolumes: get().cadernosVolumes,
+      cadernoAtivoId: get().cadernoAtivoId,
+      checkinsSemanais: get().checkinsSemanais,
+      diasLogs: get().diasLogs,
+      checkoutsSemanais: novos,
+      paginasLivresCaderno: get().paginasLivresCaderno,
+      legendaSimbolosVisivel: get().legendaSimbolosVisivel,
+      estiloDotGridAtivo: get().estiloDotGridAtivo
+    });
+  },
+
+  adicionarItemDiaLog: (dataStr, item) => {
+    const logs = { ...get().diasLogs };
+    const diaAtual = logs[dataStr] || {
+      id: dataStr,
+      data: dataStr,
+      semanaId: `semana-${dataStr.slice(0, 7)}`,
+      cadernoId: get().cadernoAtivoId,
+      paginaNumero: Object.keys(logs).length + 4,
+      revisado: false,
+      dataRevisao: null,
+      itens: [],
+      termometro: { texto: '', humor: '', atualizadoEm: '' }
+    };
+
+    const novoItem: ItemDailyLog = {
+      ...item,
+      id: `item-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+      criadoEm: new Date().toISOString()
+    };
+
+    logs[dataStr] = {
+      ...diaAtual,
+      itens: [...diaAtual.itens, novoItem]
+    };
+
+    set({ diasLogs: logs });
+    salvarNoLocalStorage({
+      livros: get().livros,
+      relacoes: get().relacoes,
+      progressos: get().progressos,
+      sessoesRevisao: get().sessoesRevisao,
+      horasPorSemana: get().horasPorSemana,
+      modoEscuro: get().modoEscuro,
+      notasZettel: get().notasZettel,
+      notasTemporarias: get().notasTemporarias,
+      canvasZettel: get().canvasZettel,
+      cadernosVolumes: get().cadernosVolumes,
+      cadernoAtivoId: get().cadernoAtivoId,
+      checkinsSemanais: get().checkinsSemanais,
+      diasLogs: logs,
+      checkoutsSemanais: get().checkoutsSemanais,
+      paginasLivresCaderno: get().paginasLivresCaderno,
+      legendaSimbolosVisivel: get().legendaSimbolosVisivel,
+      estiloDotGridAtivo: get().estiloDotGridAtivo
+    });
+  },
+
+  atualizarItemDiaLog: (dataStr, itemId, patch) => {
+    const logs = { ...get().diasLogs };
+    const dia = logs[dataStr];
+    if (!dia) return;
+
+    logs[dataStr] = {
+      ...dia,
+      itens: dia.itens.map((it) => (it.id === itemId ? { ...it, ...patch } : it))
+    };
+
+    set({ diasLogs: logs });
+    salvarNoLocalStorage({
+      livros: get().livros,
+      relacoes: get().relacoes,
+      progressos: get().progressos,
+      sessoesRevisao: get().sessoesRevisao,
+      horasPorSemana: get().horasPorSemana,
+      modoEscuro: get().modoEscuro,
+      notasZettel: get().notasZettel,
+      notasTemporarias: get().notasTemporarias,
+      canvasZettel: get().canvasZettel,
+      cadernosVolumes: get().cadernosVolumes,
+      cadernoAtivoId: get().cadernoAtivoId,
+      checkinsSemanais: get().checkinsSemanais,
+      diasLogs: logs,
+      checkoutsSemanais: get().checkoutsSemanais,
+      paginasLivresCaderno: get().paginasLivresCaderno,
+      legendaSimbolosVisivel: get().legendaSimbolosVisivel,
+      estiloDotGridAtivo: get().estiloDotGridAtivo
+    });
+  },
+
+  removerItemDiaLog: (dataStr, itemId) => {
+    const logs = { ...get().diasLogs };
+    const dia = logs[dataStr];
+    if (!dia) return;
+
+    logs[dataStr] = {
+      ...dia,
+      itens: dia.itens.filter((it) => it.id !== itemId)
+    };
+
+    set({ diasLogs: logs });
+    salvarNoLocalStorage({
+      livros: get().livros,
+      relacoes: get().relacoes,
+      progressos: get().progressos,
+      sessoesRevisao: get().sessoesRevisao,
+      horasPorSemana: get().horasPorSemana,
+      modoEscuro: get().modoEscuro,
+      notasZettel: get().notasZettel,
+      notasTemporarias: get().notasTemporarias,
+      canvasZettel: get().canvasZettel,
+      cadernosVolumes: get().cadernosVolumes,
+      cadernoAtivoId: get().cadernoAtivoId,
+      checkinsSemanais: get().checkinsSemanais,
+      diasLogs: logs,
+      checkoutsSemanais: get().checkoutsSemanais,
+      paginasLivresCaderno: get().paginasLivresCaderno,
+      legendaSimbolosVisivel: get().legendaSimbolosVisivel,
+      estiloDotGridAtivo: get().estiloDotGridAtivo
+    });
+  },
+
+  reordenarItensDiaLog: (dataStr, novosItens) => {
+    const logs = { ...get().diasLogs };
+    const dia = logs[dataStr];
+    if (!dia) return;
+
+    logs[dataStr] = {
+      ...dia,
+      itens: novosItens
+    };
+
+    set({ diasLogs: logs });
+    salvarNoLocalStorage({
+      livros: get().livros,
+      relacoes: get().relacoes,
+      progressos: get().progressos,
+      sessoesRevisao: get().sessoesRevisao,
+      horasPorSemana: get().horasPorSemana,
+      modoEscuro: get().modoEscuro,
+      notasZettel: get().notasZettel,
+      notasTemporarias: get().notasTemporarias,
+      canvasZettel: get().canvasZettel,
+      cadernosVolumes: get().cadernosVolumes,
+      cadernoAtivoId: get().cadernoAtivoId,
+      checkinsSemanais: get().checkinsSemanais,
+      diasLogs: logs,
+      checkoutsSemanais: get().checkoutsSemanais,
+      paginasLivresCaderno: get().paginasLivresCaderno,
+      legendaSimbolosVisivel: get().legendaSimbolosVisivel,
+      estiloDotGridAtivo: get().estiloDotGridAtivo
+    });
+  },
+
+  atualizarTermometroDia: (dataStr, texto, humor) => {
+    const logs = { ...get().diasLogs };
+    const dia = logs[dataStr] || {
+      id: dataStr,
+      data: dataStr,
+      semanaId: `semana-${dataStr.slice(0, 7)}`,
+      cadernoId: get().cadernoAtivoId,
+      paginaNumero: Object.keys(logs).length + 4,
+      revisado: false,
+      dataRevisao: null,
+      itens: [],
+      termometro: { texto: '', humor: '', atualizadoEm: '' }
+    };
+
+    logs[dataStr] = {
+      ...dia,
+      termometro: {
+        texto,
+        humor: humor ?? dia.termometro?.humor,
+        atualizadoEm: new Date().toISOString()
+      }
+    };
+
+    set({ diasLogs: logs });
+    salvarNoLocalStorage({
+      livros: get().livros,
+      relacoes: get().relacoes,
+      progressos: get().progressos,
+      sessoesRevisao: get().sessoesRevisao,
+      horasPorSemana: get().horasPorSemana,
+      modoEscuro: get().modoEscuro,
+      notasZettel: get().notasZettel,
+      notasTemporarias: get().notasTemporarias,
+      canvasZettel: get().canvasZettel,
+      cadernosVolumes: get().cadernosVolumes,
+      cadernoAtivoId: get().cadernoAtivoId,
+      checkinsSemanais: get().checkinsSemanais,
+      diasLogs: logs,
+      checkoutsSemanais: get().checkoutsSemanais,
+      paginasLivresCaderno: get().paginasLivresCaderno,
+      legendaSimbolosVisivel: get().legendaSimbolosVisivel,
+      estiloDotGridAtivo: get().estiloDotGridAtivo
+    });
+  },
+
+  revisarFecharDia: (dataStr, acoesPendentes) => {
+    const logs = { ...get().diasLogs };
+    const dia = logs[dataStr];
+    if (!dia) return;
+
+    let itensAtualizados = [...dia.itens];
+
+    if (acoesPendentes) {
+      const dataObj = new Date(dataStr + 'T12:00:00');
+      dataObj.setDate(dataObj.getDate() + 1);
+      const dataAmanhaStr = dataObj.toISOString().split('T')[0];
+
+      Object.entries(acoesPendentes).forEach(([itemId, decisao]) => {
+        const itemIndex = itensAtualizados.findIndex((it) => it.id === itemId);
+        if (itemIndex === -1) return;
+
+        const itemOrig = itensAtualizados[itemIndex];
+        if (decisao.acao === 'concluir') {
+          itensAtualizados[itemIndex] = { ...itemOrig, estado: 'concluido' };
+        } else if (decisao.acao === 'cancelar') {
+          itensAtualizados[itemIndex] = { ...itemOrig, estado: 'cancelado' };
+        } else if (decisao.acao === 'migrar') {
+          const destino = decisao.dataDestino || dataAmanhaStr;
+          itensAtualizados[itemIndex] = { ...itemOrig, estado: 'migrado', migradoPara: destino };
+
+          const diaDestino = logs[destino] || {
+            id: destino,
+            data: destino,
+            semanaId: dia.semanaId,
+            cadernoId: dia.cadernoId,
+            paginaNumero: Object.keys(logs).length + 4,
+            revisado: false,
+            dataRevisao: null,
+            itens: [],
+            termometro: { texto: '', humor: '', atualizadoEm: '' }
+          };
+
+          const novoItemMigrado: ItemDailyLog = {
+            id: `item-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+            tipo: itemOrig.tipo,
+            texto: `${itemOrig.texto} (migrado de ${dataStr.split('-').reverse().slice(0, 2).join('/')})`,
+            hora: itemOrig.hora,
+            estado: 'pendente',
+            urgente: itemOrig.urgente,
+            criadoEm: new Date().toISOString()
+          };
+
+          logs[destino] = {
+            ...diaDestino,
+            itens: [...diaDestino.itens, novoItemMigrado]
+          };
+        }
+      });
+    }
+
+    logs[dataStr] = {
+      ...dia,
+      itens: itensAtualizados,
+      revisado: true,
+      dataRevisao: new Date().toISOString()
+    };
+
+    set({ diasLogs: logs });
+    salvarNoLocalStorage({
+      livros: get().livros,
+      relacoes: get().relacoes,
+      progressos: get().progressos,
+      sessoesRevisao: get().sessoesRevisao,
+      horasPorSemana: get().horasPorSemana,
+      modoEscuro: get().modoEscuro,
+      notasZettel: get().notasZettel,
+      notasTemporarias: get().notasTemporarias,
+      canvasZettel: get().canvasZettel,
+      cadernosVolumes: get().cadernosVolumes,
+      cadernoAtivoId: get().cadernoAtivoId,
+      checkinsSemanais: get().checkinsSemanais,
+      diasLogs: logs,
+      checkoutsSemanais: get().checkoutsSemanais,
+      paginasLivresCaderno: get().paginasLivresCaderno,
+      legendaSimbolosVisivel: get().legendaSimbolosVisivel,
+      estiloDotGridAtivo: get().estiloDotGridAtivo
+    });
+  },
+
+  salvarPaginaLivre: (pagina) => {
+    const existentes = get().paginasLivresCaderno;
+    const index = existentes.findIndex((p) => p.id === pagina.id);
+    const novas = index >= 0
+      ? existentes.map((p) => (p.id === pagina.id ? pagina : p))
+      : [...existentes, pagina];
+    set({ paginasLivresCaderno: novas });
+    salvarNoLocalStorage({
+      livros: get().livros,
+      relacoes: get().relacoes,
+      progressos: get().progressos,
+      sessoesRevisao: get().sessoesRevisao,
+      horasPorSemana: get().horasPorSemana,
+      modoEscuro: get().modoEscuro,
+      notasZettel: get().notasZettel,
+      notasTemporarias: get().notasTemporarias,
+      canvasZettel: get().canvasZettel,
+      cadernosVolumes: get().cadernosVolumes,
+      cadernoAtivoId: get().cadernoAtivoId,
+      checkinsSemanais: get().checkinsSemanais,
+      diasLogs: get().diasLogs,
+      checkoutsSemanais: get().checkoutsSemanais,
+      paginasLivresCaderno: novas,
+      legendaSimbolosVisivel: get().legendaSimbolosVisivel,
+      estiloDotGridAtivo: get().estiloDotGridAtivo
+    });
+  },
+
+  removerPaginaLivre: (id) => {
+    const novas = get().paginasLivresCaderno.filter((p) => p.id !== id);
+    set({ paginasLivresCaderno: novas });
+    salvarNoLocalStorage({
+      livros: get().livros,
+      relacoes: get().relacoes,
+      progressos: get().progressos,
+      sessoesRevisao: get().sessoesRevisao,
+      horasPorSemana: get().horasPorSemana,
+      modoEscuro: get().modoEscuro,
+      notasZettel: get().notasZettel,
+      notasTemporarias: get().notasTemporarias,
+      canvasZettel: get().canvasZettel,
+      cadernosVolumes: get().cadernosVolumes,
+      cadernoAtivoId: get().cadernoAtivoId,
+      checkinsSemanais: get().checkinsSemanais,
+      diasLogs: get().diasLogs,
+      checkoutsSemanais: get().checkoutsSemanais,
+      paginasLivresCaderno: novas,
+      legendaSimbolosVisivel: get().legendaSimbolosVisivel,
+      estiloDotGridAtivo: get().estiloDotGridAtivo
+    });
+  },
+
+  toggleLegendaSimbolos: () => {
+    const nova = !get().legendaSimbolosVisivel;
+    set({ legendaSimbolosVisivel: nova });
+    salvarNoLocalStorage({
+      livros: get().livros,
+      relacoes: get().relacoes,
+      progressos: get().progressos,
+      sessoesRevisao: get().sessoesRevisao,
+      horasPorSemana: get().horasPorSemana,
+      modoEscuro: get().modoEscuro,
+      notasZettel: get().notasZettel,
+      notasTemporarias: get().notasTemporarias,
+      canvasZettel: get().canvasZettel,
+      cadernosVolumes: get().cadernosVolumes,
+      cadernoAtivoId: get().cadernoAtivoId,
+      checkinsSemanais: get().checkinsSemanais,
+      diasLogs: get().diasLogs,
+      checkoutsSemanais: get().checkoutsSemanais,
+      paginasLivresCaderno: get().paginasLivresCaderno,
+      legendaSimbolosVisivel: nova,
+      estiloDotGridAtivo: get().estiloDotGridAtivo
+    });
+  },
+
+  toggleEstiloDotGrid: () => {
+    const novo = !get().estiloDotGridAtivo;
+    set({ estiloDotGridAtivo: novo });
+    salvarNoLocalStorage({
+      livros: get().livros,
+      relacoes: get().relacoes,
+      progressos: get().progressos,
+      sessoesRevisao: get().sessoesRevisao,
+      horasPorSemana: get().horasPorSemana,
+      modoEscuro: get().modoEscuro,
+      notasZettel: get().notasZettel,
+      notasTemporarias: get().notasTemporarias,
+      canvasZettel: get().canvasZettel,
+      cadernosVolumes: get().cadernosVolumes,
+      cadernoAtivoId: get().cadernoAtivoId,
+      checkinsSemanais: get().checkinsSemanais,
+      diasLogs: get().diasLogs,
+      checkoutsSemanais: get().checkoutsSemanais,
+      paginasLivresCaderno: get().paginasLivresCaderno,
+      legendaSimbolosVisivel: get().legendaSimbolosVisivel,
+      estiloDotGridAtivo: novo
+    });
+  },
+
+  converterNotaTemporariaParaDiario: (notaTempId, tipo, dataStr) => {
+    const temp = get().notasTemporarias.find((t) => t.id === notaTempId);
+    if (!temp) return;
+
+    const hoje = dataStr || new Date().toISOString().split('T')[0];
+    const textoItem = `${temp.pensamento} [Fonte: ${temp.fonte}${temp.pagina ? `, p. ${temp.pagina}` : ''}]`;
+
+    get().adicionarItemDiaLog(hoje, {
+      tipo,
+      texto: textoItem,
+      estado: 'pendente',
+      urgente: false
+    });
+
+    get().marcarNotaTemporariaProcessada(notaTempId);
   }
 }));
