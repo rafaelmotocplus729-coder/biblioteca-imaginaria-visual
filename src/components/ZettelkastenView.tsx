@@ -8,17 +8,19 @@ import { useBibliotecaStore, encontrarIndiceParaNota } from '../store/useBibliot
 import { getStoredSupabaseConfig } from '../lib/supabase';
 import { DrawerNovaPermanente } from './DrawerNovaPermanente';
 import { MenuFlutuanteSelecao } from './MenuFlutuanteSelecao';
+import { CaixaEntradaInbox } from './zettelkasten/CaixaEntradaInbox';
+import { DiarioCadernoReal } from './diario/DiarioCadernoReal';
 import {
   Folder,
   Search,
   Link as LinkIcon,
   BookOpen,
+  BookMarked,
+  Inbox,
   Trash2,
-  CheckCircle2,
   Edit3,
   LayoutGrid,
   Lightbulb,
-  ArrowRight,
   ArrowUp,
   X,
   Copy,
@@ -36,7 +38,6 @@ import {
   PanelLeftClose,
   PanelLeft,
   Compass,
-  Clock,
   Cloud,
   CloudOff,
   RefreshCw,
@@ -144,9 +145,7 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
     setFundoZettelkasten,
     setOpacidadeFundoZettelkasten,
     setDesfoqueFundoZettelkasten,
-    adicionarNotaTemporaria,
     marcarNotaTemporariaProcessada,
-    removerNotaTemporaria,
     criarNotaReferenciaDeLivro,
     criarNotaPermanenteRapida,
     exportarZettelkastenMarkdown,
@@ -157,7 +156,7 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
   } = useBibliotecaStore();
 
   // Estados de layout e visão
-  const [visaoAtiva, setVisaoAtiva] = useState<'acervo' | 'inbox' | 'canvas'>('acervo');
+  const [visaoAtiva, setVisaoAtiva] = useState<'acervo' | 'inbox' | 'diario' | 'canvas'>('acervo');
   const [sidebarAberta, setSidebarAberta] = useState(true);
   const [busca, setBusca] = useState('');
   const [propriedadesAberta, setPropriedadesAberta] = useState(true);
@@ -170,7 +169,8 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
     '01 - ÍNDICE': true,
     '02 - REFERÊNCIAS': true,
     '03 - PERMANENTES': true,
-    '04 - DIÁRIO INTELECTUAL': false,
+    '04 - CAIXA DE ENTRADA': false,
+    '05 - DIÁRIO INTELECTUAL': false,
     MODELO: false,
     Rascunho: false
   });
@@ -247,11 +247,6 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
   const [modalConectarAberto, setModalConectarAberto] = useState(false);
   const [notaConectarId, setNotaConectarId] = useState('');
 
-  // Formulário de Captura Rápida (Inbox 48h)
-  const [inboxPensamento, setInboxPensamento] = useState('');
-  const [inboxLivroId, setInboxLivroId] = useState<number | ''>('');
-  const [inboxFonteTexto, setInboxFonteTexto] = useState('');
-  const [inboxPagina, setInboxPagina] = useState('');
   const [copiadoNotif, setCopiadoNotif] = useState(false);
   const [linkCopiadoNotif, setLinkCopiadoNotif] = useState(false);
 
@@ -976,34 +971,6 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
     }
   };
 
-  // Salvar captura rápida (Inbox)
-  const handleSalvarCaptura = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!inboxPensamento.trim()) return;
-
-    let fonteFinal = inboxFonteTexto.trim();
-    let lId: number | undefined = undefined;
-    if (inboxLivroId !== '') {
-      const liv = livros.find((l) => l.id === Number(inboxLivroId));
-      if (liv) {
-        fonteFinal = liv.titulo;
-        lId = liv.id;
-      }
-    }
-
-    adicionarNotaTemporaria({
-      pensamento: inboxPensamento.trim(),
-      fonte: fonteFinal || 'Leitura Geral',
-      livroId: lId,
-      pagina: inboxPagina.trim() || undefined
-    });
-
-    setInboxPensamento('');
-    setInboxPagina('');
-    setInboxFonteTexto('');
-    setInboxLivroId('');
-  };
-
   // Converter temporária em permanente
   const handleConverterEmPermanente = (temp: NotaTemporaria) => {
     abrirCriadorPermanente({
@@ -1446,12 +1413,25 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                   ? 'bg-white dark:bg-stone-700 text-amber-800 dark:text-amber-300 shadow-2xs'
                   : 'text-stone-600 dark:text-stone-400 hover:text-stone-900'
               }`}
+              title="04 - Caixa de Entrada & Captura Rápida (48h)"
             >
-              <Clock className="w-3.5 h-3.5 text-amber-600" />
-              <span>Inbox 48h</span>
+              <Inbox className="w-3.5 h-3.5 text-amber-600" />
+              <span>04 Caixa de Entrada</span>
               {notasTemporarias.filter((t) => !t.processada).length > 0 && (
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
               )}
+            </button>
+            <button
+              onClick={() => setVisaoAtiva('diario')}
+              className={`flex items-center gap-1.5 px-3 py-1 rounded-md font-bold transition relative ${
+                visaoAtiva === 'diario'
+                  ? 'bg-white dark:bg-stone-700 text-amber-900 dark:text-amber-200 shadow-2xs'
+                  : 'text-stone-600 dark:text-stone-400 hover:text-stone-900'
+              }`}
+              title="05 - O Diário Intelectual (Caderno Real)"
+            >
+              <BookMarked className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
+              <span>05 Diário Intelectual</span>
             </button>
             <button
               onClick={() => setVisaoAtiva('canvas')}
@@ -1872,11 +1852,11 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                   )}
                 </div>
 
-                {/* 04 - DIÁRIO INTELECTUAL */}
+                {/* 04 - CAIXA DE ENTRADA */}
                 <div>
                   <div
                     onClick={() => {
-                      togglePasta('04 - DIÁRIO INTELECTUAL');
+                      togglePasta('04 - CAIXA DE ENTRADA');
                       setVisaoAtiva('inbox');
                     }}
                     className={`flex items-center justify-between px-2 py-1 rounded-md hover:bg-stone-200/60 dark:hover:bg-stone-800/60 cursor-pointer font-medium ${
@@ -1886,14 +1866,37 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                     }`}
                   >
                     <div className="flex items-center gap-1.5">
-                      <Clock className="w-3 h-3 text-amber-600" />
-                      <span>04 - DIÁRIO INTELECTUAL</span>
+                      <Inbox className="w-3 h-3 text-amber-600" />
+                      <span>04 - CAIXA DE ENTRADA</span>
                     </div>
                     {notasTemporarias.filter((t) => !t.processada).length > 0 && (
                       <span className="text-[10px] px-1.5 rounded-full bg-amber-200 dark:bg-amber-900 text-amber-900 dark:text-amber-200 font-bold">
                         {notasTemporarias.filter((t) => !t.processada).length}
                       </span>
                     )}
+                  </div>
+                </div>
+
+                {/* 05 - DIÁRIO INTELECTUAL */}
+                <div>
+                  <div
+                    onClick={() => {
+                      togglePasta('05 - DIÁRIO INTELECTUAL');
+                      setVisaoAtiva('diario');
+                    }}
+                    className={`flex items-center justify-between px-2 py-1 rounded-md hover:bg-stone-200/60 dark:hover:bg-stone-800/60 cursor-pointer font-medium ${
+                      visaoAtiva === 'diario'
+                        ? 'text-amber-800 dark:text-amber-300 font-bold bg-amber-50 dark:bg-amber-950/40'
+                        : 'text-stone-700 dark:text-stone-300'
+                    }`}
+                  >
+                    <div className="flex items-center gap-1.5">
+                      <BookMarked className="w-3 h-3 text-amber-600" />
+                      <span>05 - DIÁRIO INTELECTUAL</span>
+                    </div>
+                    <span className="text-[9px] px-1.5 py-0.2 rounded font-cinzel font-semibold bg-stone-200 dark:bg-stone-800 text-stone-600 dark:text-stone-400">
+                      Caderno Real
+                    </span>
                   </div>
                 </div>
 
@@ -1953,150 +1956,14 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
         {/* ÁREA DO DOCUMENTO / WORKSPACE CENTRAL */}
         <main className="flex-1 flex flex-col justify-between overflow-y-auto">
           {visaoAtiva === 'inbox' ? (
-            /* VISÃO DIÁRIO INTELECTUAL (INBOX 48H) */
-            <div className="max-w-4xl mx-auto w-full p-6 sm:p-10 space-y-6">
-              <div className="border-b border-stone-200 dark:border-stone-800 pb-4">
-                <span className="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
-                  04 - DIÁRIO INTELECTUAL
-                </span>
-                <h2 className="text-2xl sm:text-3xl font-serif font-bold text-stone-900 dark:text-stone-100 mt-2">
-                  Caixa de Entrada & Captura Rápida (&le; 48 Horas)
-                </h2>
-                <p className="text-xs sm:text-sm text-stone-500 dark:text-stone-400 mt-1 font-serif">
-                  Capture pensamentos essenciais sem pausar a leitura. Processe em notas permanentes em até 48h e descarte.
-                </p>
-              </div>
-
-              {/* Form de Captura Rápida */}
-              <div className="bg-stone-50 dark:bg-[#18191d] border border-stone-200 dark:border-stone-800 rounded-2xl p-5 space-y-4 shadow-xs">
-                <div className="text-xs font-bold uppercase tracking-wider text-stone-700 dark:text-stone-300 font-sans flex items-center gap-1.5">
-                  <Clock className="w-4 h-4 text-amber-600" />
-                  <span>Novo Registro Rápido</span>
-                </div>
-
-                <form onSubmit={handleSalvarCaptura} className="space-y-3">
-                  <textarea
-                    rows={3}
-                    value={inboxPensamento}
-                    onChange={(e) => setInboxPensamento(e.target.value)}
-                    placeholder="Pensamento ou síntese rápida da leitura..."
-                    className="w-full p-3 text-xs sm:text-sm rounded-xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 text-stone-900 dark:text-stone-100 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-amber-500/40 font-serif leading-relaxed"
-                    required
-                  />
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                    <div>
-                      <select
-                        value={inboxLivroId}
-                        onChange={(e) => setInboxLivroId(e.target.value === '' ? '' : Number(e.target.value))}
-                        className="w-full p-2 text-xs rounded-lg bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 text-stone-900 dark:text-stone-100"
-                      >
-                        <option value="">Fonte Externa / Outra</option>
-                        {livros.map((l) => (
-                          <option key={l.id} value={l.id}>
-                            #{l.id} {l.titulo}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    <div>
-                      <input
-                        type="text"
-                        value={inboxPagina}
-                        onChange={(e) => setInboxPagina(e.target.value)}
-                        placeholder="Nº da Página (Ex: 84)"
-                        className="w-full p-2 text-xs rounded-lg bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 text-stone-900 dark:text-stone-100"
-                      />
-                    </div>
-                  </div>
-
-                  {inboxLivroId === '' && (
-                    <input
-                      type="text"
-                      value={inboxFonteTexto}
-                      onChange={(e) => setInboxFonteTexto(e.target.value)}
-                      placeholder="Nome da Fonte ou Livro externo..."
-                      className="w-full p-2 text-xs rounded-lg bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 text-stone-900 dark:text-stone-100"
-                    />
-                  )}
-
-                  <button
-                    type="submit"
-                    className="w-full py-2.5 rounded-xl bg-amber-700 hover:bg-amber-600 text-white font-bold text-xs shadow-xs transition cursor-pointer"
-                  >
-                    Registrar Pensamento no Inbox
-                  </button>
-                </form>
-              </div>
-
-              {/* Lista de Notas na Fila */}
-              <div className="space-y-3">
-                <div className="text-xs font-bold text-stone-500 uppercase tracking-wider font-sans">
-                  Fila de Processamento Ativa ({notasTemporarias.filter((t) => !t.processada).length})
-                </div>
-
-                {notasTemporarias.length === 0 ? (
-                  <div className="p-8 text-center text-stone-400 text-xs italic bg-stone-50 dark:bg-stone-900/40 rounded-xl border border-dashed border-stone-200 dark:border-stone-800">
-                    Sua caixa de entrada está limpa! Ao estudar, anote pensamentos rápidos aqui e processe em até 48 horas.
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
-                    {notasTemporarias.map((t) => (
-                      <div
-                        key={t.id}
-                        className={`p-4 rounded-xl border transition flex flex-col justify-between ${
-                          t.processada
-                            ? 'bg-stone-100/60 dark:bg-stone-900/30 border-stone-200 dark:border-stone-800 opacity-60'
-                            : 'bg-white dark:bg-[#18191d] border-stone-200 dark:border-stone-700 shadow-2xs hover:border-amber-400'
-                        }`}
-                      >
-                        <div>
-                          <div className="flex items-center justify-between text-xs text-stone-500 mb-2">
-                            <span className="font-semibold text-stone-700 dark:text-stone-300">
-                              {t.fonte} {t.pagina ? `· p. ${t.pagina}` : ''}
-                            </span>
-                            {!t.processada && (
-                              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-200">
-                                &le; 48h
-                              </span>
-                            )}
-                          </div>
-                          <p className="text-xs sm:text-sm font-serif text-stone-900 dark:text-stone-100 italic leading-relaxed">
-                            "{t.pensamento}"
-                          </p>
-                        </div>
-
-                        <div className="mt-4 pt-3 border-t border-stone-100 dark:border-stone-800 flex items-center justify-between">
-                          {!t.processada ? (
-                            <>
-                              <button
-                                onClick={() => handleConverterEmPermanente(t)}
-                                className="text-xs font-bold text-emerald-700 dark:text-emerald-400 hover:underline flex items-center gap-1 cursor-pointer"
-                              >
-                                <ArrowRight className="w-3.5 h-3.5" />
-                                <span>Sintetizar em Permanente</span>
-                              </button>
-                              <button
-                                onClick={() => removerNotaTemporaria(t.id)}
-                                className="p-1 rounded text-stone-400 hover:text-rose-600 transition"
-                                title="Descartar nota (Lixo)"
-                              >
-                                <Trash2 className="w-3.5 h-3.5" />
-                              </button>
-                            </>
-                          ) : (
-                            <div className="text-xs text-emerald-600 flex items-center gap-1">
-                              <CheckCircle2 className="w-3.5 h-3.5" />
-                              <span>Processada em Permanente</span>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
+            /* VISÃO 04 - CAIXA DE ENTRADA (DESIGN REFORMULADO & FICHÁRIO 48H) */
+            <CaixaEntradaInbox
+              onConverterEmPermanente={handleConverterEmPermanente}
+              onSelecionarLivroEstante={onSelecionarLivroEstante}
+            />
+          ) : visaoAtiva === 'diario' ? (
+            /* VISÃO 05 - O DIÁRIO INTELECTUAL ("CADERNO REAL" - PRD) */
+            <DiarioCadernoReal />
           ) : visaoAtiva === 'canvas' ? (
             /* VISÃO CANVAS DE ARTICULAÇÃO */
             <div className="max-w-5xl mx-auto w-full p-6 sm:p-10 space-y-6">

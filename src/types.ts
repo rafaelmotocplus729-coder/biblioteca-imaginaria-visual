@@ -161,3 +161,85 @@ export interface CanvasZettel {
   edges: EdgeCanvasZettel[];
 }
 
+// ==========================================
+// CADERNO REAL (SISTEMA DIGITAL DE ORGANIZAÇÃO PESSOAL)
+// ==========================================
+
+export interface CadernoVolume {
+  id: string;
+  titulo: string;
+  dataInicio: string; // ISO ou YYYY-MM-DD
+  dataFim?: string | null; // null enquanto aberto / ativo
+  ativo: boolean;
+  descricao?: string;
+  criadoEm: string;
+}
+
+export type TipoItemDaily = 'tarefa' | 'compromisso' | 'nota';
+export type EstadoItemDaily = 'pendente' | 'concluido' | 'migrado' | 'cancelado';
+
+export interface ItemDailyLog {
+  id: string;
+  tipo: TipoItemDaily; // '•' (tarefa) | '○' (compromisso) | '-' (nota/ideia)
+  texto: string;
+  hora?: string; // ex: "14:30" para compromissos
+  estado: EstadoItemDaily; // 'pendente' | 'concluido' (X) | 'migrado' (→) | 'cancelado' (—)
+  urgente: boolean; // '*' prioridade alta
+  migradoPara?: string; // Data ISO YYYY-MM-DD para onde foi transferido
+  criadoEm: string;
+}
+
+export interface TermometroDia {
+  texto: string; // Bloco ≡
+  humor?: string;
+  atualizadoEm?: string;
+}
+
+export interface DiaLog {
+  id: string; // YYYY-MM-DD
+  data: string; // YYYY-MM-DD
+  semanaId: string; // ex: '2026-W46'
+  cadernoId: string;
+  paginaNumero: number;
+  revisado: boolean; // Selo de Revisado
+  dataRevisao?: string | null;
+  itens: ItemDailyLog[];
+  termometro: TermometroDia;
+}
+
+export interface CheckinSemanal {
+  id: string; // ex: '2026-W46'
+  semanaId: string;
+  cadernoId: string;
+  dataInicio: string; // YYYY-MM-DD
+  dataFim: string; // YYYY-MM-DD
+  paginaNumero: number;
+  paragrafoIntencao: string;
+  focoTarefas: string[];
+  focoCompromissos: string[];
+  focoMetas: string[];
+  concluido: boolean;
+  criadoEm: string;
+}
+
+export interface CheckoutSemanal {
+  id: string;
+  semanaId: string;
+  cadernoId: string;
+  paginaNumero: number;
+  balancoBom: string; // O que funcionou bem?
+  balancoRuim: string; // O que deu errado / precisa melhorar?
+  concluido: boolean;
+  dataFechamento?: string;
+}
+
+export interface PaginaLivreCaderno {
+  id: string;
+  cadernoId: string;
+  paginaNumero: number;
+  titulo: string;
+  conteudo: string;
+  dataCriacao: string;
+  dataAtualizacao: string;
+}
+

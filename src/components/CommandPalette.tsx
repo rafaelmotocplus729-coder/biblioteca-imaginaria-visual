@@ -17,7 +17,8 @@ import {
   CornerDownLeft,
   X,
   Lightbulb,
-  Hourglass
+  Hourglass,
+  Clock
 } from 'lucide-react';
 
 interface CommandPaletteProps {
@@ -128,6 +129,30 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       subtitulo: 'Sistema pessoal de notas atômicas em rede (Luhmann / Ahrens)',
       badge: 'Tecla Z',
       icone: <Lightbulb className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />,
+      acao: () => {
+        onMudarVisao('zettelkasten');
+        onClose();
+      }
+    },
+    {
+      id: 'cmd-caixa-entrada',
+      tipo: 'acao',
+      titulo: '04 — Abrir Caixa de Entrada (Inbox 48h)',
+      subtitulo: 'Capturar intuições e citações rápidas das leituras',
+      badge: 'Inbox',
+      icone: <Clock className="w-4 h-4 text-amber-600 dark:text-amber-400" />,
+      acao: () => {
+        onMudarVisao('zettelkasten');
+        onClose();
+      }
+    },
+    {
+      id: 'cmd-diario-intelectual',
+      tipo: 'acao',
+      titulo: '05 — Abrir Diário Intelectual ("Caderno Real")',
+      subtitulo: 'Check-in semanal, Daily Log com símbolos (•, ○, -), termômetro e checkout',
+      badge: 'Diário',
+      icone: <NotebookPen className="w-4 h-4 text-amber-700 dark:text-amber-400" />,
       acao: () => {
         onMudarVisao('zettelkasten');
         onClose();
