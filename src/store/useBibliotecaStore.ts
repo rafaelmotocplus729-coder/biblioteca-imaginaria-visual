@@ -196,14 +196,201 @@ const IDS_MOCKUPS = new Set([
   '2-202501161035', '3-202501161120', '3-202501161130', 'ATALHOS'
 ]);
 
+/**
+ * Identifica a qual nota índice uma nota de referência ou permanente pertence:
+ * 1. Pelo metadado 'tema' (ex: [[2 - HISTÓRIA]])
+ * 2. Pelo prefixo numérico do título (ex: "2-202611..." ou "2 - ...")
+ * 3. Se for nota permanente, pelo índice da sua nota de referência vinculada
+ */
+export function encontrarIndiceParaNota(
+  nota: NotaZettel,
+  indices: NotaZettel[],
+  referencias: NotaZettel[]
+): NotaZettel | null {
+  if (nota.tipo === 'indice' || nota.pasta === '01 índice') return null;
+
+  // 1. Por metadado tema
+  if (nota.tema) {
+    const temaLimpo = nota.tema.replace(/\[\[|\]\]/g, '').trim().toLowerCase();
+    const matchTema = indices.find((idx) => {
+      const idxLimpo = idx.titulo.toLowerCase();
+      const idxIdLimpo = idx.id.toLowerCase();
+      if (idxLimpo === temaLimpo || idxIdLimpo === temaLimpo) return true;
+      if (temaLimpo.startsWith('1') && (idxLimpo.includes('literatura') || idxIdLimpo.includes('literatura'))) return true;
+      if (temaLimpo.startsWith('2') && (idxLimpo.includes('história') || idxLimpo.includes('historia') || idxIdLimpo.includes('historia'))) return true;
+      if (temaLimpo.startsWith('3') && (idxLimpo.includes('psicologia') || idxIdLimpo.includes('psicologia'))) return true;
+      if (temaLimpo.startsWith('4') && (idxLimpo.includes('religião') || idxLimpo.includes('religiao') || idxIdLimpo.includes('religiao'))) return true;
+      if (temaLimpo.startsWith('5') && (idxLimpo.includes('filosofia') || idxIdLimpo.includes('filosofia'))) return true;
+      return false;
+    });
+    if (matchTema) return matchTema;
+  }
+
+  // 2. Por prefixo numérico no título (ex: "2-202611..." ou "2 - ...") ou ID
+  const matchNum = nota.titulo.match(/^(\d+)[\s-]/) || nota.id.match(/^(\d+)[\s-]/);
+  if (matchNum) {
+    const num = matchNum[1];
+    const matchPrefixo = indices.find(
+      (idx) =>
+        idx.titulo.startsWith(`${num} `) ||
+        idx.titulo.startsWith(`${num}-`) ||
+        idx.titulo.startsWith(`${num} -`) ||
+        idx.id.startsWith(`${num}-`) ||
+        idx.id.startsWith(`${num}_`)
+    );
+    if (matchPrefixo) return matchPrefixo;
+  }
+
+  // 3. Se for permanente e tiver referência vinculada, busca o índice da referência
+  if (nota.referencia) {
+    const refNome = nota.referencia.replace(/\[\[|\]\]/g, '').trim().toLowerCase();
+    const matchRef = referencias.find(
+      (r) => r.titulo.toLowerCase() === refNome || r.id.toLowerCase() === refNome
+    );
+    if (matchRef) {
+      return encontrarIndiceParaNota(matchRef, indices, referencias);
+    }
+  }
+
+  return null;
+}
+
+/**
+ * Atualiza o conteúdo markdown de um índice garantindo que todas as referências
+ * e notas permanentes vinculadas constem com [[Wikilinks]] nas suas respectivas seções.
+ */
+function atualizarConteudoIndice(
+  conteudoAtual: string,
+  refs: NotaZettel[],
+  perms: NotaZettel[]
+): string {
+  const listaRefsStr = refs.length > 0 ? refs.map((r) => `- [[${r.titulo}]]`).join('\n') : '- ';
+  const listaPermsStr = perms.length > 0 ? perms.map((p) => `- [[${p.titulo}]]`).join('\n') : '- ';
+
+  const indiceRef = conteudoAtual.indexOf('# Referências');
+  const cabecalho = indiceRef > 0 ? conteudoAtual.slice(0, indiceRef).trim() + '\n\n' : '';
+
+  return `${cabecalho}# Referências\n${listaRefsStr}\n\n# Notas Relacionadas\n${listaPermsStr}`;
+}
+
+/**
+ * Atualiza o conteúdo markdown de uma nota de referência garantindo que
+ * todas as notas permanentes que a utilizam como fonte constem em 'Notas Relacionadas'.
+ */
+function atualizarConteudoReferencia(conteudoAtual: string, perms: NotaZettel[]): string {
+  if (perms.length === 0) return conteudoAtual;
+  const listaPerms = perms.map((p) => `- [[${p.titulo}]]`).join('\n');
+
+  const regexSecao = /(##\s*(?:Notas Relacionadas|NOTAS RELACIONADAS)[\r\n]+)([\s\S]*?)(?=[\r\n]+##|$)/i;
+  if (regexSecao.test(conteudoAtual)) {
+    return conteudoAtual.replace(regexSecao, `$1${listaPerms}\n`);
+  } else {
+    return `${conteudoAtual}\n\n## Notas Relacionadas\n${listaPerms}`;
+  }
+}
+
+/**
+ * Atualiza as conexões reversas de notas permanentes sob a seção ## Conexões.
+ */
+function atualizarConexoesPermanente(conteudoAtual: string, outrasPerms: NotaZettel[]): string {
+  if (outrasPerms.length === 0) return conteudoAtual;
+
+  const regexConexoes = /(##\s*(?:Conexões|CONEXÕES|Notas Relacionadas)[\r\n]+)([\s\S]*?)(?=[\r\n]+##|$)/i;
+  if (regexConexoes.test(conteudoAtual)) {
+    const trechoExistente = conteudoAtual.match(regexConexoes)?.[2] || '';
+    const novasLinhas = outrasPerms
+      .filter((op) => !trechoExistente.includes(`[[${op.titulo}]]`))
+      .map((op) => `- [[${op.titulo}]]`);
+    if (novasLinhas.length > 0) {
+      const trechoLimpo = trechoExistente.trim() === '-' ? '' : trechoExistente.trim();
+      const substituicao = trechoLimpo ? `${trechoLimpo}\n${novasLinhas.join('\n')}` : novasLinhas.join('\n');
+      return conteudoAtual.replace(regexConexoes, `$1${substituicao}\n`);
+    }
+    return conteudoAtual;
+  } else {
+    const listaConexoes = outrasPerms.map((op) => `- [[${op.titulo}]]`).join('\n');
+    return `${conteudoAtual}\n\n## Conexões\n${listaConexoes}`;
+  }
+}
+
+/**
+ * Motor central de sincronização automática entre Índices, Referências e Permanentes:
+ * Atualiza automaticamente todas as listas de conexões mútuas em cascata.
+ */
+export function sincronizarConexoesZettel(todasNotas: NotaZettel[]): NotaZettel[] {
+  const indices = todasNotas.filter((n) => n.tipo === 'indice' || n.pasta === '01 índice');
+  const referencias = todasNotas.filter((n) => n.tipo === 'referencia' || n.pasta === '02 referências');
+  const permanentes = todasNotas.filter((n) => n.tipo === 'permanente' || n.pasta === '03 permanentes');
+
+  const mapaNotas = new Map<string, NotaZettel>(todasNotas.map((n) => [n.id, { ...n }]));
+
+  // 1. Atualizar cada Índice com suas Referências e Notas Relacionadas
+  for (const idx of indices) {
+    const refsVinculadas = referencias.filter((r) => {
+      const ind = encontrarIndiceParaNota(r, indices, referencias);
+      return ind?.id === idx.id || ind?.titulo === idx.titulo;
+    });
+    const permsVinculadas = permanentes.filter((p) => {
+      const ind = encontrarIndiceParaNota(p, indices, referencias);
+      return ind?.id === idx.id || ind?.titulo === idx.titulo;
+    });
+
+    const notaExistente = mapaNotas.get(idx.id);
+    if (notaExistente) {
+      const novoConteudo = atualizarConteudoIndice(notaExistente.conteudo, refsVinculadas, permsVinculadas);
+      if (novoConteudo !== notaExistente.conteudo) {
+        notaExistente.conteudo = novoConteudo;
+      }
+    }
+  }
+
+  // 2. Atualizar cada Referência com as notas permanentes que a citam
+  for (const ref of referencias) {
+    const permsVinculadas = permanentes.filter((p) => {
+      if (!p.referencia) return false;
+      const refLimpo = p.referencia.replace(/\[\[|\]\]/g, '').trim().toLowerCase();
+      return refLimpo === ref.titulo.toLowerCase() || refLimpo === ref.id.toLowerCase();
+    });
+
+    const notaExistente = mapaNotas.get(ref.id);
+    if (notaExistente && permsVinculadas.length > 0) {
+      const novoConteudo = atualizarConteudoReferencia(notaExistente.conteudo, permsVinculadas);
+      if (novoConteudo !== notaExistente.conteudo) {
+        notaExistente.conteudo = novoConteudo;
+      }
+    }
+  }
+
+  // 3. Atualizar conexões reversas entre permanentes
+  for (const perm of permanentes) {
+    if (perm.relacao) {
+      const relNome = perm.relacao.replace(/\[\[|\]\]/g, '').trim().toLowerCase();
+      const outraPerm = permanentes.find(
+        (p) => p.titulo.toLowerCase() === relNome || p.id.toLowerCase() === relNome
+      );
+      if (outraPerm && outraPerm.id !== perm.id) {
+        const notaAlvo = mapaNotas.get(outraPerm.id);
+        if (notaAlvo) {
+          const novoConteudo = atualizarConexoesPermanente(notaAlvo.conteudo, [perm]);
+          if (novoConteudo !== notaAlvo.conteudo) {
+            notaAlvo.conteudo = novoConteudo;
+          }
+        }
+      }
+    }
+  }
+
+  return Array.from(mapaNotas.values());
+}
+
 function filtrarMockupsZettel(salvas?: NotaZettel[]): NotaZettel[] {
-  if (!salvas || salvas.length === 0) return NOTAS_ZETTEL_INICIAIS;
+  if (!salvas || salvas.length === 0) return sincronizarConexoesZettel(NOTAS_ZETTEL_INICIAIS);
   const reais = salvas.filter((n) => !IDS_MOCKUPS.has(n.id));
-  if (reais.length === 0) return NOTAS_ZETTEL_INICIAIS;
+  if (reais.length === 0) return sincronizarConexoesZettel(NOTAS_ZETTEL_INICIAIS);
   // Garantir que os 5 índices fundamentais existam
   const indicesExistentes = new Set(reais.filter((n) => n.tipo === 'indice').map((n) => n.id));
   const faltantes = NOTAS_ZETTEL_INICIAIS.filter((idx) => !indicesExistentes.has(idx.id));
-  return [...faltantes, ...reais];
+  return sincronizarConexoesZettel([...faltantes, ...reais]);
 }
 
 function filtrarMockupsTemporarias(salvas?: NotaTemporaria[]): NotaTemporaria[] {
@@ -786,8 +973,8 @@ export const useBibliotecaStore = create<BibliotecaState>((set, get) => ({
   },
 
   adicionarNotaZettel: (nota) => {
-    const novasNotas = [nota, ...get().notasZettel];
-    set({ notasZettel: novasNotas, notaZettelSelecionadaId: nota.id });
+    const sincronizadas = sincronizarConexoesZettel([nota, ...get().notasZettel]);
+    set({ notasZettel: sincronizadas, notaZettelSelecionadaId: nota.id });
     salvarNoLocalStorage({
       livros: get().livros,
       relacoes: get().relacoes,
@@ -795,12 +982,18 @@ export const useBibliotecaStore = create<BibliotecaState>((set, get) => ({
       sessoesRevisao: get().sessoesRevisao,
       horasPorSemana: get().horasPorSemana,
       modoEscuro: get().modoEscuro,
-      notasZettel: novasNotas,
+      notasZettel: sincronizadas,
       notasTemporarias: get().notasTemporarias,
       canvasZettel: get().canvasZettel
     });
     // Persistência assíncrona no Supabase
     salvarNotaNoSupabase(nota).catch((e) => console.warn('Supabase offline/erro:', e));
+    // Sincroniza também as notas conectadas (ex: índice e referências)
+    for (const n of sincronizadas) {
+      if (n.id !== nota.id) {
+        salvarNotaNoSupabase(n).catch(() => {});
+      }
+    }
   },
 
   atualizarNotaZettel: (id, atualizacao) => {
@@ -814,7 +1007,8 @@ export const useBibliotecaStore = create<BibliotecaState>((set, get) => ({
       return n;
     });
 
-    set({ notasZettel: novasNotas });
+    const sincronizadas = sincronizarConexoesZettel(novasNotas);
+    set({ notasZettel: sincronizadas });
     salvarNoLocalStorage({
       livros: get().livros,
       relacoes: get().relacoes,
@@ -822,7 +1016,7 @@ export const useBibliotecaStore = create<BibliotecaState>((set, get) => ({
       sessoesRevisao: get().sessoesRevisao,
       horasPorSemana: get().horasPorSemana,
       modoEscuro: get().modoEscuro,
-      notasZettel: novasNotas,
+      notasZettel: sincronizadas,
       notasTemporarias: get().notasTemporarias,
       canvasZettel: get().canvasZettel
     });
@@ -932,13 +1126,19 @@ export const useBibliotecaStore = create<BibliotecaState>((set, get) => ({
       String(agora.getMinutes()).padStart(2, '0');
 
     let temaNumero = '1';
-    let temaNome = '1 Literatura';
+    let temaNome = '1 - LITERATURA';
     if (['Filosofia', 'Metafísica', 'Moral'].includes(livro.area)) {
+      temaNumero = '5';
+      temaNome = '5 - FILOSOFIA';
+    } else if (['História', 'História da Igreja', 'Antropologia', 'Política'].includes(livro.area)) {
       temaNumero = '2';
-      temaNome = '2 Filosofia';
-    } else if (['Método', 'Gramática', 'Lógica', 'Psicologia'].includes(livro.area)) {
+      temaNome = '2 - HISTÓRIA';
+    } else if (['Psicologia', 'Método', 'Gramática', 'Lógica'].includes(livro.area)) {
       temaNumero = '3';
-      temaNome = '3 Método e Produtividade Intelectual';
+      temaNome = '3 - PSICOLOGIA';
+    } else if (['Religião', 'Catolicismo'].includes(livro.area)) {
+      temaNumero = '4';
+      temaNome = '4 - RELIGIÃO';
     }
 
     const edicao = livro.edicoes_pt?.[0];
@@ -988,7 +1188,16 @@ ${livro.sinopse_editorial || livro.tese}
       String(agora.getMinutes()).padStart(2, '0');
 
     const tituloNota = `${numTema}-${stamp} - ${titulo}`;
-    const temaNome = numTema === 1 ? '1 Literatura' : (numTema === 2 ? '2 Filosofia' : (numTema === 3 ? '3 Psicologia' : (numTema === 4 ? '4 Religião' : '5 Filosofia')));
+    const temaNome =
+      numTema === 1
+        ? '1 - LITERATURA'
+        : numTema === 2
+        ? '2 - HISTÓRIA'
+        : numTema === 3
+        ? '3 - PSICOLOGIA'
+        : numTema === 4
+        ? '4 - RELIGIÃO'
+        : '5 - FILOSOFIA';
 
     // Monta o corpo com a citação de apoio clássica se fornecida
     let corpo = `# ${titulo}\n\n`;

@@ -18,6 +18,8 @@ interface DrawerNovaPermanenteProps {
   referenciaInicial?: string;
   paginaInicial?: string;
   citacaoInicial?: string;
+  temaNumInicial?: number;
+  temaTituloInicial?: string;
   todasReferencias: NotaZettel[];
   todasPermanentes: NotaZettel[];
   todosIndices: NotaZettel[];
@@ -44,6 +46,8 @@ export const DrawerNovaPermanente: React.FC<DrawerNovaPermanenteProps> = ({
   referenciaInicial = '',
   paginaInicial = '',
   citacaoInicial = '',
+  temaNumInicial,
+  temaTituloInicial = '',
   todasReferencias,
   todasPermanentes,
   todosIndices,
@@ -54,7 +58,7 @@ export const DrawerNovaPermanente: React.FC<DrawerNovaPermanenteProps> = ({
 }) => {
   const [tipo, setTipo] = useState<'permanente' | 'referencia' | 'indice'>(tipoInicial);
   const [titulo, setTitulo] = useState('');
-  const [numTema, setNumTema] = useState<number>(2); // Padrão: 2 Filosofia
+  const [numTema, setNumTema] = useState<number>(temaNumInicial ?? 2); // Padrão: 2 História
   const [referencia, setReferencia] = useState(referenciaInicial);
   const [pagina, setPagina] = useState(paginaInicial);
   const [citacao, setCitacao] = useState(citacaoInicial);
@@ -83,14 +87,19 @@ export const DrawerNovaPermanente: React.FC<DrawerNovaPermanenteProps> = ({
       setDropdownRelacaoAberto(false);
       setLivroSelecionadoId('');
 
-      if (referenciaInicial) {
+      if (temaNumInicial) {
+        setNumTema(temaNumInicial);
+      } else if (referenciaInicial) {
         const match = referenciaInicial.match(/^(\d)/);
         if (match) {
           setNumTema(Number(match[1]));
         }
       }
+      if (tipoInicial === 'indice' && temaTituloInicial) {
+        setTitulo(temaTituloInicial);
+      }
     }
-  }, [aberto, tipoInicial, referenciaInicial, paginaInicial, citacaoInicial]);
+  }, [aberto, tipoInicial, referenciaInicial, paginaInicial, citacaoInicial, temaNumInicial, temaTituloInicial]);
 
   if (!aberto) return null;
 
