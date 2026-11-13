@@ -80,6 +80,10 @@ export const App: React.FC = () => {
 
       if (isInput) return;
 
+      // Ignora atalhos de navegação de tecla única quando teclas modificadoras (Ctrl, Meta, Alt) estiverem pressionadas
+      // Isso impede que atalhos como Ctrl+E, Ctrl+Z, Ctrl+C, Ctrl+D etc. alternem visões indevidamente
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+
       // Tecla / para busca rápida
       if (e.key === '/') {
         e.preventDefault();

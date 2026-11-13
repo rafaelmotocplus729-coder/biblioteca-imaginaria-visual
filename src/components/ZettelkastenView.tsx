@@ -25,6 +25,7 @@ import {
   X,
   Copy,
   Check,
+  MessageSquare,
   Tag,
   ChevronRight,
   ChevronDown,
@@ -201,6 +202,7 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
   const [supabaseFeedback, setSupabaseFeedback] = useState<{ ok: boolean; msg: string } | null>(null);
   const [abaSupabase, setAbaSupabase] = useState<'conexao' | 'sql'>('conexao');
   const [sqlCopiado, setSqlCopiado] = useState(false);
+  const [sinteseCopiadaIdx, setSinteseCopiadaIdx] = useState<number | null>(null);
 
   // Drawer Não-Bloqueante de Criação Rápida (Permanente, Referência, Índice)
   const [drawerNovoAberto, setDrawerNovoAberto] = useState(false);
@@ -401,22 +403,6 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
     return { refs, perms };
   }, [notaAtiva, notasZettel]);
 
-  // Atalho global Ctrl+E para alternar Leitura / Edição (Item 3)
-  useEffect(() => {
-    const handleGlobalKeyDown = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'e') {
-        const target = e.target as HTMLElement;
-        const isEditingInTextarea = target && (target.tagName === 'TEXTAREA' || target.tagName === 'INPUT');
-        if (!isEditingInTextarea && notaAtiva) {
-          e.preventDefault();
-          setModoEdicao((prev) => !prev);
-        }
-      }
-    };
-    window.addEventListener('keydown', handleGlobalKeyDown);
-    return () => window.removeEventListener('keydown', handleGlobalKeyDown);
-  }, [notaAtiva]);
-
   // Backlinks (Conexões Reversas)
   const backlinks = useMemo(() => {
     if (!notaAtiva) return [];
@@ -452,6 +438,25 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
     setSalvoFeedback(true);
     setTimeout(() => setSalvoFeedback(false), 2000);
   };
+
+  // Atalho global Ctrl+E para alternar Leitura / Edição e Salvar
+  useEffect(() => {
+    const handleGlobalKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'e') {
+        e.preventDefault();
+        e.stopPropagation();
+        if (!notaAtiva) return;
+
+        if (modoEdicao) {
+          handleSalvarEdicao();
+        } else {
+          setModoEdicao(true);
+        }
+      }
+    };
+    window.addEventListener('keydown', handleGlobalKeyDown, true);
+    return () => window.removeEventListener('keydown', handleGlobalKeyDown, true);
+  }, [notaAtiva, modoEdicao, tituloEditando, conteudoEditando]);
 
   // Salvar propriedades editadas
   const handleSalvarPropriedades = () => {
@@ -543,7 +548,13 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
         break;
       case 'comentario':
         if (selectedText) {
-          replacement = `\n- #comentário: ${selectedText}\n`;
+          const cleanText = selectedText
+            .replace(/&gt;/g, '>')
+            .replace(/&lt;/g, '<')
+            .replace(/&amp;/g, '&')
+            .replace(/&quot;/g, '"')
+            .replace(/&#39;/g, "'");
+          replacement = `\n- #comentário: ${cleanText}\n`;
         } else {
           replacement = `\n- #comentário: \n`;
         }
@@ -551,7 +562,13 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
         break;
       case 'notebooklm':
         if (selectedText) {
-          replacement = `\n- #notebooklm: ${selectedText}\n`;
+          const cleanText = selectedText
+            .replace(/&gt;/g, '>')
+            .replace(/&lt;/g, '<')
+            .replace(/&amp;/g, '&')
+            .replace(/&quot;/g, '"')
+            .replace(/&#39;/g, "'");
+          replacement = `\n- #notebooklm: ${cleanText}\n`;
         } else {
           replacement = `\n- #notebooklm: \n`;
         }
@@ -677,6 +694,14 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
       } else if (k === 'k') {
         e.preventDefault();
         aplicarFormatacaoNoEditor('wikilink', secundario);
+      } else if (k === 'e') {
+        e.preventDefault();
+        e.stopPropagation();
+        if (secundario) {
+          handleSalvarEdicaoSecundaria();
+        } else {
+          handleSalvarEdicao();
+        }
       } else if (e.key === 'Enter') {
         e.preventDefault();
         if (secundario) {
@@ -691,6 +716,37 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
       } else {
         setModoEdicao(false);
       }
+    }
+  };
+
+  // Limpeza automática de entidades HTML (&gt;, &lt;, &amp;) ao colar no editor
+  const handlePasteTextarea = (e: React.ClipboardEvent<HTMLTextAreaElement>, secundario = false) => {
+    const text = e.clipboardData.getData('text/plain');
+    if (text && (text.includes('&gt;') || text.includes('&lt;') || text.includes('&amp;'))) {
+      e.preventDefault();
+      const cleaned = text
+        .replace(/&gt;/g, '>')
+        .replace(/&lt;/g, '<')
+        .replace(/&amp;/g, '&')
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'");
+
+      const textarea = e.currentTarget;
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const val = secundario ? conteudoSecundariaEditando : conteudoEditando;
+      const novoConteudo = val.substring(0, start) + cleaned + val.substring(end);
+
+      if (secundario) {
+        setConteudoSecundariaEditando(novoConteudo);
+      } else {
+        setConteudoEditando(novoConteudo);
+      }
+
+      setTimeout(() => {
+        textarea.selectionStart = start + cleaned.length;
+        textarea.selectionEnd = start + cleaned.length;
+      }, 0);
     }
   };
 
@@ -766,6 +822,52 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
     const pag = notaAtiva.pagina ? ` p. ${notaAtiva.pagina}` : '';
     const novaLinhaCitacao = `\n- #citação${pag}: "${textoSelecionado}"\n`;
     const novoConteudo = notaAtiva.conteudo + novaLinhaCitacao;
+    atualizarNotaZettel(notaAtiva.id, { conteudo: novoConteudo });
+    setSalvoFeedback(true);
+    setTimeout(() => setSalvoFeedback(false), 2000);
+    setMenuFlutuantePos(null);
+    window.getSelection()?.removeAllRanges();
+  };
+
+  // Formatar trecho selecionado como comentário pessoal
+  const handleComentarioSelecao = () => {
+    if (!textoSelecionado || !notaAtiva) return;
+    if (modoEdicao && textareaRef.current) {
+      aplicarFormatacaoNoEditor('comentario', false);
+      setMenuFlutuantePos(null);
+      return;
+    }
+    const cleanText = textoSelecionado
+      .replace(/&gt;/g, '>')
+      .replace(/&lt;/g, '<')
+      .replace(/&amp;/g, '&')
+      .replace(/&quot;/g, '"')
+      .replace(/&#39;/g, "'");
+    const novaLinhaComentario = `\n- #comentário: ${cleanText}\n`;
+    const novoConteudo = notaAtiva.conteudo + novaLinhaComentario;
+    atualizarNotaZettel(notaAtiva.id, { conteudo: novoConteudo });
+    setSalvoFeedback(true);
+    setTimeout(() => setSalvoFeedback(false), 2000);
+    setMenuFlutuantePos(null);
+    window.getSelection()?.removeAllRanges();
+  };
+
+  // Formatar trecho selecionado como bloco NotebookLM
+  const handleNotebookLMSelecao = () => {
+    if (!textoSelecionado || !notaAtiva) return;
+    if (modoEdicao && textareaRef.current) {
+      aplicarFormatacaoNoEditor('notebooklm', false);
+      setMenuFlutuantePos(null);
+      return;
+    }
+    const cleanText = textoSelecionado
+      .replace(/&gt;/g, '>')
+      .replace(/&lt;/g, '<')
+      .replace(/&amp;/g, '&')
+      .replace(/&quot;/g, '"')
+      .replace(/&#39;/g, "'");
+    const novaLinhaNotebook = `\n- #notebooklm: ${cleanText}\n`;
+    const novoConteudo = notaAtiva.conteudo + novaLinhaNotebook;
     atualizarNotaZettel(notaAtiva.id, { conteudo: novoConteudo });
     setSalvoFeedback(true);
     setTimeout(() => setSalvoFeedback(false), 2000);
@@ -1081,16 +1183,37 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
     });
   };
 
-  // Parser combinado de ==marca-texto amarelo== e [[Wikilinks]]
-  const renderizarMarcacoesNaLinha = (str: string) => {
-    const regex = /(==[^=]+==|\[\[[^\]\|]+(?:\|[^\]]+)?\]\])/g;
-    const parts = [];
+  // Parser combinado de Markdown Inline (Negrito, Itálico, Marca-texto, Wikilinks, Código, Riscado e Entidades HTML)
+  const renderizarMarcacoesNaLinha = (str: string, depth = 0): React.ReactNode[] => {
+    if (!str) return [];
+
+    // Decodifica entidades HTML como &gt; &lt; &amp; &quot; &#39;
+    const cleanStr = depth === 0
+      ? str
+          .replace(/&gt;/g, '>')
+          .replace(/&lt;/g, '<')
+          .replace(/&amp;/g, '&')
+          .replace(/&quot;/g, '"')
+          .replace(/&#39;/g, "'")
+          .replace(/&nbsp;/g, ' ')
+      : str;
+
+    // Ordem de precedência regex:
+    // 1. Marca-texto ==texto==
+    // 2. Wikilinks [[destino|rótulo]] ou [[destino]]
+    // 3. Negrito + Itálico ***texto***
+    // 4. Negrito **texto** ou __texto__
+    // 5. Itálico *texto* ou _texto_
+    // 6. Código inline `código`
+    // 7. Riscado ~~texto~~
+    const regex = /(==[^=]+==|\[\[[^\]\|]+(?:\|[^\]]+)?\]\]|\*\*\*[^*]+\*\*\*|\*\*[^*]+\*\*|__[^_]+__|(?<!\*)\*[^*]+?\*(?!\*)|(?<!_)_[^_]+?_(?!_)|`[^`]+`|~~[^~]+~~)/g;
+    const parts: React.ReactNode[] = [];
     let lastIndex = 0;
     let match;
 
-    while ((match = regex.exec(str)) !== null) {
+    while ((match = regex.exec(cleanStr)) !== null) {
       if (match.index > lastIndex) {
-        parts.push(str.substring(lastIndex, match.index));
+        parts.push(cleanStr.substring(lastIndex, match.index));
       }
 
       const token = match[1];
@@ -1100,64 +1223,320 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
         const textoDestacado = token.slice(2, -2);
         parts.push(
           <mark
-            key={match.index}
-            className="bg-amber-200/80 dark:bg-yellow-500/25 text-stone-950 dark:text-yellow-100 px-1 py-0.5 rounded-xs border-b border-amber-400 dark:border-yellow-400/50 font-medium mx-0.5 select-text"
+            key={`${match.index}-m-${depth}`}
+            className="bg-amber-200/90 dark:bg-yellow-500/25 text-stone-950 dark:text-yellow-100 px-1 py-0.5 rounded-xs border-b border-amber-400 dark:border-yellow-400/50 font-medium mx-0.5 select-text"
           >
-            {textoDestacado}
+            {depth < 2 ? renderizarMarcacoesNaLinha(textoDestacado, depth + 1) : textoDestacado}
           </mark>
         );
       }
       // Caso 2: [[Wikilink]]
       else if (token.startsWith('[[') && token.endsWith(']]')) {
-        const linkText = token.slice(2, -2).split('|')[0];
+        const rawLink = token.slice(2, -2);
+        const [linkTarget, linkLabel] = rawLink.split('|');
+        const targetClean = linkTarget.trim();
+        const labelClean = (linkLabel || linkTarget).trim();
         parts.push(
           <button
-            key={match.index}
-            onClick={() => handleClicarWikilink(linkText)}
+            key={`${match.index}-w-${depth}`}
+            type="button"
+            onClick={() => handleClicarWikilink(targetClean)}
             className="inline-flex items-center gap-0.5 px-1.5 py-0.2 mx-0.5 rounded text-xs font-sans font-medium text-amber-800 dark:text-amber-300 hover:text-amber-950 dark:hover:text-amber-100 bg-amber-100/70 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800 hover:border-amber-400 transition cursor-pointer"
-            title={`Navegar para: [[${linkText}]]`}
+            title={`Navegar para: [[${targetClean}]]`}
           >
             <LinkIcon className="w-2.5 h-2.5 text-amber-700 dark:text-amber-400" />
-            <span>[[{linkText}]]</span>
+            <span>[[{labelClean}]]</span>
           </button>
+        );
+      }
+      // Caso 3: Negrito + Itálico ***texto***
+      else if (token.startsWith('***') && token.endsWith('***') && token.length > 6) {
+        const textoBoldItalic = token.slice(3, -3);
+        parts.push(
+          <strong
+            key={`${match.index}-bi-${depth}`}
+            className="font-bold italic text-stone-900 dark:text-stone-50 select-text"
+          >
+            {depth < 2 ? renderizarMarcacoesNaLinha(textoBoldItalic, depth + 1) : textoBoldItalic}
+          </strong>
+        );
+      }
+      // Caso 4: Negrito **texto** ou __texto__
+      else if (
+        (token.startsWith('**') && token.endsWith('**') && token.length > 4) ||
+        (token.startsWith('__') && token.endsWith('__') && token.length > 4)
+      ) {
+        const textoBold = token.slice(2, -2);
+        parts.push(
+          <strong
+            key={`${match.index}-b-${depth}`}
+            className="font-bold text-stone-950 dark:text-white select-text"
+          >
+            {depth < 2 ? renderizarMarcacoesNaLinha(textoBold, depth + 1) : textoBold}
+          </strong>
+        );
+      }
+      // Caso 5: Itálico *texto* ou _texto_
+      else if (
+        (token.startsWith('*') && token.endsWith('*') && token.length > 2) ||
+        (token.startsWith('_') && token.endsWith('_') && token.length > 2)
+      ) {
+        const textoItalic = token.slice(1, -1);
+        parts.push(
+          <em
+            key={`${match.index}-i-${depth}`}
+            className="italic font-serif select-text"
+          >
+            {depth < 2 ? renderizarMarcacoesNaLinha(textoItalic, depth + 1) : textoItalic}
+          </em>
+        );
+      }
+      // Caso 6: Código inline `código`
+      else if (token.startsWith('`') && token.endsWith('`') && token.length > 2) {
+        const textoCode = token.slice(1, -1);
+        parts.push(
+          <code
+            key={`${match.index}-c-${depth}`}
+            className="px-1.5 py-0.5 rounded bg-stone-100 dark:bg-stone-800 text-amber-800 dark:text-amber-300 font-mono text-xs select-text border border-stone-200 dark:border-stone-700"
+          >
+            {textoCode}
+          </code>
+        );
+      }
+      // Caso 7: Riscado ~~texto~~
+      else if (token.startsWith('~~') && token.endsWith('~~') && token.length > 4) {
+        const textoDel = token.slice(2, -2);
+        parts.push(
+          <del
+            key={`${match.index}-d-${depth}`}
+            className="line-through text-stone-400 select-text"
+          >
+            {depth < 2 ? renderizarMarcacoesNaLinha(textoDel, depth + 1) : textoDel}
+          </del>
         );
       }
 
       lastIndex = regex.lastIndex;
     }
 
-    if (lastIndex < str.length) {
-      parts.push(str.substring(lastIndex));
+    if (lastIndex < cleanStr.length) {
+      parts.push(cleanStr.substring(lastIndex));
     }
 
     return parts;
   };
 
-  // Renderizador de Markdown Editorial Antiquarian
+  // Renderizador de Markdown Editorial Antiquarian com Agrupamento de Blocos Multi-parágrafos
   const renderizarTextoFormatado = (texto: string, notaReferencial?: NotaZettel | null) => {
     const linhas = texto.split('\n');
     const notaContexto = notaReferencial || notaAtiva;
 
+    // FASE 1: Agrupar linhas em blocos estruturados
+    // Isso garante que respostas com múltiplos parágrafos do NotebookLM ou comentários
+    // fiquem agrupados dentro do mesmo card unificado (Imagens 2, 3 e 4).
+    interface BlocoConteudo {
+      tipo:
+        | 'heading'
+        | 'divider'
+        | 'notebooklm'
+        | 'comentario'
+        | 'sintese'
+        | 'citacao'
+        | 'num_list'
+        | 'bullet_list'
+        | 'paragraph'
+        | 'empty';
+      linhas: string[];
+      level?: number;
+      num?: string;
+      pagina?: string;
+    }
+
+    const blocos: BlocoConteudo[] = [];
+    let blocoAtual: BlocoConteudo | null = null;
+
+    const fechaBlocoAtual = () => {
+      if (blocoAtual) {
+        blocos.push(blocoAtual);
+        blocoAtual = null;
+      }
+    };
+
+    for (let i = 0; i < linhas.length; i++) {
+      const linha = linhas[i];
+      const linhaTrim = linha.trim();
+
+      // Em notas de índice, omitir marcadores de traço vazios para não poluir o layout
+      if (notaContexto?.tipo === 'indice' && (linhaTrim === '-' || linhaTrim === '- ' || linhaTrim === '*')) {
+        continue;
+      }
+
+      // 1. Títulos de seção sempre quebram qualquer bloco aberto
+      if (linha.startsWith('# ') || linha.startsWith('## ') || linha.startsWith('### ')) {
+        fechaBlocoAtual();
+        const level = linha.startsWith('# ') ? 1 : linha.startsWith('## ') ? 2 : 3;
+        blocos.push({
+          tipo: 'heading',
+          level,
+          linhas: [linha]
+        });
+        continue;
+      }
+
+      // 2. Divisores ornamentais sempre quebram bloco
+      if (linhaTrim === '---' || linhaTrim === '***' || linhaTrim === '___') {
+        fechaBlocoAtual();
+        blocos.push({
+          tipo: 'divider',
+          linhas: [linha]
+        });
+        continue;
+      }
+
+      // 3. Início de bloco NotebookLM (- #notebooklm ou #notebooklm)
+      if (linha.toLowerCase().includes('#notebooklm')) {
+        fechaBlocoAtual();
+        const primeiraLinhaSemTag = linha
+          .replace(/^[-*]\s*/, '')
+          .replace(/#notebooklm:?/i, '')
+          .replace(/^[\s:-]+/, '')
+          .trim();
+        blocoAtual = {
+          tipo: 'notebooklm',
+          linhas: primeiraLinhaSemTag ? [primeiraLinhaSemTag] : []
+        };
+        continue;
+      }
+
+      // 4. Início de bloco de Comentário Pessoal (- #comentário ou #comentário)
+      if (linha.includes('#comentário') || linha.includes('#comentario')) {
+        fechaBlocoAtual();
+        const primeiraLinhaSemTag = linha
+          .replace(/^[-*]\s*/, '')
+          .replace(/#coment[aá]rio:?/i, '')
+          .replace(/^[\s:-]+/, '')
+          .trim();
+        blocoAtual = {
+          tipo: 'comentario',
+          linhas: primeiraLinhaSemTag ? [primeiraLinhaSemTag] : []
+        };
+        continue;
+      }
+
+      // 5. Início de bloco de Síntese Pessoal (- #síntese ou #síntese)
+      if (linha.includes('#síntese') || linha.includes('#sintese')) {
+        fechaBlocoAtual();
+        const primeiraLinhaSemTag = linha
+          .replace(/^[-*]\s*/, '')
+          .replace(/#s[ií]ntese:?/i, '')
+          .replace(/^[\s:-]+/, '')
+          .trim();
+        blocoAtual = {
+          tipo: 'sintese',
+          linhas: primeiraLinhaSemTag ? [primeiraLinhaSemTag] : []
+        };
+        continue;
+      }
+
+      // 6. Início de Citação (- #citação ou #citacao ou > fora de bloco notebooklm/comentário)
+      if (linha.includes('#citação') || linha.includes('#citacao') || (linhaTrim.startsWith('>') && !blocoAtual)) {
+        fechaBlocoAtual();
+        let paginaEncontrada = '';
+        const matchPagina = linha.match(/(?:pág\.|pág|pag\.|pag|p\.|p)\s*(\d+)/i);
+        if (matchPagina) {
+          paginaEncontrada = matchPagina[1];
+        } else if (notaContexto?.pagina) {
+          paginaEncontrada = String(notaContexto.pagina);
+        }
+
+        let trechoLimpo = linha
+          .replace(/^-?\s*#cita[çc][ãa]o\s*(?:p\.\s*\d+)?\s*:?\s*/i, '')
+          .replace(/^>\s*/, '')
+          .replace(/—.*$/, '')
+          .trim();
+
+        if (trechoLimpo.startsWith('"') && trechoLimpo.endsWith('"')) {
+          trechoLimpo = trechoLimpo.slice(1, -1).trim();
+        }
+
+        blocos.push({
+          tipo: 'citacao',
+          linhas: [trechoLimpo],
+          pagina: paginaEncontrada
+        });
+        continue;
+      }
+
+      // Se estamos dentro de um bloco aberto (notebooklm, comentario ou sintese):
+      if (blocoAtual) {
+        // Se encontramos outro item com tag raiz diferente, fechamos o bloco
+        if (/^[-*]\s*#(?:cita[çc][ãa]o|s[ií]ntese|coment[aá]rio|notebooklm)/i.test(linhaTrim)) {
+          fechaBlocoAtual();
+          // retrocede o contador para o loop processar esta linha como novo bloco
+          i--;
+          continue;
+        }
+
+        // Caso contrário, esta linha pertence ao bloco atual!
+        blocoAtual.linhas.push(linha);
+        continue;
+      }
+
+      // 7. Lista numerada
+      const matchNumList = linha.match(/^(\d+)[\.\)]\s+(.*)$/);
+      if (matchNumList) {
+        blocos.push({
+          tipo: 'num_list',
+          num: matchNumList[1],
+          linhas: [matchNumList[2]]
+        });
+        continue;
+      }
+
+      // 8. Lista com marcadores
+      if (linha.startsWith('- ') || linha.startsWith('* ')) {
+        blocos.push({
+          tipo: 'bullet_list',
+          linhas: [linha.replace(/^[-*]\s+/, '')]
+        });
+        continue;
+      }
+
+      // 9. Linha vazia
+      if (!linhaTrim) {
+        blocos.push({
+          tipo: 'empty',
+          linhas: ['']
+        });
+        continue;
+      }
+
+      // 10. Parágrafo comum
+      blocos.push({
+        tipo: 'paragraph',
+        linhas: [linha]
+      });
+    }
+
+    fechaBlocoAtual();
+
+    // FASE 2: Renderizar blocos com alto padrão visual e design system unificado
     return (
       <div
         className="space-y-4 font-serif leading-relaxed text-stone-800 dark:text-stone-200 text-sm sm:text-base select-text"
         onMouseUp={handleMouseUpSelecao}
       >
-        {linhas.map((linha, idx) => {
-          // Em notas de índice, omitir marcadores de traço vazios para não poluir o layout
-          if (notaContexto?.tipo === 'indice' && (linha.trim() === '-' || linha.trim() === '- ' || linha.trim() === '*')) {
-            return null;
-          }
-
-          if (linha.startsWith('# ') || linha.startsWith('## ')) {
-            const ehH1 = linha.startsWith('# ');
+        {blocos.map((bloco, bIdx) => {
+          // TÍTULOS (H1, H2, H3)
+          if (bloco.tipo === 'heading') {
+            const linha = bloco.linhas[0];
             const textoHeading = linha.replace(/^#+\s*/, '').trim();
             const textoLower = textoHeading.toLowerCase();
 
-            // RENDERIZAÇÃO DIRETA NO ESPAÇO ABAIXO: Referências do Macrotema (Imagem 3)
+            // RENDERIZAÇÃO DIRETA NO ESPAÇO ABAIXO: Referências do Macrotema (Índice)
             if (notaContexto?.tipo === 'indice' && (textoLower === 'referências' || textoLower === 'referencias')) {
               return (
-                <div key={idx} className="pt-6 pb-2 space-y-3">
+                <div key={bIdx} className="pt-6 pb-2 space-y-3">
                   <div className="flex items-center justify-between border-b border-stone-200 dark:border-stone-800 pb-2.5">
                     <div className="flex items-center gap-2">
                       <BookOpen className="w-5 h-5 text-sky-600 dark:text-sky-400" />
@@ -1214,10 +1593,13 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
               );
             }
 
-            // RENDERIZAÇÃO DIRETA NO ESPAÇO ABAIXO: Notas Permanentes do Macrotema (Imagem 3)
-            if (notaContexto?.tipo === 'indice' && (textoLower === 'notas relacionadas' || textoLower === 'notas permanentes' || textoLower === 'permanentes')) {
+            // RENDERIZAÇÃO DIRETA NO ESPAÇO ABAIXO: Notas Permanentes do Macrotema (Índice)
+            if (
+              notaContexto?.tipo === 'indice' &&
+              (textoLower === 'notas relacionadas' || textoLower === 'notas permanentes' || textoLower === 'permanentes')
+            ) {
               return (
-                <div key={idx} className="pt-6 pb-2 space-y-3">
+                <div key={bIdx} className="pt-6 pb-2 space-y-3">
                   <div className="flex items-center justify-between border-b border-stone-200 dark:border-stone-800 pb-2.5">
                     <div className="flex items-center gap-2">
                       <Lightbulb className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
@@ -1281,10 +1663,10 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
               );
             }
 
-            if (ehH1) {
+            if (bloco.level === 1) {
               return (
                 <h1
-                  key={idx}
+                  key={bIdx}
                   className="text-xl sm:text-2xl font-serif font-bold text-stone-900 dark:text-stone-100 pt-4 pb-2 border-b border-stone-200 dark:border-stone-800 tracking-tight"
                 >
                   {textoHeading}
@@ -1292,52 +1674,44 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
               );
             }
 
+            if (bloco.level === 2) {
+              return (
+                <h2
+                  key={bIdx}
+                  className="text-xs sm:text-sm font-bold uppercase tracking-wider text-amber-900 dark:text-amber-300 pt-5 pb-1 font-sans flex items-center gap-2"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-600"></span>
+                  <span>{textoHeading}</span>
+                </h2>
+              );
+            }
+
             return (
-              <h2
-                key={idx}
-                className="text-xs sm:text-sm font-bold uppercase tracking-wider text-amber-900 dark:text-amber-300 pt-5 pb-1 font-sans flex items-center gap-2"
-              >
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-600"></span>
-                <span>{textoHeading}</span>
-              </h2>
-            );
-          }
-          if (linha.startsWith('### ')) {
-            return (
-              <h3 key={idx} className="text-sm font-bold font-serif text-stone-900 dark:text-stone-200 pt-2">
-                {linha.replace('### ', '')}
+              <h3 key={bIdx} className="text-sm font-bold font-serif text-stone-900 dark:text-stone-200 pt-2">
+                {textoHeading}
               </h3>
             );
           }
 
-          // BLOCO EDITORIAL ANTIQUARIAN PARA CITAÇÕES (#citação ou > )
-          if (linha.includes('#citação') || linha.trim().startsWith('>')) {
-            let trechoLimpo = linha;
-            let paginaEncontrada = '';
+          // DIVISOR ORNAMENTAL (---)
+          if (bloco.tipo === 'divider') {
+            return (
+              <div key={bIdx} className="my-6 flex items-center justify-center gap-3 select-none">
+                <div className="h-px bg-stone-200 dark:bg-stone-800 flex-1" />
+                <span className="text-amber-700/60 dark:text-amber-500/60 font-serif text-xs">✦</span>
+                <div className="h-px bg-stone-200 dark:bg-stone-800 flex-1" />
+              </div>
+            );
+          }
 
-            // Extrai página se houver no formato p. 84 ou p.12 ou página 84
-            const matchPagina = linha.match(/(?:pág\.|pág|pag\.|pag|p\.|p)\s*(\d+)/i);
-            if (matchPagina) {
-              paginaEncontrada = matchPagina[1];
-            } else if (notaContexto?.pagina) {
-              paginaEncontrada = String(notaContexto.pagina);
-            }
-
-            // Limpa prefixos
-            trechoLimpo = trechoLimpo
-              .replace(/^-?\s*#citação\s*(?:p\.\s*\d+)?\s*:?\s*/i, '')
-              .replace(/^>\s*/, '')
-              .replace(/—.*$/, '')
-              .trim();
-
-            if (trechoLimpo.startsWith('"') && trechoLimpo.endsWith('"')) {
-              trechoLimpo = trechoLimpo.slice(1, -1).trim();
-            }
-
+          // BLOCO EDITORIAL PARA CITAÇÕES (#citação ou > isolado)
+          if (bloco.tipo === 'citacao') {
+            const trechoLimpo = bloco.linhas[0] || '';
+            const paginaEncontrada = bloco.pagina || '';
             return (
               <div
-                key={idx}
-                className="group relative my-3.5 p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-amber-50/90 via-amber-50/50 to-stone-50/30 dark:from-[#1d1b16] dark:via-[#19191d] dark:to-[#16171b] border-l-4 border-amber-600 dark:border-amber-500 shadow-2xs hover:shadow-md transition-all duration-200"
+                key={bIdx}
+                className="group relative my-4 p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-amber-50/90 via-amber-50/50 to-stone-50/30 dark:from-[#1d1b16] dark:via-[#19191d] dark:to-[#16171b] border-l-4 border-amber-600 dark:border-amber-500 shadow-2xs hover:shadow-md transition-all duration-200"
               >
                 {/* Aspas clássicas decorativas */}
                 <span className="absolute right-4 top-2 font-serif text-5xl text-amber-600/15 dark:text-amber-400/10 select-none pointer-events-none leading-none">
@@ -1389,118 +1763,196 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
             );
           }
 
-          // BLOCO NOTEBOOKLM (Índigo/Violeta com alto contraste editorial - Item 4)
-          if (linha.toLowerCase().includes('#notebooklm')) {
-            const partes = linha.split(/#notebooklm/i);
-            const trecho = (partes[1] || partes[0]).replace(/^[\s:-]+/, '').trim();
+          // BLOCO NOTEBOOKLM (Design System Aprimorado: Íris/Violeta/Obsidian com Alto Contraste e Suporte Multi-parágrafo - Imagens 2, 3 e 4)
+          if (bloco.tipo === 'notebooklm') {
+            const textoCompleto = bloco.linhas.filter(Boolean).join('\n\n');
             return (
               <div
-                key={idx}
-                className="group relative my-3.5 p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-indigo-50/95 via-indigo-50/50 to-stone-50/30 dark:from-[#18192c] dark:via-[#151624] dark:to-[#12131c] border-l-4 border-indigo-600 dark:border-indigo-500 shadow-2xs hover:shadow-md transition-all duration-200 space-y-2.5 font-sans"
+                key={bIdx}
+                className="group relative my-4 p-5 sm:p-6 rounded-2xl bg-gradient-to-br from-indigo-50/90 via-violet-50/45 to-stone-50/30 dark:from-[#171828]/95 dark:via-[#141522]/90 dark:to-[#10111a]/85 border border-indigo-200/70 dark:border-indigo-900/50 border-l-4 border-l-indigo-600 dark:border-l-indigo-400 shadow-sm hover:shadow-md transition-all duration-200 space-y-3.5 font-sans"
               >
-                <div className="flex items-center justify-between pb-1 border-b border-indigo-200/50 dark:border-indigo-900/40">
+                {/* Cabeçalho do Card NotebookLM */}
+                <div className="flex items-center justify-between pb-2 border-b border-indigo-200/50 dark:border-indigo-900/40">
                   <div className="flex items-center gap-2">
-                    <span className="px-2.5 py-0.5 rounded-md bg-indigo-700 text-white text-[10px] uppercase font-bold tracking-wider flex items-center gap-1.5 shadow-2xs">
+                    <span className="px-2.5 py-1 rounded-md bg-gradient-to-r from-indigo-700 to-violet-700 text-white text-[10px] uppercase font-bold tracking-wider flex items-center gap-1.5 shadow-2xs">
                       <Sparkles className="w-3 h-3 text-indigo-200" />
-                      <span>NotebookLM · Ideia / Síntese</span>
+                      <span>NotebookLM · Síntese Analítica</span>
                     </span>
                   </div>
-                  <span className="text-[10px] text-indigo-700/80 dark:text-indigo-300/80 font-mono font-medium">
-                    Síntese Inteligente
+
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        navigator.clipboard.writeText(textoCompleto);
+                        setSinteseCopiadaIdx(bIdx);
+                        setTimeout(() => setSinteseCopiadaIdx(null), 2000);
+                      }}
+                      className="px-2 py-0.5 rounded-md text-[10px] font-mono font-medium text-indigo-700 dark:text-indigo-300 hover:bg-indigo-100/60 dark:hover:bg-indigo-900/50 transition cursor-pointer flex items-center gap-1"
+                      title="Copiar síntese do NotebookLM"
+                    >
+                      <Copy className="w-3 h-3" />
+                      <span>{sinteseCopiadaIdx === bIdx ? 'Copiado!' : 'Copiar'}</span>
+                    </button>
+                    <span className="text-[10px] text-indigo-700/80 dark:text-indigo-300/80 font-mono font-medium hidden sm:inline">
+                      IA Cognitiva
+                    </span>
+                  </div>
+                </div>
+
+                {/* Conteúdo com Múltiplos Parágrafos e Citações Internas (Imagem 4) */}
+                <div className="space-y-3 font-serif text-sm sm:text-base text-stone-900 dark:text-indigo-100/95 leading-relaxed">
+                  {bloco.linhas.map((linha, lIdx) => {
+                    const lTrim = linha.trim();
+                    if (!lTrim) return <div key={lIdx} className="h-1" />;
+
+                    // Se for citação interna do NotebookLM (como a citação de Camus na Imagem 4)
+                    if (lTrim.startsWith('>') || lTrim.startsWith('&gt;')) {
+                      const quoteText = lTrim.replace(/^(&gt;|>)\s*/, '');
+                      return (
+                        <blockquote
+                          key={lIdx}
+                          className="my-3 pl-3.5 py-2 border-l-3 border-indigo-400/80 dark:border-indigo-500 bg-indigo-50/70 dark:bg-indigo-950/40 rounded-r-xl font-serif italic text-stone-800 dark:text-indigo-200 text-sm sm:text-[15px] leading-relaxed select-text"
+                        >
+                          {renderizarMarcacoesNaLinha(quoteText)}
+                        </blockquote>
+                      );
+                    }
+
+                    // Se for marcador de lista interno
+                    if (lTrim.startsWith('- ') || lTrim.startsWith('* ')) {
+                      return (
+                        <div key={lIdx} className="flex items-start gap-2 pl-2 text-stone-800 dark:text-indigo-100">
+                          <span className="text-indigo-600 dark:text-indigo-400 font-bold select-none">•</span>
+                          <span className="flex-1">{renderizarMarcacoesNaLinha(lTrim.replace(/^[-*]\s+/, ''))}</span>
+                        </div>
+                      );
+                    }
+
+                    return (
+                      <p key={lIdx} className="leading-relaxed select-text">
+                        {renderizarMarcacoesNaLinha(linha)}
+                      </p>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          }
+
+          // BLOCO COMENTÁRIO PESSOAL (Design System: Slate/Céu/Reflexão com Alta Legibilidade - Imagem 1)
+          if (bloco.tipo === 'comentario') {
+            return (
+              <div
+                key={bIdx}
+                className="group relative my-4 p-5 sm:p-6 rounded-2xl bg-gradient-to-br from-sky-50/80 via-slate-50/40 to-stone-50/30 dark:from-[#0d1726]/90 dark:via-[#0c1421]/80 dark:to-[#0a101b]/70 border border-sky-200/70 dark:border-sky-900/50 border-l-4 border-l-sky-600 dark:border-l-sky-400 shadow-2xs hover:shadow-md transition-all duration-200 space-y-3 font-sans"
+              >
+                {/* Cabeçalho do Card de Comentário */}
+                <div className="flex items-center justify-between pb-2 border-b border-sky-200/50 dark:border-sky-900/40">
+                  <div className="flex items-center gap-2">
+                    <span className="px-2.5 py-1 rounded-md bg-sky-700 dark:bg-sky-600 text-white text-[10px] uppercase font-bold tracking-wider flex items-center gap-1.5 shadow-2xs">
+                      <MessageSquare className="w-3 h-3 text-sky-200" />
+                      <span>Comentário · Reflexão do Leitor</span>
+                    </span>
+                  </div>
+
+                  <span className="text-[10px] text-sky-700/80 dark:text-sky-300/80 font-mono font-medium">
+                    Marginalia Pessoal
                   </span>
                 </div>
-                <div className="font-serif text-sm sm:text-base text-stone-900 dark:text-indigo-100/95 leading-relaxed pl-0.5">
-                  {renderizarMarcacoesNaLinha(trecho)}
+
+                {/* Conteúdo do Comentário */}
+                <div className="space-y-2.5 font-sans text-sm sm:text-[15px] text-stone-800 dark:text-stone-200 leading-relaxed">
+                  {bloco.linhas.map((linha, lIdx) => {
+                    const lTrim = linha.trim();
+                    if (!lTrim) return <div key={lIdx} className="h-1" />;
+
+                    // Se tiver lista numerada dentro do comentário (como na Imagem 1)
+                    const matchNum = lTrim.match(/^(\d+)[\.\)]\s+(.*)$/);
+                    if (matchNum) {
+                      return (
+                        <div key={lIdx} className="flex items-start gap-2 pl-1 leading-relaxed">
+                          <span className="font-mono text-xs font-bold text-sky-700 dark:text-sky-400 select-none pt-0.5 min-w-[1.2rem]">
+                            {matchNum[1]}.
+                          </span>
+                          <span className="flex-1">{renderizarMarcacoesNaLinha(matchNum[2])}</span>
+                        </div>
+                      );
+                    }
+
+                    return (
+                      <p key={lIdx} className="leading-relaxed select-text">
+                        {renderizarMarcacoesNaLinha(linha)}
+                      </p>
+                    );
+                  })}
                 </div>
               </div>
             );
           }
 
-          if (linha.includes('#síntese')) {
-            const partes = linha.split('#síntese');
+          // BLOCO SÍNTESE PESSOAL
+          if (bloco.tipo === 'sintese') {
             return (
               <div
-                key={idx}
-                className="p-3 rounded-xl bg-emerald-50/80 dark:bg-emerald-950/40 border-l-3 border-emerald-600 text-xs sm:text-sm font-sans flex items-start gap-2.5 shadow-2xs"
+                key={bIdx}
+                className="group relative my-3.5 p-4 sm:p-5 rounded-2xl bg-emerald-50/80 dark:bg-emerald-950/40 border border-emerald-200/70 dark:border-emerald-900/50 border-l-4 border-l-emerald-600 text-xs sm:text-sm font-sans space-y-2 shadow-2xs hover:shadow-xs transition-all"
               >
-                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-700 text-white shrink-0">
-                  #síntese
-                </span>
-                <span className="flex-1 font-serif text-stone-900 dark:text-emerald-100">
-                  {renderizarMarcacoesNaLinha(partes[1] || partes[0])}
-                </span>
+                <div className="flex items-center justify-between pb-1.5 border-b border-emerald-200/50 dark:border-emerald-900/40">
+                  <span className="px-2.5 py-0.5 rounded-md text-[10px] uppercase font-bold tracking-wider bg-emerald-700 text-white flex items-center gap-1.5 shadow-2xs">
+                    <Sparkles className="w-3 h-3 text-emerald-200" />
+                    <span>Síntese Conceitual</span>
+                  </span>
+                </div>
+                <div className="font-serif text-stone-900 dark:text-emerald-100 space-y-2 text-sm sm:text-base leading-relaxed">
+                  {bloco.linhas.map((linha, lIdx) => (
+                    <p key={lIdx}>{renderizarMarcacoesNaLinha(linha)}</p>
+                  ))}
+                </div>
               </div>
             );
           }
 
-          if (linha.includes('#comentário')) {
-            const partes = linha.split('#comentário');
+          // LISTA NUMERADA (FORA DE BLOCO)
+          if (bloco.tipo === 'num_list') {
             return (
               <div
-                key={idx}
-                className="p-3 rounded-xl bg-sky-50/80 dark:bg-sky-950/40 border-l-3 border-sky-600 text-xs sm:text-sm font-sans flex items-start gap-2.5 shadow-2xs"
-              >
-                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-sky-700 text-white shrink-0">
-                  #comentário
-                </span>
-                <span className="flex-1 font-serif text-stone-900 dark:text-sky-100">
-                  {renderizarMarcacoesNaLinha(partes[1] || partes[0])}
-                </span>
-              </div>
-            );
-          }
-
-          // Divisor ornamental temático (Item 5)
-          if (linha.trim() === '---' || linha.trim() === '***' || linha.trim() === '___') {
-            return (
-              <div key={idx} className="my-6 flex items-center justify-center gap-3 select-none">
-                <div className="h-px bg-stone-200 dark:bg-stone-800 flex-1" />
-                <span className="text-amber-700/60 dark:text-amber-500/60 font-serif text-xs">✦</span>
-                <div className="h-px bg-stone-200 dark:bg-stone-800 flex-1" />
-              </div>
-            );
-          }
-
-          // Lista numerada 1. Item (Item 5)
-          const matchNumList = linha.match(/^(\d+)[\.\)]\s+(.*)$/);
-          if (matchNumList) {
-            return (
-              <div
-                key={idx}
+                key={bIdx}
                 className="flex items-start gap-2 text-sm sm:text-[15px] lg:text-[16px] leading-[1.8] pl-2 text-stone-800 dark:text-stone-200"
               >
                 <span className="font-mono text-xs font-bold text-amber-700 dark:text-amber-400 select-none pt-0.5 min-w-[1.2rem]">
-                  {matchNumList[1]}.
+                  {bloco.num}.
                 </span>
-                <span className="flex-1">{renderizarMarcacoesNaLinha(matchNumList[2])}</span>
+                <span className="flex-1">{renderizarMarcacoesNaLinha(bloco.linhas[0])}</span>
               </div>
             );
           }
 
-          // Lista com marcadores - ou * (Item 5)
-          if (linha.startsWith('- ') || linha.startsWith('* ')) {
-            const trecho = linha.replace(/^[-*]\s+/, '');
+          // LISTA COM MARCADORES (FORA DE BLOCO)
+          if (bloco.tipo === 'bullet_list') {
             return (
               <div
-                key={idx}
+                key={bIdx}
                 className="flex items-start gap-2 text-sm sm:text-[15px] lg:text-[16px] leading-[1.8] pl-2 text-stone-800 dark:text-stone-200"
               >
                 <span className="text-amber-700 dark:text-amber-400 font-bold select-none">•</span>
-                <span className="flex-1">{renderizarMarcacoesNaLinha(trecho)}</span>
+                <span className="flex-1">{renderizarMarcacoesNaLinha(bloco.linhas[0])}</span>
               </div>
             );
           }
 
-          if (!linha.trim()) {
-            return <div key={idx} className="h-2" />;
+          // LINHA VAZIA
+          if (bloco.tipo === 'empty') {
+            return <div key={bIdx} className="h-2" />;
           }
 
+          // PARÁGRAFO COMUM
           return (
             <p
-              key={idx}
+              key={bIdx}
               className="text-sm sm:text-[15px] lg:text-[16px] leading-[1.8] text-stone-800 dark:text-stone-200 tracking-normal font-sans"
             >
-              {renderizarMarcacoesNaLinha(linha)}
+              {renderizarMarcacoesNaLinha(bloco.linhas[0])}
             </p>
           );
         })}
@@ -2323,19 +2775,19 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                             <button
                               type="button"
                               onClick={() => aplicarFormatacaoNoEditor('comentario', false)}
-                              className="px-2.5 py-1 rounded-lg bg-sky-100 text-sky-900 dark:bg-sky-950/70 dark:text-sky-300 border border-sky-300/80 dark:border-sky-800 font-medium hover:bg-sky-200 dark:hover:bg-sky-900/60 flex items-center gap-1.5 transition cursor-pointer shadow-2xs"
-                              title="Formatar como nota/comentário pessoal (Ctrl+M)"
+                              className="px-2.5 py-1 rounded-lg bg-sky-50 dark:bg-sky-950/60 text-sky-800 dark:text-sky-300 border border-sky-200/80 dark:border-sky-800 font-semibold hover:bg-sky-100 dark:hover:bg-sky-900/60 flex items-center gap-1.5 transition cursor-pointer shadow-2xs"
+                              title="Formatar como comentário pessoal (Ctrl+M)"
                             >
-                              <Lightbulb className="w-3.5 h-3.5 text-sky-700 dark:text-sky-400" />
+                              <MessageSquare className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />
                               <span>+ #comentário</span>
                             </button>
 
-                            {/* + #NotebookLM (Item 4) */}
+                            {/* + #NotebookLM */}
                             <button
                               type="button"
                               onClick={() => aplicarFormatacaoNoEditor('notebooklm', false)}
-                              className="px-2.5 py-1 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 active:scale-95 border border-indigo-700/60 font-semibold flex items-center gap-1.5 transition cursor-pointer shadow-xs"
-                              title="Inserir bloco de ideias do NotebookLM com alto contraste (Ctrl+L)"
+                              className="px-2.5 py-1 rounded-lg bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white active:scale-95 border border-indigo-700/60 font-semibold flex items-center gap-1.5 transition cursor-pointer shadow-xs"
+                              title="Inserir bloco de ideias do NotebookLM (Ctrl+L)"
                             >
                               <Sparkles className="w-3.5 h-3.5 text-indigo-200" />
                               <span>+ #NotebookLM</span>
@@ -2449,6 +2901,7 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                           value={conteudoEditando}
                           onChange={(e) => setConteudoEditando(e.target.value)}
                           onKeyDown={(e) => handleKeyDownTextarea(e, false)}
+                          onPaste={(e) => handlePasteTextarea(e, false)}
                           className="w-full p-4 font-mono text-xs sm:text-sm rounded-xl bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-amber-500/40 leading-relaxed"
                         />
 
@@ -2483,7 +2936,7 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                             <button
                               type="button"
                               onClick={() => aplicarFormatacaoNoEditor('comentario', false)}
-                              className="px-2 py-0.5 rounded-md bg-sky-100/90 hover:bg-sky-200 dark:bg-sky-900/40 dark:hover:bg-sky-800/60 text-sky-800 dark:text-sky-300 border border-sky-300/60 dark:border-sky-700/50 font-mono transition cursor-pointer"
+                              className="px-2 py-0.5 rounded-md bg-sky-50 hover:bg-sky-100 dark:bg-sky-950/60 dark:hover:bg-sky-900/70 text-sky-800 dark:text-sky-300 border border-sky-200/70 dark:border-sky-800 font-mono transition cursor-pointer"
                               title="Inserir comentário pessoal (Ctrl+M)"
                             >
                               <span className="font-bold">Ctrl+M</span> comentário
@@ -2491,7 +2944,7 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                             <button
                               type="button"
                               onClick={() => aplicarFormatacaoNoEditor('notebooklm', false)}
-                              className="px-2 py-0.5 rounded-md bg-indigo-100 hover:bg-indigo-200 dark:bg-indigo-950/70 dark:hover:bg-indigo-900/80 text-indigo-800 dark:text-indigo-300 border border-indigo-300/60 dark:border-indigo-800/50 font-mono transition cursor-pointer"
+                              className="px-2 py-0.5 rounded-md bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950/60 dark:hover:bg-indigo-900/70 text-indigo-800 dark:text-indigo-300 border border-indigo-200/70 dark:border-indigo-800 font-mono transition cursor-pointer"
                               title="Inserir bloco de ideias do NotebookLM (Ctrl+L)"
                             >
                               <span className="font-bold">Ctrl+L</span> NotebookLM
@@ -2690,19 +3143,19 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                                 <button
                                   type="button"
                                   onClick={() => aplicarFormatacaoNoEditor('comentario', true)}
-                                  className="px-2.5 py-1 rounded-lg bg-sky-100 text-sky-900 dark:bg-sky-950/70 dark:text-sky-300 border border-sky-300/80 dark:border-sky-800 font-medium hover:bg-sky-200 dark:hover:bg-sky-900/60 flex items-center gap-1.5 transition cursor-pointer shadow-2xs"
-                                  title="Formatar como nota/comentário pessoal (Ctrl+M)"
+                                  className="px-2.5 py-1 rounded-lg bg-sky-50 dark:bg-sky-950/60 text-sky-800 dark:text-sky-300 border border-sky-200/80 dark:border-sky-800 font-semibold hover:bg-sky-100 dark:hover:bg-sky-900/60 flex items-center gap-1.5 transition cursor-pointer shadow-2xs"
+                                  title="Formatar como comentário pessoal (Ctrl+M)"
                                 >
-                                  <Lightbulb className="w-3.5 h-3.5 text-sky-700 dark:text-sky-400" />
+                                  <MessageSquare className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />
                                   <span>+ #comentário</span>
                                 </button>
 
-                                {/* + #NotebookLM (Item 4) */}
+                                {/* + #NotebookLM */}
                                 <button
                                   type="button"
                                   onClick={() => aplicarFormatacaoNoEditor('notebooklm', true)}
-                                  className="px-2.5 py-1 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 active:scale-95 border border-indigo-700/60 font-semibold flex items-center gap-1.5 transition cursor-pointer shadow-xs"
-                                  title="Inserir bloco de ideias do NotebookLM com alto contraste (Ctrl+L)"
+                                  className="px-2.5 py-1 rounded-lg bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white active:scale-95 border border-indigo-700/60 font-semibold flex items-center gap-1.5 transition cursor-pointer shadow-xs"
+                                  title="Inserir bloco de ideias do NotebookLM (Ctrl+L)"
                                 >
                                   <Sparkles className="w-3.5 h-3.5 text-indigo-200" />
                                   <span>+ #NotebookLM</span>
@@ -2816,6 +3269,7 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                               value={conteudoSecundariaEditando}
                               onChange={(e) => setConteudoSecundariaEditando(e.target.value)}
                               onKeyDown={(e) => handleKeyDownTextarea(e, true)}
+                              onPaste={(e) => handlePasteTextarea(e, true)}
                               className="w-full p-4 font-mono text-xs sm:text-sm rounded-xl bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-emerald-600/40 leading-relaxed"
                             />
 
@@ -2850,7 +3304,7 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                                 <button
                                   type="button"
                                   onClick={() => aplicarFormatacaoNoEditor('comentario', true)}
-                                  className="px-2 py-0.5 rounded-md bg-sky-100/90 hover:bg-sky-200 dark:bg-sky-900/40 dark:hover:bg-sky-800/60 text-sky-800 dark:text-sky-300 border border-sky-300/60 dark:border-sky-700/50 font-mono transition cursor-pointer"
+                                  className="px-2 py-0.5 rounded-md bg-sky-50 hover:bg-sky-100 dark:bg-sky-950/60 dark:hover:bg-sky-900/70 text-sky-800 dark:text-sky-300 border border-sky-200/70 dark:border-sky-800 font-mono transition cursor-pointer"
                                   title="Inserir comentário pessoal (Ctrl+M)"
                                 >
                                   <span className="font-bold">Ctrl+M</span> comentário
@@ -2858,7 +3312,7 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                                 <button
                                   type="button"
                                   onClick={() => aplicarFormatacaoNoEditor('notebooklm', true)}
-                                  className="px-2 py-0.5 rounded-md bg-indigo-100 hover:bg-indigo-200 dark:bg-indigo-950/70 dark:hover:bg-indigo-900/80 text-indigo-800 dark:text-indigo-300 border border-indigo-300/60 dark:border-indigo-800/50 font-mono transition cursor-pointer"
+                                  className="px-2 py-0.5 rounded-md bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950/60 dark:hover:bg-indigo-900/70 text-indigo-800 dark:text-indigo-300 border border-indigo-200/70 dark:border-indigo-800 font-mono transition cursor-pointer"
                                   title="Inserir bloco de ideias do NotebookLM (Ctrl+L)"
                                 >
                                   <span className="font-bold">Ctrl+L</span> NotebookLM
@@ -3297,17 +3751,17 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                           <button
                             type="button"
                             onClick={() => aplicarFormatacaoNoEditor('comentario', false)}
-                            className="px-2.5 py-1 rounded-xl bg-sky-100 text-sky-900 dark:bg-sky-950/70 dark:text-sky-300 border border-sky-300/80 dark:border-sky-800 font-semibold hover:bg-sky-200 dark:hover:bg-sky-900/60 flex items-center gap-1.5 transition cursor-pointer shadow-2xs"
+                            className="px-2.5 py-1 rounded-xl bg-sky-50 dark:bg-sky-950/60 text-sky-800 dark:text-sky-300 border border-sky-200/80 dark:border-sky-800 font-semibold hover:bg-sky-100 dark:hover:bg-sky-900/60 flex items-center gap-1.5 transition cursor-pointer shadow-2xs"
                             title="Formatar como comentário pessoal (Ctrl+M)"
                           >
-                            <Lightbulb className="w-3.5 h-3.5 text-sky-700 dark:text-sky-400" />
+                            <MessageSquare className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />
                             <span>+ #comentário</span>
                           </button>
 
                           <button
                             type="button"
                             onClick={() => aplicarFormatacaoNoEditor('notebooklm', false)}
-                            className="px-2.5 py-1 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 active:scale-95 border border-indigo-700/60 font-semibold flex items-center gap-1.5 transition cursor-pointer shadow-xs"
+                            className="px-2.5 py-1 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white active:scale-95 border border-indigo-700/60 font-semibold flex items-center gap-1.5 transition cursor-pointer shadow-xs"
                             title="Inserir bloco de ideias do NotebookLM (Ctrl+L)"
                           >
                             <Sparkles className="w-3.5 h-3.5 text-indigo-200" />
@@ -3415,6 +3869,7 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                         value={conteudoEditando}
                         onChange={(e) => setConteudoEditando(e.target.value)}
                         onKeyDown={(e) => handleKeyDownTextarea(e, false)}
+                        onPaste={(e) => handlePasteTextarea(e, false)}
                         placeholder="Escreva suas notas atômicas em Markdown..."
                         className="w-full p-5 sm:p-6 font-mono text-xs sm:text-sm rounded-2xl bg-stone-50/70 dark:bg-[#131417]/90 border border-stone-300/80 dark:border-stone-700/80 text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-amber-500/40 leading-relaxed shadow-inner min-h-[360px]"
                       />
@@ -3450,7 +3905,7 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                           <button
                             type="button"
                             onClick={() => aplicarFormatacaoNoEditor('comentario', false)}
-                            className="px-2 py-0.5 rounded-md bg-sky-100/90 hover:bg-sky-200 dark:bg-sky-900/40 dark:hover:bg-sky-800/60 text-sky-800 dark:text-sky-300 border border-sky-300/60 dark:border-sky-700/50 font-mono transition cursor-pointer"
+                            className="px-2 py-0.5 rounded-md bg-sky-50 hover:bg-sky-100 dark:bg-sky-950/60 dark:hover:bg-sky-900/70 text-sky-800 dark:text-sky-300 border border-sky-200/70 dark:border-sky-800 font-mono transition cursor-pointer"
                             title="Ctrl+M"
                           >
                             <span className="font-bold">Ctrl+M</span> comentário
@@ -3458,7 +3913,7 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                           <button
                             type="button"
                             onClick={() => aplicarFormatacaoNoEditor('notebooklm', false)}
-                            className="px-2 py-0.5 rounded-md bg-indigo-100 hover:bg-indigo-200 dark:bg-indigo-950/70 dark:hover:bg-indigo-900/80 text-indigo-800 dark:text-indigo-300 border border-indigo-300/60 dark:border-indigo-800/50 font-mono transition cursor-pointer"
+                            className="px-2 py-0.5 rounded-md bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950/60 dark:hover:bg-indigo-900/70 text-indigo-800 dark:text-indigo-300 border border-indigo-200/70 dark:border-indigo-800 font-mono transition cursor-pointer"
                             title="Ctrl+L"
                           >
                             <span className="font-bold">Ctrl+L</span> NotebookLM
@@ -3779,6 +4234,8 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
         textoSelecionado={textoSelecionado}
         onDestacar={handleDestacarSelecao}
         onCitar={handleCitarSelecao}
+        onComentario={handleComentarioSelecao}
+        onNotebooklm={handleNotebookLMSelecao}
         onExtrairPermanente={handleExtrairSelecaoParaPermanente}
         onCopiar={handleCopiarSelecao}
       />
