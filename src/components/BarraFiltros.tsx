@@ -29,22 +29,23 @@ export const BarraFiltros: React.FC<BarraFiltrosProps> = ({
     Boolean(filtros.idioma);
 
   return (
-    <div className="bg-library-paper/95 dark:bg-library-darkPaper/95 backdrop-blur-md rounded-2xl p-4 shadow-xs border border-stone-200/90 dark:border-stone-800/90 mb-6 space-y-3">
+    <div className="bg-white/95 dark:bg-[#18191d]/95 backdrop-blur-md rounded-2xl p-4 sm:p-5 shadow-2xs border border-stone-200/90 dark:border-stone-800/90 mb-6 space-y-3.5 transition-all">
       {/* Linha Principal: Busca Textual */}
       <div className="flex flex-col sm:flex-row gap-3 items-center">
         <div className="relative flex-1 w-full">
-          <Search className="w-4 h-4 text-amber-700/60 dark:text-amber-400/60 absolute left-3.5 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-amber-700/70 dark:text-amber-400/70 absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             value={filtros.textoBusca}
             onChange={(e) => onAtualizarFiltros({ textoBusca: e.target.value })}
             placeholder="Pesquisar por título, autor ou conceito da tese (ex: Camus, suicídio, mercado, virtude)..."
-            className="w-full pl-10 pr-9 py-2 rounded-xl border border-stone-300/80 dark:border-stone-700 bg-white/90 dark:bg-stone-900 text-sm focus:ring-2 focus:ring-amber-500/40 focus:border-amber-500 focus:outline-none placeholder:text-stone-400 transition-all shadow-2xs"
+            className="w-full pl-10 pr-9 py-2.5 rounded-xl border border-stone-300/80 dark:border-stone-700 bg-stone-50/70 dark:bg-stone-900 text-sm focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500 focus:outline-none placeholder:text-stone-400 transition-all shadow-2xs font-serif"
           />
           {filtros.textoBusca && (
             <button
               onClick={() => onAtualizarFiltros({ textoBusca: '' })}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600 dark:hover:text-stone-200 p-0.5"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600 dark:hover:text-stone-200 p-1 cursor-pointer transition-colors"
+              title="Limpar pesquisa"
             >
               <X className="w-4 h-4" />
             </button>
@@ -52,29 +53,29 @@ export const BarraFiltros: React.FC<BarraFiltrosProps> = ({
         </div>
 
         {/* Contador e Botão de Limpar */}
-        <div className="flex items-center gap-2.5 text-xs text-stone-500 dark:text-stone-400 shrink-0 w-full sm:w-auto justify-between sm:justify-end">
+        <div className="flex items-center gap-3 text-xs text-stone-500 dark:text-stone-400 shrink-0 w-full sm:w-auto justify-between sm:justify-end">
           <span className="font-serif">
-            Mostrando <strong className="font-mono text-stone-800 dark:text-stone-200">{livrosFiltrados}</strong> de {totalLivros} obras
+            Mostrando <strong className="font-mono text-stone-900 dark:text-stone-100 font-bold">{livrosFiltrados}</strong> de {totalLivros} obras
           </span>
           {temFiltroAtivo && (
             <button
               onClick={onLimparFiltros}
-              className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-cinzel font-bold text-amber-800 dark:text-amber-300 hover:bg-amber-100/70 dark:hover:bg-amber-950/50 rounded-lg border border-amber-300 dark:border-amber-800 transition-all shadow-2xs"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-cinzel font-bold text-amber-900 dark:text-amber-200 bg-amber-50 dark:bg-amber-950/60 hover:bg-amber-100 dark:hover:bg-amber-900/60 rounded-xl border border-amber-300/80 dark:border-amber-800 transition-all shadow-2xs cursor-pointer"
             >
-              <RotateCcw className="w-3 h-3" />
-              Limpar
+              <RotateCcw className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
+              <span>Limpar Filtros</span>
             </button>
           )}
         </div>
       </div>
 
       {/* Linha Secundária: Filtros Dropdown Combináveis */}
-      <div className="flex flex-wrap gap-2 pt-2.5 border-t border-stone-200/70 dark:border-stone-800/70 text-xs">
+      <div className="flex flex-wrap items-center gap-2 pt-2.5 border-t border-stone-200/80 dark:border-stone-800/80 text-xs">
         {/* Nível */}
         <select
           value={filtros.nivel ?? ''}
           onChange={(e) => onAtualizarFiltros({ nivel: e.target.value ? Number(e.target.value) : undefined })}
-          className="px-2.5 py-1.5 rounded-lg border border-stone-200/90 dark:border-stone-700 bg-white dark:bg-stone-900 text-stone-700 dark:text-stone-300 font-cinzel text-xs font-semibold focus:ring-1 focus:ring-amber-500 shadow-2xs"
+          className="px-3 py-1.5 rounded-xl border border-stone-200/90 dark:border-stone-700 bg-stone-50/80 dark:bg-stone-900 text-stone-700 dark:text-stone-300 font-cinzel text-xs font-semibold focus:ring-1 focus:ring-amber-500 shadow-2xs cursor-pointer hover:border-amber-400/60 transition-colors"
         >
           <option value="">Todos os Níveis (1 a 5)</option>
           <option value="1">Nível 1 (Propedêutica)</option>
@@ -88,7 +89,7 @@ export const BarraFiltros: React.FC<BarraFiltrosProps> = ({
         <select
           value={filtros.area ?? ''}
           onChange={(e) => onAtualizarFiltros({ area: e.target.value || undefined })}
-          className="px-2.5 py-1.5 rounded-lg border border-stone-200/90 dark:border-stone-700 bg-white dark:bg-stone-900 text-stone-700 dark:text-stone-300 font-serif text-xs font-medium focus:ring-1 focus:ring-amber-500 shadow-2xs"
+          className="px-3 py-1.5 rounded-xl border border-stone-200/90 dark:border-stone-700 bg-stone-50/80 dark:bg-stone-900 text-stone-700 dark:text-stone-300 font-serif text-xs font-medium focus:ring-1 focus:ring-amber-500 shadow-2xs cursor-pointer hover:border-amber-400/60 transition-colors"
         >
           <option value="">Todas as Áreas ({todasAreas.length})</option>
           {todasAreas.map((area) => (
@@ -102,7 +103,7 @@ export const BarraFiltros: React.FC<BarraFiltrosProps> = ({
         <select
           value={filtros.classe ?? ''}
           onChange={(e) => onAtualizarFiltros({ classe: (e.target.value as ClasseLivro) || undefined })}
-          className="px-2.5 py-1.5 rounded-lg border border-stone-200/90 dark:border-stone-700 bg-white dark:bg-stone-900 text-stone-700 dark:text-stone-300 font-cinzel text-xs font-semibold focus:ring-1 focus:ring-amber-500 shadow-2xs"
+          className="px-3 py-1.5 rounded-xl border border-stone-200/90 dark:border-stone-700 bg-stone-50/80 dark:bg-stone-900 text-stone-700 dark:text-stone-300 font-cinzel text-xs font-semibold focus:ring-1 focus:ring-amber-500 shadow-2xs cursor-pointer hover:border-amber-400/60 transition-colors"
         >
           <option value="">Todas as Classes</option>
           <option value="OBRA">OBRA (Leitura Integral)</option>
@@ -114,7 +115,7 @@ export const BarraFiltros: React.FC<BarraFiltrosProps> = ({
         <select
           value={filtros.estado ?? ''}
           onChange={(e) => onAtualizarFiltros({ estado: (e.target.value as EstadoLeitura) || undefined })}
-          className="px-2.5 py-1.5 rounded-lg border border-stone-200/90 dark:border-stone-700 bg-white dark:bg-stone-900 text-stone-700 dark:text-stone-300 font-serif text-xs font-medium focus:ring-1 focus:ring-amber-500 shadow-2xs"
+          className="px-3 py-1.5 rounded-xl border border-stone-200/90 dark:border-stone-700 bg-stone-50/80 dark:bg-stone-900 text-stone-700 dark:text-stone-300 font-serif text-xs font-medium focus:ring-1 focus:ring-amber-500 shadow-2xs cursor-pointer hover:border-amber-400/60 transition-colors"
         >
           <option value="">Todos os Estados</option>
           <option value="lendo">Lendo Agora</option>
@@ -128,7 +129,7 @@ export const BarraFiltros: React.FC<BarraFiltrosProps> = ({
         <select
           value={filtros.idioma ?? ''}
           onChange={(e) => onAtualizarFiltros({ idioma: (e.target.value as IdiomaLeitura) || undefined })}
-          className="px-2.5 py-1.5 rounded-lg border border-stone-200/90 dark:border-stone-700 bg-white dark:bg-stone-900 text-stone-700 dark:text-stone-300 font-serif text-xs font-medium focus:ring-1 focus:ring-amber-500 shadow-2xs"
+          className="px-3 py-1.5 rounded-xl border border-stone-200/90 dark:border-stone-700 bg-stone-50/80 dark:bg-stone-900 text-stone-700 dark:text-stone-300 font-serif text-xs font-medium focus:ring-1 focus:ring-amber-500 shadow-2xs cursor-pointer hover:border-amber-400/60 transition-colors"
         >
           <option value="">Todos os Idiomas</option>
           <option value="pt">Português (PT)</option>
@@ -138,13 +139,14 @@ export const BarraFiltros: React.FC<BarraFiltrosProps> = ({
         {/* Obra de Vida */}
         <button
           onClick={() => onAtualizarFiltros({ apenasObraDeVida: !filtros.apenasObraDeVida })}
-          className={`px-3 py-1.5 rounded-lg border font-cinzel text-xs font-bold transition-all shadow-2xs ${
+          className={`px-3 py-1.5 rounded-xl border font-cinzel text-xs font-bold transition-all shadow-2xs cursor-pointer ${
             filtros.apenasObraDeVida
-              ? 'bg-amber-100 dark:bg-amber-950 text-amber-900 dark:text-amber-200 border-amber-400 shadow-xs'
-              : 'border-stone-200/90 dark:border-stone-700 bg-white dark:bg-stone-900 text-stone-600 dark:text-stone-400 hover:border-amber-400'
+              ? 'bg-amber-100 dark:bg-amber-950 text-amber-900 dark:text-amber-200 border-amber-400 shadow-xs ring-1 ring-amber-500/20'
+              : 'border-stone-200/90 dark:border-stone-700 bg-stone-50/80 dark:bg-stone-900 text-stone-600 dark:text-stone-400 hover:border-amber-400'
           }`}
+          title="Filtrar apenas as 5 grandes Obras de Vida (uma por nível)"
         >
-          ★ Obras de Vida (5)
+          ★ Obra de Vida
         </button>
       </div>
     </div>

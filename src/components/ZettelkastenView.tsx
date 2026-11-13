@@ -227,8 +227,8 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
     } catch {}
   };
 
-  // Modo Split View (Lado a Lado para Monitores Grandes)
-  const [splitViewAtivo, setSplitViewAtivo] = useState(true);
+  // Modo Split View (Lado a Lado para Monitores Grandes) - Padrão é visão única (false)
+  const [splitViewAtivo, setSplitViewAtivo] = useState(false);
   const [notaSecundariaId, setNotaSecundariaId] = useState<string | null>(null);
   const [modoEdicaoSecundaria, setModoEdicaoSecundaria] = useState(false);
   const [conteudoSecundariaEditando, setConteudoSecundariaEditando] = useState('');
@@ -353,9 +353,16 @@ export const ZettelkastenView: React.FC<ZettelkastenViewProps> = ({
       );
     };
 
-    const indices = filtrar(notasZettel.filter((n) => n.tipo === 'indice' || n.pasta === '01 índice'));
-    const referencias = filtrar(notasZettel.filter((n) => n.tipo === 'referencia' || n.pasta === '02 referências'));
-    const permanentes = filtrar(notasZettel.filter((n) => n.tipo === 'permanente' || n.pasta === '03 permanentes'));
+    const ordenacaoNumerica = (a: NotaZettel, b: NotaZettel) => {
+      return (
+        a.titulo.localeCompare(b.titulo, undefined, { numeric: true, sensitivity: 'base' }) ||
+        a.id.localeCompare(b.id, undefined, { numeric: true, sensitivity: 'base' })
+      );
+    };
+
+    const indices = filtrar(notasZettel.filter((n) => n.tipo === 'indice' || n.pasta === '01 índice')).sort(ordenacaoNumerica);
+    const referencias = filtrar(notasZettel.filter((n) => n.tipo === 'referencia' || n.pasta === '02 referências')).sort(ordenacaoNumerica);
+    const permanentes = filtrar(notasZettel.filter((n) => n.tipo === 'permanente' || n.pasta === '03 permanentes')).sort(ordenacaoNumerica);
     return { indices, referencias, permanentes };
   }, [notasZettel, busca]);
 
@@ -1137,24 +1144,161 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
         onMouseUp={handleMouseUpSelecao}
       >
         {linhas.map((linha, idx) => {
-          if (linha.startsWith('# ')) {
-            return (
-              <h1
-                key={idx}
-                className="text-xl sm:text-2xl font-serif font-bold text-stone-900 dark:text-stone-100 pt-4 pb-2 border-b border-stone-200 dark:border-stone-800 tracking-tight"
-              >
-                {linha.replace('# ', '')}
-              </h1>
-            );
+          // Em notas de índice, omitir marcadores de traço vazios para não poluir o layout
+          if (notaContexto?.tipo === 'indice' && (linha.trim() === '-' || linha.trim() === '- ' || linha.trim() === '*')) {
+            return null;
           }
-          if (linha.startsWith('## ')) {
+
+          if (linha.startsWith('# ') || linha.startsWith('## ')) {
+            const ehH1 = linha.startsWith('# ');
+            const textoHeading = linha.replace(/^#+\s*/, '').trim();
+            const textoLower = textoHeading.toLowerCase();
+
+            // RENDERIZAÇÃO DIRETA NO ESPAÇO ABAIXO: Referências do Macrotema (Imagem 3)
+            if (notaContexto?.tipo === 'indice' && (textoLower === 'referências' || textoLower === 'referencias')) {
+              return (
+                <div key={idx} className="pt-6 pb-2 space-y-3">
+                  <div className="flex items-center justify-between border-b border-stone-200 dark:border-stone-800 pb-2.5">
+                    <div className="flex items-center gap-2">
+                      <BookOpen className="w-5 h-5 text-sky-600 dark:text-sky-400" />
+                      <h2 className="text-lg sm:text-xl font-serif font-bold text-stone-900 dark:text-stone-100">
+                        Referências e Obras
+                      </h2>
+                      <span className="px-2 py-0.5 rounded-full text-xs font-mono font-bold bg-sky-100 dark:bg-sky-950/70 text-sky-800 dark:text-sky-300">
+                        {itensDoIndiceAtivo.refs.length}
+                      </span>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const temaNum = parseInt(notaContexto.titulo.match(/^(\d+)/)?.[1] || '0', 10);
+                        abrirCriadorPermanente({ tipo: 'referencia', temaNum, temaTitulo: notaContexto.titulo });
+                      }}
+                      className="px-3 py-1.5 rounded-xl bg-sky-50 hover:bg-sky-100 dark:bg-sky-950/60 dark:hover:bg-sky-900/60 text-sky-700 dark:text-sky-300 border border-sky-300/80 dark:border-sky-800 text-xs font-bold flex items-center gap-1.5 shadow-2xs transition cursor-pointer"
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                      <span>+ Vincular Referência</span>
+                    </button>
+                  </div>
+
+                  {itensDoIndiceAtivo.refs.length === 0 ? (
+                    <div className="p-4 rounded-2xl border border-dashed border-stone-200 dark:border-stone-800 text-xs text-stone-400 italic bg-stone-50/50 dark:bg-stone-900/30">
+                      Nenhuma obra ou referência bibliográfica vinculada a este macrotema ainda.
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                      {itensDoIndiceAtivo.refs.map((ref) => (
+                        <div
+                          key={ref.id}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            selecionarNotaZettel(ref.id);
+                          }}
+                          className="p-3.5 rounded-2xl bg-white dark:bg-stone-900 border border-stone-200/90 dark:border-stone-800 hover:border-sky-400 dark:hover:border-sky-600 transition cursor-pointer shadow-2xs hover:shadow-sm group flex items-start gap-3"
+                        >
+                          <div className="w-8 h-8 rounded-xl bg-sky-50 dark:bg-sky-950/80 border border-sky-200 dark:border-sky-900/80 flex items-center justify-center text-sky-600 dark:text-sky-400 shrink-0 group-hover:scale-105 transition-transform">
+                            <BookOpen className="w-4 h-4" />
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <div className="text-xs sm:text-sm font-bold text-stone-900 dark:text-stone-100 group-hover:text-sky-700 dark:group-hover:text-sky-300 truncate">
+                              {ref.titulo}
+                            </div>
+                            <div className="text-[10px] text-stone-400 font-mono truncate mt-0.5">{ref.id}</div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            }
+
+            // RENDERIZAÇÃO DIRETA NO ESPAÇO ABAIXO: Notas Permanentes do Macrotema (Imagem 3)
+            if (notaContexto?.tipo === 'indice' && (textoLower === 'notas relacionadas' || textoLower === 'notas permanentes' || textoLower === 'permanentes')) {
+              return (
+                <div key={idx} className="pt-6 pb-2 space-y-3">
+                  <div className="flex items-center justify-between border-b border-stone-200 dark:border-stone-800 pb-2.5">
+                    <div className="flex items-center gap-2">
+                      <Lightbulb className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                      <h2 className="text-lg sm:text-xl font-serif font-bold text-stone-900 dark:text-stone-100">
+                        Notas Relacionadas e Ideias
+                      </h2>
+                      <span className="px-2 py-0.5 rounded-full text-xs font-mono font-bold bg-emerald-100 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-300">
+                        {itensDoIndiceAtivo.perms.length}
+                      </span>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const temaNum = parseInt(notaContexto.titulo.match(/^(\d+)/)?.[1] || '0', 10);
+                        abrirCriadorPermanente({ tipo: 'permanente', temaNum, temaTitulo: notaContexto.titulo });
+                      }}
+                      className="px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/60 dark:hover:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 border border-emerald-300/80 dark:border-emerald-800 text-xs font-bold flex items-center gap-1.5 shadow-2xs transition cursor-pointer"
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                      <span>+ Nova Permanente</span>
+                    </button>
+                  </div>
+
+                  {itensDoIndiceAtivo.perms.length === 0 ? (
+                    <div className="p-4 rounded-2xl border border-dashed border-stone-200 dark:border-stone-800 text-xs text-stone-400 italic bg-stone-50/50 dark:bg-stone-900/30">
+                      Nenhuma nota permanente vinculada a este macrotema ainda.
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                      {itensDoIndiceAtivo.perms.map((perm) => (
+                        <div
+                          key={perm.id}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            selecionarNotaZettel(perm.id);
+                          }}
+                          className="p-3.5 rounded-2xl bg-white dark:bg-stone-900 border border-stone-200/90 dark:border-stone-800 hover:border-emerald-400 dark:hover:border-emerald-600 transition cursor-pointer shadow-2xs hover:shadow-sm group flex items-start gap-3"
+                        >
+                          <div className="w-8 h-8 rounded-xl bg-emerald-50 dark:bg-emerald-950/80 border border-emerald-200 dark:border-emerald-900/80 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shrink-0 group-hover:scale-105 transition-transform">
+                            <Lightbulb className="w-4 h-4" />
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <div className="text-xs sm:text-sm font-bold text-stone-900 dark:text-stone-100 group-hover:text-emerald-700 dark:group-hover:text-emerald-300 truncate">
+                              {perm.titulo}
+                            </div>
+                            <div className="flex items-center gap-2 mt-0.5">
+                              <span className="text-[10px] text-stone-400 font-mono truncate">{perm.id}</span>
+                              {perm.tipoRelacao && (
+                                <span className="text-[9px] px-1.5 py-0.2 rounded bg-purple-100 dark:bg-purple-950 text-purple-700 dark:text-purple-300 font-semibold truncate">
+                                  {perm.tipoRelacao}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            }
+
+            if (ehH1) {
+              return (
+                <h1
+                  key={idx}
+                  className="text-xl sm:text-2xl font-serif font-bold text-stone-900 dark:text-stone-100 pt-4 pb-2 border-b border-stone-200 dark:border-stone-800 tracking-tight"
+                >
+                  {textoHeading}
+                </h1>
+              );
+            }
+
             return (
               <h2
                 key={idx}
                 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-amber-900 dark:text-amber-300 pt-5 pb-1 font-sans flex items-center gap-2"
               >
                 <span className="w-1.5 h-1.5 rounded-full bg-amber-600"></span>
-                <span>{linha.replace('## ', '')}</span>
+                <span>{textoHeading}</span>
               </h2>
             );
           }
@@ -1381,41 +1525,41 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
         <div className="absolute inset-0 pointer-events-none bg-white/75 dark:bg-[#141518]/85 backdrop-blur-[0.5px] z-0" />
       )}
 
-      {/* BARRA DE FERRAMENTAS SUPERIOR */}
-      <div className="relative z-10 flex flex-wrap items-center justify-between border-b border-stone-200 dark:border-stone-800 bg-stone-50/90 dark:bg-[#121316]/90 backdrop-blur px-3 py-2 text-xs gap-2">
-        {/* Lado Esquerdo */}
-        <div className="flex items-center gap-2">
+      {/* BARRA DE FERRAMENTAS SUPERIOR (Redesign Unificado e Elegante) */}
+      <div className="relative z-10 flex flex-wrap items-center justify-between border-b border-stone-200/90 dark:border-stone-800/90 bg-stone-50/95 dark:bg-[#131417]/95 backdrop-blur-md px-3 sm:px-5 py-2.5 text-xs gap-2.5 shadow-2xs">
+        {/* Lado Esquerdo: Sidebar Toggle, Abas Principais e Botão Nova Nota */}
+        <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
           <button
             onClick={() => setSidebarAberta((prev) => !prev)}
-            className="p-1.5 rounded-lg text-stone-600 dark:text-stone-400 hover:bg-stone-200/60 dark:hover:bg-stone-800 transition cursor-pointer"
-            title={sidebarAberta ? 'Recolher Painel de Pastas' : 'Expandir Painel de Pastas'}
+            className="p-1.5 rounded-xl border border-stone-200/90 dark:border-stone-800 text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 hover:bg-stone-200/70 dark:hover:bg-stone-800 transition cursor-pointer shadow-2xs"
+            title={sidebarAberta ? 'Recolher Painel Lateral' : 'Expandir Painel Lateral'}
           >
             {sidebarAberta ? <PanelLeftClose className="w-4 h-4" /> : <PanelLeft className="w-4 h-4" />}
           </button>
 
-          {/* Abas */}
-          <div className="flex items-center bg-stone-200/70 dark:bg-stone-800 p-0.5 rounded-lg text-xs">
+          {/* Abas Principais Segmentadas */}
+          <div className="flex items-center bg-stone-200/70 dark:bg-stone-900/90 p-1 rounded-xl border border-stone-200/90 dark:border-stone-800 text-xs shadow-2xs">
             <button
               onClick={() => setVisaoAtiva('acervo')}
-              className={`flex items-center gap-1.5 px-3 py-1 rounded-md font-bold transition ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-cinzel font-bold transition cursor-pointer ${
                 visaoAtiva === 'acervo'
-                  ? 'bg-white dark:bg-stone-700 text-stone-900 dark:text-stone-100 shadow-2xs'
-                  : 'text-stone-600 dark:text-stone-400 hover:text-stone-900'
+                  ? 'bg-white dark:bg-stone-800 text-stone-900 dark:text-stone-100 shadow-xs border border-stone-200/60 dark:border-stone-700/60'
+                  : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
               }`}
             >
-              <FileText className="w-3.5 h-3.5 text-amber-600" />
+              <FileText className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
               <span>Notas ({notasZettel.length})</span>
             </button>
             <button
               onClick={() => setVisaoAtiva('inbox')}
-              className={`flex items-center gap-1.5 px-3 py-1 rounded-md font-bold transition relative ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-cinzel font-bold transition cursor-pointer relative ${
                 visaoAtiva === 'inbox'
-                  ? 'bg-white dark:bg-stone-700 text-amber-800 dark:text-amber-300 shadow-2xs'
-                  : 'text-stone-600 dark:text-stone-400 hover:text-stone-900'
+                  ? 'bg-white dark:bg-stone-800 text-amber-900 dark:text-amber-200 shadow-xs border border-stone-200/60 dark:border-stone-700/60'
+                  : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
               }`}
               title="04 - Caixa de Entrada & Captura Rápida (48h)"
             >
-              <Inbox className="w-3.5 h-3.5 text-amber-600" />
+              <Inbox className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
               <span>04 Caixa de Entrada</span>
               {notasTemporarias.filter((t) => !t.processada).length > 0 && (
                 <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
@@ -1423,10 +1567,10 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
             </button>
             <button
               onClick={() => setVisaoAtiva('diario')}
-              className={`flex items-center gap-1.5 px-3 py-1 rounded-md font-bold transition relative ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-cinzel font-bold transition cursor-pointer relative ${
                 visaoAtiva === 'diario'
-                  ? 'bg-white dark:bg-stone-700 text-amber-900 dark:text-amber-200 shadow-2xs'
-                  : 'text-stone-600 dark:text-stone-400 hover:text-stone-900'
+                  ? 'bg-white dark:bg-stone-800 text-amber-900 dark:text-amber-200 shadow-xs border border-stone-200/60 dark:border-stone-700/60'
+                  : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
               }`}
               title="05 - O Diário Intelectual (Caderno Real)"
             >
@@ -1435,39 +1579,21 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
             </button>
             <button
               onClick={() => setVisaoAtiva('canvas')}
-              className={`flex items-center gap-1.5 px-3 py-1 rounded-md font-bold transition ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-cinzel font-bold transition cursor-pointer ${
                 visaoAtiva === 'canvas'
-                  ? 'bg-white dark:bg-stone-700 text-purple-800 dark:text-purple-300 shadow-2xs'
-                  : 'text-stone-600 dark:text-stone-400 hover:text-stone-900'
+                  ? 'bg-white dark:bg-stone-800 text-purple-900 dark:text-purple-200 shadow-xs border border-stone-200/60 dark:border-stone-700/60'
+                  : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
               }`}
             >
-              <LayoutGrid className="w-3.5 h-3.5 text-purple-600" />
+              <LayoutGrid className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
               <span>Canvas</span>
             </button>
           </div>
 
-          {/* Botão Split View / Painel Duplo (Lado a Lado para Monitores Grandes) */}
-          <button
-            onClick={() => setSplitViewAtivo((prev) => !prev)}
-            className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-xs transition cursor-pointer ${
-              splitViewAtivo
-                ? 'bg-amber-100 dark:bg-amber-950/80 text-amber-900 dark:text-amber-200 border-amber-300 dark:border-amber-700 font-bold shadow-2xs'
-                : 'bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 border-stone-200 dark:border-stone-700 hover:bg-stone-200 dark:hover:bg-stone-700'
-            }`}
-            title={
-              splitViewAtivo
-                ? 'Desativar Painel Duplo (Retornar para visão única)'
-                : 'Ativar Painel Duplo (Fonte/Referência à esquerda + Rascunho/Permanente à direita)'
-            }
-          >
-            <Columns className="w-3.5 h-3.5 text-amber-600" />
-            <span className="hidden md:inline font-medium">Painel Duplo</span>
-          </button>
-
-          {/* Botão Principal de Inserção Rápida */}
+          {/* Botão Principal Nova Nota */}
           <button
             onClick={() => abrirCriadorPermanente()}
-            className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-700 hover:bg-emerald-600 text-white font-bold text-xs shadow-xs transition cursor-pointer"
+            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-emerald-700 to-emerald-600 hover:from-emerald-600 hover:to-emerald-500 text-white font-cinzel font-bold text-xs shadow-xs hover:shadow-sm transition cursor-pointer"
             title="Criar nova nota permanente com suas próprias palavras"
           >
             <Plus className="w-3.5 h-3.5" />
@@ -1475,167 +1601,178 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
           </button>
         </div>
 
-        {/* Lado Direito: Status Supabase, Fundo, Edição, Largura, etc. */}
-        <div className="flex items-center gap-1.5 shrink-0">
-          {/* Indicador Discreto de Status do Supabase (Sem texto poluidor - Item 2) */}
-          <button
-            onClick={() => setModalSupabaseAberto(true)}
-            className="p-1.5 rounded-lg border border-stone-200/90 dark:border-stone-700/90 bg-stone-100/90 dark:bg-stone-800/90 hover:bg-stone-200 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-300 transition relative cursor-pointer"
-            title={supabaseMensagem ? `Supabase: ${supabaseMensagem}` : `Supabase: ${
-              supabaseStatus === 'conectado'
-                ? 'Conectado à nuvem'
-                : supabaseStatus === 'sincronizando'
-                ? 'Sincronizando...'
-                : supabaseStatus === 'erro'
-                ? 'Erro de sincronização'
-                : 'Desconectado'
-            } (Clique para gerenciar banco nuvem)`}
-          >
-            {supabaseStatus === 'conectado' ? (
-              <Cloud className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-            ) : supabaseStatus === 'sincronizando' ? (
-              <RefreshCw className="w-3.5 h-3.5 text-sky-600 animate-spin" />
-            ) : supabaseStatus === 'erro' ? (
-              <CloudOff className="w-3.5 h-3.5 text-rose-600" />
-            ) : (
-              <Database className="w-3.5 h-3.5 text-stone-500" />
-            )}
-            <span
-              className={`absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full ring-1 ring-white dark:ring-stone-900 ${
-                supabaseStatus === 'conectado'
-                  ? 'bg-emerald-500'
-                  : supabaseStatus === 'sincronizando'
-                  ? 'bg-sky-500 animate-pulse'
-                  : supabaseStatus === 'erro'
-                  ? 'bg-rose-500'
-                  : 'bg-stone-400'
+        {/* Lado Direito: Layout / Visualização, Ações da Nota e Ambiente */}
+        <div className="flex items-center gap-2 sm:gap-2.5 shrink-0 flex-wrap">
+          {/* Controles de Layout (Painel Duplo e Largura) */}
+          <div className="flex items-center bg-stone-200/60 dark:bg-stone-900/90 p-1 rounded-xl border border-stone-200/90 dark:border-stone-800 text-xs shadow-2xs">
+            <button
+              onClick={() => setSplitViewAtivo((prev) => !prev)}
+              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg transition cursor-pointer font-cinzel text-xs ${
+                splitViewAtivo
+                  ? 'bg-amber-100 dark:bg-amber-950/80 text-amber-900 dark:text-amber-200 font-bold shadow-2xs border border-amber-300 dark:border-amber-700'
+                  : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
               }`}
-            />
-          </button>
-
-          {/* Sincronizar Agora */}
-          {supabaseStatus === 'conectado' && (
-            <button
-              onClick={() => sincronizarSupabase()}
-              className="p-1.5 rounded-lg bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-300 transition cursor-pointer"
-              title="Sincronizar com o Supabase agora"
+              title={
+                splitViewAtivo
+                  ? 'Desativar Painel Duplo (Retornar para visão única)'
+                  : 'Ativar Painel Duplo (Fonte/Referência à esquerda + Rascunho/Permanente à direita)'
+              }
             >
-              <RefreshCw className="w-3.5 h-3.5 text-stone-600 dark:text-stone-400" />
+              <Columns className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
+              <span className="hidden md:inline">Painel Duplo</span>
             </button>
-          )}
 
-          {/* Alternador de Largura de Leitura (Item 6 para Monitores Grandes) */}
-          <button
-            onClick={() => {
-              const prox = larguraLeitura === 'focada' ? 'padrao' : larguraLeitura === 'padrao' ? 'ampla' : 'focada';
-              mudarLarguraLeitura(prox);
-            }}
-            className="px-2 py-1.5 rounded-lg border border-stone-200/90 dark:border-stone-700/90 bg-stone-100/90 dark:bg-stone-800/90 hover:bg-stone-200 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-300 transition cursor-pointer flex items-center gap-1.5"
-            title={`Largura da Página: ${
-              larguraLeitura === 'focada'
-                ? 'Leitura Focada (72ch)'
-                : larguraLeitura === 'padrao'
-                ? 'Padrão Editorial (85ch)'
-                : 'Ampla (Tela Cheia)'
-            } (Clique para alternar)`}
-          >
-            {larguraLeitura === 'focada' ? (
-              <Minimize2 className="w-3.5 h-3.5 text-amber-600" />
-            ) : larguraLeitura === 'padrao' ? (
-              <AlignLeft className="w-3.5 h-3.5 text-amber-600" />
-            ) : (
-              <Maximize2 className="w-3.5 h-3.5 text-amber-600" />
-            )}
-            <span className="hidden xl:inline text-[11px] font-sans text-stone-500 capitalize">{larguraLeitura}</span>
-          </button>
-
-          {/* Imagem de Fundo */}
-          <button
-            onClick={() => setModalFundoAberto(true)}
-            className="p-1.5 rounded-lg bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-300 transition cursor-pointer"
-            title="Escolher Imagem de Fundo (Pintura Clássica)"
-          >
-            <ImageIcon className="w-3.5 h-3.5 text-amber-600" />
-          </button>
-
-          {/* Alternar Modo Leitura / Edição (Ctrl+E) */}
-          {notaAtiva && (
-            <button
-              onClick={() => setModoEdicao((prev) => !prev)}
-              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border text-xs font-semibold transition cursor-pointer ${
-                modoEdicao
-                  ? 'bg-amber-700 text-white border-amber-600 shadow-xs'
-                  : 'bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-stone-700 border-stone-200 dark:border-stone-700'
-              }`}
-              title={modoEdicao ? 'Alternar para Modo Leitura (Ctrl+E)' : 'Alternar para Modo Edição (Ctrl+E)'}
-            >
-              {modoEdicao ? (
-                <>
-                  <Book className="w-3.5 h-3.5 text-amber-200" />
-                  <span className="hidden sm:inline">Leitura</span>
-                </>
-              ) : (
-                <>
-                  <Edit3 className="w-3.5 h-3.5 text-amber-600" />
-                  <span className="hidden sm:inline">Editar</span>
-                </>
-              )}
-            </button>
-          )}
-
-          {/* Copiar Wikilink [[Título]] */}
-          {notaAtiva && (
-            <button
-              onClick={handleCopiarWikilinkNota}
-              className="p-1.5 rounded-lg bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-300 transition cursor-pointer"
-              title="Copiar Wikilink [[Título]]"
-            >
-              {linkCopiadoNotif ? (
-                <Check className="w-3.5 h-3.5 text-emerald-600" />
-              ) : (
-                <LinkIcon className="w-3.5 h-3.5 text-amber-600" />
-              )}
-            </button>
-          )}
-
-          {/* Alternar #revisar */}
-          {notaAtiva && (
-            <button
-              onClick={handleToggleRevisar}
-              className={`p-1.5 rounded-lg border transition cursor-pointer ${
-                notaAtiva.revisar
-                  ? 'bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-200 border-amber-300'
-                  : 'bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-400 hover:bg-stone-200 dark:hover:bg-stone-700 border-stone-200 dark:border-stone-700'
-              }`}
-              title={notaAtiva.revisar ? 'Remover tag #revisar' : 'Marcar para #revisar'}
-            >
-              <Tag className="w-3.5 h-3.5" />
-            </button>
-          )}
-
-          {/* Excluir Nota */}
-          {notaAtiva && (
             <button
               onClick={() => {
-                if (confirm(`Excluir permanentemente "${notaAtiva.titulo}"?`)) {
-                  removerNotaZettel(notaAtiva.id);
-                }
+                const prox = larguraLeitura === 'focada' ? 'padrao' : larguraLeitura === 'padrao' ? 'ampla' : 'focada';
+                mudarLarguraLeitura(prox);
               }}
-              className="p-1.5 rounded-lg bg-stone-100 dark:bg-stone-800 hover:bg-rose-50 dark:hover:bg-rose-950/60 hover:text-rose-600 border border-stone-200 dark:border-stone-700 text-stone-500 transition cursor-pointer"
-              title="Excluir nota"
+              className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200 transition cursor-pointer font-cinzel text-xs"
+              title={`Largura da Página: ${
+                larguraLeitura === 'focada'
+                  ? 'Leitura Focada (72ch)'
+                  : larguraLeitura === 'padrao'
+                  ? 'Padrão Editorial (85ch)'
+                  : 'Ampla (Tela Cheia)'
+              } (Clique para alternar)`}
             >
-              <Trash2 className="w-3.5 h-3.5" />
+              {larguraLeitura === 'focada' ? (
+                <Minimize2 className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
+              ) : larguraLeitura === 'padrao' ? (
+                <AlignLeft className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
+              ) : (
+                <Maximize2 className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
+              )}
+              <span className="hidden lg:inline capitalize">{larguraLeitura}</span>
             </button>
+          </div>
+
+          {/* Ações da Nota Ativa */}
+          {notaAtiva && (
+            <div className="flex items-center bg-stone-200/60 dark:bg-stone-900/90 p-1 rounded-xl border border-stone-200/90 dark:border-stone-800 text-xs shadow-2xs">
+              <button
+                onClick={() => setModoEdicao((prev) => !prev)}
+                className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg font-cinzel text-xs font-bold transition cursor-pointer ${
+                  modoEdicao
+                    ? 'bg-amber-700 text-white shadow-2xs'
+                    : 'text-stone-700 dark:text-stone-300 hover:text-amber-900 dark:hover:text-amber-200'
+                }`}
+                title={modoEdicao ? 'Mudar para Modo Leitura (Ctrl+E)' : 'Mudar para Modo Edição (Ctrl+E)'}
+              >
+                {modoEdicao ? (
+                  <>
+                    <Book className="w-3.5 h-3.5 text-amber-200" />
+                    <span>Leitura</span>
+                  </>
+                ) : (
+                  <>
+                    <Edit3 className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
+                    <span>Editar</span>
+                  </>
+                )}
+              </button>
+
+              <button
+                onClick={handleCopiarWikilinkNota}
+                className="p-1.5 rounded-lg text-stone-600 dark:text-stone-400 hover:text-amber-800 dark:hover:text-amber-300 transition cursor-pointer"
+                title="Copiar Wikilink [[Título]] da nota"
+              >
+                {linkCopiadoNotif ? (
+                  <Check className="w-3.5 h-3.5 text-emerald-600" />
+                ) : (
+                  <LinkIcon className="w-3.5 h-3.5" />
+                )}
+              </button>
+
+              <button
+                onClick={handleToggleRevisar}
+                className={`p-1.5 rounded-lg transition cursor-pointer ${
+                  notaAtiva.revisar
+                    ? 'text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-amber-950/80'
+                    : 'text-stone-500 hover:text-amber-700 dark:hover:text-amber-300'
+                }`}
+                title={notaAtiva.revisar ? 'Remover tag #revisar' : 'Marcar para #revisar'}
+              >
+                <Tag className="w-3.5 h-3.5" />
+              </button>
+
+              <button
+                onClick={handleCopiarExportacao}
+                className="p-1.5 rounded-lg text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200 transition cursor-pointer"
+                title="Exportar Markdown formatado"
+              >
+                {copiadoNotif ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+              </button>
+
+              <button
+                onClick={() => {
+                  if (confirm(`Excluir permanentemente "${notaAtiva.titulo}"?`)) {
+                    removerNotaZettel(notaAtiva.id);
+                  }
+                }}
+                className="p-1.5 rounded-lg text-stone-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition cursor-pointer"
+                title="Excluir nota"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+              </button>
+            </div>
           )}
 
-          {/* Exportar Markdown */}
-          <button
-            onClick={handleCopiarExportacao}
-            className="p-1.5 rounded-lg bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-300 transition cursor-pointer"
-            title="Exportar Markdown para o Obsidian"
-          >
-            {copiadoNotif ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
-          </button>
+          {/* Ambiente e Sincronização */}
+          <div className="flex items-center bg-stone-200/60 dark:bg-stone-900/90 p-1 rounded-xl border border-stone-200/90 dark:border-stone-800 text-xs shadow-2xs">
+            <button
+              onClick={() => setModalFundoAberto(true)}
+              className="p-1.5 rounded-lg text-stone-600 dark:text-stone-400 hover:text-amber-700 dark:hover:text-amber-300 transition cursor-pointer"
+              title="Escolher Pintura Clássica de Fundo"
+            >
+              <ImageIcon className="w-3.5 h-3.5" />
+            </button>
+
+            <button
+              onClick={() => setModalSupabaseAberto(true)}
+              className="p-1.5 rounded-lg text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition relative cursor-pointer"
+              title={supabaseMensagem ? `Supabase: ${supabaseMensagem}` : `Supabase: ${
+                supabaseStatus === 'conectado'
+                  ? 'Conectado à nuvem'
+                  : supabaseStatus === 'sincronizando'
+                  ? 'Sincronizando...'
+                  : supabaseStatus === 'erro'
+                  ? 'Erro de sincronização'
+                  : 'Desconectado'
+              } (Clique para gerenciar banco nuvem)`}
+            >
+              {supabaseStatus === 'conectado' ? (
+                <Cloud className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+              ) : supabaseStatus === 'sincronizando' ? (
+                <RefreshCw className="w-3.5 h-3.5 text-sky-600 animate-spin" />
+              ) : supabaseStatus === 'erro' ? (
+                <CloudOff className="w-3.5 h-3.5 text-rose-600" />
+              ) : (
+                <Database className="w-3.5 h-3.5 text-stone-500" />
+              )}
+              <span
+                className={`absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full ring-1 ring-white dark:ring-stone-900 ${
+                  supabaseStatus === 'conectado'
+                    ? 'bg-emerald-500'
+                    : supabaseStatus === 'sincronizando'
+                    ? 'bg-sky-500 animate-pulse'
+                    : supabaseStatus === 'erro'
+                    ? 'bg-rose-500'
+                    : 'bg-stone-400'
+                }`}
+              />
+            </button>
+
+            {supabaseStatus === 'conectado' && (
+              <button
+                onClick={() => sincronizarSupabase()}
+                className="p-1.5 rounded-lg text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200 transition cursor-pointer"
+                title="Sincronizar com o Supabase agora"
+              >
+                <RefreshCw className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
@@ -2786,11 +2923,13 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                     ? 'max-w-3xl'
                     : larguraLeitura === 'padrao'
                     ? 'max-w-4xl'
-                    : 'max-w-5xl xl:max-w-6xl'
-                } mx-auto w-full px-6 sm:px-10 py-8 space-y-6 transition-all duration-300`}
+                    : 'max-w-5xl 2xl:max-w-6xl'
+                } mx-auto w-full px-3 sm:px-6 lg:px-8 py-6 sm:py-8 transition-all duration-300`}
               >
+                {/* Folio Editorial Canvas / Folha de Leitura e Edição Equilibrada */}
+                <div className="bg-white/95 dark:bg-[#18191d]/95 backdrop-blur-md rounded-3xl border border-stone-200/90 dark:border-stone-800/90 shadow-xl p-6 sm:p-10 lg:p-12 space-y-6">
                 {/* Breadcrumb */}
-                <div className="text-xs font-sans text-stone-400 dark:text-stone-500 flex items-center justify-between pb-1">
+                <div className="text-xs font-sans text-stone-400 dark:text-stone-500 flex items-center justify-between pb-1 border-b border-stone-100 dark:border-stone-800/60">
                   <div className="flex items-center gap-1.5 overflow-x-auto">
                     <span>Biblioteca</span>
                     <span>/</span>
@@ -2800,37 +2939,43 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                   </div>
 
                   {salvoFeedback && (
-                    <span className="text-[11px] font-bold text-emerald-600 flex items-center gap-1 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded">
+                    <span className="text-[11px] font-bold text-emerald-600 flex items-center gap-1 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded-lg border border-emerald-200 dark:border-emerald-800">
                       <Check className="w-3 h-3" /> Salvo com sucesso!
                     </span>
                   )}
                 </div>
 
-                {/* Título Principal com Edição Direta */}
+                {/* Título Principal com Edição Direta Sem Truncar */}
                 <div className="space-y-2">
                   {modoEdicao ? (
-                    <div>
-                      <label className="text-[11px] font-bold text-stone-500 uppercase tracking-wider block mb-1">
-                        Título do Arquivo / Conceito
-                      </label>
-                      <input
-                        type="text"
+                    <div className="space-y-1.5">
+                      <div className="flex items-center justify-between">
+                        <label className="text-[11px] font-bold text-stone-500 uppercase tracking-wider block">
+                          Título do Arquivo / Conceito
+                        </label>
+                        <span className="text-[10px] text-amber-700 dark:text-amber-400 font-mono font-semibold">
+                          Modo Edição Ativo
+                        </span>
+                      </div>
+                      <textarea
+                        rows={2}
                         value={tituloEditando}
                         onChange={(e) => setTituloEditando(e.target.value)}
-                        className="w-full text-xl sm:text-2xl font-serif font-bold p-2.5 rounded-xl bg-stone-100 dark:bg-stone-900 border border-stone-300 dark:border-stone-700 text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-amber-500/40"
+                        placeholder="Título da nota ou conceito..."
+                        className="w-full text-xl sm:text-2xl lg:text-3xl font-serif font-bold p-3.5 rounded-2xl bg-stone-50/90 dark:bg-stone-900/90 border border-stone-300 dark:border-stone-700 text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-amber-500/40 resize-none leading-snug shadow-inner"
                       />
                     </div>
                   ) : (
                     <div className="flex items-start justify-between gap-4">
-                      <h1 className="text-2xl sm:text-3xl font-serif font-bold text-stone-900 dark:text-stone-100 tracking-tight leading-snug">
+                      <h1 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-bold text-stone-900 dark:text-stone-100 tracking-tight leading-snug">
                         {notaAtiva.titulo}
                       </h1>
                       <button
                         onClick={() => setModoEdicao(true)}
-                        className="shrink-0 text-xs text-amber-700 dark:text-amber-400 hover:underline flex items-center gap-1 pt-1 cursor-pointer font-bold"
+                        className="shrink-0 text-xs text-amber-700 dark:text-amber-400 hover:text-amber-800 dark:hover:text-amber-300 px-3 py-1.5 rounded-xl bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-900/60 flex items-center gap-1.5 cursor-pointer font-bold shadow-2xs transition"
                       >
                         <Edit3 className="w-3.5 h-3.5" />
-                        <span>Editar</span>
+                        <span>Editar (Ctrl+E)</span>
                       </button>
                     </div>
                   )}
@@ -3000,45 +3145,23 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                           </div>
                         </div>
                       ) : (
-                        /* Exibição Normal de Propriedades */
-                        <div className="pt-2 space-y-2 text-stone-700 dark:text-stone-300">
+                        /* Exibição Normal de Propriedades em Grid Responsivo e Compacto */
+                        <div className="pt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 text-stone-700 dark:text-stone-300">
                           {/* Linha ID */}
-                          <div className="flex items-center gap-4 text-xs">
-                            <div className="w-24 text-stone-400 flex items-center gap-1.5 shrink-0 font-medium">
-                              <span className="font-mono text-stone-400">≡</span>
-                              <span>ID</span>
-                            </div>
-                            <div className="font-mono text-stone-800 dark:text-stone-200">{notaAtiva.id}</div>
-                          </div>
-
-                          {/* Linha Tags */}
-                          <div className="flex items-center gap-4 text-xs">
-                            <div className="w-24 text-stone-400 flex items-center gap-1.5 shrink-0 font-medium">
-                              <Tag className="w-3 h-3 text-stone-400" />
-                              <span>tags</span>
-                            </div>
-                            <div className="flex flex-wrap items-center gap-1.5">
-                              {notaAtiva.tags.map((t) => (
-                                <span
-                                  key={t}
-                                  className="px-2 py-0.5 rounded-full text-[11px] bg-stone-200/70 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border border-stone-300 dark:border-stone-700"
-                                >
-                                  {t}
-                                </span>
-                              ))}
-                            </div>
+                          <div className="p-2 rounded-xl bg-white/70 dark:bg-stone-900/60 border border-stone-200/60 dark:border-stone-800 flex items-center justify-between">
+                            <span className="text-[11px] font-mono text-stone-400 font-semibold uppercase">≡ ID</span>
+                            <span className="font-mono text-xs text-stone-800 dark:text-stone-200 truncate ml-2 font-bold">{notaAtiva.id}</span>
                           </div>
 
                           {/* Linha Tema */}
                           {notaAtiva.tema && (
-                            <div className="flex items-center gap-4 text-xs">
-                              <div className="w-24 text-stone-400 flex items-center gap-1.5 shrink-0 font-medium">
-                                <Folder className="w-3 h-3 text-stone-400" />
-                                <span>Tema</span>
-                              </div>
+                            <div className="p-2 rounded-xl bg-white/70 dark:bg-stone-900/60 border border-stone-200/60 dark:border-stone-800 flex items-center justify-between">
+                              <span className="text-[11px] text-stone-400 font-medium flex items-center gap-1 shrink-0">
+                                <Folder className="w-3 h-3 text-purple-500" /> Tema
+                              </span>
                               <button
                                 onClick={() => handleClicarWikilink(notaAtiva.tema || '')}
-                                className="font-semibold text-purple-700 dark:text-purple-400 underline hover:text-purple-900 cursor-pointer"
+                                className="font-semibold text-xs text-purple-700 dark:text-purple-400 underline hover:text-purple-900 cursor-pointer truncate ml-2 max-w-[180px]"
                               >
                                 {notaAtiva.tema.replace(/\[\[|\]\]/g, '')}
                               </button>
@@ -3047,14 +3170,13 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
 
                           {/* Linha Referência */}
                           {notaAtiva.referencia && (
-                            <div className="flex items-center gap-4 text-xs">
-                              <div className="w-24 text-stone-400 flex items-center gap-1.5 shrink-0 font-medium">
-                                <BookOpen className="w-3 h-3 text-stone-400" />
-                                <span>Referência</span>
-                              </div>
+                            <div className="p-2 rounded-xl bg-white/70 dark:bg-stone-900/60 border border-stone-200/60 dark:border-stone-800 flex items-center justify-between">
+                              <span className="text-[11px] text-stone-400 font-medium flex items-center gap-1 shrink-0">
+                                <BookOpen className="w-3 h-3 text-sky-500" /> Referência
+                              </span>
                               <button
                                 onClick={() => handleClicarWikilink(notaAtiva.referencia || '')}
-                                className="font-semibold text-sky-700 dark:text-sky-400 underline hover:text-sky-900 cursor-pointer truncate max-w-md"
+                                className="font-semibold text-xs text-sky-700 dark:text-sky-400 underline hover:text-sky-900 cursor-pointer truncate ml-2 max-w-[180px]"
                               >
                                 {notaAtiva.referencia.replace(/\[\[|\]\]/g, '')}
                               </button>
@@ -3063,47 +3185,60 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
 
                           {/* Linha Página */}
                           {notaAtiva.pagina && (
-                            <div className="flex items-center gap-4 text-xs">
-                              <div className="w-24 text-stone-400 flex items-center gap-1.5 shrink-0 font-medium">
-                                <span className="font-mono text-stone-400">p.</span>
-                                <span>Página</span>
-                              </div>
-                              <div className="font-bold text-stone-800 dark:text-stone-200">{notaAtiva.pagina}</div>
+                            <div className="p-2 rounded-xl bg-white/70 dark:bg-stone-900/60 border border-stone-200/60 dark:border-stone-800 flex items-center justify-between">
+                              <span className="text-[11px] text-stone-400 font-medium shrink-0">Página</span>
+                              <span className="font-mono text-xs font-bold text-stone-800 dark:text-stone-200">p. {notaAtiva.pagina}</span>
                             </div>
                           )}
 
                           {/* Linha Relação Afim */}
                           {notaAtiva.relacao && (
-                            <div className="flex items-center gap-4 text-xs">
-                              <div className="w-24 text-stone-400 flex items-center gap-1.5 shrink-0 font-medium">
-                                <Lightbulb className="w-3 h-3 text-stone-400" />
-                                <span>Relação</span>
-                              </div>
+                            <div className="p-2 rounded-xl bg-white/70 dark:bg-stone-900/60 border border-stone-200/60 dark:border-stone-800 flex items-center justify-between">
+                              <span className="text-[11px] text-stone-400 font-medium flex items-center gap-1 shrink-0">
+                                <Lightbulb className="w-3 h-3 text-emerald-500" /> Conexão
+                              </span>
                               <button
                                 onClick={() => handleClicarWikilink(notaAtiva.relacao || '')}
-                                className="font-semibold text-emerald-700 dark:text-emerald-400 underline hover:text-emerald-900 cursor-pointer truncate max-w-md"
+                                className="font-semibold text-xs text-emerald-700 dark:text-emerald-400 underline hover:text-emerald-900 cursor-pointer truncate ml-2 max-w-[180px]"
                               >
                                 {notaAtiva.relacao.replace(/\[\[|\]\]/g, '')}
                               </button>
                             </div>
                           )}
 
+                          {/* Linha Tags */}
+                          <div className="p-2 rounded-xl bg-white/70 dark:bg-stone-900/60 border border-stone-200/60 dark:border-stone-800 flex items-center justify-between sm:col-span-2 lg:col-span-3">
+                            <span className="text-[11px] text-stone-400 font-medium flex items-center gap-1 shrink-0">
+                              <Tag className="w-3 h-3 text-amber-600" /> Tags
+                            </span>
+                            <div className="flex flex-wrap items-center gap-1.5 ml-2 justify-end">
+                              {notaAtiva.tags.map((t) => (
+                                <span
+                                  key={t}
+                                  className="px-2 py-0.5 rounded-md text-[11px] bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border border-stone-300/80 dark:border-stone-700 font-mono"
+                                >
+                                  #{t}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+
                           {/* Linha Relação Dialética */}
                           {notaAtiva.tipoRelacao && (
-                            <div className="flex items-center gap-4 text-xs pt-1 border-t border-stone-200 dark:border-stone-800">
-                              <div className="w-24 text-stone-400 flex items-center gap-1.5 shrink-0 font-medium">
-                                <LinkIcon className="w-3 h-3 text-purple-500" />
+                            <div className="p-2.5 rounded-xl bg-purple-50/60 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-900/50 flex flex-wrap items-center justify-between gap-2 sm:col-span-2 lg:col-span-3 text-xs">
+                              <div className="text-stone-500 dark:text-stone-400 flex items-center gap-1.5 font-medium">
+                                <LinkIcon className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
                                 <span>Dialética</span>
                               </div>
                               <div className="flex items-center gap-2">
-                                <span className="px-2 py-0.5 rounded text-[11px] font-bold bg-purple-100 dark:bg-purple-950/60 text-purple-800 dark:text-purple-300 border border-purple-300 dark:border-purple-800">
+                                <span className="px-2 py-0.5 rounded text-[11px] font-bold bg-purple-100 dark:bg-purple-950/80 text-purple-800 dark:text-purple-300 border border-purple-300 dark:border-purple-800">
                                   {notaAtiva.tipoRelacao === 'contraponto' ? '⚡ Contraponto / Objeção' :
                                    notaAtiva.tipoRelacao === 'desenvolve' ? '🌲 Desenvolve / Aprofunda' :
                                    notaAtiva.tipoRelacao === 'complementa' ? '🧩 Complementa / Afim' :
                                    notaAtiva.tipoRelacao === 'aplica' ? '💡 Aplica / Exemplo' : '📜 Origem Histórica'}
                                 </span>
                                 {notaAtiva.justificativaRelacao && (
-                                  <span className="text-xs text-stone-500 italic">"{notaAtiva.justificativaRelacao}"</span>
+                                  <span className="text-xs text-stone-600 dark:text-stone-300 italic">"{notaAtiva.justificativaRelacao}"</span>
                                 )}
                               </div>
                             </div>
@@ -3111,7 +3246,7 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
 
                           {/* Citação Original de Apoio */}
                           {notaAtiva.citacaoOriginal && (
-                            <div className="p-3 rounded-xl bg-amber-50/70 dark:bg-amber-950/30 border-l-2 border-amber-600 text-xs font-serif italic text-stone-700 dark:text-amber-100/90">
+                            <div className="p-3 rounded-xl bg-amber-50/70 dark:bg-amber-950/30 border-l-3 border-amber-600 text-xs font-serif italic text-stone-700 dark:text-amber-100/90 sm:col-span-2 lg:col-span-3">
                               "{notaAtiva.citacaoOriginal}"
                             </div>
                           )}
@@ -3125,168 +3260,152 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                 <div className="py-2">
                   {modoEdicao ? (
                     <div className="space-y-3">
-                      {/* BARRA DE FERRAMENTAS DE FORMATAÇÃO E MARCADORES (Itens 4 e 5) */}
-                      <div className="flex flex-col gap-2 p-2.5 rounded-xl bg-stone-100/90 dark:bg-stone-900/90 border border-stone-200 dark:border-stone-800 text-xs shadow-2xs">
-                        {/* Linha 1: Marcadores Semânticos */}
+                      {/* BARRA DE FERRAMENTAS DE FORMATAÇÃO UNIFICADA E ELEGANTE (Imagem 4) */}
+                      <div className="p-2 sm:p-2.5 rounded-2xl bg-stone-100/90 dark:bg-[#1f2026]/90 border border-stone-200 dark:border-stone-800 text-xs shadow-2xs space-y-2">
                         <div className="flex flex-wrap items-center gap-1.5">
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-stone-400 mr-1 hidden sm:inline">
-                            Marcadores:
-                          </span>
-
-                          {/* ==Marca-texto== */}
+                          {/* Segmento 1: Marcadores Semânticos */}
                           <button
                             type="button"
                             onClick={() => aplicarFormatacaoNoEditor('marcatexto', false)}
-                            className="px-2.5 py-1 rounded-lg bg-yellow-100 text-yellow-900 dark:bg-yellow-500/20 dark:text-yellow-300 border border-yellow-300/80 dark:border-yellow-500/40 font-medium hover:bg-yellow-200 dark:hover:bg-yellow-500/30 flex items-center gap-1.5 transition cursor-pointer shadow-2xs"
+                            className="px-2.5 py-1 rounded-xl bg-yellow-100 text-yellow-900 dark:bg-yellow-500/20 dark:text-yellow-300 border border-yellow-300/80 dark:border-yellow-500/40 font-semibold hover:bg-yellow-200 dark:hover:bg-yellow-500/30 flex items-center gap-1.5 transition cursor-pointer shadow-2xs"
                             title="Destacar com marca-texto amarelo (Ctrl+H)"
                           >
                             <Highlighter className="w-3.5 h-3.5 text-amber-600 dark:text-yellow-400" />
-                            <span className="font-semibold">==Marca-texto==</span>
+                            <span>==Marca-texto==</span>
                           </button>
 
-                          {/* + #citação */}
                           <button
                             type="button"
                             onClick={() => aplicarFormatacaoNoEditor('citacao', false)}
-                            className="px-2.5 py-1 rounded-lg bg-amber-100 text-amber-900 dark:bg-amber-950/70 dark:text-amber-300 border border-amber-300/80 dark:border-amber-800 font-medium hover:bg-amber-200 dark:hover:bg-amber-900/60 flex items-center gap-1.5 transition cursor-pointer shadow-2xs"
+                            className="px-2.5 py-1 rounded-xl bg-amber-100 text-amber-900 dark:bg-amber-950/70 dark:text-amber-300 border border-amber-300/80 dark:border-amber-800 font-semibold hover:bg-amber-200 dark:hover:bg-amber-900/60 flex items-center gap-1.5 transition cursor-pointer shadow-2xs"
                             title="Formatar como citação de autor/livro (Ctrl+Q)"
                           >
                             <Quote className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
                             <span>+ #citação</span>
                           </button>
 
-                          {/* + #síntese */}
                           <button
                             type="button"
                             onClick={() => aplicarFormatacaoNoEditor('sintese', false)}
-                            className="px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-900 dark:bg-emerald-950/70 dark:text-emerald-300 border border-emerald-300/80 dark:border-emerald-800 font-medium hover:bg-emerald-200 dark:hover:bg-emerald-900/60 flex items-center gap-1.5 transition cursor-pointer shadow-2xs"
+                            className="px-2.5 py-1 rounded-xl bg-emerald-100 text-emerald-900 dark:bg-emerald-950/70 dark:text-emerald-300 border border-emerald-300/80 dark:border-emerald-800 font-semibold hover:bg-emerald-200 dark:hover:bg-emerald-900/60 flex items-center gap-1.5 transition cursor-pointer shadow-2xs"
                             title="Formatar como síntese conceitual"
                           >
                             <Sparkles className="w-3.5 h-3.5 text-emerald-700 dark:text-emerald-400" />
                             <span>+ #síntese</span>
                           </button>
 
-                          {/* + #comentário */}
                           <button
                             type="button"
                             onClick={() => aplicarFormatacaoNoEditor('comentario', false)}
-                            className="px-2.5 py-1 rounded-lg bg-sky-100 text-sky-900 dark:bg-sky-950/70 dark:text-sky-300 border border-sky-300/80 dark:border-sky-800 font-medium hover:bg-sky-200 dark:hover:bg-sky-900/60 flex items-center gap-1.5 transition cursor-pointer shadow-2xs"
-                            title="Formatar como nota/comentário pessoal (Ctrl+M)"
+                            className="px-2.5 py-1 rounded-xl bg-sky-100 text-sky-900 dark:bg-sky-950/70 dark:text-sky-300 border border-sky-300/80 dark:border-sky-800 font-semibold hover:bg-sky-200 dark:hover:bg-sky-900/60 flex items-center gap-1.5 transition cursor-pointer shadow-2xs"
+                            title="Formatar como comentário pessoal (Ctrl+M)"
                           >
                             <Lightbulb className="w-3.5 h-3.5 text-sky-700 dark:text-sky-400" />
                             <span>+ #comentário</span>
                           </button>
 
-                          {/* + #NotebookLM (Item 4: Alto contraste, elegante índigo/violeta com Sparkles) */}
                           <button
                             type="button"
                             onClick={() => aplicarFormatacaoNoEditor('notebooklm', false)}
-                            className="px-2.5 py-1 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 active:scale-95 border border-indigo-700/60 font-semibold flex items-center gap-1.5 transition cursor-pointer shadow-xs"
-                            title="Inserir bloco de ideias do NotebookLM com alto contraste (Ctrl+L)"
+                            className="px-2.5 py-1 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 active:scale-95 border border-indigo-700/60 font-semibold flex items-center gap-1.5 transition cursor-pointer shadow-xs"
+                            title="Inserir bloco de ideias do NotebookLM (Ctrl+L)"
                           >
                             <Sparkles className="w-3.5 h-3.5 text-indigo-200" />
                             <span>+ #NotebookLM</span>
                           </button>
 
-                          {/* + [[Wikilink]] */}
                           <button
                             type="button"
                             onClick={() => aplicarFormatacaoNoEditor('wikilink', false)}
-                            className="px-2.5 py-1 rounded-lg bg-stone-200/90 text-stone-800 dark:bg-stone-800 dark:text-stone-200 hover:bg-stone-300 dark:hover:bg-stone-700 border border-stone-300 dark:border-stone-700 font-medium flex items-center gap-1.5 transition cursor-pointer shadow-2xs"
+                            className="px-2.5 py-1 rounded-xl bg-stone-200/90 text-stone-800 dark:bg-stone-800 dark:text-stone-200 hover:bg-stone-300 dark:hover:bg-stone-700 border border-stone-300 dark:border-stone-700 font-semibold flex items-center gap-1.5 transition cursor-pointer shadow-2xs"
                             title="Inserir conexão bidirecional [[Wikilink]] (Ctrl+K)"
                           >
                             <LinkIcon className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
                             <span>[[Wikilink]]</span>
                           </button>
-                        </div>
 
-                        {/* Linha 2: Estrutura Editorial & Tipografia (Item 5) */}
-                        <div className="flex flex-wrap items-center gap-1 pt-1.5 border-t border-stone-200/70 dark:border-stone-800/70">
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-stone-400 mr-1 hidden sm:inline">
-                            Estrutura:
-                          </span>
+                          <span className="h-5 w-px bg-stone-300 dark:bg-stone-700 mx-1 hidden sm:inline-block" />
 
-                          <button
-                            type="button"
-                            onClick={() => aplicarFormatacaoNoEditor('titulo', false)}
-                            className="px-2 py-1 rounded hover:bg-stone-200 dark:hover:bg-stone-800 text-stone-700 dark:text-stone-300 flex items-center gap-1 transition cursor-pointer"
-                            title="Título H1 (# Título)"
-                          >
-                            <Heading1 className="w-3.5 h-3.5 text-amber-600" />
-                            <span className="font-semibold text-[11px]">H1</span>
-                          </button>
+                          {/* Segmento 2: Estrutura & Tipografia */}
+                          <div className="flex items-center gap-1">
+                            <button
+                              type="button"
+                              onClick={() => aplicarFormatacaoNoEditor('titulo', false)}
+                              className="px-2 py-1 rounded-lg hover:bg-stone-200 dark:hover:bg-stone-800 text-stone-700 dark:text-stone-300 font-bold text-xs flex items-center gap-1 transition cursor-pointer"
+                              title="Título H1 (# Título)"
+                            >
+                              <Heading1 className="w-3.5 h-3.5 text-amber-600" />
+                              <span>H1</span>
+                            </button>
 
-                          <button
-                            type="button"
-                            onClick={() => aplicarFormatacaoNoEditor('subtitulo', false)}
-                            className="px-2 py-1 rounded hover:bg-stone-200 dark:hover:bg-stone-800 text-stone-700 dark:text-stone-300 flex items-center gap-1 transition cursor-pointer"
-                            title="Subtítulo H2 (## Subtítulo)"
-                          >
-                            <Heading2 className="w-3.5 h-3.5 text-amber-600" />
-                            <span className="font-semibold text-[11px]">H2</span>
-                          </button>
+                            <button
+                              type="button"
+                              onClick={() => aplicarFormatacaoNoEditor('subtitulo', false)}
+                              className="px-2 py-1 rounded-lg hover:bg-stone-200 dark:hover:bg-stone-800 text-stone-700 dark:text-stone-300 font-bold text-xs flex items-center gap-1 transition cursor-pointer"
+                              title="Subtítulo H2 (## Subtítulo)"
+                            >
+                              <Heading2 className="w-3.5 h-3.5 text-amber-600" />
+                              <span>H2</span>
+                            </button>
 
-                          <button
-                            type="button"
-                            onClick={() => aplicarFormatacaoNoEditor('secao', false)}
-                            className="px-2 py-1 rounded hover:bg-stone-200 dark:hover:bg-stone-800 text-stone-700 dark:text-stone-300 flex items-center gap-1 transition cursor-pointer"
-                            title="Seção H3 (### Seção)"
-                          >
-                            <Heading3 className="w-3.5 h-3.5 text-amber-600" />
-                            <span className="font-semibold text-[11px]">H3</span>
-                          </button>
+                            <button
+                              type="button"
+                              onClick={() => aplicarFormatacaoNoEditor('secao', false)}
+                              className="px-2 py-1 rounded-lg hover:bg-stone-200 dark:hover:bg-stone-800 text-stone-700 dark:text-stone-300 font-bold text-xs flex items-center gap-1 transition cursor-pointer"
+                              title="Seção H3 (### Seção)"
+                            >
+                              <Heading3 className="w-3.5 h-3.5 text-amber-600" />
+                              <span>H3</span>
+                            </button>
 
-                          <span className="h-3.5 w-px bg-stone-300 dark:bg-stone-700 mx-1" />
+                            <button
+                              type="button"
+                              onClick={() => aplicarFormatacaoNoEditor('negrito', false)}
+                              className="p-1.5 rounded-lg hover:bg-stone-200 dark:hover:bg-stone-800 text-stone-700 dark:text-stone-300 transition cursor-pointer"
+                              title="Negrito (**texto**) (Ctrl+B)"
+                            >
+                              <Bold className="w-3.5 h-3.5" />
+                            </button>
 
-                          <button
-                            type="button"
-                            onClick={() => aplicarFormatacaoNoEditor('negrito', false)}
-                            className="p-1.5 rounded hover:bg-stone-200 dark:hover:bg-stone-800 text-stone-700 dark:text-stone-300 transition cursor-pointer"
-                            title="Negrito (**texto**) (Ctrl+B)"
-                          >
-                            <Bold className="w-3.5 h-3.5" />
-                          </button>
+                            <button
+                              type="button"
+                              onClick={() => aplicarFormatacaoNoEditor('italico', false)}
+                              className="p-1.5 rounded-lg hover:bg-stone-200 dark:hover:bg-stone-800 text-stone-700 dark:text-stone-300 transition cursor-pointer"
+                              title="Itálico (*texto*) (Ctrl+I)"
+                            >
+                              <Italic className="w-3.5 h-3.5" />
+                            </button>
 
-                          <button
-                            type="button"
-                            onClick={() => aplicarFormatacaoNoEditor('italico', false)}
-                            className="p-1.5 rounded hover:bg-stone-200 dark:hover:bg-stone-800 text-stone-700 dark:text-stone-300 transition cursor-pointer"
-                            title="Itálico (*texto*) (Ctrl+I)"
-                          >
-                            <Italic className="w-3.5 h-3.5" />
-                          </button>
+                            <button
+                              type="button"
+                              onClick={() => aplicarFormatacaoNoEditor('lista', false)}
+                              className="px-2 py-1 rounded-lg hover:bg-stone-200 dark:hover:bg-stone-800 text-stone-700 dark:text-stone-300 flex items-center gap-1 transition cursor-pointer text-xs"
+                              title="Lista com marcadores (- item)"
+                            >
+                              <List className="w-3.5 h-3.5 text-stone-500" />
+                              <span className="hidden md:inline">Lista</span>
+                            </button>
 
-                          <span className="h-3.5 w-px bg-stone-300 dark:bg-stone-700 mx-1" />
+                            <button
+                              type="button"
+                              onClick={() => aplicarFormatacaoNoEditor('lista-numerada', false)}
+                              className="px-2 py-1 rounded-lg hover:bg-stone-200 dark:hover:bg-stone-800 text-stone-700 dark:text-stone-300 flex items-center gap-1 transition cursor-pointer text-xs"
+                              title="Lista numerada (1. item)"
+                            >
+                              <ListOrdered className="w-3.5 h-3.5 text-stone-500" />
+                              <span className="hidden md:inline">1. 2. 3.</span>
+                            </button>
 
-                          <button
-                            type="button"
-                            onClick={() => aplicarFormatacaoNoEditor('lista', false)}
-                            className="px-2 py-1 rounded hover:bg-stone-200 dark:hover:bg-stone-800 text-stone-700 dark:text-stone-300 flex items-center gap-1 transition cursor-pointer"
-                            title="Lista com marcadores (- item)"
-                          >
-                            <List className="w-3.5 h-3.5 text-stone-500" />
-                            <span className="text-[11px]">Lista</span>
-                          </button>
-
-                          <button
-                            type="button"
-                            onClick={() => aplicarFormatacaoNoEditor('lista-numerada', false)}
-                            className="px-2 py-1 rounded hover:bg-stone-200 dark:hover:bg-stone-800 text-stone-700 dark:text-stone-300 flex items-center gap-1 transition cursor-pointer"
-                            title="Lista numerada (1. item)"
-                          >
-                            <ListOrdered className="w-3.5 h-3.5 text-stone-500" />
-                            <span className="text-[11px]">1. 2. 3.</span>
-                          </button>
-
-                          <button
-                            type="button"
-                            onClick={() => aplicarFormatacaoNoEditor('divisor', false)}
-                            className="px-2 py-1 rounded hover:bg-stone-200 dark:hover:bg-stone-800 text-stone-700 dark:text-stone-300 flex items-center gap-1 transition cursor-pointer"
-                            title="Divisor de seção (---)"
-                          >
-                            <Minus className="w-3.5 h-3.5 text-stone-500" />
-                            <span className="text-[11px]">Divisor</span>
-                          </button>
+                            <button
+                              type="button"
+                              onClick={() => aplicarFormatacaoNoEditor('divisor', false)}
+                              className="px-2 py-1 rounded-lg hover:bg-stone-200 dark:hover:bg-stone-800 text-stone-700 dark:text-stone-300 flex items-center gap-1 transition cursor-pointer text-xs"
+                              title="Divisor de seção (---)"
+                            >
+                              <Minus className="w-3.5 h-3.5 text-stone-500" />
+                              <span className="hidden md:inline">Divisor</span>
+                            </button>
+                          </div>
                         </div>
                       </div>
 
@@ -3296,18 +3415,19 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                         value={conteudoEditando}
                         onChange={(e) => setConteudoEditando(e.target.value)}
                         onKeyDown={(e) => handleKeyDownTextarea(e, false)}
-                        className="w-full p-4 font-mono text-xs sm:text-sm rounded-xl bg-stone-50 dark:bg-stone-900 border border-stone-300 dark:border-stone-700 text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-amber-500/40 leading-relaxed"
+                        placeholder="Escreva suas notas atômicas em Markdown..."
+                        className="w-full p-5 sm:p-6 font-mono text-xs sm:text-sm rounded-2xl bg-stone-50/70 dark:bg-[#131417]/90 border border-stone-300/80 dark:border-stone-700/80 text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-amber-500/40 leading-relaxed shadow-inner min-h-[360px]"
                       />
 
-                      {/* BARRA DE ATALHOS RÁPIDOS INTERATIVA (Item 7) */}
-                      <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-stone-200 dark:border-stone-800 text-xs">
+                      {/* BARRA DE ATALHOS RÁPIDOS E AÇÕES (Imagem 4) */}
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t border-stone-200 dark:border-stone-800 text-xs">
                         <div className="flex flex-wrap items-center gap-1.5 text-[11px] text-stone-500">
-                          <span className="font-semibold text-stone-600 dark:text-stone-400">Atalhos rápidos:</span>
+                          <span className="font-semibold text-stone-600 dark:text-stone-400 mr-0.5">Atalhos rápidos:</span>
                           <button
                             type="button"
                             onClick={() => aplicarFormatacaoNoEditor('marcatexto', false)}
                             className="px-2 py-0.5 rounded-md bg-yellow-100/90 hover:bg-yellow-200 dark:bg-yellow-900/40 dark:hover:bg-yellow-800/60 text-yellow-800 dark:text-yellow-300 border border-yellow-300/60 dark:border-yellow-700/50 font-mono transition cursor-pointer"
-                            title="Aplicar marca-texto no trecho selecionado (Ctrl+H)"
+                            title="Ctrl+H"
                           >
                             <span className="font-bold">Ctrl+H</span> marca-texto
                           </button>
@@ -3315,7 +3435,7 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                             type="button"
                             onClick={() => aplicarFormatacaoNoEditor('citacao', false)}
                             className="px-2 py-0.5 rounded-md bg-amber-100/90 hover:bg-amber-200 dark:bg-amber-900/40 dark:hover:bg-amber-800/60 text-amber-800 dark:text-amber-300 border border-amber-300/60 dark:border-amber-700/50 font-mono transition cursor-pointer"
-                            title="Formatar trecho como citação (Ctrl+Q)"
+                            title="Ctrl+Q"
                           >
                             <span className="font-bold">Ctrl+Q</span> citação
                           </button>
@@ -3323,7 +3443,7 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                             type="button"
                             onClick={() => aplicarFormatacaoNoEditor('negrito', false)}
                             className="px-2 py-0.5 rounded-md bg-stone-200/80 hover:bg-stone-300/80 dark:bg-stone-800 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-300 border border-stone-300/70 dark:border-stone-700 font-mono transition cursor-pointer"
-                            title="Formatar trecho em negrito (Ctrl+B)"
+                            title="Ctrl+B"
                           >
                             <span className="font-bold">Ctrl+B</span> negrito
                           </button>
@@ -3331,7 +3451,7 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                             type="button"
                             onClick={() => aplicarFormatacaoNoEditor('comentario', false)}
                             className="px-2 py-0.5 rounded-md bg-sky-100/90 hover:bg-sky-200 dark:bg-sky-900/40 dark:hover:bg-sky-800/60 text-sky-800 dark:text-sky-300 border border-sky-300/60 dark:border-sky-700/50 font-mono transition cursor-pointer"
-                            title="Inserir comentário pessoal (Ctrl+M)"
+                            title="Ctrl+M"
                           >
                             <span className="font-bold">Ctrl+M</span> comentário
                           </button>
@@ -3339,29 +3459,30 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                             type="button"
                             onClick={() => aplicarFormatacaoNoEditor('notebooklm', false)}
                             className="px-2 py-0.5 rounded-md bg-indigo-100 hover:bg-indigo-200 dark:bg-indigo-950/70 dark:hover:bg-indigo-900/80 text-indigo-800 dark:text-indigo-300 border border-indigo-300/60 dark:border-indigo-800/50 font-mono transition cursor-pointer"
-                            title="Inserir bloco de ideias do NotebookLM (Ctrl+L)"
+                            title="Ctrl+L"
                           >
                             <span className="font-bold">Ctrl+L</span> NotebookLM
                           </button>
-                          <span className="px-2 py-0.5 rounded-md bg-stone-100 dark:bg-stone-800 text-stone-500 font-mono border border-stone-200 dark:border-stone-700">
-                            <span className="font-bold">Ctrl+Enter</span> salvar
+                          <span className="px-2 py-0.5 rounded-md bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-400 font-mono border border-stone-200 dark:border-stone-700 font-semibold">
+                            Ctrl+Enter salvar
                           </span>
                         </div>
 
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
                           <button
                             type="button"
                             onClick={() => setModoEdicao(false)}
-                            className="px-4 py-1.5 rounded-lg text-xs font-medium text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800 cursor-pointer transition"
+                            className="px-4 py-2 rounded-xl text-xs font-semibold text-stone-600 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800 cursor-pointer transition"
                           >
                             Cancelar
                           </button>
                           <button
                             type="button"
                             onClick={handleSalvarEdicao}
-                            className="px-4 py-1.5 rounded-lg text-xs font-bold bg-amber-700 hover:bg-amber-600 text-white shadow-xs cursor-pointer transition"
+                            className="px-5 py-2 rounded-xl text-xs font-bold bg-amber-700 hover:bg-amber-600 text-white shadow-md cursor-pointer transition flex items-center gap-1.5"
                           >
-                            Salvar Alterações
+                            <Check className="w-3.5 h-3.5" />
+                            <span>Salvar Alterações</span>
                           </button>
                         </div>
                       </div>
@@ -3372,51 +3493,41 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                       className="cursor-text select-text"
                       title="Dica: clique duplo para editar rapidamente"
                     >
-                      {/* HUB AUTOMÁTICO DE CONEXÕES DO ÍNDICE / MACROTEMA (Item 1 e Imagem 2) */}
-                      {notaAtiva.tipo === 'indice' && (
-                        <div className="mb-8 p-5 rounded-2xl bg-stone-50/90 dark:bg-[#16171a]/90 border border-stone-200 dark:border-stone-800/80 shadow-xs space-y-5">
-                          <div className="flex items-center justify-between border-b border-stone-200/80 dark:border-stone-800/80 pb-3">
-                            <div className="flex items-center gap-2">
-                              <Folder className="w-4 h-4 text-amber-600" />
-                              <h3 className="font-serif font-bold text-stone-900 dark:text-stone-100 text-sm">
-                                Conexões Automáticas deste Macrotema
-                              </h3>
-                            </div>
-                            <div className="flex items-center gap-2 text-xs text-stone-500 font-sans">
-                              <span className="px-2 py-0.5 rounded-full bg-sky-100 dark:bg-sky-950/60 text-sky-800 dark:text-sky-300 font-medium">
-                                {itensDoIndiceAtivo.refs.length} referências
-                              </span>
-                              <span className="px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 font-medium">
-                                {itensDoIndiceAtivo.perms.length} permanentes
-                              </span>
-                            </div>
-                          </div>
+                      {/* Conteúdo Renderizado da Nota */}
+                      {renderizarTextoFormatado(notaAtiva.conteudo, notaAtiva)}
 
-                          {/* Seção 1: Referências */}
-                          <div className="space-y-2">
-                            <div className="flex items-center justify-between">
-                              <span className="text-xs font-bold uppercase tracking-wider text-sky-800 dark:text-sky-400 flex items-center gap-1.5">
-                                <BookOpen className="w-3.5 h-3.5" />
-                                Referências e Obras
-                              </span>
+                      {/* Fallback para índices que não possuem seções markdown explícitas no corpo */}
+                      {notaAtiva.tipo === 'indice' && !notaAtiva.conteudo.toLowerCase().includes('referências') && !notaAtiva.conteudo.toLowerCase().includes('referencias') && (
+                        <div className="mt-8 pt-6 border-t border-stone-200 dark:border-stone-800 space-y-6">
+                          <div className="space-y-3">
+                            <div className="flex items-center justify-between border-b border-stone-200 dark:border-stone-800 pb-2.5">
+                              <div className="flex items-center gap-2">
+                                <BookOpen className="w-5 h-5 text-sky-600 dark:text-sky-400" />
+                                <h2 className="text-lg sm:text-xl font-serif font-bold text-stone-900 dark:text-stone-100">
+                                  Referências e Obras
+                                </h2>
+                                <span className="px-2 py-0.5 rounded-full text-xs font-mono font-bold bg-sky-100 dark:bg-sky-950/70 text-sky-800 dark:text-sky-300">
+                                  {itensDoIndiceAtivo.refs.length}
+                                </span>
+                              </div>
                               <button
+                                type="button"
                                 onClick={() => {
                                   const temaNum = parseInt(notaAtiva.titulo.match(/^(\d+)/)?.[1] || '0', 10);
                                   abrirCriadorPermanente({ tipo: 'referencia', temaNum, temaTitulo: notaAtiva.titulo });
                                 }}
-                                className="text-[11px] text-sky-700 dark:text-sky-400 hover:underline flex items-center gap-1 cursor-pointer font-semibold"
+                                className="px-3 py-1.5 rounded-xl bg-sky-50 hover:bg-sky-100 dark:bg-sky-950/60 text-sky-700 dark:text-sky-300 border border-sky-300/80 dark:border-sky-800 text-xs font-bold flex items-center gap-1.5 shadow-2xs transition cursor-pointer"
                               >
-                                <Plus className="w-3 h-3" />
-                                <span>Vincular Referência</span>
+                                <Plus className="w-3.5 h-3.5" />
+                                <span>+ Vincular Referência</span>
                               </button>
                             </div>
-
                             {itensDoIndiceAtivo.refs.length === 0 ? (
-                              <div className="p-3.5 rounded-xl border border-dashed border-stone-200 dark:border-stone-800 text-xs text-stone-400 italic bg-white/40 dark:bg-stone-900/40">
-                                Nenhuma referência vinculada a este macrotema ainda.
+                              <div className="p-4 rounded-2xl border border-dashed border-stone-200 dark:border-stone-800 text-xs text-stone-400 italic bg-stone-50/50 dark:bg-stone-900/30">
+                                Nenhuma obra ou referência bibliográfica vinculada a este macrotema ainda.
                               </div>
                             ) : (
-                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
                                 {itensDoIndiceAtivo.refs.map((ref) => (
                                   <div
                                     key={ref.id}
@@ -3424,11 +3535,13 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                                       e.stopPropagation();
                                       selecionarNotaZettel(ref.id);
                                     }}
-                                    className="p-3 rounded-xl bg-white dark:bg-stone-900/90 border border-stone-200/90 dark:border-stone-800 hover:border-sky-400 dark:hover:border-sky-600 transition cursor-pointer shadow-2xs group flex items-start gap-2.5"
+                                    className="p-3.5 rounded-2xl bg-white dark:bg-stone-900 border border-stone-200/90 dark:border-stone-800 hover:border-sky-400 dark:hover:border-sky-600 transition cursor-pointer shadow-2xs hover:shadow-sm group flex items-start gap-3"
                                   >
-                                    <BookOpen className="w-4 h-4 text-sky-600 dark:text-sky-400 shrink-0 mt-0.5 group-hover:scale-110 transition-transform" />
+                                    <div className="w-8 h-8 rounded-xl bg-sky-50 dark:bg-sky-950/80 border border-sky-200 dark:border-sky-900/80 flex items-center justify-center text-sky-600 dark:text-sky-400 shrink-0 group-hover:scale-105 transition-transform">
+                                      <BookOpen className="w-4 h-4" />
+                                    </div>
                                     <div className="min-w-0 flex-1">
-                                      <div className="text-xs font-bold text-stone-900 dark:text-stone-100 group-hover:text-sky-700 dark:group-hover:text-sky-300 truncate">
+                                      <div className="text-xs sm:text-sm font-bold text-stone-900 dark:text-stone-100 group-hover:text-sky-700 dark:group-hover:text-sky-300 truncate">
                                         {ref.titulo}
                                       </div>
                                       <div className="text-[10px] text-stone-400 font-mono truncate mt-0.5">{ref.id}</div>
@@ -3439,31 +3552,35 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                             )}
                           </div>
 
-                          {/* Seção 2: Notas Permanentes */}
-                          <div className="space-y-2 pt-2 border-t border-stone-200/60 dark:border-stone-800/60">
-                            <div className="flex items-center justify-between">
-                              <span className="text-xs font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-400 flex items-center gap-1.5">
-                                <Lightbulb className="w-3.5 h-3.5" />
-                                Notas Permanentes e Ideias
-                              </span>
+                          <div className="space-y-3">
+                            <div className="flex items-center justify-between border-b border-stone-200 dark:border-stone-800 pb-2.5">
+                              <div className="flex items-center gap-2">
+                                <Lightbulb className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                                <h2 className="text-lg sm:text-xl font-serif font-bold text-stone-900 dark:text-stone-100">
+                                  Notas Relacionadas e Ideias
+                                </h2>
+                                <span className="px-2 py-0.5 rounded-full text-xs font-mono font-bold bg-emerald-100 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-300">
+                                  {itensDoIndiceAtivo.perms.length}
+                                </span>
+                              </div>
                               <button
+                                type="button"
                                 onClick={() => {
                                   const temaNum = parseInt(notaAtiva.titulo.match(/^(\d+)/)?.[1] || '0', 10);
                                   abrirCriadorPermanente({ tipo: 'permanente', temaNum, temaTitulo: notaAtiva.titulo });
                                 }}
-                                className="text-[11px] text-emerald-700 dark:text-emerald-400 hover:underline flex items-center gap-1 cursor-pointer font-semibold"
+                                className="px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-300/80 dark:border-emerald-800 text-xs font-bold flex items-center gap-1.5 shadow-2xs transition cursor-pointer"
                               >
-                                <Plus className="w-3 h-3" />
-                                <span>Nova Permanente</span>
+                                <Plus className="w-3.5 h-3.5" />
+                                <span>+ Nova Permanente</span>
                               </button>
                             </div>
-
                             {itensDoIndiceAtivo.perms.length === 0 ? (
-                              <div className="p-3.5 rounded-xl border border-dashed border-stone-200 dark:border-stone-800 text-xs text-stone-400 italic bg-white/40 dark:bg-stone-900/40">
+                              <div className="p-4 rounded-2xl border border-dashed border-stone-200 dark:border-stone-800 text-xs text-stone-400 italic bg-stone-50/50 dark:bg-stone-900/30">
                                 Nenhuma nota permanente vinculada a este macrotema ainda.
                               </div>
                             ) : (
-                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
                                 {itensDoIndiceAtivo.perms.map((perm) => (
                                   <div
                                     key={perm.id}
@@ -3471,14 +3588,16 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                                       e.stopPropagation();
                                       selecionarNotaZettel(perm.id);
                                     }}
-                                    className="p-3 rounded-xl bg-white dark:bg-stone-900/90 border border-stone-200/90 dark:border-stone-800 hover:border-emerald-400 dark:hover:border-emerald-600 transition cursor-pointer shadow-2xs group flex items-start gap-2.5"
+                                    className="p-3.5 rounded-2xl bg-white dark:bg-stone-900 border border-stone-200/90 dark:border-stone-800 hover:border-emerald-400 dark:hover:border-emerald-600 transition cursor-pointer shadow-2xs hover:shadow-sm group flex items-start gap-3"
                                   >
-                                    <Lightbulb className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5 group-hover:scale-110 transition-transform" />
+                                    <div className="w-8 h-8 rounded-xl bg-emerald-50 dark:bg-emerald-950/80 border border-emerald-200 dark:border-emerald-900/80 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shrink-0 group-hover:scale-105 transition-transform">
+                                      <Lightbulb className="w-4 h-4" />
+                                    </div>
                                     <div className="min-w-0 flex-1">
-                                      <div className="text-xs font-bold text-stone-900 dark:text-stone-100 group-hover:text-emerald-700 dark:group-hover:text-emerald-300 truncate">
+                                      <div className="text-xs sm:text-sm font-bold text-stone-900 dark:text-stone-100 group-hover:text-emerald-700 dark:group-hover:text-emerald-300 truncate">
                                         {perm.titulo}
                                       </div>
-                                      <div className="flex items-center gap-1.5 mt-0.5">
+                                      <div className="flex items-center gap-2 mt-0.5">
                                         <span className="text-[10px] text-stone-400 font-mono truncate">{perm.id}</span>
                                         {perm.tipoRelacao && (
                                           <span className="text-[9px] px-1.5 py-0.2 rounded bg-purple-100 dark:bg-purple-950 text-purple-700 dark:text-purple-300 font-semibold truncate">
@@ -3494,9 +3613,6 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                           </div>
                         </div>
                       )}
-
-                      {/* Conteúdo Renderizado da Nota */}
-                      {renderizarTextoFormatado(notaAtiva.conteudo, notaAtiva)}
 
                       {/* BARRA DE AÇÃO INFERIOR PARA EDIÇÃO RÁPIDA SEM SUBIR A PÁGINA (Item 3) */}
                       <div className="mt-12 pt-6 border-t border-stone-200/80 dark:border-stone-800/80 flex flex-wrap items-center justify-between gap-3 text-xs bg-stone-50/70 dark:bg-stone-900/40 p-4 rounded-2xl">
@@ -3533,6 +3649,7 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                       </div>
                     </div>
                   )}
+                </div>
                 </div>
               </div>
 

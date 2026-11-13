@@ -90,7 +90,7 @@ export const DiarioCadernoReal: React.FC = () => {
         estiloDotGridAtivo ? 'dot-grid-paper' : ''
       }`}
     >
-      <div className="max-w-5xl mx-auto space-y-6">
+      <div className="max-w-6xl xl:max-w-7xl mx-auto space-y-6">
         {/* ======================================================== */}
         {/* CABEÇALHO DO CADERNO (MÓDULO 1: METADADOS DO VOLUME)     */}
         {/* ======================================================== */}
