@@ -182,9 +182,9 @@ export const App: React.FC = () => {
 
       {/* Conteúdo Principal */}
       <main className={`flex-1 w-full mx-auto transition-all duration-300 ${
-        visaoAtiva === 'zettelkasten' || visaoAtiva === 'linha-tempo'
-          ? 'max-w-[1920px] px-2 sm:px-4 lg:px-6 py-3 sm:py-4'
-          : 'max-w-7xl px-4 sm:px-6 py-6 sm:py-8'
+        visaoAtiva === 'zettelkasten' || visaoAtiva === 'linha-tempo' || visaoAtiva === 'grafo'
+          ? 'max-w-[2200px] w-full px-2 sm:px-4 lg:px-6 py-3 sm:py-4'
+          : 'max-w-7xl 2xl:max-w-[1600px] px-4 sm:px-6 py-6 sm:py-8'
       }`}>
         {visaoAtiva === 'estante' ? (
           <>

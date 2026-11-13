@@ -950,12 +950,13 @@ export const LinhaDoTempo: React.FC<LinhaDoTempoProps> = ({
                                   <div className="flex items-start gap-3 pt-1">
                                     {/* Capa */}
                                     <div
-                                      className={`rounded-md overflow-hidden shadow-md shrink-0 border border-stone-300 dark:border-stone-700 bg-stone-100 dark:bg-stone-800 relative group-hover/card:scale-105 transition-transform ${
+                                      className={`rounded-lg overflow-hidden shadow-book shrink-0 border border-black/15 dark:border-stone-700/60 bg-stone-100 dark:bg-stone-800 relative group-hover/card:scale-105 transition-transform ${
                                         densidade === 'confortavel'
-                                          ? 'w-18 h-26 sm:w-20 sm:h-28'
-                                          : 'w-14 h-20 sm:w-16 sm:h-22'
+                                          ? 'w-20 h-28 sm:w-24 sm:h-32'
+                                          : 'w-14 h-20 sm:w-16 sm:h-24'
                                       }`}
                                     >
+                                      <div className="absolute left-0 top-0 bottom-0 w-1.5 pointer-events-none bg-gradient-to-r from-black/40 via-black/20 to-transparent z-10" />
                                       {livro.capa_url ? (
                                         <img
                                           src={livro.capa_url}

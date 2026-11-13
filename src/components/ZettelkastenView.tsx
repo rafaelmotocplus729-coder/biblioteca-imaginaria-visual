@@ -1187,7 +1187,7 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                       Nenhuma obra ou referência bibliográfica vinculada a este macrotema ainda.
                     </div>
                   ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 pt-1">
                       {itensDoIndiceAtivo.refs.map((ref) => (
                         <div
                           key={ref.id}
@@ -1247,7 +1247,7 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                       Nenhuma nota permanente vinculada a este macrotema ainda.
                     </div>
                   ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 pt-1">
                       {itensDoIndiceAtivo.perms.map((perm) => (
                         <div
                           key={perm.id}
@@ -2920,11 +2920,11 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                 <div
                 className={`${
                   larguraLeitura === 'focada'
-                    ? 'max-w-3xl'
-                    : larguraLeitura === 'padrao'
                     ? 'max-w-4xl'
-                    : 'max-w-5xl 2xl:max-w-6xl'
-                } mx-auto w-full px-3 sm:px-6 lg:px-8 py-6 sm:py-8 transition-all duration-300`}
+                    : larguraLeitura === 'padrao'
+                    ? 'max-w-6xl xl:max-w-7xl'
+                    : 'w-full max-w-[95vw] 2xl:max-w-[96vw]'
+                } mx-auto w-full px-2 sm:px-4 lg:px-6 py-6 sm:py-8 transition-all duration-300`}
               >
                 {/* Folio Editorial Canvas / Folha de Leitura e Edição Equilibrada */}
                 <div className="bg-white/95 dark:bg-[#18191d]/95 backdrop-blur-md rounded-3xl border border-stone-200/90 dark:border-stone-800/90 shadow-xl p-6 sm:p-10 lg:p-12 space-y-6">
@@ -3527,7 +3527,7 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                                 Nenhuma obra ou referência bibliográfica vinculada a este macrotema ainda.
                               </div>
                             ) : (
-                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 pt-1">
                                 {itensDoIndiceAtivo.refs.map((ref) => (
                                   <div
                                     key={ref.id}
@@ -3580,7 +3580,7 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                                 Nenhuma nota permanente vinculada a este macrotema ainda.
                               </div>
                             ) : (
-                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 pt-1">
                                 {itensDoIndiceAtivo.perms.map((perm) => (
                                   <div
                                     key={perm.id}

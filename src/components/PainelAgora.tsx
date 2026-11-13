@@ -114,10 +114,10 @@ export const PainelAgora: React.FC<PainelAgoraProps> = ({
                     <div
                       key={livro.id}
                       onClick={() => onSelecionarLivro(livro.id)}
-                      className="group/card relative p-3.5 rounded-2xl border border-amber-400/60 dark:border-amber-600/40 bg-gradient-to-br from-amber-50/50 via-white to-amber-50/30 dark:from-stone-800/90 dark:via-stone-800/70 dark:to-stone-900/90 hover:border-amber-500 dark:hover:border-amber-400 cursor-pointer transition-all duration-200 shadow-2xs hover:shadow-md flex items-start gap-3.5"
+                      className="group/card relative p-3 sm:p-3.5 rounded-2xl border border-amber-400/60 dark:border-amber-600/40 bg-gradient-to-br from-amber-50/50 via-white to-amber-50/30 dark:from-stone-800/90 dark:via-stone-800/70 dark:to-stone-900/90 hover:border-amber-500 dark:hover:border-amber-400 cursor-pointer transition-all duration-200 shadow-2xs hover:shadow-md flex items-center gap-3 sm:gap-3.5"
                     >
-                      {/* Miniatura do livro com efeito de relevo e lombada */}
-                      <div className="w-13 h-18 shrink-0 rounded-md overflow-hidden shadow-book border border-black/15 relative bg-stone-200 dark:bg-stone-800 group-hover/card:scale-105 transition-transform duration-200">
+                      {/* Miniatura do livro com proporção e lombada refinada */}
+                      <div className="w-14 h-20 sm:w-16 sm:h-24 shrink-0 rounded-lg overflow-hidden shadow-book border border-black/15 dark:border-stone-700/60 relative bg-stone-200 dark:bg-stone-800 group-hover/card:scale-105 transition-transform duration-200">
                         <div className="absolute left-0 top-0 bottom-0 w-2 pointer-events-none bg-gradient-to-r from-black/40 via-black/20 to-transparent z-10" />
                         {livro.capa_url ? (
                           <img src={livro.capa_url} alt="" className="w-full h-full object-cover" />
@@ -144,14 +144,14 @@ export const PainelAgora: React.FC<PainelAgoraProps> = ({
                             {livro.area}
                           </span>
                         </div>
-                        <h4 className="font-serif font-bold text-sm sm:text-base text-stone-900 dark:text-stone-100 truncate group-hover/card:text-amber-800 dark:group-hover/card:text-amber-300 transition-colors mt-1 leading-snug">
+                        <h4 className="font-serif font-bold text-sm sm:text-[15px] text-stone-900 dark:text-stone-100 truncate group-hover/card:text-amber-800 dark:group-hover/card:text-amber-300 transition-colors mt-1 leading-snug">
                           {livro.titulo}
                         </h4>
                         <p className="text-xs text-stone-600 dark:text-stone-400 truncate italic font-serif">
                           {livro.autor}
                         </p>
                         {prog?.data_inicio && (
-                          <div className="flex items-center gap-1 text-[10.5px] text-stone-500 dark:text-stone-400 mt-1.5 font-mono">
+                          <div className="flex items-center gap-1 text-[10.5px] text-stone-500 dark:text-stone-400 mt-1 font-mono">
                             <Calendar className="w-3 h-3 text-amber-700 dark:text-amber-400 shrink-0" />
                             <span>Iniciado: {new Date(prog.data_inicio).toLocaleDateString('pt-BR')}</span>
                           </div>
@@ -188,9 +188,9 @@ export const PainelAgora: React.FC<PainelAgoraProps> = ({
                 return (
                   <div
                     onClick={() => onSelecionarLivro(proximoSugerido.id)}
-                    className="group/card relative p-3.5 rounded-2xl border border-stone-200/90 dark:border-stone-800/90 bg-gradient-to-br from-stone-50/60 via-white to-stone-50/40 dark:from-stone-800/80 dark:via-stone-800/60 dark:to-stone-900/80 hover:border-amber-500/80 dark:hover:border-amber-400/80 cursor-pointer transition-all duration-200 shadow-2xs hover:shadow-md flex items-start gap-3.5"
+                    className="group/card relative p-3 sm:p-3.5 rounded-2xl border border-stone-200/90 dark:border-stone-800/90 bg-gradient-to-br from-stone-50/60 via-white to-stone-50/40 dark:from-stone-800/80 dark:via-stone-800/60 dark:to-stone-900/80 hover:border-amber-500/80 dark:hover:border-amber-400/80 cursor-pointer transition-all duration-200 shadow-2xs hover:shadow-md flex items-center gap-3 sm:gap-3.5"
                   >
-                    <div className="w-13 h-18 shrink-0 rounded-md overflow-hidden shadow-book border border-black/15 relative bg-stone-200 dark:bg-stone-800 group-hover/card:scale-105 transition-transform duration-200">
+                    <div className="w-14 h-20 sm:w-16 sm:h-24 shrink-0 rounded-lg overflow-hidden shadow-book border border-black/15 dark:border-stone-700/60 relative bg-stone-200 dark:bg-stone-800 group-hover/card:scale-105 transition-transform duration-200">
                       <div className="absolute left-0 top-0 bottom-0 w-2 pointer-events-none bg-gradient-to-r from-black/40 via-black/20 to-transparent z-10" />
                       {proximoSugerido.capa_url ? (
                         <img src={proximoSugerido.capa_url} alt="" className="w-full h-full object-cover" />
@@ -217,7 +217,7 @@ export const PainelAgora: React.FC<PainelAgoraProps> = ({
                           {proximoSugerido.area}
                         </span>
                       </div>
-                      <h4 className="font-serif font-bold text-sm sm:text-base text-stone-900 dark:text-stone-100 truncate group-hover/card:text-amber-800 dark:group-hover/card:text-amber-300 transition-colors mt-1 leading-snug">
+                      <h4 className="font-serif font-bold text-sm sm:text-[15px] text-stone-900 dark:text-stone-100 truncate group-hover/card:text-amber-800 dark:group-hover/card:text-amber-300 transition-colors mt-1 leading-snug">
                         {proximoSugerido.titulo}
                       </h4>
                       <p className="text-xs text-stone-600 dark:text-stone-400 truncate italic font-serif">
@@ -226,7 +226,7 @@ export const PainelAgora: React.FC<PainelAgoraProps> = ({
 
                       {/* Marginalia de justificativa dialética */}
                       {proximoSugerido.por_que_antes_do_proximo && (
-                        <div className="mt-2.5 pl-3 py-1.5 border-l-2 border-amber-600/80 bg-amber-500/10 dark:bg-amber-500/15 rounded-r-lg text-[11px] font-serif italic text-stone-800 dark:text-stone-200 line-clamp-2 leading-relaxed shadow-2xs">
+                        <div className="mt-1.5 pl-2.5 py-1 border-l-2 border-amber-600/80 bg-amber-500/10 dark:bg-amber-500/15 rounded-r text-[10.5px] font-serif italic text-stone-800 dark:text-stone-200 line-clamp-2 leading-relaxed shadow-2xs">
                           “{proximoSugerido.por_que_antes_do_proximo}”
                         </div>
                       )}

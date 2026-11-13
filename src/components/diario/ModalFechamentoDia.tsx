@@ -72,55 +72,62 @@ export const ModalFechamentoDia: React.FC<ModalFechamentoDiaProps> = ({
   const [ano, mes, diaNum] = dia.data.split('-');
   const dataFormatada = `${diaNum}/${mes}/${ano}`;
 
+  // Função auxiliar para calcular data futura
+  const calcularDataFutura = (dias: number) => {
+    const d = new Date(dia.data + 'T12:00:00');
+    d.setDate(d.getDate() + dias);
+    return d.toISOString().split('T')[0];
+  };
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-stone-900/60 dark:bg-black/75 backdrop-blur-xs animate-fadeIn">
-      <div className="bg-white dark:bg-[#18191d] border border-stone-300 dark:border-stone-800 rounded-3xl max-w-xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-stone-900/60 dark:bg-black/80 backdrop-blur-xs animate-fadeIn">
+      <div className="bg-white dark:bg-[#18191d] border border-stone-300 dark:border-stone-800 rounded-3xl max-w-3xl w-full max-h-[92vh] flex flex-col shadow-2xl overflow-hidden">
         {/* Cabeçalho */}
-        <div className="p-5 sm:p-6 border-b border-stone-200 dark:border-stone-800 flex items-center justify-between bg-stone-50/70 dark:bg-stone-900/40">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-amber-800 text-amber-100 flex items-center justify-center shadow-md">
-              <CheckCircle2 className="w-5 h-5 text-amber-300" />
+        <div className="p-5 sm:p-6 border-b border-stone-200 dark:border-stone-800 flex items-center justify-between bg-stone-50/80 dark:bg-stone-900/60">
+          <div className="flex items-center gap-3.5">
+            <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-amber-700 to-amber-900 text-amber-100 flex items-center justify-center shadow-md">
+              <CheckCircle2 className="w-6 h-6 text-amber-300" />
             </div>
             <div>
               <span className="text-[10px] font-cinzel font-bold uppercase tracking-wider text-amber-800 dark:text-amber-400">
                 Rotina Noturna de Fechamento
               </span>
-              <h3 className="text-lg sm:text-xl font-serif font-bold text-stone-900 dark:text-stone-100">
+              <h3 className="text-xl sm:text-2xl font-serif font-bold text-stone-900 dark:text-stone-100">
                 Fechar & Revisar Dia ({dataFormatada})
               </h3>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-xl text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 hover:bg-stone-200/50 dark:hover:bg-stone-800 transition"
+            className="p-2 rounded-xl text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 hover:bg-stone-200/50 dark:hover:bg-stone-800 transition cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Corpo com Scroll */}
-        <div className="p-5 sm:p-6 overflow-y-auto space-y-6 flex-1 text-xs">
+        <div className="p-5 sm:p-7 overflow-y-auto space-y-6 flex-1 text-xs">
           {/* Instrução Filosófica */}
-          <div className="p-3.5 rounded-2xl bg-amber-50/70 dark:bg-amber-950/30 border border-amber-200/80 dark:border-amber-900/40 text-stone-700 dark:text-stone-300 font-serif leading-relaxed">
+          <div className="p-4 rounded-2xl bg-amber-50/80 dark:bg-amber-950/40 border border-amber-200/80 dark:border-amber-900/50 text-stone-700 dark:text-stone-300 font-serif leading-relaxed text-[12.5px]">
             Revise o que foi cumprido, defina o destino do que sobrou e carimbe o dia. Nada se perde: tarefas não feitas são migradas sem culpa ou canceladas com clareza.
           </div>
 
           {/* Triagem de Pendências */}
-          <div className="space-y-3">
+          <div className="space-y-3.5">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-cinzel font-bold uppercase tracking-wide text-stone-800 dark:text-stone-200 flex items-center gap-1.5">
-                <Clock className="w-3.5 h-3.5 text-amber-700" />
+              <span className="text-xs font-cinzel font-bold uppercase tracking-wide text-stone-800 dark:text-stone-200 flex items-center gap-2">
+                <Clock className="w-4 h-4 text-amber-700 dark:text-amber-400" />
                 Pendências do Dia ({itensPendentes.length})
               </span>
               {itensPendentes.length === 0 && (
-                <span className="text-[11px] text-emerald-600 font-medium">
+                <span className="text-xs text-emerald-600 dark:text-emerald-400 font-medium bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800">
                   ✓ Tudo resolvido no dia!
                 </span>
               )}
             </div>
 
             {itensPendentes.length > 0 ? (
-              <div className="space-y-2.5">
+              <div className="space-y-3">
                 {itensPendentes.map((it) => {
                   const acaoAtual = acoesPendentes[it.id]?.acao || 'migrar';
                   const dataDestino = acoesPendentes[it.id]?.dataDestino || amanhaStr;
@@ -128,76 +135,126 @@ export const ModalFechamentoDia: React.FC<ModalFechamentoDiaProps> = ({
                   return (
                     <div
                       key={it.id}
-                      className="p-3 rounded-2xl border border-stone-200 dark:border-stone-800 bg-stone-50/50 dark:bg-stone-900/30 space-y-2.5"
+                      className="p-4 rounded-2xl border border-stone-200/90 dark:border-stone-800 bg-stone-50/70 dark:bg-stone-900/40 space-y-3 shadow-2xs hover:border-amber-400/50 transition-all"
                     >
-                      <div className="flex items-center gap-2">
-                        <span className="w-4 h-4 rounded flex items-center justify-center font-bold text-xs bg-stone-200 dark:bg-stone-800 text-stone-800 dark:text-stone-200 shrink-0">
+                      {/* Texto da Pendência */}
+                      <div className="flex items-start gap-2.5">
+                        <span className="w-5 h-5 rounded-lg flex items-center justify-center font-bold text-xs bg-stone-200 dark:bg-stone-800 text-stone-800 dark:text-stone-200 shrink-0 mt-0.5">
                           {it.tipo === 'tarefa' ? '•' : '○'}
                         </span>
-                        <span className="font-serif text-stone-900 dark:text-stone-100 font-medium text-xs leading-snug">
-                          {it.texto}
-                        </span>
+                        <div className="min-w-0 flex-1">
+                          <span className="font-serif text-stone-900 dark:text-stone-100 font-medium text-sm leading-snug block">
+                            {it.texto}
+                          </span>
+                          <span className="text-[10px] text-stone-400 uppercase font-mono tracking-wider mt-0.5 block">
+                            {it.tipo === 'tarefa' ? 'Tarefa Pendente' : 'Evento / Compromisso'}
+                          </span>
+                        </div>
                       </div>
 
-                      {/* Botões de Ação Rápida */}
-                      <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                      {/* Botões de Ação Rápida em Pílulas Espaçosas */}
+                      <div className="flex flex-wrap items-center gap-2 pt-1 border-t border-stone-200/60 dark:border-stone-800/60">
                         <button
                           type="button"
                           onClick={() => handleMudarAcao(it.id, 'concluir')}
-                          className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition flex items-center gap-1 cursor-pointer ${
+                          className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 cursor-pointer shadow-2xs ${
                             acaoAtual === 'concluir'
-                              ? 'bg-emerald-600 text-white font-bold shadow-2xs'
-                              : 'bg-white dark:bg-stone-800 text-stone-600 dark:text-stone-400 border border-stone-200 dark:border-stone-700 hover:bg-stone-100'
+                              ? 'bg-emerald-600 text-white font-bold ring-2 ring-emerald-500/30'
+                              : 'bg-white dark:bg-stone-800 text-stone-700 dark:text-stone-300 border border-stone-200 dark:border-stone-700 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 hover:text-emerald-700'
                           }`}
                         >
-                          <CheckCircle2 className="w-3 h-3" />
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
                           <span>Concluir (X)</span>
                         </button>
 
                         <button
                           type="button"
                           onClick={() => handleMudarAcao(it.id, 'migrar')}
-                          className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition flex items-center gap-1 cursor-pointer ${
+                          className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 cursor-pointer shadow-2xs ${
                             acaoAtual === 'migrar'
-                              ? 'bg-amber-700 text-white font-bold shadow-2xs'
-                              : 'bg-white dark:bg-stone-800 text-stone-600 dark:text-stone-400 border border-stone-200 dark:border-stone-700 hover:bg-stone-100'
+                              ? 'bg-amber-700 text-white font-bold ring-2 ring-amber-500/30'
+                              : 'bg-white dark:bg-stone-800 text-stone-700 dark:text-stone-300 border border-stone-200 dark:border-stone-700 hover:bg-amber-50 dark:hover:bg-amber-950/40 hover:text-amber-700'
                           }`}
                         >
-                          <ArrowRight className="w-3 h-3" />
+                          <ArrowRight className="w-3.5 h-3.5 text-amber-300" />
                           <span>Migrar (→)</span>
                         </button>
 
                         <button
                           type="button"
                           onClick={() => handleMudarAcao(it.id, 'cancelar')}
-                          className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition flex items-center gap-1 cursor-pointer ${
+                          className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 cursor-pointer shadow-2xs ${
                             acaoAtual === 'cancelar'
-                              ? 'bg-stone-700 text-white font-bold shadow-2xs'
-                              : 'bg-white dark:bg-stone-800 text-stone-600 dark:text-stone-400 border border-stone-200 dark:border-stone-700 hover:bg-stone-100'
+                              ? 'bg-stone-700 text-white font-bold ring-2 ring-stone-500/30'
+                              : 'bg-white dark:bg-stone-800 text-stone-700 dark:text-stone-300 border border-stone-200 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-700'
                           }`}
                         >
-                          <Ban className="w-3 h-3" />
+                          <Ban className="w-3.5 h-3.5 text-stone-400" />
                           <span>Cancelar (—)</span>
                         </button>
+                      </div>
 
-                        {acaoAtual === 'migrar' && (
-                          <div className="flex items-center gap-1 ml-auto text-[11px] text-stone-500">
-                            <span>Para:</span>
+                      {/* Seção Destino da Migração (Aparece com destaque quando 'migrar' está ativo) */}
+                      {acaoAtual === 'migrar' && (
+                        <div className="flex flex-wrap items-center gap-2 p-2.5 rounded-xl bg-amber-500/10 dark:bg-amber-500/15 border border-amber-500/30 text-xs text-stone-700 dark:text-stone-300">
+                          <span className="font-semibold text-amber-900 dark:text-amber-200 flex items-center gap-1">
+                            <ArrowRight className="w-3 h-3 text-amber-600" /> Destino:
+                          </span>
+                          
+                          {/* Presets Rápidos */}
+                          <div className="flex items-center gap-1">
+                            <button
+                              type="button"
+                              onClick={() => handleMudarDataDestino(it.id, calcularDataFutura(1))}
+                              className={`px-2 py-0.5 rounded-lg text-[11px] font-semibold transition cursor-pointer border ${
+                                dataDestino === calcularDataFutura(1)
+                                  ? 'bg-amber-700 text-white border-amber-800 shadow-2xs'
+                                  : 'bg-white dark:bg-stone-800 text-stone-700 dark:text-stone-300 border-amber-200 dark:border-stone-700 hover:bg-amber-50'
+                              }`}
+                            >
+                              Amanhã (+1d)
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleMudarDataDestino(it.id, calcularDataFutura(2))}
+                              className={`px-2 py-0.5 rounded-lg text-[11px] font-semibold transition cursor-pointer border ${
+                                dataDestino === calcularDataFutura(2)
+                                  ? 'bg-amber-700 text-white border-amber-800 shadow-2xs'
+                                  : 'bg-white dark:bg-stone-800 text-stone-700 dark:text-stone-300 border-amber-200 dark:border-stone-700 hover:bg-amber-50'
+                              }`}
+                            >
+                              +2 dias
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleMudarDataDestino(it.id, calcularDataFutura(7))}
+                              className={`px-2 py-0.5 rounded-lg text-[11px] font-semibold transition cursor-pointer border ${
+                                dataDestino === calcularDataFutura(7)
+                                  ? 'bg-amber-700 text-white border-amber-800 shadow-2xs'
+                                  : 'bg-white dark:bg-stone-800 text-stone-700 dark:text-stone-300 border-amber-200 dark:border-stone-700 hover:bg-amber-50'
+                              }`}
+                            >
+                              +1 semana
+                            </button>
+                          </div>
+
+                          <div className="flex items-center gap-1.5 ml-auto">
+                            <span className="text-[11px] text-stone-500 font-serif">Data livre:</span>
                             <input
                               type="date"
                               value={dataDestino}
                               onChange={(e) => handleMudarDataDestino(it.id, e.target.value)}
-                              className="px-2 py-0.5 rounded-md bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 text-stone-800 dark:text-stone-200 text-[11px]"
+                              className="px-2.5 py-1 rounded-lg bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 text-stone-900 dark:text-stone-100 text-xs font-mono shadow-2xs focus:ring-1 focus:ring-amber-500 focus:outline-none"
                             />
                           </div>
-                        )}
-                      </div>
+                        </div>
+                      )}
                     </div>
                   );
                 })}
               </div>
             ) : (
-              <div className="p-4 text-center text-stone-500 italic bg-stone-50/50 dark:bg-stone-900/30 rounded-2xl border border-stone-200 dark:border-stone-800">
+              <div className="p-5 text-center text-stone-500 italic bg-stone-50/50 dark:bg-stone-900/30 rounded-2xl border border-stone-200 dark:border-stone-800">
                 Todas as tarefas do dia foram cumpridas ou registradas!
               </div>
             )}

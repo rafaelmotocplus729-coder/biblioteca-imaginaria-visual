@@ -685,8 +685,24 @@ export const GrafoVisualizacao: React.FC<GrafoVisualizacaoProps> = ({
             <div className="absolute bottom-2 right-2 w-4 h-4 border-b-2 border-r-2 border-amber-500/40 pointer-events-none rounded-br-sm" />
 
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+              {/* Miniatura do Livro Central com Relevo Nobre */}
+              <div className="w-16 h-24 sm:w-20 sm:h-28 shrink-0 rounded-xl overflow-hidden shadow-book border border-black/15 dark:border-stone-700/60 relative bg-stone-200 dark:bg-stone-800">
+                <div className="absolute left-0 top-0 bottom-0 w-2 pointer-events-none bg-gradient-to-r from-black/40 via-black/20 to-transparent z-10" />
+                {livroCentral.capa_url ? (
+                  <img src={livroCentral.capa_url} alt="" className="w-full h-full object-cover" />
+                ) : (
+                  <div
+                    className="w-full h-full text-[9px] p-2 text-white font-cinzel font-bold flex flex-col justify-between"
+                    style={{ backgroundColor: CORES_AREAS[livroCentral.area]?.hex }}
+                  >
+                    <span>#{livroCentral.id}</span>
+                    <span className="truncate">{livroCentral.classe}</span>
+                  </div>
+                )}
+              </div>
+
               {/* Informações Principais da Obra */}
-              <div className="space-y-3 flex-1">
+              <div className="space-y-3 flex-1 min-w-0">
                 {/* Badges de Nível, Área e Classe */}
                 <div className="flex flex-wrap items-center gap-2">
                   <span
@@ -724,13 +740,27 @@ export const GrafoVisualizacao: React.FC<GrafoVisualizacaoProps> = ({
                     "{livroCentral.tese}"
                   </p>
                 </div>
+
+                {/* Indicadores de Conexões do Foco */}
+                <div className="flex flex-wrap items-center gap-2 pt-1">
+                  <span className="text-[11px] font-mono px-2 py-0.5 rounded-md bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-900/50 flex items-center gap-1 font-semibold">
+                    <Zap className="w-3 h-3 fill-current" />
+                    {contagensFoco.contraponto} Contrapontos Dialéticos
+                  </span>
+                  <span className="text-[11px] font-mono px-2 py-0.5 rounded-md bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-900/50 flex items-center gap-1 font-semibold">
+                    → {contagensFoco.prepara} Relações de Sequência
+                  </span>
+                  <span className="text-[11px] font-mono px-2 py-0.5 rounded-md bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-900/50 flex items-center gap-1 font-semibold">
+                    ≈ {contagensFoco.mesmo_tema} Mesma Temática
+                  </span>
+                </div>
               </div>
 
               {/* Ações do Livro Central */}
               <div className="flex flex-col sm:flex-row md:flex-col gap-2 shrink-0 w-full sm:w-auto">
                 <button
                   onClick={() => onSelecionarLivro(livroCentral.id)}
-                  className="px-4 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-semibold text-xs flex items-center justify-center gap-2 shadow-sm transition-all"
+                  className="px-4 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-semibold text-xs flex items-center justify-center gap-2 shadow-sm transition-all cursor-pointer"
                 >
                   <ExternalLink className="w-3.5 h-3.5" />
                   <span>Ver Ficha Completa</span>
@@ -738,7 +768,7 @@ export const GrafoVisualizacao: React.FC<GrafoVisualizacaoProps> = ({
 
                 <button
                   onClick={() => handleAbrirNovaRelacao(livroCentral.id)}
-                  className="px-4 py-2.5 rounded-xl bg-white dark:bg-slate-800 hover:bg-stone-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-stone-200 dark:border-slate-700 font-semibold text-xs flex items-center justify-center gap-2 shadow-xs transition-all"
+                  className="px-4 py-2.5 rounded-xl bg-white dark:bg-slate-800 hover:bg-stone-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-stone-200 dark:border-slate-700 font-semibold text-xs flex items-center justify-center gap-2 shadow-xs transition-all cursor-pointer"
                 >
                   <Plus className="w-3.5 h-3.5 text-amber-600" />
                   <span>Adicionar Conexão</span>
@@ -849,24 +879,41 @@ export const GrafoVisualizacao: React.FC<GrafoVisualizacaoProps> = ({
                           </div>
                         </div>
 
-                        {/* Dados da Obra Conectada */}
-                        <div>
-                          <div className="flex items-center gap-1.5 text-[11px] text-slate-500 dark:text-slate-400">
-                            <span
-                              className="w-2 h-2 rounded-full inline-block"
-                              style={{ backgroundColor: CORES_AREAS[outroLivro.area]?.hex }}
-                            />
-                            <span>{outroLivro.area}</span>
-                            <span>·</span>
-                            <span className="font-serif">Nível {NUMEROS_ROMANOS[outroLivro.nivel]}</span>
+                        {/* Dados da Obra Conectada com Capa Miniatura */}
+                        <div className="flex items-start gap-3">
+                          <div className="w-12 h-16 shrink-0 rounded-lg overflow-hidden shadow-book border border-black/15 dark:border-stone-700/60 relative bg-stone-200 dark:bg-stone-800">
+                            <div className="absolute left-0 top-0 bottom-0 w-1.5 pointer-events-none bg-gradient-to-r from-black/40 via-black/20 to-transparent z-10" />
+                            {outroLivro.capa_url ? (
+                              <img src={outroLivro.capa_url} alt="" className="w-full h-full object-cover" />
+                            ) : (
+                              <div
+                                className="w-full h-full text-[8px] p-1 text-white font-cinzel font-bold flex flex-col justify-between"
+                                style={{ backgroundColor: CORES_AREAS[outroLivro.area]?.hex }}
+                              >
+                                <span>#{outroLivro.id}</span>
+                                <span className="truncate">{outroLivro.classe}</span>
+                              </div>
+                            )}
                           </div>
 
-                          <h5 className="font-serif font-bold text-base text-slate-900 dark:text-slate-100 leading-snug mt-0.5">
-                            #{outroLivro.id} {outroLivro.titulo}
-                          </h5>
-                          <p className="text-xs text-slate-600 dark:text-slate-400 italic">
-                            {outroLivro.autor} ({outroLivro.ano})
-                          </p>
+                          <div className="min-w-0 flex-1">
+                            <div className="flex items-center gap-1.5 text-[11px] text-slate-500 dark:text-slate-400">
+                              <span
+                                className="w-2 h-2 rounded-full inline-block"
+                                style={{ backgroundColor: CORES_AREAS[outroLivro.area]?.hex }}
+                              />
+                              <span className="font-semibold">{outroLivro.area}</span>
+                              <span>·</span>
+                              <span className="font-serif">Nível {NUMEROS_ROMANOS[outroLivro.nivel]}</span>
+                            </div>
+
+                            <h5 className="font-serif font-bold text-sm sm:text-base text-slate-900 dark:text-slate-100 leading-snug mt-0.5 truncate">
+                              #{outroLivro.id} {outroLivro.titulo}
+                            </h5>
+                            <p className="text-xs text-slate-600 dark:text-slate-400 italic truncate">
+                              {outroLivro.autor} ({outroLivro.ano})
+                            </p>
+                          </div>
                         </div>
 
                         {/* Nota Explícita da Relação (Justificativa Intelectual) */}
@@ -949,7 +996,7 @@ export const GrafoVisualizacao: React.FC<GrafoVisualizacaoProps> = ({
           MODO CONSTELAÇÃO GERAL (MACRO D3 FORCE SIMULATION COM 60 OBRAS)
          ========================================================================= */}
       {modoExibicao === 'macro' && (
-        <div className="relative flex-1 w-full h-[650px]">
+        <div className="relative flex-1 w-full h-[650px] lg:h-[750px] 2xl:h-[840px]">
           {/* Barra de Filtros Flutuante do Modo Macro */}
           <div className="absolute top-4 left-4 z-10 flex flex-wrap items-center gap-2 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-2.5 rounded-xl border border-stone-200 dark:border-slate-800 shadow-md max-w-[90%]">
             {/* Filtro por Nível */}
