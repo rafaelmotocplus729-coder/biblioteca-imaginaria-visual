@@ -12,14 +12,20 @@ import {
   ExternalLink,
   ZoomIn,
   ZoomOut,
-  RotateCcw,
+  Maximize2,
   Search,
   Sparkles,
   Layers,
   BookOpen,
   ChevronRight,
   ChevronLeft,
-  Target
+  ChevronDown,
+  Target,
+  ArrowRight,
+  ArrowLeft,
+  Scale,
+  Star,
+  Compass
 } from 'lucide-react';
 
 interface GrafoVisualizacaoProps {
@@ -126,18 +132,96 @@ export const GrafoVisualizacao: React.FC<GrafoVisualizacaoProps> = ({
     return base;
   }, [conexoesDoFoco, modoConflitos, filtroTipoFoco]);
 
-  // Contagens por categoria no livro em foco
+  // Contagens por categoria e direção no livro em foco
   const contagensFoco = useMemo(() => {
+    if (!livroCentral) {
+      return {
+        todas: 0,
+        contraponto: 0,
+        prepara: 0,
+        mesmo_tema: 0,
+        preparaEntrada: 0,
+        aprofundamentoSaida: 0
+      };
+    }
     const contrapontos = conexoesDoFoco.filter((r) => r.tipo === 'contraponto').length;
     const preparas = conexoesDoFoco.filter((r) => r.tipo === 'prepara').length;
     const mesmoTema = conexoesDoFoco.filter((r) => r.tipo === 'mesmo_tema').length;
+    const preparaEntrada = conexoesDoFoco.filter((r) => r.tipo === 'prepara' && r.para === livroCentral.id).length;
+    const aprofundamentoSaida = conexoesDoFoco.filter((r) => r.tipo === 'prepara' && r.de === livroCentral.id).length;
     return {
       todas: conexoesDoFoco.length,
       contraponto: contrapontos,
       prepara: preparas,
-      mesmo_tema: mesmoTema
+      mesmo_tema: mesmoTema,
+      preparaEntrada,
+      aprofundamentoSaida
     };
-  }, [conexoesDoFoco]);
+  }, [conexoesDoFoco, livroCentral]);
+
+  // 4 Colunas Direcionais para a Matriz Ego-Network (Prepara, Contextualiza, Aprofunda, Contrasta)
+  const colunasDirecionais = useMemo(() => {
+    if (!livroCentral) return [];
+    const preparamEsta = conexoesFiltradasFoco.filter(
+      (r) => r.tipo === 'prepara' && r.para === livroCentral.id
+    );
+    const contextualizam = conexoesFiltradasFoco.filter(
+      (r) => r.tipo === 'mesmo_tema'
+    );
+    const aprofundam = conexoesFiltradasFoco.filter(
+      (r) => r.tipo === 'prepara' && r.de === livroCentral.id
+    );
+    const contrastam = conexoesFiltradasFoco.filter(
+      (r) => r.tipo === 'contraponto'
+    );
+
+    return [
+      {
+        id: 'prepara',
+        titulo: 'Prepara',
+        subtitulo: 'Base Prévia & Fundamento',
+        descricao: 'Obras anteriores que fornecem vocabulário ou premissas para esta leitura.',
+        icone: ArrowLeft,
+        corHeader: 'border-emerald-500/50 bg-emerald-50/50 dark:bg-emerald-950/25 text-emerald-900 dark:text-emerald-200',
+        corBadge: 'bg-emerald-700 dark:bg-emerald-600 text-white',
+        corCard: 'bg-emerald-50/25 dark:bg-emerald-950/15 border-emerald-200/80 dark:border-emerald-900/50 hover:border-emerald-500/70',
+        itens: preparamEsta
+      },
+      {
+        id: 'contextualiza',
+        titulo: 'Contextualiza',
+        subtitulo: 'Mesmo Tema & Horizonte',
+        descricao: 'Obras irmãs que iluminam o mesmo problema sob ângulos complementares.',
+        icone: Compass,
+        corHeader: 'border-sky-500/50 bg-sky-50/50 dark:bg-sky-950/25 text-sky-900 dark:text-sky-200',
+        corBadge: 'bg-sky-600 text-white',
+        corCard: 'bg-sky-50/25 dark:bg-sky-950/15 border-sky-200/80 dark:border-sky-900/50 hover:border-sky-500/70',
+        itens: contextualizam
+      },
+      {
+        id: 'aprofunda',
+        titulo: 'Aprofunda',
+        subtitulo: 'Sequência & Desdobramento',
+        descricao: 'Obras posteriores que exigem ou expandem diretamente as teses desta obra.',
+        icone: ArrowRight,
+        corHeader: 'border-amber-500/50 bg-amber-50/50 dark:bg-amber-950/25 text-amber-900 dark:text-amber-200',
+        corBadge: 'bg-amber-700 dark:bg-amber-600 text-white',
+        corCard: 'bg-amber-50/25 dark:bg-amber-950/15 border-amber-200/80 dark:border-amber-900/50 hover:border-amber-500/70',
+        itens: aprofundam
+      },
+      {
+        id: 'contrasta',
+        titulo: 'Contrasta',
+        subtitulo: 'Contraponto Dialético',
+        descricao: 'Teses rivais, críticas diretas e tensões filosóficas fundamentais.',
+        icone: Scale,
+        corHeader: 'border-rose-500/50 bg-rose-50/50 dark:bg-rose-950/25 text-rose-900 dark:text-rose-200',
+        corBadge: 'bg-rose-600 text-white',
+        corCard: 'bg-rose-50/30 dark:bg-rose-950/20 border-rose-200/90 dark:border-rose-900/60 hover:border-rose-500/80',
+        itens: contrastam
+      }
+    ];
+  }, [conexoesFiltradasFoco, livroCentral]);
 
   // Relações ativas globais (para o modo macro)
   const relacoesAtivasMacro = useMemo(() => {
@@ -470,38 +554,50 @@ export const GrafoVisualizacao: React.FC<GrafoVisualizacaoProps> = ({
   const livroSelecionadoMacro = livros.find((l) => l.id === macroNoSelecionadoId);
 
   return (
-    <div className="relative flex flex-col w-full bg-library-paper dark:bg-library-darkPaper rounded-2xl border border-stone-200 dark:border-library-darkBorder overflow-hidden shadow-sm transition-all duration-300">
+    <div className="relative flex flex-col w-full bg-library-paper dark:bg-library-darkPaper rounded-2xl border border-stone-200/90 dark:border-library-darkBorder overflow-hidden shadow-sm transition-all duration-300">
       {/* Barra de Ferramentas Superior Unificada */}
-      <div className="px-5 py-4 border-b border-stone-200 dark:border-library-darkBorder bg-stone-50/80 dark:bg-slate-900/80 backdrop-blur-md flex flex-wrap items-center justify-between gap-3">
-        {/* Alternador Principal: Modo Foco (Padrão) vs Constelação Geral */}
-        <div className="flex items-center gap-1.5 p-1 bg-stone-200/70 dark:bg-slate-800 rounded-xl border border-stone-300/60 dark:border-slate-700">
+      <div className="px-5 py-4 border-b border-stone-200/90 dark:border-library-darkBorder bg-stone-50/90 dark:bg-stone-900/90 backdrop-blur-md flex flex-wrap items-center justify-between gap-3">
+        {/* Alternador Principal: Foco na Obra (Ego-Network) vs Constelação Geral */}
+        <div className="flex items-center gap-1 p-1 bg-stone-200/80 dark:bg-stone-800/90 rounded-xl border border-stone-300/70 dark:border-stone-700/80 shadow-inner">
           <button
             onClick={() => setModoExibicao('foco')}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all duration-200 ${
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-cinzel font-semibold flex items-center gap-2 transition-all duration-200 cursor-pointer ${
               modoExibicao === 'foco'
-                ? 'bg-amber-600 text-white shadow-sm font-bold'
-                : 'text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
+                ? 'bg-amber-800 text-amber-50 shadow-sm font-bold ring-1 ring-amber-600/40'
+                : 'text-stone-700 dark:text-stone-300 hover:text-stone-950 dark:hover:text-white'
             }`}
           >
-            <Target className="w-3.5 h-3.5" />
-            <span>Modo Foco (Ego-Network)</span>
-            <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.2 rounded bg-black/20 text-white font-mono">
-              Padrão
+            <Target className="w-3.5 h-3.5 text-amber-300" />
+            <span>Foco na Obra</span>
+            <span
+              className={`text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded font-mono ${
+                modoExibicao === 'foco'
+                  ? 'bg-black/25 text-amber-200'
+                  : 'bg-stone-300/70 dark:bg-stone-700 text-stone-600 dark:text-stone-300'
+              }`}
+            >
+              Ego-Network
             </span>
           </button>
 
           <button
             onClick={() => setModoExibicao('macro')}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all duration-200 ${
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-cinzel font-semibold flex items-center gap-2 transition-all duration-200 cursor-pointer ${
               modoExibicao === 'macro'
-                ? 'bg-amber-600 text-white shadow-sm font-bold'
-                : 'text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
+                ? 'bg-amber-800 text-amber-50 shadow-sm font-bold ring-1 ring-amber-600/40'
+                : 'text-stone-700 dark:text-stone-300 hover:text-stone-950 dark:hover:text-white'
             }`}
           >
             <Layers className="w-3.5 h-3.5" />
             <span>Constelação Geral</span>
-            <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono">
-              60 Obras
+            <span
+              className={`text-[10px] px-1.5 py-0.5 rounded font-mono tabular-nums ${
+                modoExibicao === 'macro'
+                  ? 'bg-black/25 text-amber-200'
+                  : 'bg-stone-300/70 dark:bg-stone-700 text-stone-600 dark:text-stone-300'
+              }`}
+            >
+              {livros.length} Obras
             </span>
           </button>
         </div>
@@ -511,23 +607,23 @@ export const GrafoVisualizacao: React.FC<GrafoVisualizacaoProps> = ({
           {/* Alternador de Conflitos Dialéticos */}
           <button
             onClick={onToggleModoConflitos}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all ${
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-cinzel font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
               modoConflitos
-                ? 'bg-rose-600 text-white shadow-sm ring-1 ring-rose-500'
-                : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-stone-200 dark:border-slate-700 hover:bg-rose-50 dark:hover:bg-rose-950/30'
+                ? 'bg-rose-700 text-white shadow-sm ring-1 ring-rose-500'
+                : 'bg-white dark:bg-stone-800 text-stone-700 dark:text-stone-300 border border-stone-200 dark:border-stone-700 hover:border-rose-400 hover:bg-rose-50/60 dark:hover:bg-rose-950/30'
             }`}
             title="Destaca apenas obras que possuem contrapontos dialéticos ou teses em tensão"
           >
-            <Zap className={`w-3.5 h-3.5 ${modoConflitos ? 'fill-current' : 'text-rose-500'}`} />
-            <span>{modoConflitos ? 'Modo Conflitos (Ativo)' : 'Filtrar Conflitos'}</span>
+            <Zap className={`w-3.5 h-3.5 ${modoConflitos ? 'fill-current text-amber-200' : 'text-rose-600 dark:text-rose-400'}`} />
+            <span>{modoConflitos ? 'Conflitos Ativos' : 'Filtrar Conflitos'}</span>
           </button>
 
           {/* Botão de Adicionar Nova Conexão */}
           <button
             onClick={() => handleAbrirNovaRelacao(modoExibicao === 'foco' ? focoLivroId : undefined)}
-            className="px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-600 hover:bg-amber-700 text-white flex items-center gap-1.5 shadow-sm transition-all"
+            className="px-3.5 py-1.5 rounded-xl text-xs font-cinzel font-bold bg-amber-800 hover:bg-amber-900 text-amber-50 flex items-center gap-1.5 shadow-sm transition-all cursor-pointer"
           >
-            <Plus className="w-3.5 h-3.5" />
+            <Plus className="w-3.5 h-3.5 text-amber-300" />
             <span>Conectar Livros</span>
           </button>
         </div>
@@ -539,24 +635,36 @@ export const GrafoVisualizacao: React.FC<GrafoVisualizacaoProps> = ({
       {modoExibicao === 'foco' && livroCentral && (
         <div className="p-5 md:p-7 space-y-6">
           {/* Seletor & Navegador Rápido de Obra Central */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-white dark:bg-slate-900 p-3.5 rounded-xl border border-stone-200 dark:border-slate-800 shadow-xs">
-            {/* Controles de navegação anterior / próximo */}
-            <div className="flex items-center gap-1.5">
+          <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3.5 bg-white/90 dark:bg-stone-900/90 p-3.5 rounded-xl border border-stone-200/90 dark:border-stone-800 shadow-2xs">
+            {/* Controles de navegação anterior / próximo + Seletor Direto */}
+            <div className="flex items-center gap-2">
               <button
                 onClick={() => handleNavegarFoco(-1)}
-                className="p-1.5 rounded-lg border border-stone-200 dark:border-slate-700 hover:bg-stone-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition-colors"
+                className="p-2 rounded-lg border border-stone-200 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-600 dark:text-stone-300 transition-colors cursor-pointer"
                 title="Livro anterior da biblioteca"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
 
-              <span className="text-xs font-serif font-bold text-slate-700 dark:text-slate-300 px-1">
-                Obra #{livroCentral.id} de {livros.length}
-              </span>
+              <div className="relative">
+                <select
+                  value={livroCentral.id}
+                  onChange={(e) => setFocoLivroId(Number(e.target.value))}
+                  aria-label="Selecionar obra em foco"
+                  className="appearance-none pl-3 pr-8 py-1.5 rounded-lg border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-xs font-serif font-bold text-stone-800 dark:text-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-500/50 cursor-pointer"
+                >
+                  {livros.map((l) => (
+                    <option key={l.id} value={l.id}>
+                      Obra #{l.id} de {livros.length} — {l.titulo} ({l.autor.split(' ').pop()})
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown className="w-3.5 h-3.5 text-stone-500 pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2" />
+              </div>
 
               <button
                 onClick={() => handleNavegarFoco(1)}
-                className="p-1.5 rounded-lg border border-stone-200 dark:border-slate-700 hover:bg-stone-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition-colors"
+                className="p-2 rounded-lg border border-stone-200 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-600 dark:text-stone-300 transition-colors cursor-pointer"
                 title="Próximo livro da biblioteca"
               >
                 <ChevronRight className="w-4 h-4" />
@@ -564,36 +672,38 @@ export const GrafoVisualizacao: React.FC<GrafoVisualizacaoProps> = ({
             </div>
 
             {/* Dropdown com Busca Instantânea de Livro */}
-            <div className="relative flex-1 max-w-lg">
+            <div className="relative flex-1 max-w-md">
               <div className="relative">
                 <input
                   type="text"
-                  placeholder="Trocar obra central (ex: Hayek, Hobbes, Platão...)"
+                  placeholder="Buscar obra para focar (ex: Hayek, Hobbes, Platão...)"
                   value={buscaLivroFoco}
                   onChange={(e) => {
                     setBuscaLivroFoco(e.target.value);
                     setDropdownBuscaAberto(true);
                   }}
                   onFocus={() => setDropdownBuscaAberto(true)}
-                  className="w-full pl-8 pr-3 py-1.5 text-xs rounded-lg border border-stone-200 dark:border-slate-700 bg-stone-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 focus:outline-hidden focus:ring-1 focus:ring-amber-500"
+                  className="w-full pl-8 pr-8 py-1.5 text-xs rounded-lg border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-stone-800 dark:text-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-500/50 font-serif"
                 />
-                <Search className="w-3.5 h-3.5 absolute left-2.5 top-2 text-slate-400" />
-                {buscaLivroFoco && (
+                <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-stone-400" />
+                {buscaLivroFoco ? (
                   <button
                     onClick={() => {
                       setBuscaLivroFoco('');
                       setDropdownBuscaAberto(false);
                     }}
-                    className="absolute right-2.5 top-2 text-slate-400 hover:text-slate-600"
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600"
                   >
-                    <X className="w-3 h-3" />
+                    <X className="w-3.5 h-3.5" />
                   </button>
+                ) : (
+                  <ChevronDown className="w-3.5 h-3.5 absolute right-2.5 top-1/2 -translate-y-1/2 text-stone-400 pointer-events-none" />
                 )}
               </div>
 
               {/* Lista suspensa de resultados */}
               {dropdownBuscaAberto && buscaLivroFoco.trim().length > 0 && (
-                <div className="absolute left-0 right-0 top-full mt-1.5 z-30 max-h-60 overflow-y-auto bg-white dark:bg-slate-900 border border-stone-200 dark:border-slate-800 rounded-xl shadow-xl py-1 text-xs">
+                <div className="absolute left-0 right-0 top-full mt-1.5 z-30 max-h-60 overflow-y-auto bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-xl shadow-xl py-1 text-xs">
                   {livros
                     .filter(
                       (l) =>
@@ -609,19 +719,19 @@ export const GrafoVisualizacao: React.FC<GrafoVisualizacaoProps> = ({
                           setBuscaLivroFoco('');
                           setDropdownBuscaAberto(false);
                         }}
-                        className="px-3 py-2 hover:bg-amber-50 dark:hover:bg-slate-800 cursor-pointer flex items-center justify-between border-b border-stone-100 dark:border-slate-800 last:border-0"
+                        className="px-3 py-2 hover:bg-amber-50 dark:hover:bg-stone-800 cursor-pointer flex items-center justify-between border-b border-stone-100 dark:border-stone-800 last:border-0"
                       >
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 min-w-0">
                           <span
-                            className="w-2 h-2 rounded-full"
+                            className="w-2 h-2 rounded-full shrink-0"
                             style={{ backgroundColor: CORES_AREAS[l.area]?.hex }}
                           />
-                          <span className="font-bold text-slate-800 dark:text-slate-200">
+                          <span className="font-bold text-stone-800 dark:text-stone-200 truncate">
                             #{l.id} {l.titulo}
                           </span>
-                          <span className="text-slate-400">· {l.autor}</span>
+                          <span className="text-stone-400 truncate">· {l.autor}</span>
                         </div>
-                        <span className="text-[10px] text-amber-700 dark:text-amber-400 font-serif">
+                        <span className="text-[10px] text-amber-700 dark:text-amber-400 font-cinzel font-bold shrink-0 ml-2">
                           Nível {NUMEROS_ROMANOS[l.nivel]}
                         </span>
                       </div>
@@ -630,69 +740,94 @@ export const GrafoVisualizacao: React.FC<GrafoVisualizacaoProps> = ({
               )}
             </div>
 
-            {/* Filtros rápidos de tipo de relação para a obra em foco */}
-            <div className="flex items-center gap-1 overflow-x-auto pb-1 sm:pb-0">
+            {/* Pílulas de Contagem de Conexões com Numerais Tabulares e Hierarquia Clara */}
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 lg:pb-0">
               <button
                 onClick={() => setFiltroTipoFoco('todas')}
-                className={`px-2.5 py-1 rounded-md text-[11px] font-semibold transition-all ${
+                className={`px-2.5 py-1.5 rounded-lg text-[11px] font-cinzel font-bold transition-all flex items-center gap-1.5 shrink-0 cursor-pointer ${
                   filtroTipoFoco === 'todas'
-                    ? 'bg-slate-800 text-white dark:bg-slate-200 dark:text-slate-900'
-                    : 'text-slate-600 dark:text-slate-400 hover:bg-stone-100 dark:hover:bg-slate-800'
+                    ? 'bg-stone-800 text-white dark:bg-stone-200 dark:text-stone-900 shadow-xs'
+                    : 'text-stone-600 dark:text-stone-400 bg-stone-100/80 dark:bg-stone-800/70 hover:bg-stone-200/70 dark:hover:bg-stone-800'
                 }`}
               >
-                Todas ({contagensFoco.todas})
-              </button>
-              <button
-                onClick={() => setFiltroTipoFoco('contraponto')}
-                className={`px-2.5 py-1 rounded-md text-[11px] font-semibold transition-all flex items-center gap-1 ${
-                  filtroTipoFoco === 'contraponto'
-                    ? 'bg-rose-600 text-white'
-                    : 'text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30'
-                }`}
-              >
-                <Zap className="w-3 h-3 fill-current" />
-                Contrapontos ({contagensFoco.contraponto})
+                <span>Todas</span>
+                <span className="font-mono tabular-nums px-1.5 py-0.2 rounded bg-black/15 dark:bg-black/20 text-[10px]">
+                  {contagensFoco.todas}
+                </span>
               </button>
               <button
                 onClick={() => setFiltroTipoFoco('prepara')}
-                className={`px-2.5 py-1 rounded-md text-[11px] font-semibold transition-all flex items-center gap-1 ${
+                className={`px-2.5 py-1.5 rounded-lg text-[11px] font-cinzel font-bold transition-all flex items-center gap-1.5 shrink-0 cursor-pointer ${
                   filtroTipoFoco === 'prepara'
-                    ? 'bg-amber-600 text-white'
-                    : 'text-amber-700 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950/30'
+                    ? 'bg-amber-700 text-white shadow-xs'
+                    : 'text-amber-800 dark:text-amber-300 bg-amber-50/80 dark:bg-amber-950/30 hover:bg-amber-100/70 dark:hover:bg-amber-950/50 border border-amber-200/60 dark:border-amber-800/50'
                 }`}
+                title="Relações de preparação (Base Prévia) e aprofundamento (Sequência)"
               >
-                <span>Sequência ({contagensFoco.prepara})</span>
+                <ArrowRight className="w-3 h-3" />
+                <span>Prepara & Aprofunda</span>
+                <span className="font-mono tabular-nums px-1.5 py-0.2 rounded bg-amber-900/15 dark:bg-black/30 text-[10px]">
+                  {contagensFoco.prepara}
+                </span>
               </button>
               <button
                 onClick={() => setFiltroTipoFoco('mesmo_tema')}
-                className={`px-2.5 py-1 rounded-md text-[11px] font-semibold transition-all flex items-center gap-1 ${
+                className={`px-2.5 py-1.5 rounded-lg text-[11px] font-cinzel font-bold transition-all flex items-center gap-1.5 shrink-0 cursor-pointer ${
                   filtroTipoFoco === 'mesmo_tema'
-                    ? 'bg-blue-600 text-white'
-                    : 'text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/30'
+                    ? 'bg-sky-600 text-white shadow-xs'
+                    : 'text-sky-700 dark:text-sky-300 bg-sky-50/80 dark:bg-sky-950/30 hover:bg-sky-100/70 dark:hover:bg-sky-950/50 border border-sky-200/60 dark:border-sky-800/50'
                 }`}
+                title="Obras que contextualizam e dialogam no mesmo eixo temático"
               >
-                <span>Mesmo Tema ({contagensFoco.mesmo_tema})</span>
+                <Compass className="w-3 h-3" />
+                <span>Contextualiza</span>
+                <span className="font-mono tabular-nums px-1.5 py-0.2 rounded bg-sky-900/15 dark:bg-black/30 text-[10px]">
+                  {contagensFoco.mesmo_tema}
+                </span>
+              </button>
+              <button
+                onClick={() => setFiltroTipoFoco('contraponto')}
+                className={`px-2.5 py-1.5 rounded-lg text-[11px] font-cinzel font-bold transition-all flex items-center gap-1.5 shrink-0 cursor-pointer ${
+                  filtroTipoFoco === 'contraponto'
+                    ? 'bg-rose-600 text-white shadow-xs'
+                    : 'text-rose-700 dark:text-rose-300 bg-rose-50/80 dark:bg-rose-950/30 hover:bg-rose-100/70 dark:hover:bg-rose-950/50 border border-rose-200/60 dark:border-rose-800/50'
+                }`}
+                title="Obras em tensão dialética ou contraponto direto"
+              >
+                <Scale className="w-3 h-3" />
+                <span>Contrasta</span>
+                <span className="font-mono tabular-nums px-1.5 py-0.2 rounded bg-rose-900/15 dark:bg-black/30 text-[10px]">
+                  {contagensFoco.contraponto}
+                </span>
               </button>
             </div>
           </div>
 
-          {/* PALCO CENTRAL: Card Hero da Obra em Foco com Design Editorial */}
-          <div className="relative bg-gradient-to-br from-stone-50 via-white to-amber-50/40 dark:from-slate-900 dark:via-slate-900/90 dark:to-slate-950 p-6 md:p-8 rounded-2xl border-2 border-amber-200/70 dark:border-amber-900/40 shadow-md">
+          {/* PALCO CENTRAL: Card Pedestal da Obra em Foco com Design Editorial */}
+          <div className="relative bg-gradient-to-br from-stone-50 via-[#FAF7F2] to-amber-50/40 dark:from-stone-900 dark:via-stone-900/95 dark:to-stone-950 p-6 md:p-8 rounded-2xl border border-amber-300/80 dark:border-amber-800/50 shadow-md">
             {/* Moldura dupla sutil de cantos clássicos */}
-            <div className="absolute top-2 left-2 w-4 h-4 border-t-2 border-l-2 border-amber-500/40 pointer-events-none rounded-tl-sm" />
-            <div className="absolute top-2 right-2 w-4 h-4 border-t-2 border-r-2 border-amber-500/40 pointer-events-none rounded-tr-sm" />
-            <div className="absolute bottom-2 left-2 w-4 h-4 border-b-2 border-l-2 border-amber-500/40 pointer-events-none rounded-bl-sm" />
-            <div className="absolute bottom-2 right-2 w-4 h-4 border-b-2 border-r-2 border-amber-500/40 pointer-events-none rounded-br-sm" />
+            <div className="absolute top-2.5 left-2.5 w-4 h-4 border-t-2 border-l-2 border-amber-600/40 pointer-events-none rounded-tl-xs" />
+            <div className="absolute top-2.5 right-2.5 w-4 h-4 border-t-2 border-r-2 border-amber-600/40 pointer-events-none rounded-tr-xs" />
+            <div className="absolute bottom-2.5 left-2.5 w-4 h-4 border-b-2 border-l-2 border-amber-600/40 pointer-events-none rounded-bl-xs" />
+            <div className="absolute bottom-2.5 right-2.5 w-4 h-4 border-b-2 border-r-2 border-amber-600/40 pointer-events-none rounded-br-xs" />
 
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
               {/* Miniatura do Livro Central com Relevo Nobre */}
-              <div className="w-16 h-24 sm:w-20 sm:h-28 shrink-0 rounded-xl overflow-hidden shadow-book border border-black/15 dark:border-stone-700/60 relative bg-stone-200 dark:bg-stone-800">
+              <div
+                onClick={() => onSelecionarLivro(livroCentral.id)}
+                className="w-20 h-28 sm:w-24 sm:h-34 shrink-0 rounded-xl overflow-hidden shadow-book border border-black/15 dark:border-stone-700/60 relative bg-stone-200 dark:bg-stone-800 cursor-pointer group"
+                title="Clique para abrir a ficha completa da obra"
+              >
                 <div className="absolute left-0 top-0 bottom-0 w-2 pointer-events-none bg-gradient-to-r from-black/40 via-black/20 to-transparent z-10" />
                 {livroCentral.capa_url ? (
-                  <img src={livroCentral.capa_url} alt="" className="w-full h-full object-cover" />
+                  <img
+                    src={livroCentral.capa_url}
+                    alt={livroCentral.titulo}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
                 ) : (
                   <div
-                    className="w-full h-full text-[9px] p-2 text-white font-cinzel font-bold flex flex-col justify-between"
+                    className="w-full h-full text-[9px] p-2.5 text-white font-cinzel font-bold flex flex-col justify-between"
                     style={{ backgroundColor: CORES_AREAS[livroCentral.area]?.hex }}
                   >
                     <span>#{livroCentral.id}</span>
@@ -701,287 +836,328 @@ export const GrafoVisualizacao: React.FC<GrafoVisualizacaoProps> = ({
                 )}
               </div>
 
-              {/* Informações Principais da Obra */}
+              {/* Informações Principais da Obra no Pedestal */}
               <div className="space-y-3 flex-1 min-w-0">
                 {/* Badges de Nível, Área e Classe */}
                 <div className="flex flex-wrap items-center gap-2">
                   <span
-                    className="px-2.5 py-0.5 text-xs font-bold rounded-md text-white shadow-xs"
+                    className="px-2.5 py-0.5 text-xs font-cinzel font-bold rounded-md text-white shadow-2xs tabular-nums"
                     style={{ backgroundColor: CORES_AREAS[livroCentral.area]?.hex }}
                   >
                     #{livroCentral.id} · {livroCentral.area}
                   </span>
-                  <span className="px-2 py-0.5 text-xs font-serif font-bold rounded-md bg-stone-200 dark:bg-slate-800 text-slate-800 dark:text-slate-200">
+                  <span className="px-2.5 py-0.5 text-xs font-cinzel font-bold rounded-md bg-stone-200/90 dark:bg-stone-800 text-stone-800 dark:text-stone-200 border border-stone-300/70 dark:border-stone-700">
                     Nível {NUMEROS_ROMANOS[livroCentral.nivel]}
                   </span>
-                  <span className="px-2 py-0.5 text-[10px] font-mono uppercase tracking-wider rounded-md border border-stone-300 dark:border-slate-700 text-slate-600 dark:text-slate-400">
+                  <span className="px-2 py-0.5 text-[10px] font-mono uppercase tracking-wider rounded-md border border-stone-300 dark:border-stone-700 text-stone-600 dark:text-stone-400">
                     {livroCentral.classe}
                   </span>
                   {livroCentral.obra_de_vida && (
-                    <span className="px-2 py-0.5 text-[10px] font-bold rounded-md bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-200 border border-amber-300 dark:border-amber-800">
-                      ★ Obra de Vida
+                    <span className="px-2.5 py-0.5 text-[10px] font-cinzel font-bold rounded-md bg-amber-100/90 text-amber-900 dark:bg-amber-950/80 dark:text-amber-200 border border-amber-300 dark:border-amber-800 inline-flex items-center gap-1">
+                      <Star className="w-3 h-3 text-amber-600 dark:text-amber-400 fill-current" />
+                      <span>Obra de Vida</span>
                     </span>
                   )}
                 </div>
 
                 {/* Título & Autor */}
                 <div>
-                  <h3 className="text-2xl md:text-3xl font-serif font-bold text-slate-900 dark:text-amber-100 leading-tight">
+                  <h3 className="text-2xl md:text-3xl font-serif font-bold text-stone-900 dark:text-amber-50 leading-tight tracking-tight">
                     {livroCentral.titulo}
                   </h3>
-                  <p className="text-sm font-serif italic text-slate-600 dark:text-slate-400 mt-1">
-                    {livroCentral.autor} ({livroCentral.ano})
+                  <p className="text-sm font-serif italic text-stone-600 dark:text-stone-400 mt-1">
+                    {livroCentral.autor} <span className="not-italic font-mono text-xs opacity-80">({livroCentral.ano})</span>
                   </p>
                 </div>
 
                 {/* Tese Central em Destaque */}
-                <div className="relative pl-4 border-l-2 border-amber-500/70 dark:border-amber-400/60 py-1 bg-amber-50/50 dark:bg-slate-800/40 rounded-r-lg pr-3">
-                  <p className="text-xs md:text-sm font-serif italic text-slate-800 dark:text-slate-200">
-                    "{livroCentral.tese}"
+                <div className="relative pl-4 border-l-2 border-amber-600/80 dark:border-amber-400/70 py-1.5 bg-amber-50/60 dark:bg-stone-800/50 rounded-r-xl pr-4">
+                  <p className="text-xs md:text-sm font-serif italic text-stone-800 dark:text-stone-200 leading-relaxed">
+                    &ldquo;{livroCentral.tese}&rdquo;
                   </p>
                 </div>
 
-                {/* Indicadores de Conexões do Foco */}
+                {/* Indicadores Direcionais de Conexões do Foco (4 Dimensões) */}
                 <div className="flex flex-wrap items-center gap-2 pt-1">
-                  <span className="text-[11px] font-mono px-2 py-0.5 rounded-md bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-900/50 flex items-center gap-1 font-semibold">
-                    <Zap className="w-3 h-3 fill-current" />
-                    {contagensFoco.contraponto} Contrapontos Dialéticos
+                  <span className="text-[11px] font-mono tabular-nums px-2.5 py-1 rounded-lg bg-emerald-50/80 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-900/60 inline-flex items-center gap-1.5 font-semibold">
+                    <ArrowLeft className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
+                    <span>{contagensFoco.preparaEntrada} Prepara</span>
                   </span>
-                  <span className="text-[11px] font-mono px-2 py-0.5 rounded-md bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-900/50 flex items-center gap-1 font-semibold">
-                    → {contagensFoco.prepara} Relações de Sequência
+                  <span className="text-[11px] font-mono tabular-nums px-2.5 py-1 rounded-lg bg-sky-50/80 dark:bg-sky-950/40 text-sky-800 dark:text-sky-300 border border-sky-200/80 dark:border-sky-900/60 inline-flex items-center gap-1.5 font-semibold">
+                    <Compass className="w-3 h-3 text-sky-600 dark:text-sky-400" />
+                    <span>{contagensFoco.mesmo_tema} Contextualiza</span>
                   </span>
-                  <span className="text-[11px] font-mono px-2 py-0.5 rounded-md bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-900/50 flex items-center gap-1 font-semibold">
-                    ≈ {contagensFoco.mesmo_tema} Mesma Temática
+                  <span className="text-[11px] font-mono tabular-nums px-2.5 py-1 rounded-lg bg-amber-50/80 dark:bg-amber-950/40 text-amber-900 dark:text-amber-300 border border-amber-200/80 dark:border-amber-900/60 inline-flex items-center gap-1.5 font-semibold">
+                    <ArrowRight className="w-3 h-3 text-amber-600 dark:text-amber-400" />
+                    <span>{contagensFoco.aprofundamentoSaida} Aprofunda</span>
+                  </span>
+                  <span className="text-[11px] font-mono tabular-nums px-2.5 py-1 rounded-lg bg-rose-50/80 dark:bg-rose-950/40 text-rose-800 dark:text-rose-300 border border-rose-200/80 dark:border-rose-900/60 inline-flex items-center gap-1.5 font-semibold">
+                    <Scale className="w-3 h-3 text-rose-600 dark:text-rose-400" />
+                    <span>{contagensFoco.contraponto} Contrasta</span>
                   </span>
                 </div>
               </div>
 
               {/* Ações do Livro Central */}
-              <div className="flex flex-col sm:flex-row md:flex-col gap-2 shrink-0 w-full sm:w-auto">
+              <div className="flex flex-col sm:flex-row md:flex-col gap-2.5 shrink-0 w-full sm:w-auto">
                 <button
                   onClick={() => onSelecionarLivro(livroCentral.id)}
-                  className="px-4 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-semibold text-xs flex items-center justify-center gap-2 shadow-sm transition-all cursor-pointer"
+                  className="px-4 py-2.5 rounded-xl bg-amber-800 hover:bg-amber-900 text-amber-50 font-cinzel font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition-all cursor-pointer"
                 >
-                  <ExternalLink className="w-3.5 h-3.5" />
-                  <span>Ver Ficha Completa</span>
+                  <ExternalLink className="w-3.5 h-3.5 text-amber-300" />
+                  <span>Abrir Obra Completa</span>
                 </button>
 
                 <button
                   onClick={() => handleAbrirNovaRelacao(livroCentral.id)}
-                  className="px-4 py-2.5 rounded-xl bg-white dark:bg-slate-800 hover:bg-stone-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-stone-200 dark:border-slate-700 font-semibold text-xs flex items-center justify-center gap-2 shadow-xs transition-all cursor-pointer"
+                  className="px-4 py-2.5 rounded-xl bg-white dark:bg-stone-800 hover:bg-stone-100 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-200 border border-stone-200 dark:border-stone-700 font-cinzel font-bold text-xs flex items-center justify-center gap-2 shadow-2xs transition-all cursor-pointer"
                 >
-                  <Plus className="w-3.5 h-3.5 text-amber-600" />
-                  <span>Adicionar Conexão</span>
+                  <Plus className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
+                  <span>Nova Conexão</span>
                 </button>
               </div>
             </div>
           </div>
 
-          {/* SESSÃO: CONEXÕES DIRETAS DA OBRA CENTRAL (CARDS EXPLICATIVOS) */}
+          {/* SESSÃO: 4 COLUNAS DIRECIONAIS DE FICHAS DE ÍNDICE EDITORIAL (PREPARA, CONTEXTUALIZA, APROFUNDA, CONTRASTA) */}
           <div className="space-y-4">
-            <div className="flex items-center justify-between pb-2 border-b border-stone-200 dark:border-library-darkBorder">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2.5 border-b border-stone-200 dark:border-library-darkBorder">
               <div className="flex items-center gap-2">
-                <Share2 className="w-4 h-4 text-amber-600" />
-                <h4 className="font-serif font-bold text-base text-slate-900 dark:text-slate-100">
-                  Rede de Conexões Intelectuais ({conexoesFiltradasFoco.length})
+                <Share2 className="w-4 h-4 text-amber-700 dark:text-amber-400" />
+                <h4 className="font-serif font-bold text-base text-stone-900 dark:text-stone-100">
+                  Matriz de Conexões Intelectuais
                 </h4>
+                <span className="text-xs font-mono tabular-nums px-2 py-0.5 rounded-full bg-stone-200/80 dark:bg-stone-800 text-stone-700 dark:text-stone-300 font-bold">
+                  {conexoesFiltradasFoco.length}
+                </span>
               </div>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Clique em <strong className="text-amber-700 dark:text-amber-400">"Focar nesta obra"</strong> para navegar livro a livro pelas ideias
+              <p className="text-xs text-stone-500 dark:text-stone-400 font-serif">
+                Use <strong className="text-amber-800 dark:text-amber-300">Focar no Grafo</strong> para deslocar o centro da rede ou <strong className="text-stone-700 dark:text-stone-200">Abrir Obra</strong> para ler a ficha.
               </p>
             </div>
 
             {/* Estado Vazio se não houver conexões para o filtro */}
             {conexoesFiltradasFoco.length === 0 ? (
-              <div className="text-center py-12 px-4 bg-stone-50/70 dark:bg-slate-900/40 rounded-2xl border border-dashed border-stone-300 dark:border-slate-800 space-y-3">
-                <Sparkles className="w-8 h-8 text-amber-500 mx-auto opacity-70" />
-                <h5 className="font-serif font-bold text-sm text-slate-800 dark:text-slate-200">
+              <div className="text-center py-12 px-4 bg-stone-50/70 dark:bg-stone-900/40 rounded-2xl border border-dashed border-stone-300 dark:border-stone-800 space-y-3">
+                <Sparkles className="w-8 h-8 text-amber-600 mx-auto opacity-70" />
+                <h5 className="font-serif font-bold text-sm text-stone-800 dark:text-stone-200">
                   Nenhuma conexão para o filtro selecionado
                 </h5>
-                <p className="text-xs text-slate-500 max-w-md mx-auto">
+                <p className="text-xs text-stone-500 max-w-md mx-auto font-serif">
                   {filtroTipoFoco === 'contraponto'
                     ? 'Esta obra ainda não possui contrapontos dialéticos registrados.'
                     : 'Não foram encontradas relações correspondentes para este livro.'}
                 </p>
                 <button
                   onClick={() => handleAbrirNovaRelacao(livroCentral.id)}
-                  className="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-amber-600 hover:bg-amber-700 text-white inline-flex items-center gap-1.5 shadow-sm"
+                  className="px-3.5 py-2 rounded-xl text-xs font-cinzel font-bold bg-amber-800 hover:bg-amber-900 text-amber-50 inline-flex items-center gap-1.5 shadow-sm cursor-pointer"
                 >
                   <Plus className="w-3.5 h-3.5" />
-                  Criar Conexão para este Livro
+                  <span>Criar Conexão para este Livro</span>
                 </button>
               </div>
             ) : (
-              /* Grid Responsivo de Cards de Livros Conectados com Justificativa Visível */
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {conexoesFiltradasFoco.map((rel) => {
-                  const ehOrigem = rel.de === livroCentral.id;
-                  const outroLivroId = ehOrigem ? rel.para : rel.de;
-                  const outroLivro = livros.find((l) => l.id === outroLivroId);
-                  const estaEditando = editandoRelId === rel.id;
-
-                  if (!outroLivro) return null;
-
+              /* 4 Colunas Direcionais de Fichas Editoriais */
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 items-start">
+                {colunasDirecionais.map((coluna) => {
+                  const IconeColuna = coluna.icone;
                   return (
                     <div
-                      key={rel.id}
-                      className={`relative flex flex-col justify-between p-4 rounded-xl border transition-all duration-200 shadow-xs hover:shadow-md ${
-                        rel.tipo === 'contraponto'
-                          ? 'bg-rose-50/40 dark:bg-rose-950/20 border-rose-300/80 dark:border-rose-900/60'
-                          : rel.tipo === 'prepara'
-                          ? 'bg-amber-50/30 dark:bg-amber-950/15 border-amber-300/70 dark:border-amber-900/50'
-                          : 'bg-blue-50/30 dark:bg-blue-950/15 border-blue-300/70 dark:border-blue-900/50'
-                      }`}
+                      key={coluna.id}
+                      className="flex flex-col rounded-2xl border border-stone-200/90 dark:border-stone-800/90 bg-stone-50/60 dark:bg-stone-900/40 overflow-hidden shadow-2xs"
                     >
-                      <div className="space-y-3">
-                        {/* Cabeçalho da Conexão: Tipo e Ações */}
-                        <div className="flex items-center justify-between">
-                          <span
-                            className={`px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 text-white ${
-                              rel.tipo === 'contraponto'
-                                ? 'bg-rose-600'
-                                : rel.tipo === 'prepara'
-                                ? ehOrigem
-                                  ? 'bg-slate-700 dark:bg-slate-600'
-                                  : 'bg-emerald-700 dark:bg-emerald-600'
-                                : 'bg-blue-600'
-                            }`}
-                          >
-                            {rel.tipo === 'contraponto' && <Zap className="w-2.5 h-2.5 fill-current" />}
-                            {rel.tipo === 'contraponto'
-                              ? '⚡ Contraponto Dialético'
-                              : rel.tipo === 'prepara'
-                              ? ehOrigem
-                                ? '→ Prepara (Leia depois)'
-                                : '← Vem de (Base prévia)'
-                              : '≈ Mesmo Tema'}
-                          </span>
-
-                          <div className="flex items-center gap-1">
-                            <button
-                              onClick={() => {
-                                setEditandoRelId(rel.id);
-                                setEditNota(rel.nota);
-                                setEditTipo(rel.tipo);
-                              }}
-                              className="p-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
-                              title="Editar nota da relação"
-                            >
-                              <Edit3 className="w-3 h-3" />
-                            </button>
-                            <button
-                              onClick={() => onRemoverRelacao(rel.id)}
-                              className="p-1 text-slate-400 hover:text-rose-600 transition-colors"
-                              title="Excluir relação"
-                            >
-                              <Trash2 className="w-3 h-3" />
-                            </button>
+                      {/* Cabeçalho da Coluna Direcional */}
+                      <div className={`p-3.5 border-b ${coluna.corHeader} flex items-center justify-between gap-2`}>
+                        <div className="flex items-center gap-2 min-w-0">
+                          <div className={`w-7 h-7 rounded-lg ${coluna.corBadge} flex items-center justify-center shrink-0 shadow-2xs`}>
+                            <IconeColuna className="w-3.5 h-3.5" />
                           </div>
-                        </div>
-
-                        {/* Dados da Obra Conectada com Capa Miniatura */}
-                        <div className="flex items-start gap-3">
-                          <div className="w-12 h-16 shrink-0 rounded-lg overflow-hidden shadow-book border border-black/15 dark:border-stone-700/60 relative bg-stone-200 dark:bg-stone-800">
-                            <div className="absolute left-0 top-0 bottom-0 w-1.5 pointer-events-none bg-gradient-to-r from-black/40 via-black/20 to-transparent z-10" />
-                            {outroLivro.capa_url ? (
-                              <img src={outroLivro.capa_url} alt="" className="w-full h-full object-cover" />
-                            ) : (
-                              <div
-                                className="w-full h-full text-[8px] p-1 text-white font-cinzel font-bold flex flex-col justify-between"
-                                style={{ backgroundColor: CORES_AREAS[outroLivro.area]?.hex }}
-                              >
-                                <span>#{outroLivro.id}</span>
-                                <span className="truncate">{outroLivro.classe}</span>
-                              </div>
-                            )}
-                          </div>
-
-                          <div className="min-w-0 flex-1">
-                            <div className="flex items-center gap-1.5 text-[11px] text-slate-500 dark:text-slate-400">
-                              <span
-                                className="w-2 h-2 rounded-full inline-block"
-                                style={{ backgroundColor: CORES_AREAS[outroLivro.area]?.hex }}
-                              />
-                              <span className="font-semibold">{outroLivro.area}</span>
-                              <span>·</span>
-                              <span className="font-serif">Nível {NUMEROS_ROMANOS[outroLivro.nivel]}</span>
-                            </div>
-
-                            <h5 className="font-serif font-bold text-sm sm:text-base text-slate-900 dark:text-slate-100 leading-snug mt-0.5 truncate">
-                              #{outroLivro.id} {outroLivro.titulo}
+                          <div className="min-w-0">
+                            <h5 className="font-cinzel font-bold text-xs uppercase tracking-wider truncate">
+                              {coluna.titulo}
                             </h5>
-                            <p className="text-xs text-slate-600 dark:text-slate-400 italic truncate">
-                              {outroLivro.autor} ({outroLivro.ano})
+                            <p className="text-[10px] font-serif opacity-80 truncate">
+                              {coluna.subtitulo}
                             </p>
                           </div>
                         </div>
-
-                        {/* Nota Explícita da Relação (Justificativa Intelectual) */}
-                        {estaEditando ? (
-                          <div className="pt-1.5 space-y-2 bg-white dark:bg-slate-900 p-2.5 rounded-lg border border-stone-200 dark:border-slate-700">
-                            <label className="text-[10px] font-semibold text-slate-500 uppercase">
-                              Editar Justificativa:
-                            </label>
-                            <input
-                              type="text"
-                              value={editNota}
-                              onChange={(e) => setEditNota(e.target.value)}
-                              className="w-full p-1.5 text-xs border rounded bg-stone-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100"
-                            />
-                            <div className="flex justify-between items-center gap-2">
-                              <select
-                                value={editTipo}
-                                onChange={(e) => setEditTipo(e.target.value as TipoRelacao)}
-                                className="p-1 text-[11px] border rounded bg-stone-50 dark:bg-slate-800"
-                              >
-                                <option value="contraponto">Contraponto</option>
-                                <option value="prepara">Prepara</option>
-                                <option value="mesmo_tema">Mesmo Tema</option>
-                              </select>
-                              <div className="flex gap-1">
-                                <button
-                                  onClick={() => setEditandoRelId(null)}
-                                  className="px-2 py-0.5 text-[10px] rounded hover:bg-stone-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300"
-                                >
-                                  Cancelar
-                                </button>
-                                <button
-                                  onClick={() => handleSalvarEdicao(rel.id)}
-                                  className="px-2.5 py-0.5 text-[10px] bg-amber-600 text-white rounded font-bold"
-                                >
-                                  Salvar
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-                        ) : (
-                          <div className="p-2.5 rounded-lg bg-white/80 dark:bg-slate-900/80 border border-stone-200/70 dark:border-slate-800 text-xs">
-                            <p className="font-serif italic text-slate-700 dark:text-slate-300 leading-relaxed">
-                              "{rel.nota}"
-                            </p>
-                          </div>
-                        )}
+                        <span className="px-2 py-0.5 rounded-full text-xs font-mono font-bold tabular-nums bg-white/80 dark:bg-stone-900/80 border border-black/10 dark:border-white/10 shrink-0">
+                          {coluna.itens.length}
+                        </span>
                       </div>
 
-                      {/* Botões de Ação na Base do Card Conectado */}
-                      <div className="flex items-center gap-2 pt-3 mt-2 border-t border-stone-200/60 dark:border-slate-800/60">
-                        <button
-                          onClick={() => setFocoLivroId(outroLivro.id)}
-                          className="flex-1 py-1.5 px-2.5 rounded-lg bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold flex items-center justify-center gap-1.5 shadow-xs transition-colors"
-                          title={`Tornar #${outroLivro.id} o novo livro central do foco`}
-                        >
-                          <Target className="w-3 h-3" />
-                          <span>Focar nesta Obra</span>
-                        </button>
+                      {/* Lista de Cartões de Índice da Coluna */}
+                      <div className="p-3 space-y-3">
+                        {coluna.itens.length === 0 ? (
+                          <div className="py-8 px-3 text-center rounded-xl border border-dashed border-stone-200 dark:border-stone-800/80 text-stone-400 dark:text-stone-500 text-xs font-serif italic">
+                            Nenhuma obra nesta direção
+                          </div>
+                        ) : (
+                          coluna.itens.map((rel) => {
+                            const ehOrigem = rel.de === livroCentral.id;
+                            const outroLivroId = ehOrigem ? rel.para : rel.de;
+                            const outroLivro = livros.find((l) => l.id === outroLivroId);
+                            const estaEditando = editandoRelId === rel.id;
 
-                        <button
-                          onClick={() => onSelecionarLivro(outroLivro.id)}
-                          className="py-1.5 px-2.5 rounded-lg border border-stone-200 dark:border-slate-700 hover:bg-stone-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-semibold flex items-center justify-center gap-1 transition-colors"
-                          title="Abrir ficha detalhada"
-                        >
-                          <BookOpen className="w-3 h-3" />
-                          <span>Ficha</span>
-                        </button>
+                            if (!outroLivro) return null;
+
+                            return (
+                              <div
+                                key={rel.id}
+                                className={`group relative flex flex-col justify-between p-3.5 rounded-xl border transition-all duration-200 shadow-2xs hover:shadow-md hover:-translate-y-0.5 bg-white dark:bg-stone-900 ${coluna.corCard}`}
+                              >
+                                <div className="space-y-2.5">
+                                  {/* Barra Superior da Ficha de Índice */}
+                                  <div className="flex items-center justify-between gap-1.5">
+                                    <span
+                                      className={`px-2 py-0.5 rounded text-[9.5px] font-cinzel font-bold uppercase tracking-wider inline-flex items-center gap-1 ${coluna.corBadge}`}
+                                    >
+                                      <IconeColuna className="w-2.5 h-2.5" />
+                                      <span>{coluna.titulo}</span>
+                                    </span>
+
+                                    <div className="flex items-center gap-0.5 opacity-75 group-hover:opacity-100 transition-opacity">
+                                      <button
+                                        onClick={() => {
+                                          setEditandoRelId(rel.id);
+                                          setEditNota(rel.nota);
+                                          setEditTipo(rel.tipo);
+                                        }}
+                                        className="p-1 rounded hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 transition-colors cursor-pointer"
+                                        title="Editar nota da relação"
+                                      >
+                                        <Edit3 className="w-3 h-3" />
+                                      </button>
+                                      <button
+                                        onClick={() => onRemoverRelacao(rel.id)}
+                                        className="p-1 rounded hover:bg-rose-50 dark:hover:bg-rose-950/40 text-stone-400 hover:text-rose-600 transition-colors cursor-pointer"
+                                        title="Excluir relação"
+                                      >
+                                        <Trash2 className="w-3 h-3" />
+                                      </button>
+                                    </div>
+                                  </div>
+
+                                  {/* Dados da Obra Conectada com Miniatura */}
+                                  <div className="flex items-start gap-2.5">
+                                    <div
+                                      onClick={() => onSelecionarLivro(outroLivro.id)}
+                                      className="w-11 h-16 shrink-0 rounded-md overflow-hidden shadow-book border border-black/15 dark:border-stone-700/60 relative bg-stone-200 dark:bg-stone-800 cursor-pointer"
+                                    >
+                                      <div className="absolute left-0 top-0 bottom-0 w-1 pointer-events-none bg-gradient-to-r from-black/40 via-black/20 to-transparent z-10" />
+                                      {outroLivro.capa_url ? (
+                                        <img src={outroLivro.capa_url} alt="" className="w-full h-full object-cover" />
+                                      ) : (
+                                        <div
+                                          className="w-full h-full text-[8px] p-1 text-white font-cinzel font-bold flex flex-col justify-between"
+                                          style={{ backgroundColor: CORES_AREAS[outroLivro.area]?.hex }}
+                                        >
+                                          <span>#{outroLivro.id}</span>
+                                          <span className="truncate">{outroLivro.classe}</span>
+                                        </div>
+                                      )}
+                                    </div>
+
+                                    <div className="min-w-0 flex-1">
+                                      <div className="flex items-center gap-1.5 text-[10px] text-stone-500 dark:text-stone-400">
+                                        <span
+                                          className="w-2 h-2 rounded-full inline-block shrink-0"
+                                          style={{ backgroundColor: CORES_AREAS[outroLivro.area]?.hex }}
+                                        />
+                                        <span className="font-semibold truncate">{outroLivro.area}</span>
+                                        <span>·</span>
+                                        <span className="font-cinzel font-bold shrink-0">
+                                          Nível {NUMEROS_ROMANOS[outroLivro.nivel]}
+                                        </span>
+                                      </div>
+
+                                      <h6
+                                        onClick={() => onSelecionarLivro(outroLivro.id)}
+                                        className="font-serif font-bold text-sm text-stone-900 dark:text-stone-100 leading-snug mt-0.5 line-clamp-2 hover:text-amber-700 dark:hover:text-amber-400 cursor-pointer transition-colors"
+                                        title={`#${outroLivro.id} ${outroLivro.titulo}`}
+                                      >
+                                        <span className="font-mono text-xs text-stone-500 dark:text-stone-400 mr-1">
+                                          #{outroLivro.id}
+                                        </span>
+                                        {outroLivro.titulo}
+                                      </h6>
+                                      <p className="text-[11px] text-stone-600 dark:text-stone-400 font-serif italic truncate">
+                                        {outroLivro.autor} ({outroLivro.ano})
+                                      </p>
+                                    </div>
+                                  </div>
+
+                                  {/* Justificativa Editorial da Relação */}
+                                  {estaEditando ? (
+                                    <div className="pt-1.5 space-y-2 bg-stone-50 dark:bg-stone-950 p-2.5 rounded-lg border border-stone-200 dark:border-stone-700">
+                                      <label className="text-[10px] font-cinzel font-bold text-stone-500 uppercase">
+                                        Editar Justificativa:
+                                      </label>
+                                      <input
+                                        type="text"
+                                        value={editNota}
+                                        onChange={(e) => setEditNota(e.target.value)}
+                                        className="w-full p-1.5 text-xs border rounded bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100 border-stone-300 dark:border-stone-700"
+                                      />
+                                      <div className="flex justify-between items-center gap-2">
+                                        <select
+                                          value={editTipo}
+                                          onChange={(e) => setEditTipo(e.target.value as TipoRelacao)}
+                                          className="p-1 text-[11px] border rounded bg-white dark:bg-stone-900 border-stone-300 dark:border-stone-700"
+                                        >
+                                          <option value="contraponto">Contrasta (Contraponto)</option>
+                                          <option value="prepara">Prepara / Aprofunda</option>
+                                          <option value="mesmo_tema">Contextualiza (Mesmo Tema)</option>
+                                        </select>
+                                        <div className="flex gap-1">
+                                          <button
+                                            onClick={() => setEditandoRelId(null)}
+                                            className="px-2 py-0.5 text-[10px] rounded hover:bg-stone-200 dark:hover:bg-stone-800 text-stone-600 dark:text-stone-300"
+                                          >
+                                            Cancelar
+                                          </button>
+                                          <button
+                                            onClick={() => handleSalvarEdicao(rel.id)}
+                                            className="px-2.5 py-0.5 text-[10px] bg-amber-700 text-white rounded font-bold"
+                                          >
+                                            Salvar
+                                          </button>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  ) : (
+                                    <div className="p-2.5 rounded-lg bg-stone-50/90 dark:bg-stone-950/70 border border-stone-200/70 dark:border-stone-800/80 text-xs">
+                                      <p className="font-serif italic text-stone-700 dark:text-stone-300 leading-relaxed">
+                                        &ldquo;{rel.nota}&rdquo;
+                                      </p>
+                                    </div>
+                                  )}
+                                </div>
+
+                                {/* Ações Claras da Ficha de Índice: Focar no Grafo vs Abrir Obra */}
+                                <div className="flex items-center gap-1.5 pt-2.5 mt-2.5 border-t border-stone-200/60 dark:border-stone-800/70">
+                                  <button
+                                    onClick={() => setFocoLivroId(outroLivro.id)}
+                                    className="flex-1 py-1.5 px-2.5 rounded-lg bg-amber-800 hover:bg-amber-900 text-amber-50 text-[11px] font-cinzel font-bold flex items-center justify-center gap-1.5 shadow-2xs transition-colors cursor-pointer"
+                                    title={`Focar o grafo na Obra #${outroLivro.id}`}
+                                  >
+                                    <Target className="w-3 h-3 text-amber-300 shrink-0" />
+                                    <span className="truncate">Focar no Grafo</span>
+                                  </button>
+
+                                  <button
+                                    onClick={() => onSelecionarLivro(outroLivro.id)}
+                                    className="py-1.5 px-2.5 rounded-lg border border-stone-200 dark:border-stone-700 bg-stone-50 hover:bg-stone-100 dark:bg-stone-800 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-200 text-[11px] font-cinzel font-semibold flex items-center justify-center gap-1 transition-colors cursor-pointer shrink-0"
+                                    title="Abrir modal completo da obra"
+                                  >
+                                    <BookOpen className="w-3 h-3 text-amber-700 dark:text-amber-400" />
+                                    <span>Abrir Obra</span>
+                                  </button>
+                                </div>
+                              </div>
+                            );
+                          })
+                        )}
                       </div>
                     </div>
                   );
@@ -993,21 +1169,23 @@ export const GrafoVisualizacao: React.FC<GrafoVisualizacaoProps> = ({
       )}
 
       {/* =========================================================================
-          MODO CONSTELAÇÃO GERAL (MACRO D3 FORCE SIMULATION COM 60 OBRAS)
+          MODO CONSTELAÇÃO GERAL (MACRO D3 FORCE SIMULATION COM {livros.length} OBRAS)
          ========================================================================= */}
       {modoExibicao === 'macro' && (
         <div className="relative flex-1 w-full h-[650px] lg:h-[750px] 2xl:h-[840px]">
-          {/* Barra de Filtros Flutuante do Modo Macro */}
-          <div className="absolute top-4 left-4 z-10 flex flex-wrap items-center gap-2 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-2.5 rounded-xl border border-stone-200 dark:border-slate-800 shadow-md max-w-[90%]">
+          {/* Barra de Filtros e Legenda Flutuante do Modo Macro */}
+          <div className="absolute top-4 left-4 z-10 flex flex-wrap items-center gap-2.5 bg-white/95 dark:bg-stone-900/95 backdrop-blur-md p-3 rounded-xl border border-stone-200/90 dark:border-stone-800 shadow-md max-w-[92%]">
             {/* Filtro por Nível */}
             <div className="flex items-center gap-1 text-xs">
-              <span className="text-slate-500 font-semibold pl-1">Nível:</span>
+              <span className="text-stone-500 font-cinzel font-bold uppercase text-[10px] tracking-wider pl-1 pr-1">
+                Nível:
+              </span>
               <button
                 onClick={() => setMacroFiltroNivel(null)}
-                className={`px-2 py-0.5 rounded text-[11px] font-semibold ${
+                className={`px-2 py-0.5 rounded-md text-[11px] font-cinzel font-semibold cursor-pointer transition-colors ${
                   macroFiltroNivel === null
-                    ? 'bg-amber-600 text-white font-bold'
-                    : 'text-slate-600 dark:text-slate-300 hover:bg-stone-100 dark:hover:bg-slate-800'
+                    ? 'bg-amber-800 text-amber-50 font-bold'
+                    : 'text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800'
                 }`}
               >
                 Todos
@@ -1016,10 +1194,10 @@ export const GrafoVisualizacao: React.FC<GrafoVisualizacaoProps> = ({
                 <button
                   key={lvl}
                   onClick={() => setMacroFiltroNivel(macroFiltroNivel === lvl ? null : lvl)}
-                  className={`px-2 py-0.5 rounded text-[11px] font-serif font-bold ${
+                  className={`px-2 py-0.5 rounded-md text-[11px] font-cinzel font-bold cursor-pointer transition-colors ${
                     macroFiltroNivel === lvl
-                      ? 'bg-amber-600 text-white'
-                      : 'text-slate-600 dark:text-slate-300 hover:bg-stone-100 dark:hover:bg-slate-800'
+                      ? 'bg-amber-800 text-amber-50'
+                      : 'text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800'
                   }`}
                 >
                   {NUMEROS_ROMANOS[lvl]}
@@ -1028,11 +1206,11 @@ export const GrafoVisualizacao: React.FC<GrafoVisualizacaoProps> = ({
             </div>
 
             {/* Filtro por Área */}
-            <div className="flex items-center gap-1 text-xs pl-2 border-l border-stone-200 dark:border-slate-800">
+            <div className="relative flex items-center pl-2.5 border-l border-stone-200 dark:border-stone-800">
               <select
                 value={macroFiltroArea}
                 onChange={(e) => setMacroFiltroArea(e.target.value)}
-                className="p-1 text-xs rounded border border-stone-200 dark:border-slate-700 bg-stone-50 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-medium"
+                className="appearance-none pl-2.5 pr-7 py-1 text-xs rounded-lg border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-200 font-serif font-medium cursor-pointer focus:outline-none focus:ring-1 focus:ring-amber-500"
               >
                 <option value="todas">Todas as Áreas</option>
                 {todasAreas.map((area) => (
@@ -1041,73 +1219,80 @@ export const GrafoVisualizacao: React.FC<GrafoVisualizacaoProps> = ({
                   </option>
                 ))}
               </select>
+              <ChevronDown className="w-3.5 h-3.5 text-stone-400 pointer-events-none absolute right-2 top-1/2 -translate-y-1/2" />
             </div>
 
             {/* Busca textual rápida no macro */}
-            <div className="relative pl-2 border-l border-stone-200 dark:border-slate-800">
+            <div className="relative pl-2.5 border-l border-stone-200 dark:border-stone-800">
               <input
                 type="text"
                 placeholder="Destacar obra..."
                 value={macroBusca}
                 onChange={(e) => setMacroBusca(e.target.value)}
-                className="pl-6 pr-2 py-0.5 text-xs rounded border border-stone-200 dark:border-slate-700 bg-stone-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 w-32 focus:w-44 transition-all"
+                className="pl-7 pr-2.5 py-1 text-xs rounded-lg border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-stone-800 dark:text-stone-200 w-36 focus:w-48 transition-all font-serif focus:outline-none focus:ring-1 focus:ring-amber-500"
               />
-              <Search className="w-3 h-3 absolute left-4 top-1.5 text-slate-400" />
+              <Search className="w-3.5 h-3.5 absolute left-4.5 top-1/2 -translate-y-1/2 text-stone-400" />
             </div>
 
-            {/* Legenda de Tipos de Linha */}
-            <div className="hidden xl:flex items-center gap-3 text-[10px] text-slate-500 pl-2 border-l border-stone-200 dark:border-slate-800">
-              <span className="flex items-center gap-1">
-                <span className="w-3 h-0.5 bg-slate-400 inline-block"></span> Prepara
+            {/* Legenda Editorial de Tipos de Linha */}
+            <div className="hidden xl:flex items-center gap-3.5 text-[11px] text-stone-600 dark:text-stone-400 pl-3 border-l border-stone-200 dark:border-stone-800 font-serif">
+              <span className="flex items-center gap-1.5">
+                <span className="w-4 h-0.5 bg-slate-400 inline-block rounded-full"></span>
+                <span>Prepara / Aprofunda</span>
               </span>
-              <span className="flex items-center gap-1 text-rose-600 font-bold">
-                <span className="w-3 h-0.5 border-t border-dashed border-rose-600 inline-block"></span> Contraponto
+              <span className="flex items-center gap-1.5 text-rose-600 dark:text-rose-400 font-semibold">
+                <span className="w-4 h-0.5 border-t-2 border-dashed border-rose-600 inline-block"></span>
+                <span>Contrasta</span>
               </span>
-              <span className="flex items-center gap-1 text-blue-600 font-bold">
-                <span className="w-3 h-0.5 border-t border-dotted border-blue-600 inline-block"></span> Mesmo Tema
+              <span className="flex items-center gap-1.5 text-sky-600 dark:text-sky-400 font-semibold">
+                <span className="w-4 h-0.5 border-t-2 border-dotted border-sky-600 inline-block"></span>
+                <span>Contextualiza</span>
               </span>
             </div>
           </div>
 
-          {/* Controles de Zoom Flutuantes no Canto Direito */}
-          <div className="absolute bottom-6 right-6 z-10 flex flex-col gap-1.5 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md p-1.5 rounded-xl border border-stone-200 dark:border-slate-800 shadow-md">
+          {/* Controles de Zoom Flutuantes no Canto Direito com Dimensionamento Uniforme e Tooltips */}
+          <div className="absolute bottom-6 right-6 z-10 flex flex-col gap-1.5 bg-white/95 dark:bg-stone-900/95 backdrop-blur-md p-1.5 rounded-xl border border-stone-200/90 dark:border-stone-800 shadow-lg">
             <button
               onClick={() => handleZoom('in')}
-              className="p-2 rounded-lg hover:bg-stone-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 transition-colors"
-              title="Aproximar zoom"
+              className="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-amber-50 dark:hover:bg-stone-800 text-stone-700 dark:text-stone-300 hover:text-amber-800 dark:hover:text-amber-300 transition-colors cursor-pointer"
+              title="Aproximar visualização (Zoom In)"
+              aria-label="Aproximar visualização"
             >
               <ZoomIn className="w-4 h-4" />
             </button>
             <button
               onClick={() => handleZoom('out')}
-              className="p-2 rounded-lg hover:bg-stone-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 transition-colors"
-              title="Afastar zoom"
+              className="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-amber-50 dark:hover:bg-stone-800 text-stone-700 dark:text-stone-300 hover:text-amber-800 dark:hover:text-amber-300 transition-colors cursor-pointer"
+              title="Afastar visualização (Zoom Out)"
+              aria-label="Afastar visualização"
             >
               <ZoomOut className="w-4 h-4" />
             </button>
             <button
               onClick={() => handleZoom('reset')}
-              className="p-2 rounded-lg hover:bg-stone-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 transition-colors"
-              title="Redefinir visualização"
+              className="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-amber-50 dark:hover:bg-stone-800 text-stone-700 dark:text-stone-300 hover:text-amber-800 dark:hover:text-amber-300 transition-colors cursor-pointer"
+              title="Centralizar e ajustar constelação na tela (Resetar Zoom)"
+              aria-label="Centralizar e ajustar constelação na tela"
             >
-              <RotateCcw className="w-4 h-4" />
+              <Maximize2 className="w-4 h-4" />
             </button>
           </div>
 
           {/* Banner de Ação Rápida para o Nó Selecionado no Modo Macro */}
           {livroSelecionadoMacro && (
-            <div className="absolute bottom-6 left-6 z-10 flex flex-col sm:flex-row items-start sm:items-center gap-3 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-4 rounded-xl border-2 border-amber-500 shadow-xl max-w-md animate-fadeIn">
-              <div className="flex-1">
+            <div className="absolute bottom-6 left-6 z-10 flex flex-col sm:flex-row items-start sm:items-center gap-3.5 bg-white/95 dark:bg-stone-900/95 backdrop-blur-md p-4 rounded-xl border-2 border-amber-600/80 shadow-xl max-w-md animate-fadeIn">
+              <div className="flex-1 min-w-0">
                 <span
-                  className="px-2 py-0.5 text-[10px] font-bold rounded text-white"
+                  className="px-2 py-0.5 text-[10px] font-cinzel font-bold rounded text-white tabular-nums"
                   style={{ backgroundColor: CORES_AREAS[livroSelecionadoMacro.area]?.hex }}
                 >
                   #{livroSelecionadoMacro.id} · {livroSelecionadoMacro.area}
                 </span>
-                <h4 className="font-serif font-bold text-sm text-slate-900 dark:text-white mt-1">
+                <h4 className="font-serif font-bold text-sm text-stone-900 dark:text-white mt-1 truncate">
                   {livroSelecionadoMacro.titulo}
                 </h4>
-                <p className="text-xs text-slate-500 italic">
+                <p className="text-xs text-stone-500 font-serif italic truncate">
                   {livroSelecionadoMacro.autor} ({livroSelecionadoMacro.ano})
                 </p>
               </div>
@@ -1115,20 +1300,21 @@ export const GrafoVisualizacao: React.FC<GrafoVisualizacaoProps> = ({
               <div className="flex items-center gap-2 shrink-0">
                 <button
                   onClick={() => handleFocarObra(livroSelecionadoMacro.id)}
-                  className="px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold flex items-center gap-1.5 shadow"
+                  className="px-3 py-1.5 rounded-lg bg-amber-800 hover:bg-amber-900 text-amber-50 text-xs font-cinzel font-bold flex items-center gap-1.5 shadow-sm cursor-pointer"
                 >
-                  <Target className="w-3.5 h-3.5" />
-                  <span>Entrar em Foco</span>
+                  <Target className="w-3.5 h-3.5 text-amber-300" />
+                  <span>Focar no Grafo</span>
                 </button>
                 <button
                   onClick={() => onSelecionarLivro(livroSelecionadoMacro.id)}
-                  className="px-2.5 py-1.5 rounded-lg border border-stone-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-stone-100 text-xs font-semibold"
+                  className="px-2.5 py-1.5 rounded-lg border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 text-xs font-cinzel font-semibold cursor-pointer"
                 >
-                  Ficha
+                  Abrir Obra
                 </button>
                 <button
                   onClick={() => setMacroNoSelecionadoId(null)}
-                  className="p-1.5 text-slate-400 hover:text-slate-600"
+                  className="p-1.5 text-stone-400 hover:text-stone-600 cursor-pointer"
+                  title="Fechar seleção"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -1150,17 +1336,17 @@ export const GrafoVisualizacao: React.FC<GrafoVisualizacaoProps> = ({
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex justify-center items-center p-4 animate-fadeIn">
           <form
             onSubmit={handleCriarRelacao}
-            className="bg-white dark:bg-slate-900 rounded-2xl p-6 max-w-lg w-full shadow-2xl border border-stone-200 dark:border-slate-800 space-y-4"
+            className="bg-library-paper dark:bg-library-darkPaper rounded-2xl p-6 max-w-lg w-full shadow-2xl border border-stone-300 dark:border-stone-800 space-y-4"
           >
-            <div className="flex justify-between items-center border-b pb-3 border-stone-200 dark:border-slate-800">
-              <h3 className="font-serif font-bold text-base text-slate-900 dark:text-white flex items-center gap-2">
-                <Share2 className="w-4 h-4 text-amber-600" />
+            <div className="flex justify-between items-center border-b pb-3 border-stone-200 dark:border-stone-800">
+              <h3 className="font-serif font-bold text-base text-stone-900 dark:text-white flex items-center gap-2">
+                <Share2 className="w-4 h-4 text-amber-700 dark:text-amber-400" />
                 <span>Criar Nova Conexão no Grafo</span>
               </h3>
               <button
                 type="button"
                 onClick={() => setModalNovaRelacao(false)}
-                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+                className="text-stone-400 hover:text-stone-600 dark:hover:text-stone-200"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -1168,13 +1354,13 @@ export const GrafoVisualizacao: React.FC<GrafoVisualizacaoProps> = ({
 
             <div className="space-y-3 text-xs">
               <div>
-                <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                  De (Origem):
+                <label className="block font-cinzel font-bold text-stone-700 dark:text-stone-300 mb-1 uppercase tracking-wider text-[11px]">
+                  De (Obra de Origem):
                 </label>
                 <select
                   value={novoDe}
                   onChange={(e) => setNovoDe(Number(e.target.value))}
-                  className="w-full p-2 border rounded-lg bg-stone-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border-stone-200 dark:border-slate-700"
+                  className="w-full p-2.5 border rounded-xl bg-white dark:bg-stone-900 text-stone-800 dark:text-stone-200 border-stone-300 dark:border-stone-700 font-serif"
                 >
                   {livros.map((l) => (
                     <option key={l.id} value={l.id}>
@@ -1185,13 +1371,13 @@ export const GrafoVisualizacao: React.FC<GrafoVisualizacaoProps> = ({
               </div>
 
               <div>
-                <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                  Para (Destino):
+                <label className="block font-cinzel font-bold text-stone-700 dark:text-stone-300 mb-1 uppercase tracking-wider text-[11px]">
+                  Para (Obra de Destino):
                 </label>
                 <select
                   value={novoPara}
                   onChange={(e) => setNovoPara(Number(e.target.value))}
-                  className="w-full p-2 border rounded-lg bg-stone-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border-stone-200 dark:border-slate-700"
+                  className="w-full p-2.5 border rounded-xl bg-white dark:bg-stone-900 text-stone-800 dark:text-stone-200 border-stone-300 dark:border-stone-700 font-serif"
                 >
                   {livros.map((l) => (
                     <option key={l.id} value={l.id}>
@@ -1202,46 +1388,46 @@ export const GrafoVisualizacao: React.FC<GrafoVisualizacaoProps> = ({
               </div>
 
               <div>
-                <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                  Tipo de Conexão:
+                <label className="block font-cinzel font-bold text-stone-700 dark:text-stone-300 mb-1 uppercase tracking-wider text-[11px]">
+                  Natureza Dialética da Conexão:
                 </label>
                 <select
                   value={novoTipo}
                   onChange={(e) => setNovoTipo(e.target.value as TipoRelacao)}
-                  className="w-full p-2 border rounded-lg bg-stone-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border-stone-200 dark:border-slate-700 font-semibold"
+                  className="w-full p-2.5 border rounded-xl bg-white dark:bg-stone-900 text-stone-800 dark:text-stone-200 border-stone-300 dark:border-stone-700 font-serif font-semibold"
                 >
-                  <option value="contraponto">⚡ Contraponto (Teses em conflito / Debate dialético)</option>
-                  <option value="prepara">→ Prepara (Sequência intelectual de leitura prévia)</option>
-                  <option value="mesmo_tema">≈ Mesmo Tema (Diálogo afim sobre mesmo objeto)</option>
+                  <option value="contraponto">Contrasta — Contraponto Dialético (Teses em conflito)</option>
+                  <option value="prepara">Prepara / Aprofunda — Sequência Intelectual de Leitura</option>
+                  <option value="mesmo_tema">Contextualiza — Mesmo Tema (Diálogo afim)</option>
                 </select>
               </div>
 
               <div>
-                <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                  Nota Explicativa (Por que essas duas obras se conectam?):
+                <label className="block font-cinzel font-bold text-stone-700 dark:text-stone-300 mb-1 uppercase tracking-wider text-[11px]">
+                  Justificativa Intelectual (Por que essas duas obras dialogam?):
                 </label>
                 <input
                   type="text"
                   required
                   value={novaNota}
                   onChange={(e) => setNovaNota(e.target.value)}
-                  placeholder="Ex: Hayek defende mercado espontâneo; Polanyi alerta contra a mercantilização da sociedade."
-                  className="w-full p-2.5 border rounded-lg bg-stone-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border-stone-200 dark:border-slate-700"
+                  placeholder="Ex: Hayek defende a ordem espontânea; Polanyi alerta contra a mercantilização do trabalho e da terra."
+                  className="w-full p-2.5 border rounded-xl bg-white dark:bg-stone-900 text-stone-800 dark:text-stone-200 border-stone-300 dark:border-stone-700 font-serif"
                 />
               </div>
             </div>
 
-            <div className="flex justify-end gap-2 pt-3 border-t border-stone-200 dark:border-slate-800">
+            <div className="flex justify-end gap-2 pt-3 border-t border-stone-200 dark:border-stone-800">
               <button
                 type="button"
                 onClick={() => setModalNovaRelacao(false)}
-                className="px-4 py-2 text-xs font-semibold rounded-lg hover:bg-stone-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400"
+                className="px-4 py-2 text-xs font-cinzel font-semibold rounded-xl hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-600 dark:text-stone-400"
               >
                 Cancelar
               </button>
               <button
                 type="submit"
-                className="px-4 py-2 text-xs font-bold rounded-lg bg-amber-600 hover:bg-amber-700 text-white shadow-sm"
+                className="px-4 py-2 text-xs font-cinzel font-bold rounded-xl bg-amber-800 hover:bg-amber-900 text-amber-50 shadow-sm"
               >
                 Salvar Conexão
               </button>
@@ -1252,3 +1438,4 @@ export const GrafoVisualizacao: React.FC<GrafoVisualizacaoProps> = ({
     </div>
   );
 };
+

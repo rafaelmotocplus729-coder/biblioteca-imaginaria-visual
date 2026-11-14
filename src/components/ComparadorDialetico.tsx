@@ -12,7 +12,12 @@ import {
   Check,
   BookOpen,
   Quote,
-  Compass
+  Compass,
+  ShieldAlert,
+  CheckCircle2,
+  Layers,
+  ChevronDown,
+  Plus
 } from 'lucide-react';
 
 interface ComparadorDialeticoProps {
@@ -26,6 +31,45 @@ interface ComparadorDialeticoProps {
   onAtualizarNotas: (livroId: number, notas: string) => void;
   onSelecionarLivro: (id: number) => void;
 }
+
+const renderizarBadgeResumo = (resumo: Livro['resumo_permitido']) => {
+  const info = LEGENDA_RESUMO[resumo];
+  if (!info) return null;
+
+  if (resumo === 'nao') {
+    return (
+      <span
+        title={info.descricao}
+        className="inline-flex items-center gap-1 px-2 py-0.5 text-[9px] font-sans font-semibold rounded-md bg-rose-100/80 dark:bg-rose-950/50 text-rose-900 dark:text-rose-300 border border-rose-300/60 dark:border-rose-800/50"
+      >
+        <ShieldAlert className="w-2.5 h-2.5 text-rose-600 dark:text-rose-400 shrink-0" />
+        <span>{info.rotulo}</span>
+      </span>
+    );
+  }
+
+  if (resumo === 'sim') {
+    return (
+      <span
+        title={info.descricao}
+        className="inline-flex items-center gap-1 px-2 py-0.5 text-[9px] font-sans font-semibold rounded-md bg-emerald-100/80 dark:bg-emerald-950/50 text-emerald-900 dark:text-emerald-300 border border-emerald-300/60 dark:border-emerald-800/50"
+      >
+        <CheckCircle2 className="w-2.5 h-2.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+        <span>{info.rotulo}</span>
+      </span>
+    );
+  }
+
+  return (
+    <span
+      title={info.descricao}
+      className="inline-flex items-center gap-1 px-2 py-0.5 text-[9px] font-sans font-semibold rounded-md bg-amber-100/80 dark:bg-amber-950/50 text-amber-900 dark:text-amber-300 border border-amber-300/60 dark:border-amber-700/50"
+    >
+      <Layers className="w-2.5 h-2.5 text-amber-600 dark:text-amber-400 shrink-0" />
+      <span>{info.rotulo}</span>
+    </span>
+  );
+};
 
 export const ComparadorDialetico: React.FC<ComparadorDialeticoProps> = ({
   isOpen,
@@ -107,11 +151,11 @@ export const ComparadorDialetico: React.FC<ComparadorDialeticoProps> = ({
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-stone-950/85 backdrop-blur-md flex justify-center items-start sm:items-center p-2 sm:p-5 md:p-8 animate-fadeIn">
       <div
-        className="relative bg-[#FAF7F2] dark:bg-[#16171B] w-full max-w-6xl max-h-[94vh] overflow-y-auto rounded-2xl shadow-2xl border border-stone-300 dark:border-stone-800 text-stone-800 dark:text-stone-100 flex flex-col scrollbar-none"
+        className="relative bg-library-paper dark:bg-library-darkPaper w-full max-w-6xl max-h-[94vh] overflow-y-auto rounded-2xl shadow-2xl border border-stone-300 dark:border-stone-800 text-stone-800 dark:text-stone-100 flex flex-col scrollbar-none"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Bloco Unificado de Cabeçalho Fixo (Sticky) - Impede sobreposição ao rolar */}
-        <div className="sticky top-0 z-30 bg-[#FAF7F2]/98 dark:bg-[#16171B]/98 backdrop-blur-md border-b border-stone-200/90 dark:border-stone-800/90 shadow-xs">
+        <div className="sticky top-0 z-30 bg-library-paper/98 dark:bg-library-darkPaper/98 backdrop-blur-md border-b border-stone-200/90 dark:border-stone-800/90 shadow-xs">
           {/* Barra Superior de Título */}
           <div className="flex items-center justify-between px-5 sm:px-8 py-3.5 border-b border-stone-200/70 dark:border-stone-800/60">
             <div className="flex items-center gap-3">
@@ -128,13 +172,18 @@ export const ComparadorDialetico: React.FC<ComparadorDialeticoProps> = ({
               </div>
             </div>
 
-            <button
-              onClick={onClose}
-              title="Fechar (Esc)"
-              className="p-2 rounded-full hover:bg-stone-200/80 dark:hover:bg-stone-800 text-stone-500 hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100 transition-colors"
-            >
-              <X className="w-5 h-5" />
-            </button>
+            <div className="flex items-center gap-2">
+              <kbd className="hidden sm:inline-block px-2 py-0.5 text-[10px] font-mono font-semibold text-stone-500 dark:text-stone-400 bg-stone-200/80 dark:bg-stone-800 rounded-md border border-stone-300 dark:border-stone-700 shadow-2xs">
+                ESC
+              </kbd>
+              <button
+                onClick={onClose}
+                title="Fechar (Esc)"
+                className="p-2 rounded-xl hover:bg-stone-200/80 dark:hover:bg-stone-800 text-stone-500 hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100 transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
           </div>
 
           {/* Carrossel de Debates Clássicos */}
@@ -159,7 +208,7 @@ export const ComparadorDialetico: React.FC<ComparadorDialeticoProps> = ({
                       setLivroAId(deLivro.id);
                       setLivroBId(paraLivro.id);
                     }}
-                    className={`px-3 py-1.5 rounded-full text-xs font-serif whitespace-nowrap transition-all border flex items-center gap-1.5 ${
+                    className={`px-3 py-1.5 rounded-full text-xs font-serif whitespace-nowrap transition-all border flex items-center gap-1.5 cursor-pointer ${
                       isSelected
                         ? 'bg-gradient-to-r from-rose-900 to-rose-950 text-amber-100 border-amber-600/70 shadow-sm ring-1 ring-amber-500/30 font-semibold scale-[1.02]'
                         : 'bg-white/90 dark:bg-stone-800/90 text-stone-700 dark:text-stone-300 border-stone-200/90 dark:border-stone-700/80 hover:border-amber-500/70 hover:text-stone-950 dark:hover:text-white'
@@ -186,19 +235,22 @@ export const ComparadorDialetico: React.FC<ComparadorDialeticoProps> = ({
                   <span className="w-2 h-2 rounded-full" style={{ backgroundColor: coresA.hex }} />
                   Tese Inicial (Livro A)
                 </label>
-                <span className="text-[11px] font-sans text-stone-500">#{livroA.id} · Nível {livroA.nivel}</span>
+                <span className="text-[11px] font-sans tabular-nums text-stone-500">#{livroA.id} · Nível {livroA.nivel}</span>
               </div>
-              <select
-                value={livroAId}
-                onChange={(e) => setLivroAId(Number(e.target.value))}
-                className="w-full p-2.5 sm:p-3 rounded-xl border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 text-sm font-serif font-medium text-stone-900 dark:text-stone-100 shadow-2xs focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-hidden"
-              >
-                {livros.map((l) => (
-                  <option key={l.id} value={l.id}>
-                    #{l.id} {l.titulo} — {l.autor} ({l.ano})
-                  </option>
-                ))}
-              </select>
+              <div className="relative">
+                <select
+                  value={livroAId}
+                  onChange={(e) => setLivroAId(Number(e.target.value))}
+                  className="w-full appearance-none pl-3.5 pr-9 py-2.5 sm:py-3 rounded-xl border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 text-sm font-serif font-medium text-stone-900 dark:text-stone-100 shadow-2xs focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-hidden cursor-pointer"
+                >
+                  {livros.map((l) => (
+                    <option key={l.id} value={l.id}>
+                      #{l.id} {l.titulo} — {l.autor} ({l.ano})
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown className="w-4 h-4 text-stone-400 pointer-events-none absolute right-3 top-1/2 -translate-y-1/2" />
+              </div>
             </div>
 
             {/* Botão Central de Inversão A <-> B */}
@@ -207,7 +259,7 @@ export const ComparadorDialetico: React.FC<ComparadorDialeticoProps> = ({
                 type="button"
                 onClick={handleInverter}
                 title="Inverter Obras (A ↔ B)"
-                className="p-2.5 rounded-xl border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:text-amber-700 dark:hover:text-amber-400 hover:border-amber-500/80 hover:bg-amber-50/50 dark:hover:bg-stone-800 transition-all shadow-2xs group flex items-center gap-1 text-xs font-cinzel font-semibold"
+                className="p-2.5 rounded-xl border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:text-amber-700 dark:hover:text-amber-400 hover:border-amber-500/80 hover:bg-amber-50/50 dark:hover:bg-stone-800 transition-all shadow-2xs group flex items-center gap-1 text-xs font-cinzel font-semibold cursor-pointer"
               >
                 <ArrowLeftRight className="w-4 h-4 group-hover:rotate-180 transition-transform duration-300 text-amber-600" />
                 <span className="md:hidden">Inverter</span>
@@ -221,19 +273,22 @@ export const ComparadorDialetico: React.FC<ComparadorDialeticoProps> = ({
                   <span className="w-2 h-2 rounded-full" style={{ backgroundColor: coresB.hex }} />
                   Antítese / Contraponto (Livro B)
                 </label>
-                <span className="text-[11px] font-sans text-stone-500">#{livroB.id} · Nível {livroB.nivel}</span>
+                <span className="text-[11px] font-sans tabular-nums text-stone-500">#{livroB.id} · Nível {livroB.nivel}</span>
               </div>
-              <select
-                value={livroBId}
-                onChange={(e) => setLivroBId(Number(e.target.value))}
-                className="w-full p-2.5 sm:p-3 rounded-xl border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 text-sm font-serif font-medium text-stone-900 dark:text-stone-100 shadow-2xs focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-hidden"
-              >
-                {livros.map((l) => (
-                  <option key={l.id} value={l.id}>
-                    #{l.id} {l.titulo} — {l.autor} ({l.ano})
-                  </option>
-                ))}
-              </select>
+              <div className="relative">
+                <select
+                  value={livroBId}
+                  onChange={(e) => setLivroBId(Number(e.target.value))}
+                  className="w-full appearance-none pl-3.5 pr-9 py-2.5 sm:py-3 rounded-xl border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 text-sm font-serif font-medium text-stone-900 dark:text-stone-100 shadow-2xs focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-hidden cursor-pointer"
+                >
+                  {livros.map((l) => (
+                    <option key={l.id} value={l.id}>
+                      #{l.id} {l.titulo} — {l.autor} ({l.ano})
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown className="w-4 h-4 text-stone-400 pointer-events-none absolute right-3 top-1/2 -translate-y-1/2" />
+              </div>
             </div>
           </div>
 
@@ -266,7 +321,7 @@ export const ComparadorDialetico: React.FC<ComparadorDialeticoProps> = ({
           {/* Painel Duplo Lado a Lado com Capas Reais e Teses */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative">
             {/* Medallion Central VS (Desktop) */}
-            <div className="hidden md:flex absolute left-1/2 top-28 -translate-x-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-[#FAF7F2] dark:bg-[#16171B] border-2 border-amber-600/70 shadow-lg items-center justify-center text-amber-700 dark:text-amber-400 z-10 font-cinzel font-bold text-xs">
+            <div className="hidden md:flex absolute left-1/2 top-28 -translate-x-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-library-paper dark:bg-library-darkPaper border-2 border-amber-600/70 shadow-lg items-center justify-center text-amber-700 dark:text-amber-400 z-10 font-cinzel font-bold text-xs">
               <Swords className="w-5 h-5 text-rose-600 dark:text-rose-400" />
             </div>
 
@@ -305,22 +360,15 @@ export const ComparadorDialetico: React.FC<ComparadorDialeticoProps> = ({
                 <div className="space-y-1.5 flex-1 min-w-0">
                   <div className="flex flex-wrap items-center gap-1.5">
                     <span
-                      className="px-2 py-0.5 text-[9px] font-cinzel font-bold uppercase rounded-md text-white shadow-2xs"
+                      className="px-2 py-0.5 text-[9px] font-cinzel font-bold uppercase rounded-md text-white shadow-2xs tabular-nums"
                       style={{ backgroundColor: coresA.hex }}
                     >
                       Nível {livroA.nivel} · #{livroA.id}
                     </span>
-                    <span className="px-1.5 py-0.5 text-[9px] font-sans font-medium uppercase rounded bg-stone-200/80 dark:bg-stone-800 text-stone-700 dark:text-stone-300">
+                    <span className="px-1.5 py-0.5 text-[9px] font-sans font-medium uppercase rounded-md bg-stone-200/80 dark:bg-stone-800 text-stone-700 dark:text-stone-300">
                       {livroA.classe}
                     </span>
-                    {LEGENDA_RESUMO[livroA.resumo_permitido] && (
-                      <span
-                        title={LEGENDA_RESUMO[livroA.resumo_permitido].descricao}
-                        className="px-1.5 py-0.5 text-[9px] font-sans font-medium rounded bg-amber-100/70 dark:bg-amber-950/40 text-amber-900 dark:text-amber-300 border border-amber-300/50 dark:border-amber-700/40"
-                      >
-                        {LEGENDA_RESUMO[livroA.resumo_permitido].simbolo} {LEGENDA_RESUMO[livroA.resumo_permitido].rotulo}
-                      </span>
-                    )}
+                    {renderizarBadgeResumo(livroA.resumo_permitido)}
                   </div>
 
                   <h3 className="font-serif font-bold text-lg sm:text-xl text-stone-900 dark:text-stone-100 leading-snug">
@@ -331,7 +379,7 @@ export const ComparadorDialetico: React.FC<ComparadorDialeticoProps> = ({
                     {livroA.autor} ({livroA.ano})
                   </p>
 
-                  <p className="text-[11px] text-stone-500 font-sans">
+                  <p className="text-[11px] text-stone-500 font-sans tabular-nums">
                     ~{obterPaginasLivro(livroA.id, livroA.classe)} págs · {livroA.area}
                   </p>
 
@@ -341,7 +389,7 @@ export const ComparadorDialetico: React.FC<ComparadorDialeticoProps> = ({
                         onSelecionarLivro(livroA.id);
                         onClose();
                       }}
-                      className="inline-flex items-center gap-1 text-xs font-cinzel font-bold text-amber-700 dark:text-amber-400 hover:text-amber-900 dark:hover:text-amber-300 hover:underline transition-colors"
+                      className="inline-flex items-center gap-1 text-xs font-cinzel font-bold text-amber-700 dark:text-amber-400 hover:text-amber-900 dark:hover:text-amber-300 hover:underline transition-colors cursor-pointer"
                     >
                       Ver Ficha Completa <ArrowRight className="w-3 h-3" />
                     </button>
@@ -350,7 +398,7 @@ export const ComparadorDialetico: React.FC<ComparadorDialeticoProps> = ({
               </div>
 
               {/* Tese Central de A */}
-              <div className="space-y-1.5 bg-[#FAF7F2] dark:bg-stone-950/70 p-4 rounded-xl border border-stone-200/90 dark:border-stone-800/80">
+              <div className="space-y-1.5 bg-library-paper dark:bg-stone-950/70 p-4 rounded-xl border border-stone-200/90 dark:border-stone-800/80">
                 <div className="flex items-center gap-1.5 text-[10px] font-cinzel font-bold text-stone-500 uppercase tracking-wider">
                   <Quote className="w-3 h-3 text-amber-600" />
                   <span>Tese Central</span>
@@ -361,7 +409,7 @@ export const ComparadorDialetico: React.FC<ComparadorDialeticoProps> = ({
               </div>
 
               {/* O que acrescenta de A */}
-              <div className="space-y-1.5 bg-[#FAF7F2] dark:bg-stone-950/70 p-4 rounded-xl border border-stone-200/90 dark:border-stone-800/80">
+              <div className="space-y-1.5 bg-library-paper dark:bg-stone-950/70 p-4 rounded-xl border border-stone-200/90 dark:border-stone-800/80">
                 <div className="flex items-center gap-1.5 text-[10px] font-cinzel font-bold text-stone-500 uppercase tracking-wider">
                   <BookOpen className="w-3 h-3 text-stone-500" />
                   <span>O que Acrescenta à sua Formação</span>
@@ -413,22 +461,15 @@ export const ComparadorDialetico: React.FC<ComparadorDialeticoProps> = ({
                 <div className="space-y-1.5 flex-1 min-w-0">
                   <div className="flex flex-wrap items-center gap-1.5">
                     <span
-                      className="px-2 py-0.5 text-[9px] font-cinzel font-bold uppercase rounded-md text-white shadow-2xs"
+                      className="px-2 py-0.5 text-[9px] font-cinzel font-bold uppercase rounded-md text-white shadow-2xs tabular-nums"
                       style={{ backgroundColor: coresB.hex }}
                     >
                       Nível {livroB.nivel} · #{livroB.id}
                     </span>
-                    <span className="px-1.5 py-0.5 text-[9px] font-sans font-medium uppercase rounded bg-stone-200/80 dark:bg-stone-800 text-stone-700 dark:text-stone-300">
+                    <span className="px-1.5 py-0.5 text-[9px] font-sans font-medium uppercase rounded-md bg-stone-200/80 dark:bg-stone-800 text-stone-700 dark:text-stone-300">
                       {livroB.classe}
                     </span>
-                    {LEGENDA_RESUMO[livroB.resumo_permitido] && (
-                      <span
-                        title={LEGENDA_RESUMO[livroB.resumo_permitido].descricao}
-                        className="px-1.5 py-0.5 text-[9px] font-sans font-medium rounded bg-amber-100/70 dark:bg-amber-950/40 text-amber-900 dark:text-amber-300 border border-amber-300/50 dark:border-amber-700/40"
-                      >
-                        {LEGENDA_RESUMO[livroB.resumo_permitido].simbolo} {LEGENDA_RESUMO[livroB.resumo_permitido].rotulo}
-                      </span>
-                    )}
+                    {renderizarBadgeResumo(livroB.resumo_permitido)}
                   </div>
 
                   <h3 className="font-serif font-bold text-lg sm:text-xl text-stone-900 dark:text-stone-100 leading-snug">
@@ -439,7 +480,7 @@ export const ComparadorDialetico: React.FC<ComparadorDialeticoProps> = ({
                     {livroB.autor} ({livroB.ano})
                   </p>
 
-                  <p className="text-[11px] text-stone-500 font-sans">
+                  <p className="text-[11px] text-stone-500 font-sans tabular-nums">
                     ~{obterPaginasLivro(livroB.id, livroB.classe)} págs · {livroB.area}
                   </p>
 
@@ -449,7 +490,7 @@ export const ComparadorDialetico: React.FC<ComparadorDialeticoProps> = ({
                         onSelecionarLivro(livroB.id);
                         onClose();
                       }}
-                      className="inline-flex items-center gap-1 text-xs font-cinzel font-bold text-amber-700 dark:text-amber-400 hover:text-amber-900 dark:hover:text-amber-300 hover:underline transition-colors"
+                      className="inline-flex items-center gap-1 text-xs font-cinzel font-bold text-amber-700 dark:text-amber-400 hover:text-amber-900 dark:hover:text-amber-300 hover:underline transition-colors cursor-pointer"
                     >
                       Ver Ficha Completa <ArrowRight className="w-3 h-3" />
                     </button>
@@ -458,7 +499,7 @@ export const ComparadorDialetico: React.FC<ComparadorDialeticoProps> = ({
               </div>
 
               {/* Tese Central de B */}
-              <div className="space-y-1.5 bg-[#FAF7F2] dark:bg-stone-950/70 p-4 rounded-xl border border-stone-200/90 dark:border-stone-800/80">
+              <div className="space-y-1.5 bg-library-paper dark:bg-stone-950/70 p-4 rounded-xl border border-stone-200/90 dark:border-stone-800/80">
                 <div className="flex items-center gap-1.5 text-[10px] font-cinzel font-bold text-stone-500 uppercase tracking-wider">
                   <Quote className="w-3 h-3 text-amber-600" />
                   <span>Tese Central</span>
@@ -469,7 +510,7 @@ export const ComparadorDialetico: React.FC<ComparadorDialeticoProps> = ({
               </div>
 
               {/* O que acrescenta de B */}
-              <div className="space-y-1.5 bg-[#FAF7F2] dark:bg-stone-950/70 p-4 rounded-xl border border-stone-200/90 dark:border-stone-800/80">
+              <div className="space-y-1.5 bg-library-paper dark:bg-stone-950/70 p-4 rounded-xl border border-stone-200/90 dark:border-stone-800/80">
                 <div className="flex items-center gap-1.5 text-[10px] font-cinzel font-bold text-stone-500 uppercase tracking-wider">
                   <BookOpen className="w-3 h-3 text-stone-500" />
                   <span>O que Acrescenta à sua Formação</span>
@@ -509,16 +550,18 @@ export const ComparadorDialetico: React.FC<ComparadorDialeticoProps> = ({
                 <button
                   type="button"
                   onClick={() => handleInserirTag('[Convergência]')}
-                  className="px-2 py-0.5 rounded bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-300 hover:border-amber-400 text-[11px]"
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-300 hover:border-amber-500/70 hover:text-stone-900 dark:hover:text-stone-100 text-[11px] font-medium transition-colors cursor-pointer"
                 >
-                  + Convergência
+                  <Plus className="w-3 h-3 text-amber-600 dark:text-amber-400" />
+                  <span>Convergência</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => handleInserirTag('[Divergência Irredutível]')}
-                  className="px-2 py-0.5 rounded bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-300 hover:border-amber-400 text-[11px]"
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-300 hover:border-amber-500/70 hover:text-stone-900 dark:hover:text-stone-100 text-[11px] font-medium transition-colors cursor-pointer"
                 >
-                  + Divergência
+                  <Plus className="w-3 h-3 text-amber-600 dark:text-amber-400" />
+                  <span>Divergência</span>
                 </button>
               </div>
             </div>

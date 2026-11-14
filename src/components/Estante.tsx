@@ -2,7 +2,20 @@ import React, { useState } from 'react';
 import { Livro, Progresso } from '../types';
 import { LivroCard } from './LivroCard';
 import { EX_LIBRIS_NIVEIS } from '../constants/theme';
-import { Layers, CheckCircle2, SplitSquareVertical, ArrowRightLeft, Compass } from 'lucide-react';
+import {
+  Layers,
+  CheckCircle2,
+  SplitSquareVertical,
+  ArrowRightLeft,
+  Compass,
+  Landmark,
+  Scale,
+  ScrollText,
+  Swords,
+  Crown,
+  BookMarked,
+  Sparkles
+} from 'lucide-react';
 
 interface EstanteProps {
   livros: Livro[];
@@ -12,26 +25,48 @@ interface EstanteProps {
   filtroNivel?: number;
 }
 
-const NOMES_NIVEIS: Record<number, { titulo: string; descricao: string }> = {
+const NOMES_NIVEIS: Record<number, { titulo: string; curto: string; descricao: string }> = {
   1: {
     titulo: 'Nível 1 — Propedêutica & Instrumental',
+    curto: 'Propedêutica',
     descricao: 'Método de estudo, proficiência linguística, reflexão existencial básica, imaginação sociológica e introdução ao debate ideológico.'
   },
   2: {
     titulo: 'Nível 2 — Consciência Crítica & Psicologia Humana',
+    curto: 'Consciência',
     descricao: 'O confronto com o absurdo, a literatura realista, a identidade nacional, a arquitetura das condutas e a sabedoria trágica.'
   },
   3: {
     titulo: 'Nível 3 — Fundamentos Clássicos & Origens do Conflito',
+    curto: 'Fundamentos',
     descricao: 'A metafísica grega, a introspecção cristã, as revoluções científicas, o ceticismo epistemológico e a gênese do poder moderno.'
   },
   4: {
     titulo: 'Nível 4 — Maturidade Dialética & Dilemas da Liberdade',
+    curto: 'Dialética',
     descricao: 'A mística do sofrimento, a economia política em choque de sistemas, a tradição, o processo civilizador e o declínio dos laços sólidos.'
   },
   5: {
     titulo: 'Nível 5 — Cume Intelectual & Travessias do Espírito',
+    curto: 'Cume',
     descricao: 'A tragédia das nações, a lei moral incondicional, a hegemonia cultural, a ação humana e os abismos do inconsciente e do sono.'
+  }
+};
+
+const renderExLibrisIcon = (iconKey?: string, className = 'w-5 h-5') => {
+  switch (iconKey) {
+    case 'landmark':
+      return <Landmark className={className} />;
+    case 'scale':
+      return <Scale className={className} />;
+    case 'scroll':
+      return <ScrollText className={className} />;
+    case 'swords':
+      return <Swords className={className} />;
+    case 'crown':
+      return <Crown className={className} />;
+    default:
+      return <Landmark className={className} />;
   }
 };
 
@@ -46,7 +81,7 @@ export const Estante: React.FC<EstanteProps> = ({
   const [filtroTrilha, setFiltroTrilha] = useState<'todas' | 'a' | 'b'>('todas');
   const [modoAgrupamento, setModoAgrupamento] = useState<'subtrilhas' | 'intercalado'>('subtrilhas');
 
-  // Determinar quais níveis exibir (considera filtro superior ou aba mobile ativa)
+  // Determinar quais níveis exibir (considera filtro superior ou aba ativa)
   const nivelAtivo = filtroNivel !== undefined ? filtroNivel : (tabNivelMobile === 'todos' ? undefined : tabNivelMobile);
   const niveisParaExibir = nivelAtivo !== undefined ? [nivelAtivo] : [1, 2, 3, 4, 5];
 
@@ -62,7 +97,7 @@ export const Estante: React.FC<EstanteProps> = ({
     if (modoVisualizacao === 'lombada') {
       return (
         <div className="overflow-x-auto pb-1 scrollbar-thin">
-          <div className="min-w-max flex items-end justify-start gap-1 sm:gap-2 px-1 pt-6 pb-0">
+          <div className="min-w-max flex items-end justify-start gap-1.5 sm:gap-2 px-2 pt-6 pb-0">
             {itens.map((livro) => (
               <LivroCard
                 key={livro.id}
@@ -78,9 +113,9 @@ export const Estante: React.FC<EstanteProps> = ({
     }
 
     return (
-      <div className="flex sm:grid sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 overflow-x-auto sm:overflow-visible gap-4 sm:gap-6 pb-2 sm:pb-0 snap-x scrollbar-thin">
+      <div className="flex sm:grid sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 overflow-x-auto sm:overflow-visible gap-4 sm:gap-5 pb-2 sm:pb-0 snap-x scrollbar-thin">
         {itens.map((livro) => (
-          <div key={livro.id} className="min-w-[150px] sm:min-w-0 snap-start shrink-0 sm:shrink">
+          <div key={livro.id} className="min-w-[155px] sm:min-w-0 snap-start shrink-0 sm:shrink">
             <LivroCard
               livro={livro}
               progresso={progressos[livro.id]}
@@ -104,38 +139,48 @@ export const Estante: React.FC<EstanteProps> = ({
   );
 
   return (
-    <div className="space-y-12 pb-20">
+    <div className="space-y-10 pb-20">
       {/* Barra Nobre de Navegação: Níveis, Trilhas & Organização da Estante */}
-      <div className="bg-library-paper/95 dark:bg-library-darkPaper/95 backdrop-blur-md p-3.5 sm:p-4 rounded-2xl border border-stone-200/90 dark:border-stone-800/90 shadow-sm space-y-3.5">
-        {/* Tier 1: Seletor de Níveis em Abas Nobres */}
+      <div className="surface-editorial p-4 sm:p-5 rounded-2xl space-y-4">
+        {/* Tier 1: Seletor de Níveis em Abas Arquitetônicas */}
         {!filtroNivel && (
-          <div className="space-y-1.5">
+          <div className="space-y-2">
             <div className="flex items-center justify-between text-[11px] font-cinzel font-bold text-stone-500 dark:text-stone-400 px-0.5">
               <span className="flex items-center gap-1.5 uppercase tracking-wider">
                 <Layers className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
-                Níveis do Plano de Estudos
+                Arquitetura dos 5 Níveis Formativos
               </span>
               <span className="text-[10px] font-mono text-stone-400 dark:text-stone-500 hidden sm:inline">
-                Atalhos numéricos [1] a [5] no teclado
+                Atalhos de teclado: [1] a [5] · [0] Todos
               </span>
             </div>
 
-            <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
               <button
+                type="button"
                 onClick={() => setTabNivelMobile('todos')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-cinzel font-bold transition-all shrink-0 flex items-center gap-2 border ${
+                className={`p-2.5 rounded-xl text-left transition-all flex flex-col justify-between border cursor-pointer ${
                   tabNivelMobile === 'todos'
-                    ? 'bg-amber-900 dark:bg-amber-800 text-amber-50 border-amber-700 shadow-xs'
-                    : 'bg-stone-50/80 dark:bg-stone-900/80 text-stone-700 dark:text-stone-300 border-stone-200/90 dark:border-stone-800 hover:border-amber-500/60'
+                    ? 'bg-stone-900 dark:bg-amber-900/90 text-amber-50 border-stone-800 dark:border-amber-700 shadow-xs'
+                    : 'bg-stone-50/90 dark:bg-stone-900/80 text-stone-700 dark:text-stone-300 border-stone-200/90 dark:border-stone-800 hover:border-amber-500/60'
                 }`}
               >
-                <span>Todos os Níveis</span>
-                <span className={`text-[10px] px-1.5 py-0.2 rounded font-mono ${
-                  tabNivelMobile === 'todos'
-                    ? 'bg-amber-950/60 text-amber-200'
-                    : 'bg-stone-200/60 dark:bg-stone-800 text-stone-500 dark:text-stone-400'
-                }`}>
-                  120
+                <div className="flex items-center justify-between w-full">
+                  <span className="text-[10px] font-cinzel font-bold uppercase tracking-wider opacity-80">
+                    Visão Integral
+                  </span>
+                  <span
+                    className={`text-[10px] px-1.5 py-0.2 rounded font-mono tabular-nums ${
+                      tabNivelMobile === 'todos'
+                        ? 'bg-white/15 text-amber-200'
+                        : 'bg-stone-200/70 dark:bg-stone-800 text-stone-600 dark:text-stone-400'
+                    }`}
+                  >
+                    {livros.length}
+                  </span>
+                </div>
+                <span className="font-serif font-bold text-xs mt-1 truncate">
+                  Todos os Níveis (I–V)
                 </span>
               </button>
 
@@ -144,29 +189,40 @@ export const Estante: React.FC<EstanteProps> = ({
                 const lidos = livrosNivel.filter((l) => progressos[l.id]?.estado === 'lido').length;
                 const completo = livrosNivel.length > 0 && lidos === livrosNivel.length;
                 const isActive = tabNivelMobile === lvl;
+                const infoNivel = NOMES_NIVEIS[lvl];
 
                 return (
                   <button
                     key={lvl}
+                    type="button"
                     onClick={() => setTabNivelMobile(lvl)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-cinzel font-bold transition-all shrink-0 flex items-center gap-2 border ${
+                    className={`p-2.5 rounded-xl text-left transition-all flex flex-col justify-between border cursor-pointer ${
                       isActive
-                        ? 'bg-amber-900 dark:bg-amber-800 text-amber-50 border-amber-700 shadow-xs'
-                        : 'bg-stone-50/80 dark:bg-stone-900/80 text-stone-700 dark:text-stone-300 border-stone-200/90 dark:border-stone-800 hover:border-amber-500/60'
+                        ? 'bg-stone-900 dark:bg-amber-900/90 text-amber-50 border-stone-800 dark:border-amber-700 shadow-xs'
+                        : 'bg-stone-50/90 dark:bg-stone-900/80 text-stone-700 dark:text-stone-300 border-stone-200/90 dark:border-stone-800 hover:border-amber-500/60'
                     }`}
                   >
-                    <span>Nível {algarismosRomanos[lvl]}</span>
-                    {completo ? (
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                    ) : (
-                      <span className={`text-[10px] px-1.5 py-0.2 rounded font-mono ${
-                        isActive
-                          ? 'bg-amber-950/60 text-amber-200'
-                          : 'bg-stone-200/60 dark:bg-stone-800 text-stone-500 dark:text-stone-400'
-                      }`}>
-                        {lidos}/{livrosNivel.length}
+                    <div className="flex items-center justify-between w-full gap-1">
+                      <span className="text-[10px] font-cinzel font-bold uppercase tracking-wider">
+                        Nível {algarismosRomanos[lvl]}
                       </span>
-                    )}
+                      {completo ? (
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                      ) : (
+                        <span
+                          className={`text-[10px] px-1.5 py-0.2 rounded font-mono tabular-nums ${
+                            isActive
+                              ? 'bg-white/15 text-amber-200'
+                              : 'bg-stone-200/70 dark:bg-stone-800 text-stone-500 dark:text-stone-400'
+                          }`}
+                        >
+                          {lidos}/{livrosNivel.length}
+                        </span>
+                      )}
+                    </div>
+                    <span className="font-serif font-semibold text-xs mt-1 truncate">
+                      {infoNivel.curto}
+                    </span>
                   </button>
                 );
               })}
@@ -175,56 +231,62 @@ export const Estante: React.FC<EstanteProps> = ({
         )}
 
         {/* Tier 2: Alternador de Trilhas e Modos de Exibição da Estante */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pt-2.5 border-t border-stone-200/70 dark:border-stone-800/70">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pt-3 border-t border-stone-200/70 dark:border-stone-800/80">
           {/* Alternador de Trilhas (Canônica A vs Expansão B vs Ambas) */}
-          <div className="flex items-center gap-1.5 bg-stone-100/90 dark:bg-stone-900/90 p-1 rounded-xl border border-stone-200/90 dark:border-stone-800 shadow-2xs self-start sm:self-auto overflow-x-auto scrollbar-none">
+          <div className="flex items-center gap-1 bg-stone-100/90 dark:bg-stone-900/90 p-1 rounded-xl border border-stone-200/90 dark:border-stone-800 self-start sm:self-auto overflow-x-auto scrollbar-none">
             <button
+              type="button"
               onClick={() => setFiltroTrilha('todas')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-cinzel font-bold transition-all flex items-center gap-1.5 shrink-0 ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-cinzel font-bold transition-all flex items-center gap-1.5 shrink-0 cursor-pointer ${
                 filtroTrilha === 'todas'
-                  ? 'bg-white dark:bg-stone-800 text-amber-900 dark:text-amber-200 shadow-xs border border-stone-200/60 dark:border-stone-700/60'
+                  ? 'bg-white dark:bg-stone-800 text-stone-900 dark:text-amber-200 shadow-2xs border border-stone-200/80 dark:border-stone-700'
                   : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
               }`}
               title="Exibir todas as 24 obras de cada nível (12 canônicas + 12 expansão)"
             >
               <Compass className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
-              <span>✦ Todas as 24 Obras</span>
+              <span>Todas as 24 Obras / Nível</span>
             </button>
             <button
+              type="button"
               onClick={() => setFiltroTrilha('a')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-cinzel font-bold transition-all shrink-0 ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-cinzel font-bold transition-all flex items-center gap-1.5 shrink-0 cursor-pointer ${
                 filtroTrilha === 'a'
-                  ? 'bg-amber-900 dark:bg-amber-800 text-amber-50 shadow-xs'
+                  ? 'bg-white dark:bg-stone-800 text-stone-900 dark:text-amber-200 shadow-2xs border border-stone-200/80 dark:border-stone-700'
                   : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
               }`}
               title="Exibir apenas a Trilha A (Obras Canônicas originais 1 a 60)"
             >
-              Trilha A (Canônica)
+              <BookMarked className="w-3.5 h-3.5 text-stone-600 dark:text-stone-400" />
+              <span>Trilha A (Canônica)</span>
             </button>
             <button
+              type="button"
               onClick={() => setFiltroTrilha('b')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-cinzel font-bold transition-all shrink-0 ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-cinzel font-bold transition-all flex items-center gap-1.5 shrink-0 cursor-pointer ${
                 filtroTrilha === 'b'
-                  ? 'bg-amber-900 dark:bg-amber-800 text-amber-50 shadow-xs'
+                  ? 'bg-white dark:bg-stone-800 text-stone-900 dark:text-amber-200 shadow-2xs border border-stone-200/80 dark:border-stone-700'
                   : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
               }`}
               title="Exibir apenas a Trilha B (Segunda leva de obras complementares 61 a 120)"
             >
-              Trilha B (Expansão)
+              <Sparkles className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+              <span>Trilha B (Expansão)</span>
             </button>
           </div>
 
           {/* Quando 'todas' estiver ativo, permitir alternar entre Prateleiras Divididas ou Intercaladas */}
           {filtroTrilha === 'todas' && (
-            <div className="flex items-center gap-1 bg-stone-100/90 dark:bg-stone-900/90 p-1 rounded-xl border border-stone-200/90 dark:border-stone-800 shadow-2xs self-start sm:self-auto shrink-0">
-              <span className="text-[10px] font-cinzel text-stone-400 px-2 hidden md:inline uppercase">
-                Exibição:
+            <div className="flex items-center gap-1 bg-stone-100/90 dark:bg-stone-900/90 p-1 rounded-xl border border-stone-200/90 dark:border-stone-800 self-start sm:self-auto shrink-0">
+              <span className="text-[10px] font-cinzel font-semibold text-stone-400 dark:text-stone-500 px-2 hidden md:inline uppercase tracking-wider">
+                Disposição:
               </span>
               <button
+                type="button"
                 onClick={() => setModoAgrupamento('subtrilhas')}
-                className={`px-2.5 py-1 rounded-lg text-xs font-cinzel font-semibold transition-all flex items-center gap-1.5 ${
+                className={`px-2.5 py-1 rounded-lg text-xs font-cinzel font-semibold transition-all flex items-center gap-1.5 cursor-pointer ${
                   modoAgrupamento === 'subtrilhas'
-                    ? 'bg-white dark:bg-stone-800 text-amber-900 dark:text-amber-200 shadow-xs border border-stone-200/60 dark:border-stone-700/60 font-bold'
+                    ? 'bg-white dark:bg-stone-800 text-stone-900 dark:text-amber-200 shadow-2xs border border-stone-200/80 dark:border-stone-700 font-bold'
                     : 'text-stone-500 hover:text-stone-800 dark:hover:text-stone-200'
                 }`}
                 title="Separar visualmente em duas prateleiras por nível: Trilha A e Trilha B"
@@ -233,10 +295,11 @@ export const Estante: React.FC<EstanteProps> = ({
                 <span>Por Trilha</span>
               </button>
               <button
+                type="button"
                 onClick={() => setModoAgrupamento('intercalado')}
-                className={`px-2.5 py-1 rounded-lg text-xs font-cinzel font-semibold transition-all flex items-center gap-1.5 ${
+                className={`px-2.5 py-1 rounded-lg text-xs font-cinzel font-semibold transition-all flex items-center gap-1.5 cursor-pointer ${
                   modoAgrupamento === 'intercalado'
-                    ? 'bg-white dark:bg-stone-800 text-amber-900 dark:text-amber-200 shadow-xs border border-stone-200/60 dark:border-stone-700/60 font-bold'
+                    ? 'bg-white dark:bg-stone-800 text-stone-900 dark:text-amber-200 shadow-2xs border border-stone-200/80 dark:border-stone-700 font-bold'
                     : 'text-stone-500 hover:text-stone-800 dark:hover:text-stone-200'
                 }`}
                 title="Intercalar os livros lado a lado (1A, 1B, 2A, 2B...)"
@@ -281,18 +344,26 @@ export const Estante: React.FC<EstanteProps> = ({
         return (
           <section
             key={nivel}
-            className="relative bg-library-paper/90 dark:bg-library-darkPaper/90 rounded-2xl p-4 sm:p-7 border border-stone-300/80 dark:border-stone-800/90 backdrop-blur-md shadow-sm transition-all space-y-6"
+            className="relative surface-parchment rounded-2xl p-4 sm:p-7 shadow-2xs transition-all space-y-6"
           >
             {/* Cabeçalho Editorial do Nível */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-stone-200 dark:border-stone-800/80 gap-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-stone-200/90 dark:border-stone-800/90 gap-3">
               <div className="flex items-start gap-3.5">
-                <div className="shrink-0 w-11 h-11 rounded-sm brass-plaque flex items-center justify-center font-cinzel font-bold text-lg select-none">
+                <div className="shrink-0 w-11 h-11 rounded-md brass-plaque flex items-center justify-center font-cinzel font-bold text-lg select-none">
                   {romano}
                 </div>
                 <div>
-                  <h3 className="font-serif font-bold text-lg sm:text-xl text-stone-900 dark:text-stone-100 flex items-center gap-2">
-                    {info.titulo}
-                  </h3>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <h3 className="font-serif font-bold text-lg sm:text-xl text-stone-900 dark:text-stone-100">
+                      {info.titulo}
+                    </h3>
+                    {exLibris && (
+                      <span className="hidden md:inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-cinzel font-semibold text-amber-900 dark:text-amber-300 bg-amber-100/60 dark:bg-amber-950/50 border border-amber-300/50 dark:border-amber-800/50">
+                        {renderExLibrisIcon(exLibris.iconKey, 'w-3 h-3 text-amber-700 dark:text-amber-400')}
+                        <span>{exLibris.titulo}</span>
+                      </span>
+                    )}
+                  </div>
                   <p className="text-xs text-stone-600 dark:text-stone-400 mt-1 max-w-2xl font-serif italic leading-relaxed">
                     {info.descricao}
                   </p>
@@ -300,21 +371,21 @@ export const Estante: React.FC<EstanteProps> = ({
               </div>
 
               {/* Rótulo de Leitura com Barra de Progresso Clássica */}
-              <div className="flex flex-col sm:items-end gap-1.5 shrink-0">
-                <div className="flex items-center gap-3 text-xs text-stone-600 dark:text-stone-400 font-cinzel bg-stone-100/80 dark:bg-stone-900/80 px-3 py-1.5 rounded-md border border-stone-200 dark:border-stone-800">
+              <div className="flex flex-col sm:items-end gap-1.5 shrink-0 tabular-nums">
+                <div className="flex items-center gap-3 text-xs text-stone-600 dark:text-stone-400 font-mono bg-white/90 dark:bg-stone-900/90 px-3 py-1.5 rounded-lg border border-stone-200/90 dark:border-stone-800">
                   {emCurso > 0 && (
                     <span className="text-amber-700 dark:text-amber-400 font-bold flex items-center gap-1.5">
                       <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
-                      {emCurso} em curso
+                      {emCurso} lendo
                     </span>
                   )}
-                  <span className="text-stone-700 dark:text-stone-300 font-semibold">
-                    {concluidos} / {livrosDoNivel.length} lidos ({porcentagem}%)
+                  <span className="text-stone-800 dark:text-stone-200 font-semibold">
+                    {concluidos}/{livrosDoNivel.length} lidos ({porcentagem}%)
                   </span>
                 </div>
-                <div className="w-full sm:w-36 h-1 bg-stone-200 dark:bg-stone-800 rounded-full overflow-hidden">
+                <div className="w-full sm:w-40 h-1.5 bg-stone-200/80 dark:bg-stone-800 rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-gradient-to-r from-amber-600 to-amber-400 transition-all duration-500"
+                    className="h-full bg-amber-600 dark:bg-amber-500 transition-all duration-500"
                     style={{ width: `${porcentagem}%` }}
                   />
                 </div>
@@ -323,19 +394,21 @@ export const Estante: React.FC<EstanteProps> = ({
 
             {/* Selo Ex-Libris de Honra quando o nível for concluído */}
             {nivelCompletado && exLibris && (
-              <div className="p-4 rounded-xl border border-amber-400/60 bg-gradient-to-r from-amber-50 via-amber-100/50 to-amber-50 dark:from-amber-950/40 dark:via-amber-900/20 dark:to-amber-950/40 text-stone-800 dark:text-stone-200 flex items-center justify-between gap-4 animate-fadeIn">
-                <div className="flex items-center gap-3">
-                  <span className="text-2xl">{exLibris.icon}</span>
+              <div className="p-4 rounded-xl border border-amber-400/60 bg-amber-50/80 dark:bg-amber-950/30 text-stone-800 dark:text-stone-200 flex items-center justify-between gap-4 animate-fadeIn">
+                <div className="flex items-center gap-3.5">
+                  <div className="w-10 h-10 rounded-lg bg-amber-900 text-amber-200 flex items-center justify-center shrink-0 shadow-xs border border-amber-600/50">
+                    {renderExLibrisIcon(exLibris.iconKey, 'w-5 h-5')}
+                  </div>
                   <div>
                     <h4 className="font-cinzel font-bold text-sm text-amber-900 dark:text-amber-200">
                       {exLibris.titulo}
                     </h4>
-                    <p className="text-xs font-serif italic text-amber-800/80 dark:text-amber-300/80">
-                      "{exLibris.lema}" — Todas as {livrosDoNivel.length} obras absorvidas neste nível.
+                    <p className="text-xs font-serif italic text-amber-800/90 dark:text-amber-300/80">
+                      “{exLibris.lema}” — Todas as {livrosDoNivel.length} obras deste nível foram concluídas.
                     </p>
                   </div>
                 </div>
-                <span className="px-2.5 py-1 text-[10px] font-cinzel font-bold uppercase tracking-wider rounded bg-amber-700 text-white shadow-xs">
+                <span className="px-2.5 py-1 text-[10px] font-cinzel font-bold uppercase tracking-wider rounded-md bg-amber-800 text-amber-50 shadow-2xs shrink-0">
                   Nível Conquistado
                 </span>
               </div>
@@ -344,16 +417,16 @@ export const Estante: React.FC<EstanteProps> = ({
             {/* Visualização das Prateleiras */}
             {filtroTrilha === 'todas' && modoAgrupamento === 'subtrilhas' && trilhaA.length > 0 && trilhaB.length > 0 ? (
               /* MODO DOIS TRILHOS DISTINTOS POR NÍVEL */
-              <div className="space-y-8 pt-2">
+              <div className="space-y-8 pt-1">
                 {/* PRATELEIRA TRILHA A: CANÔNICA */}
                 <div className="space-y-3">
                   <div className="flex items-center justify-between px-1">
-                    <span className="text-xs font-cinzel font-bold text-amber-900 dark:text-amber-300 uppercase tracking-widest flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-stone-700 dark:bg-stone-400" />
-                      Trilha A — Obras Fundamentais / Canônicas (1 a 12)
+                    <span className="text-xs font-cinzel font-bold text-stone-800 dark:text-stone-200 uppercase tracking-wider flex items-center gap-2">
+                      <BookMarked className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
+                      <span>Trilha A — Cânone Fundamental (Obras 1 a 12 do Nível)</span>
                     </span>
-                    <span className="text-[11px] text-stone-500 font-cinzel">
-                      {trilhaA.filter(l => progressos[l.id]?.estado === 'lido').length} / {trilhaA.length} lidas
+                    <span className="text-[11px] text-stone-500 dark:text-stone-400 font-mono tabular-nums">
+                      {trilhaA.filter((l) => progressos[l.id]?.estado === 'lido').length}/{trilhaA.length} lidas
                     </span>
                   </div>
                   {renderGradeLivros(trilhaA)}
@@ -361,14 +434,14 @@ export const Estante: React.FC<EstanteProps> = ({
                 </div>
 
                 {/* PRATELEIRA TRILHA B: EXPANSÃO DIALÉTICA */}
-                <div className="space-y-3 pt-4">
+                <div className="space-y-3 pt-3">
                   <div className="flex items-center justify-between px-1">
-                    <span className="text-xs font-cinzel font-bold text-amber-800 dark:text-amber-400 uppercase tracking-widest flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-amber-600 animate-pulse" />
-                      Trilha B — Expansão Dialética & Diálogos (13 a 24 / IDs 61-120)
+                    <span className="text-xs font-cinzel font-bold text-amber-900 dark:text-amber-300 uppercase tracking-wider flex items-center gap-2">
+                      <Sparkles className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+                      <span>Trilha B — Expansão Dialética &amp; Diálogos (Obras 13 a 24)</span>
                     </span>
-                    <span className="text-[11px] text-stone-500 font-cinzel">
-                      {trilhaB.filter(l => progressos[l.id]?.estado === 'lido').length} / {trilhaB.length} lidas
+                    <span className="text-[11px] text-stone-500 dark:text-stone-400 font-mono tabular-nums">
+                      {trilhaB.filter((l) => progressos[l.id]?.estado === 'lido').length}/{trilhaB.length} lidas
                     </span>
                   </div>
                   {renderGradeLivros(trilhaB)}
@@ -379,8 +452,11 @@ export const Estante: React.FC<EstanteProps> = ({
               /* MODO ÚNICA PRATELEIRA (SEJA INTERCALADA OU FILTRADA POR TRILHA A/B) */
               <div className="space-y-3">
                 {filtroTrilha === 'todas' && modoAgrupamento === 'intercalado' && (
-                  <div className="px-1 text-[11px] font-cinzel text-amber-800 dark:text-amber-400 italic">
-                    Visão Intercalada: Obras de fundamentação e expansão emparelhadas sequencialmente (1A, 1B, 2A, 2B...).
+                  <div className="px-1 text-xs font-serif text-amber-800 dark:text-amber-400 italic flex items-center gap-1.5">
+                    <ArrowRightLeft className="w-3.5 h-3.5 shrink-0" />
+                    <span>
+                      Visão Intercalada: Obras de fundamentação e expansão emparelhadas sequencialmente (1A, 1B, 2A, 2B...).
+                    </span>
                   </div>
                 )}
                 {renderGradeLivros(modoAgrupamento === 'intercalado' ? livrosIntercalados : livrosDoNivel)}
@@ -393,3 +469,4 @@ export const Estante: React.FC<EstanteProps> = ({
     </div>
   );
 };
+

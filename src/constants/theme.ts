@@ -156,31 +156,42 @@ export function calcularAlturaLombada(id: number): number {
   return alturas[id % alturas.length];
 }
 
-export const EX_LIBRIS_NIVEIS: Record<number, { titulo: string; lema: string; icon: string }> = {
+export const EX_LIBRIS_NIVEIS: Record<number, { titulo: string; lema: string; icon: string; romano: string; iconKey: 'landmark' | 'scale' | 'scroll' | 'swords' | 'crown' }> = {
   1: {
     titulo: 'Ex-Libris Propaedeutica',
     lema: 'Ad Discendum et Discernendum',
-    icon: '🏛️'
+    icon: 'I',
+    romano: 'I',
+    iconKey: 'landmark'
   },
   2: {
     titulo: 'Ex-Libris Conscientia',
     lema: 'In Absurdo Lux et Veritas',
-    icon: '⚖️'
+    icon: 'II',
+    romano: 'II',
+    iconKey: 'scale'
   },
   3: {
     titulo: 'Ex-Libris Fundamenta',
     lema: 'Radices Sapientiae Antiquae',
-    icon: '📜'
+    icon: 'III',
+    romano: 'III',
+    iconKey: 'scroll'
   },
   4: {
     titulo: 'Ex-Libris Dialectica',
     lema: 'Per Confligentes Ad Libertatem',
-    icon: '⚔️'
+    icon: 'IV',
+    romano: 'IV',
+    iconKey: 'swords'
   },
   5: {
     titulo: 'Ex-Libris Culmen Magnum',
     lema: 'In Altissimis Animae Transeunt',
-    icon: '👑'
+    icon: 'V',
+    romano: 'V',
+    iconKey: 'crown'
   }
 };
+
 

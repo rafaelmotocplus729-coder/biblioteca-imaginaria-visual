@@ -7,6 +7,8 @@ import {
   Clock,
   Sparkles,
   ArrowUpDown,
+  ArrowRight,
+  ArrowUpRight,
   Search,
   RotateCcw,
   Landmark,
@@ -22,7 +24,8 @@ import {
   ListFilter,
   Maximize2,
   Minimize2,
-  Navigation
+  Navigation,
+  X
 } from 'lucide-react';
 
 interface LinhaDoTempoProps {
@@ -48,8 +51,8 @@ export interface PeriodoHistorico {
 export const PERIODOS_HISTORICOS: PeriodoHistorico[] = [
   {
     id: 'antiguidade',
-    nome: 'Antiguidade Clássica',
-    subtitulo: 'Grécia, Roma & Patrística',
+    nome: 'Antiguidade',
+    subtitulo: 'Grécia, Roma & Primeiros Séculos',
     anoInicio: -1000,
     anoFim: 476,
     rotuloAnos: 'c. 450 a.C. — 476 d.C.',
@@ -61,8 +64,8 @@ export const PERIODOS_HISTORICOS: PeriodoHistorico[] = [
   },
   {
     id: 'idade-media',
-    nome: 'Idade Média & Escolástica',
-    subtitulo: 'Síntese Filosófica & Cosmovisão',
+    nome: 'Patrística & Idade Média',
+    subtitulo: 'Síntese Escolástica & Cosmovisão',
     anoInicio: 476,
     anoFim: 1453,
     rotuloAnos: '476 — 1453 d.C.',
@@ -74,38 +77,38 @@ export const PERIODOS_HISTORICOS: PeriodoHistorico[] = [
   },
   {
     id: 'renascimento',
-    nome: 'Renascimento & Humanismo',
-    subtitulo: 'Realismo Político & Ensaísmo Cético',
+    nome: 'Renascimento & Modernidade',
+    subtitulo: 'Humanismo, Razão & Contrato',
     anoInicio: 1453,
-    anoFim: 1600,
-    rotuloAnos: '1453 — 1600',
-    descricao: 'A redescoberta do indivíduo, a virtù maquiavélica, o ensaísmo introspectivo e a sátira cavalheiresca.',
+    anoFim: 1789,
+    rotuloAnos: '1453 — 1789',
+    descricao: 'A redescoberta do indivíduo, a virtù maquiavélica, dúvida metódica, soberania política e Luzes.',
     corTag: 'bg-emerald-100 text-emerald-900 dark:bg-emerald-950/70 dark:text-emerald-200 border-emerald-300 dark:border-emerald-800',
     corBorda: 'border-emerald-500',
     corFundoHeader: 'from-emerald-900/15 to-emerald-700/5 dark:from-emerald-950/40 dark:to-stone-900/30',
     icone: Compass
   },
   {
-    id: 'iluminismo',
-    nome: 'Iluminismo & Idade da Razão',
-    subtitulo: 'Racionalismo, Contrato & Luzes',
-    anoInicio: 1600,
-    anoFim: 1789,
-    rotuloAnos: '1600 — 1789',
-    descricao: 'Dúvida metódica, soberania política, fundamentos da economia política e a crítica da razão pura.',
+    id: 'seculo-xix',
+    nome: 'Século XIX',
+    subtitulo: 'Dialética, Revoluções & Realismo',
+    anoInicio: 1789,
+    anoFim: 1900,
+    rotuloAnos: '1789 — 1900',
+    descricao: 'O choque de classes, o drama existencial, a tragédia moral, a crítica à modernidade e a sociologia.',
     corTag: 'bg-blue-100 text-blue-900 dark:bg-blue-950/70 dark:text-blue-200 border-blue-300 dark:border-blue-800',
     corBorda: 'border-blue-500',
     corFundoHeader: 'from-blue-900/15 to-blue-700/5 dark:from-blue-950/40 dark:to-stone-900/30',
     icone: Sun
   },
   {
-    id: 'modernidade',
-    nome: 'Modernidade & Século XIX',
-    subtitulo: 'Dialética, Revoluções & Realismo',
-    anoInicio: 1789,
-    anoFim: 1914,
-    rotuloAnos: '1789 — 1914',
-    descricao: 'O choque de classes, o drama existencial, a tragédia moral, a crítica à modernidade e o nascimento da sociologia.',
+    id: 'seculo-xx-1',
+    nome: 'Século XX (1ª Metade)',
+    subtitulo: 'Crise dos Sistemas & Entre-Guerras',
+    anoInicio: 1900,
+    anoFim: 1945,
+    rotuloAnos: '1900 — 1945',
+    descricao: 'As grandes guerras, crise da cultura europeia, psicanálise, ordem espontânea vs planejamento.',
     corTag: 'bg-purple-100 text-purple-900 dark:bg-purple-950/70 dark:text-purple-200 border-purple-300 dark:border-purple-800',
     corBorda: 'border-purple-500',
     corFundoHeader: 'from-purple-900/15 to-purple-700/5 dark:from-purple-950/40 dark:to-stone-900/30',
@@ -113,12 +116,12 @@ export const PERIODOS_HISTORICOS: PeriodoHistorico[] = [
   },
   {
     id: 'contemporaneidade',
-    nome: 'Contemporaneidade (Séc. XX & XXI)',
-    subtitulo: 'Crise dos Sistemas & Liberdade',
-    anoInicio: 1914,
+    nome: 'Pós-Guerra & Contemporâneo',
+    subtitulo: 'Liberdade, Totalitarismo & Séc. XXI',
+    anoInicio: 1945,
     anoFim: 2100,
-    rotuloAnos: '1914 — Dias de Hoje',
-    descricao: 'As guerras mundiais, o totalitarismo, existencialismo, ordem espontânea vs mercado e modernidade líquida.',
+    rotuloAnos: '1945 — Dias de Hoje',
+    descricao: 'O exame do totalitarismo, existencialismo, hermenêutica, tradição moral e modernidade líquida.',
     corTag: 'bg-rose-100 text-rose-900 dark:bg-rose-950/70 dark:text-rose-200 border-rose-300 dark:border-rose-800',
     corBorda: 'border-rose-500',
     corFundoHeader: 'from-rose-900/15 to-rose-700/5 dark:from-rose-950/40 dark:to-stone-900/30',
@@ -404,25 +407,25 @@ export const LinhaDoTempo: React.FC<LinhaDoTempoProps> = ({
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 shrink-0">
             <div className="p-3 rounded-xl bg-stone-50/80 dark:bg-stone-900/80 border border-stone-200 dark:border-stone-800 text-center">
               <span className="text-[10px] uppercase font-cinzel text-stone-500 block">Total no Acervo</span>
-              <strong className="text-lg sm:text-xl font-cinzel text-stone-900 dark:text-stone-100">
+              <strong className="text-lg sm:text-xl font-cinzel tabular-nums text-stone-900 dark:text-stone-100">
                 {estatisticas.total}
               </strong>
-              <span className="text-[10px] text-stone-500 block">120 Obras</span>
+              <span className="text-[10px] text-stone-500 block font-mono tabular-nums">{estatisticas.total} Obras</span>
             </div>
 
             <div className="p-3 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-center">
               <span className="text-[10px] uppercase font-cinzel text-emerald-700 dark:text-emerald-400 block">Lidas</span>
-              <strong className="text-lg sm:text-xl font-cinzel text-emerald-800 dark:text-emerald-200">
+              <strong className="text-lg sm:text-xl font-cinzel tabular-nums text-emerald-800 dark:text-emerald-200">
                 {estatisticas.lidos}
               </strong>
-              <span className="text-[10px] text-emerald-600 dark:text-emerald-400 block font-mono">
+              <span className="text-[10px] text-emerald-600 dark:text-emerald-400 block font-mono tabular-nums">
                 {estatisticas.porcentagem}% concluído
               </span>
             </div>
 
             <div className="p-3 rounded-xl bg-amber-50/70 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-center">
               <span className="text-[10px] uppercase font-cinzel text-amber-700 dark:text-amber-400 block">Lendo Agora</span>
-              <strong className="text-lg sm:text-xl font-cinzel text-amber-800 dark:text-amber-200">
+              <strong className="text-lg sm:text-xl font-cinzel tabular-nums text-amber-800 dark:text-amber-200">
                 {estatisticas.lendo}
               </strong>
               <span className="text-[10px] text-amber-600 dark:text-amber-400 block">em andamento</span>
@@ -430,7 +433,7 @@ export const LinhaDoTempo: React.FC<LinhaDoTempoProps> = ({
 
             <div className="p-3 rounded-xl bg-stone-100/70 dark:bg-stone-900/60 border border-stone-200 dark:border-stone-800 text-center">
               <span className="text-[10px] uppercase font-cinzel text-stone-500 block">A Ler</span>
-              <strong className="text-lg sm:text-xl font-cinzel text-stone-700 dark:text-stone-300">
+              <strong className="text-lg sm:text-xl font-cinzel tabular-nums text-stone-700 dark:text-stone-300">
                 {estatisticas.aLer}
               </strong>
               <span className="text-[10px] text-stone-500 block">restantes</span>
@@ -442,7 +445,7 @@ export const LinhaDoTempo: React.FC<LinhaDoTempoProps> = ({
         <div className="mt-5 pt-4 border-t border-stone-200/80 dark:border-stone-800/80 space-y-1.5">
           <div className="flex items-center justify-between text-[11px] font-cinzel text-stone-600 dark:text-stone-400">
             <span>Progresso da Travessia Histórica</span>
-            <span className="font-mono font-bold text-amber-800 dark:text-amber-300">
+            <span className="font-mono font-bold tabular-nums text-amber-800 dark:text-amber-300">
               {estatisticas.lidos} de {estatisticas.total} obras lidas ({estatisticas.porcentagem}%)
             </span>
           </div>
@@ -457,13 +460,25 @@ export const LinhaDoTempo: React.FC<LinhaDoTempoProps> = ({
 
       {/* 2. RÉGUA CRONOLÓGICA DAS 6 ERAS & NAVEGAÇÃO RÁPIDA */}
       <section className="space-y-3">
-        <div className="flex items-center justify-between px-1">
-          <h3 className="text-xs font-cinzel font-bold text-stone-700 dark:text-stone-300 uppercase tracking-wider flex items-center gap-2">
-            <Navigation className="w-4 h-4 text-amber-700 dark:text-amber-400" />
-            Navegador Rápido pelas Grandes Eras
-          </h3>
+        <div className="flex flex-wrap items-center justify-between gap-2 px-1">
+          <div className="flex items-center gap-2.5">
+            <h3 className="text-xs font-cinzel font-bold text-stone-700 dark:text-stone-300 uppercase tracking-wider flex items-center gap-2">
+              <Navigation className="w-4 h-4 text-amber-700 dark:text-amber-400" />
+              <span>Navegador pelas 6 Eras Históricas</span>
+            </h3>
+            {periodoAtivo !== 'todos' && (
+              <button
+                onClick={() => setPeriodoAtivo('todos')}
+                className="px-2.5 py-0.5 rounded-full text-[11px] font-cinzel font-semibold bg-amber-100 dark:bg-amber-950/70 text-amber-900 dark:text-amber-200 border border-amber-300 dark:border-amber-800 hover:bg-amber-200/80 dark:hover:bg-amber-900 transition-colors inline-flex items-center gap-1 cursor-pointer"
+                title="Voltar a exibir todas as eras"
+              >
+                <X className="w-3.5 h-3.5" />
+                <span>Limpar Era</span>
+              </button>
+            )}
+          </div>
           <span className="text-[11px] text-stone-500 font-serif italic hidden sm:inline">
-            Clique em uma era para deslizar a linha do tempo diretamente até ela
+            Selecione uma era para filtrar ou deslizar a fita histórica diretamente até o período
           </span>
         </div>
 
@@ -476,28 +491,45 @@ export const LinhaDoTempo: React.FC<LinhaDoTempoProps> = ({
                 scrollContainerRef.current.scrollTo({ left: 0, behavior: 'smooth' });
               }
             }}
-            className={`p-3 rounded-xl border text-left transition-all flex flex-col justify-between ${
+            className={`p-3.5 rounded-xl border text-left transition-all flex flex-col justify-between cursor-pointer ${
               periodoAtivo === 'todos'
-                ? 'bg-amber-900 text-amber-50 border-amber-700 shadow-md ring-1 ring-amber-600/50'
-                : 'bg-library-paper dark:bg-library-darkPaper text-stone-700 dark:text-stone-300 border-stone-200 dark:border-stone-800 hover:border-amber-400'
+                ? 'bg-gradient-to-br from-amber-900 via-amber-950 to-stone-950 text-amber-50 border-amber-500/90 shadow-md ring-2 ring-amber-500/30'
+                : 'bg-library-paper dark:bg-library-darkPaper text-stone-700 dark:text-stone-300 border-stone-200/90 dark:border-stone-800 hover:border-amber-500/70 hover:shadow-xs'
             }`}
           >
             <div>
               <div className="flex items-center justify-between">
-                <Sparkles className="w-4 h-4 text-amber-400" />
-                <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-black/20 text-amber-200">
-                  {estatisticas.total}
+                <Sparkles className={`w-4 h-4 ${periodoAtivo === 'todos' ? 'text-amber-300' : 'text-amber-600 dark:text-amber-400'}`} />
+                <span
+                  className={`text-[10px] font-mono font-bold tabular-nums px-1.5 py-0.5 rounded ${
+                    periodoAtivo === 'todos'
+                      ? 'bg-black/30 text-amber-200 border border-amber-500/30'
+                      : 'bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300'
+                  }`}
+                >
+                  {estatisticas.total} obras
                 </span>
               </div>
-              <h4 className="font-cinzel font-bold text-xs mt-2">Visão Total</h4>
-              <p className="text-[10px] opacity-80 mt-0.5 line-clamp-1">Todas as 6 Eras</p>
+              <h4 className="font-cinzel font-bold text-xs mt-2">Visão Integral</h4>
+              <p className="text-[10px] opacity-80 mt-0.5 font-serif line-clamp-1">Todas as 6 Eras</p>
             </div>
-            <div className="mt-3 pt-1.5 border-t border-white/10 text-[9.5px] font-mono opacity-80">
-              {estatisticas.lidos}/{estatisticas.total} lidas
+            <div className="mt-3 pt-2 border-t border-stone-200/40 dark:border-stone-800/80 space-y-1">
+              <div className="flex items-center justify-between text-[9.5px] font-mono tabular-nums">
+                <span className="opacity-80">{estatisticas.lidos}/{estatisticas.total} lidas</span>
+                <span className="font-bold">{estatisticas.porcentagem}%</span>
+              </div>
+              <div className="w-full h-1.5 rounded-full bg-black/15 dark:bg-stone-800 overflow-hidden">
+                <div
+                  className={`h-full rounded-full transition-all duration-500 ${
+                    periodoAtivo === 'todos' ? 'bg-amber-300' : 'bg-amber-600 dark:bg-amber-500'
+                  }`}
+                  style={{ width: `${estatisticas.porcentagem}%` }}
+                />
+              </div>
             </div>
           </button>
 
-          {/* Cards das 6 Eras */}
+          {/* Cards das 6 Eras Históricas */}
           {PERIODOS_HISTORICOS.map((periodo) => {
             const IconeEra = periodo.icone;
             const dadosEra = contagemPorPeriodo[periodo.id] || { total: 0, lidos: 0 };
@@ -515,35 +547,45 @@ export const LinhaDoTempo: React.FC<LinhaDoTempoProps> = ({
                   }
                   navegarParaEra(periodo.id);
                 }}
-                className={`p-3 rounded-xl border text-left transition-all flex flex-col justify-between group ${
+                className={`p-3.5 rounded-xl border text-left transition-all flex flex-col justify-between group cursor-pointer ${
                   isActive
-                    ? 'bg-amber-900 text-amber-50 border-amber-700 shadow-md ring-1 ring-amber-600/50'
-                    : 'bg-library-paper dark:bg-library-darkPaper text-stone-700 dark:text-stone-300 border-stone-200 dark:border-stone-800 hover:border-amber-400'
+                    ? 'bg-gradient-to-br from-amber-900 via-amber-950 to-stone-950 text-amber-50 border-amber-500/90 shadow-md ring-2 ring-amber-500/30'
+                    : 'bg-library-paper dark:bg-library-darkPaper text-stone-700 dark:text-stone-300 border-stone-200/90 dark:border-stone-800 hover:border-amber-500/70 hover:shadow-xs'
                 }`}
               >
                 <div>
-                  <div className="flex items-center justify-between">
-                    <IconeEra className={`w-4 h-4 ${isActive ? 'text-amber-300' : 'text-amber-700 dark:text-amber-400 group-hover:scale-110 transition-transform'}`} />
-                    <span className={`text-[10px] font-mono px-1.5 py-0.2 rounded ${
-                      isActive ? 'bg-black/20 text-amber-200' : 'bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300'
-                    }`}>
-                      {dadosEra.total}
+                  <div className="flex items-center justify-between gap-1">
+                    <IconeEra
+                      className={`w-4 h-4 shrink-0 ${
+                        isActive
+                          ? 'text-amber-300'
+                          : 'text-amber-700 dark:text-amber-400 group-hover:scale-110 transition-transform'
+                      }`}
+                    />
+                    <span
+                      className={`text-[10px] font-mono font-bold tabular-nums px-1.5 py-0.5 rounded ${
+                        isActive
+                          ? 'bg-black/30 text-amber-200 border border-amber-500/30'
+                          : 'bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300'
+                      }`}
+                    >
+                      {dadosEra.total} obras
                     </span>
                   </div>
                   <h4 className="font-cinzel font-bold text-xs mt-2 line-clamp-1" title={periodo.nome}>
                     {periodo.nome}
                   </h4>
-                  <p className="text-[9.5px] opacity-75 font-mono line-clamp-1">
+                  <p className="text-[9.5px] opacity-75 font-mono tabular-nums line-clamp-1 mt-0.5">
                     {periodo.rotuloAnos}
                   </p>
                 </div>
 
-                <div className="mt-3 pt-2 border-t border-stone-200/50 dark:border-stone-800/80 space-y-1">
-                  <div className="flex items-center justify-between text-[9.5px] font-mono">
+                <div className="mt-3 pt-2 border-t border-stone-200/40 dark:border-stone-800/80 space-y-1">
+                  <div className="flex items-center justify-between text-[9.5px] font-mono tabular-nums">
                     <span className="opacity-80">{dadosEra.lidos}/{dadosEra.total} lidas</span>
-                    <span className="opacity-90 font-bold">{percEra}%</span>
+                    <span className="opacity-95 font-bold">{percEra}%</span>
                   </div>
-                  <div className="w-full h-1 rounded-full bg-stone-200 dark:bg-stone-800 overflow-hidden">
+                  <div className="w-full h-1.5 rounded-full bg-stone-200/80 dark:bg-stone-800 overflow-hidden">
                     <div
                       className={`h-full rounded-full transition-all duration-500 ${
                         isActive ? 'bg-amber-300' : 'bg-amber-600 dark:bg-amber-500'
@@ -565,7 +607,7 @@ export const LinhaDoTempo: React.FC<LinhaDoTempoProps> = ({
           <div className="flex items-center gap-1.5 bg-stone-100 dark:bg-stone-900 p-1 rounded-xl border border-stone-200 dark:border-stone-800 shrink-0">
             <button
               onClick={() => setModoVisualizacao('horizontal')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-cinzel font-bold transition-all flex items-center gap-1.5 ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-cinzel font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
                 modoVisualizacao === 'horizontal'
                   ? 'bg-amber-900 text-amber-50 shadow-sm'
                   : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
@@ -573,11 +615,11 @@ export const LinhaDoTempo: React.FC<LinhaDoTempoProps> = ({
               title="Linha do tempo contínua horizontal com rolagem lateral"
             >
               <MoveHorizontal className="w-4 h-4 text-amber-400" />
-              <span>Linha Horizontal (Rolagem Lateral)</span>
+              <span>Linha Horizontal</span>
             </button>
             <button
               onClick={() => setModoVisualizacao('vertical')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-cinzel font-bold transition-all flex items-center gap-1.5 ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-cinzel font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
                 modoVisualizacao === 'vertical'
                   ? 'bg-amber-900 text-amber-50 shadow-sm'
                   : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
@@ -597,14 +639,15 @@ export const LinhaDoTempo: React.FC<LinhaDoTempoProps> = ({
               value={buscaTexto}
               onChange={(e) => setBuscaTexto(e.target.value)}
               placeholder="Buscar obra, autor, ano ou conceito (ex: Platão, 1848, virtude)..."
-              className="w-full pl-9 pr-8 py-2 rounded-lg border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 text-xs sm:text-sm text-stone-800 dark:text-stone-200 placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-amber-500/50"
+              className="w-full pl-9 pr-8 py-2 rounded-lg border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 text-xs sm:text-sm text-stone-800 dark:text-stone-200 placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-amber-500/50 font-serif"
             />
             {buscaTexto && (
               <button
                 onClick={() => setBuscaTexto('')}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600 dark:hover:text-stone-200 text-xs"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600 dark:hover:text-stone-200 p-0.5 rounded"
+                title="Limpar busca"
               >
-                ✕
+                <X className="w-3.5 h-3.5" />
               </button>
             )}
           </div>
@@ -613,7 +656,7 @@ export const LinhaDoTempo: React.FC<LinhaDoTempoProps> = ({
           <div className="flex items-center gap-1 bg-stone-100 dark:bg-stone-900 p-1 rounded-lg border border-stone-200 dark:border-stone-800 overflow-x-auto shrink-0">
             <button
               onClick={() => setFiltroEstado('todos')}
-              className={`px-2.5 py-1.5 rounded-md text-xs font-cinzel font-semibold transition-all shrink-0 ${
+              className={`px-2.5 py-1.5 rounded-md text-xs font-cinzel font-semibold tabular-nums transition-all shrink-0 cursor-pointer ${
                 filtroEstado === 'todos'
                   ? 'bg-white dark:bg-stone-800 text-amber-900 dark:text-amber-200 shadow-xs'
                   : 'text-stone-600 dark:text-stone-400 hover:text-stone-900'
@@ -623,7 +666,7 @@ export const LinhaDoTempo: React.FC<LinhaDoTempoProps> = ({
             </button>
             <button
               onClick={() => setFiltroEstado('lido')}
-              className={`px-2.5 py-1.5 rounded-md text-xs font-cinzel font-semibold transition-all shrink-0 flex items-center gap-1 ${
+              className={`px-2.5 py-1.5 rounded-md text-xs font-cinzel font-semibold tabular-nums transition-all shrink-0 flex items-center gap-1 cursor-pointer ${
                 filtroEstado === 'lido'
                   ? 'bg-emerald-800 text-white shadow-xs'
                   : 'text-stone-600 dark:text-stone-400 hover:text-emerald-700'
@@ -634,7 +677,7 @@ export const LinhaDoTempo: React.FC<LinhaDoTempoProps> = ({
             </button>
             <button
               onClick={() => setFiltroEstado('lendo')}
-              className={`px-2.5 py-1.5 rounded-md text-xs font-cinzel font-semibold transition-all shrink-0 flex items-center gap-1 ${
+              className={`px-2.5 py-1.5 rounded-md text-xs font-cinzel font-semibold tabular-nums transition-all shrink-0 flex items-center gap-1 cursor-pointer ${
                 filtroEstado === 'lendo'
                   ? 'bg-amber-800 text-white shadow-xs'
                   : 'text-stone-600 dark:text-stone-400 hover:text-amber-700'
@@ -645,7 +688,7 @@ export const LinhaDoTempo: React.FC<LinhaDoTempoProps> = ({
             </button>
             <button
               onClick={() => setFiltroEstado('a_ler')}
-              className={`px-2.5 py-1.5 rounded-md text-xs font-cinzel font-semibold transition-all shrink-0 flex items-center gap-1 ${
+              className={`px-2.5 py-1.5 rounded-md text-xs font-cinzel font-semibold tabular-nums transition-all shrink-0 flex items-center gap-1 cursor-pointer ${
                 filtroEstado === 'a_ler'
                   ? 'bg-stone-700 text-white shadow-xs'
                   : 'text-stone-600 dark:text-stone-400 hover:text-stone-900'
@@ -664,7 +707,7 @@ export const LinhaDoTempo: React.FC<LinhaDoTempoProps> = ({
             <select
               value={filtroArea}
               onChange={(e) => setFiltroArea(e.target.value)}
-              className="py-1 px-2.5 rounded-lg border border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 text-stone-700 dark:text-stone-300 text-xs focus:ring-1 focus:ring-amber-500"
+              className="py-1.5 px-2.5 rounded-lg border border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 text-stone-700 dark:text-stone-300 text-xs font-serif focus:ring-1 focus:ring-amber-500"
             >
               <option value="">Todas as Áreas ({areas.length})</option>
               {areas.map((area) => (
@@ -674,15 +717,17 @@ export const LinhaDoTempo: React.FC<LinhaDoTempoProps> = ({
               ))}
             </select>
 
-            {/* Alternador de Ordenação */}
+            {/* Alternador de Ordenação (Sem setas de texto cruas) */}
             <button
               onClick={() => setOrdem(ordem === 'asc' ? 'desc' : 'asc')}
-              className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 text-stone-700 dark:text-stone-300 hover:border-amber-500 font-cinzel text-xs transition-colors"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 text-stone-700 dark:text-stone-300 hover:border-amber-500 font-cinzel text-xs transition-colors cursor-pointer"
               title="Inverter sentido cronológico"
             >
               <ArrowUpDown className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
-              <span>
-                {ordem === 'asc' ? 'Antigos ➔ Recentes' : 'Recentes ➔ Antigos'}
+              <span className="inline-flex items-center gap-1">
+                <span>{ordem === 'asc' ? 'Antigos' : 'Recentes'}</span>
+                <ArrowRight className="w-3 h-3 text-amber-600 dark:text-amber-400" />
+                <span>{ordem === 'asc' ? 'Recentes' : 'Antigos'}</span>
               </span>
             </button>
 
@@ -691,27 +736,27 @@ export const LinhaDoTempo: React.FC<LinhaDoTempoProps> = ({
               <div className="flex items-center gap-1 bg-stone-100 dark:bg-stone-800 p-0.5 rounded-lg border border-stone-200 dark:border-stone-700">
                 <button
                   onClick={() => setDensidade('confortavel')}
-                  className={`px-2 py-0.5 rounded text-[11px] font-cinzel ${
+                  className={`px-2.5 py-1 rounded-md text-[11px] font-cinzel inline-flex items-center gap-1 cursor-pointer ${
                     densidade === 'confortavel'
                       ? 'bg-white dark:bg-stone-700 text-amber-900 dark:text-amber-200 shadow-2xs font-bold'
                       : 'text-stone-500 hover:text-stone-800'
                   }`}
                   title="Exibir capas maiores e resumo das teses"
                 >
-                  <Maximize2 className="w-3 h-3 inline mr-1" />
-                  Confortável
+                  <Maximize2 className="w-3 h-3" />
+                  <span>Confortável</span>
                 </button>
                 <button
                   onClick={() => setDensidade('compacto')}
-                  className={`px-2 py-0.5 rounded text-[11px] font-cinzel ${
+                  className={`px-2.5 py-1 rounded-md text-[11px] font-cinzel inline-flex items-center gap-1 cursor-pointer ${
                     densidade === 'compacto'
                       ? 'bg-white dark:bg-stone-700 text-amber-900 dark:text-amber-200 shadow-2xs font-bold'
                       : 'text-stone-500 hover:text-stone-800'
                   }`}
                   title="Visão condensada para visualizar mais livros simultaneamente"
                 >
-                  <Minimize2 className="w-3 h-3 inline mr-1" />
-                  Compacto
+                  <Minimize2 className="w-3 h-3" />
+                  <span>Compacto</span>
                 </button>
               </div>
             )}
@@ -719,7 +764,7 @@ export const LinhaDoTempo: React.FC<LinhaDoTempoProps> = ({
             {temFiltroAtivo && (
               <button
                 onClick={limparFiltros}
-                className="flex items-center gap-1 px-2.5 py-1 rounded text-xs text-amber-800 dark:text-amber-300 hover:bg-amber-50 dark:hover:bg-amber-950/40 border border-amber-300 dark:border-amber-800 transition-colors"
+                className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-cinzel font-semibold text-amber-800 dark:text-amber-300 hover:bg-amber-50 dark:hover:bg-amber-950/40 border border-amber-300 dark:border-amber-800 transition-colors cursor-pointer"
               >
                 <RotateCcw className="w-3 h-3" />
                 <span>Limpar Filtros</span>
@@ -731,27 +776,27 @@ export const LinhaDoTempo: React.FC<LinhaDoTempoProps> = ({
           <div className="flex items-center gap-3">
             {modoVisualizacao === 'horizontal' && (
               <div className="flex items-center gap-1.5">
-                <span className="text-[11px] text-stone-500 font-mono hidden sm:inline">
-                  Navegação Lateral:
+                <span className="text-[11px] text-stone-500 font-cinzel uppercase tracking-wider hidden sm:inline">
+                  Trilha:
                 </span>
                 <button
                   onClick={() => rolarHorizontal(-600)}
-                  className="p-1.5 rounded-lg bg-stone-100 hover:bg-amber-100 dark:bg-stone-800 dark:hover:bg-amber-950 border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-300 hover:text-amber-900 transition-colors"
-                  title="Deslocar lateralmente para a esquerda"
+                  className="p-1.5 rounded-lg bg-stone-100 hover:bg-amber-100 dark:bg-stone-800 dark:hover:bg-amber-950 border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-300 hover:text-amber-900 transition-colors cursor-pointer"
+                  title="Deslocar trilha para a esquerda"
                 >
                   <ChevronLeft className="w-4 h-4" />
                 </button>
                 <button
                   onClick={() => rolarHorizontal(600)}
-                  className="p-1.5 rounded-lg bg-stone-100 hover:bg-amber-100 dark:bg-stone-800 dark:hover:bg-amber-950 border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-300 hover:text-amber-900 transition-colors"
-                  title="Deslocar lateralmente para a direita"
+                  className="p-1.5 rounded-lg bg-stone-100 hover:bg-amber-100 dark:bg-stone-800 dark:hover:bg-amber-950 border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-300 hover:text-amber-900 transition-colors cursor-pointer"
+                  title="Deslocar trilha para a direita"
                 >
                   <ChevronRight className="w-4 h-4" />
                 </button>
               </div>
             )}
 
-            <div className="text-stone-500 text-xs font-serif">
+            <div className="text-stone-500 text-xs font-serif tabular-nums">
               <strong>{livrosExibidos.length}</strong> de {livros.length} obras
             </div>
           </div>
@@ -759,7 +804,7 @@ export const LinhaDoTempo: React.FC<LinhaDoTempoProps> = ({
 
         {/* Mini barra de indicador de posição lateral na fita horizontal */}
         {modoVisualizacao === 'horizontal' && (
-          <div className="pt-1 flex items-center gap-3 text-[11px] font-mono text-stone-500 border-t border-stone-200/40 dark:border-stone-800/40">
+          <div className="pt-1 flex items-center gap-3 text-[11px] font-mono tabular-nums text-stone-500 border-t border-stone-200/40 dark:border-stone-800/40">
             <span className="shrink-0 font-cinzel text-amber-800 dark:text-amber-300 font-bold">
               {ordem === 'asc' ? 'c. 450 a.C.' : 'Século XXI'}
             </span>
@@ -781,14 +826,17 @@ export const LinhaDoTempo: React.FC<LinhaDoTempoProps> = ({
 
       {/* DICA DE INTERAÇÃO NO MODO HORIZONTAL */}
       {modoVisualizacao === 'horizontal' && (
-        <div className="flex items-center justify-between text-xs px-3 py-2 rounded-xl bg-amber-500/10 dark:bg-amber-500/5 border border-amber-500/20 text-stone-700 dark:text-stone-300">
-          <div className="flex items-center gap-2">
-            <span className="text-base">🧭</span>
+        <div className="flex items-center justify-between text-xs px-3.5 py-2.5 rounded-xl bg-amber-500/10 dark:bg-amber-500/5 border border-amber-500/20 text-stone-700 dark:text-stone-300">
+          <div className="flex items-center gap-2.5">
+            <Compass className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 shrink-0" />
             <span className="font-serif">
-              <strong>Como navegar:</strong> Clique e arraste para os lados com o mouse, use a roda do mouse (scroll horizontal) ou as setas laterais para explorar toda a fita histórica.
+              <strong className="font-cinzel text-[11px] uppercase tracking-wider text-amber-900 dark:text-amber-300 mr-1.5">
+                Como navegar:
+              </strong>
+              Clique e arraste para os lados com o mouse, use a roda do mouse (scroll horizontal) ou as setas laterais para explorar toda a fita histórica.
             </span>
           </div>
-          <span className="text-[11px] font-mono text-amber-800 dark:text-amber-300 hidden md:inline">
+          <span className="text-[11px] font-mono tabular-nums text-amber-800 dark:text-amber-300 hidden md:inline shrink-0 ml-3">
             {gruposPorPeriodo.length} {gruposPorPeriodo.length === 1 ? 'Era visível' : 'Eras visíveis'}
           </span>
         </div>
@@ -806,7 +854,7 @@ export const LinhaDoTempo: React.FC<LinhaDoTempoProps> = ({
           </p>
           <button
             onClick={limparFiltros}
-            className="px-4 py-2 rounded-lg bg-amber-900 text-amber-100 text-xs font-cinzel font-semibold hover:bg-amber-800 transition-colors inline-flex items-center gap-2"
+            className="px-4 py-2 rounded-lg bg-amber-900 text-amber-100 text-xs font-cinzel font-semibold hover:bg-amber-800 transition-colors inline-flex items-center gap-2 cursor-pointer"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             <span>Restaurar Linha do Tempo Completa</span>
@@ -820,18 +868,20 @@ export const LinhaDoTempo: React.FC<LinhaDoTempoProps> = ({
           {/* Botões Flutuantes Laterais de Avanço Rápido */}
           <button
             onClick={() => rolarHorizontal(-700)}
-            className="absolute left-2 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-library-paper/90 dark:bg-library-darkPaper/90 border border-stone-300 dark:border-stone-700 text-stone-800 dark:text-stone-100 shadow-xl backdrop-blur-md flex items-center justify-center hover:bg-amber-700 hover:text-white transition-all opacity-80 hover:opacity-100 hover:scale-110 active:scale-95"
-            title="Mover para esquerda"
+            className="absolute left-2 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-library-paper/95 dark:bg-library-darkPaper/95 border border-stone-300 dark:border-stone-700 text-stone-800 dark:text-stone-100 shadow-xl backdrop-blur-md flex items-center justify-center hover:bg-amber-800 hover:text-amber-50 hover:border-amber-600 transition-all opacity-85 hover:opacity-100 hover:scale-105 active:scale-95 cursor-pointer"
+            title="Deslizar trilha para a esquerda"
+            aria-label="Deslizar trilha para a esquerda"
           >
-            <ChevronLeft className="w-6 h-6" />
+            <ChevronLeft className="w-5 h-5" />
           </button>
 
           <button
             onClick={() => rolarHorizontal(700)}
-            className="absolute right-2 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-library-paper/90 dark:bg-library-darkPaper/90 border border-stone-300 dark:border-stone-700 text-stone-800 dark:text-stone-100 shadow-xl backdrop-blur-md flex items-center justify-center hover:bg-amber-700 hover:text-white transition-all opacity-80 hover:opacity-100 hover:scale-110 active:scale-95"
-            title="Mover para direita"
+            className="absolute right-2 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-library-paper/95 dark:bg-library-darkPaper/95 border border-stone-300 dark:border-stone-700 text-stone-800 dark:text-stone-100 shadow-xl backdrop-blur-md flex items-center justify-center hover:bg-amber-800 hover:text-amber-50 hover:border-amber-600 transition-all opacity-85 hover:opacity-100 hover:scale-105 active:scale-95 cursor-pointer"
+            title="Deslizar trilha para a direita"
+            aria-label="Deslizar trilha para a direita"
           >
-            <ChevronRight className="w-6 h-6" />
+            <ChevronRight className="w-5 h-5" />
           </button>
 
           {/* Contêiner de Rolagem Horizontal */}
@@ -874,7 +924,7 @@ export const LinhaDoTempo: React.FC<LinhaDoTempoProps> = ({
                             <h3 className="font-cinzel font-bold text-base text-stone-900 dark:text-stone-100">
                               {periodo.nome}
                             </h3>
-                            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-stone-700">
+                            <span className="text-[10px] font-mono tabular-nums px-2 py-0.5 rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-stone-700">
                               {periodo.rotuloAnos}
                             </span>
                           </div>
@@ -885,10 +935,10 @@ export const LinhaDoTempo: React.FC<LinhaDoTempoProps> = ({
                       </div>
 
                       <div className="flex items-center gap-2 shrink-0">
-                        <span className="text-xs font-mono text-stone-600 dark:text-stone-400">
-                          <strong>{lidosNaEra}</strong> de {itens.length} lidas
+                        <span className="text-xs font-mono tabular-nums text-stone-600 dark:text-stone-400">
+                          <strong>{lidosNaEra}</strong>/{itens.length} lidas
                         </span>
-                        <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950 text-amber-900 dark:text-amber-200 font-bold border border-amber-300 dark:border-amber-800">
+                        <span className="text-[10px] font-mono tabular-nums px-2.5 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950 text-amber-900 dark:text-amber-200 font-bold border border-amber-300 dark:border-amber-800">
                           {itens.length} {itens.length === 1 ? 'obra' : 'obras'}
                         </span>
                       </div>
@@ -910,7 +960,7 @@ export const LinhaDoTempo: React.FC<LinhaDoTempoProps> = ({
                             <div
                               key={livro.id}
                               className={`relative flex flex-col items-center group/card transition-transform ${
-                                densidade === 'confortavel' ? 'w-64 sm:w-72' : 'w-48 sm:w-52'
+                                densidade === 'confortavel' ? 'w-68 sm:w-74' : 'w-52 sm:w-56'
                               }`}
                             >
                               {/* Nó Luminoso sobre o Eixo Central */}
@@ -928,32 +978,35 @@ export const LinhaDoTempo: React.FC<LinhaDoTempoProps> = ({
                               {/* Haste Conectora Vertical */}
                               <div className="absolute -top-7 h-7 w-0.5 border-l-2 border-dashed border-amber-700/40 dark:border-amber-500/30 group-hover/card:border-amber-500 transition-colors" />
 
-                              {/* Card da Obra Histórica */}
+                              {/* Card da Obra Histórica Refinado */}
                               <div
                                 onClick={() => handleClickLivro(livro.id)}
-                                className={`w-full rounded-xl border border-stone-200/90 dark:border-stone-800/90 bg-white dark:bg-stone-900 hover:border-amber-500 dark:hover:border-amber-500 shadow-xs hover:shadow-lg transition-all duration-200 flex flex-col justify-between cursor-pointer group-hover/card:-translate-y-1.5 ${
-                                  densidade === 'confortavel' ? 'p-4 gap-3' : 'p-3 gap-2'
+                                className={`w-full rounded-xl border border-stone-200/90 dark:border-stone-800/90 bg-white dark:bg-stone-900 hover:border-amber-500 dark:hover:border-amber-500 shadow-2xs hover:shadow-lg transition-all duration-200 flex flex-col justify-between cursor-pointer group-hover/card:-translate-y-1.5 ${
+                                  densidade === 'confortavel' ? 'p-4 gap-3.5' : 'p-3 gap-2.5'
                                 }`}
                               >
-                                {/* Topo: Ano & Badges */}
-                                <div className="space-y-2">
-                                  <div className="flex items-center justify-between gap-1.5">
-                                    <span className="px-2 py-0.5 rounded font-cinzel font-bold text-xs bg-amber-900 text-amber-100 dark:bg-amber-800 shadow-2xs">
+                                {/* Topo Limpo: Badge de Ano / Século + Tag de Área */}
+                                <div className="space-y-2.5">
+                                  <div className="flex items-center justify-between gap-2 pb-2 border-b border-stone-100 dark:border-stone-800/80">
+                                    <span className="px-2 py-0.5 rounded-md font-cinzel font-bold text-[11px] tabular-nums bg-amber-900 text-amber-50 dark:bg-amber-800 shadow-2xs shrink-0">
                                       {livro.ano}
                                     </span>
-                                    <span className={`px-2 py-0.5 rounded text-[10px] font-bold truncate max-w-[120px] ${coresArea.badge}`}>
+                                    <span
+                                      className="px-2 py-0.5 rounded-md text-[10px] font-cinzel font-bold text-white truncate max-w-[130px] shadow-2xs"
+                                      style={{ backgroundColor: coresArea.hex }}
+                                    >
                                       {livro.area}
                                     </span>
                                   </div>
 
-                                  {/* Capa e Dados Básicos */}
-                                  <div className="flex items-start gap-3 pt-1">
+                                  {/* Capa Miniatura e Metadados Alinhados */}
+                                  <div className="flex items-start gap-3">
                                     {/* Capa */}
                                     <div
                                       className={`rounded-lg overflow-hidden shadow-book shrink-0 border border-black/15 dark:border-stone-700/60 bg-stone-100 dark:bg-stone-800 relative group-hover/card:scale-105 transition-transform ${
                                         densidade === 'confortavel'
-                                          ? 'w-20 h-28 sm:w-24 sm:h-32'
-                                          : 'w-14 h-20 sm:w-16 sm:h-24'
+                                          ? 'w-18 h-26 sm:w-20 sm:h-28'
+                                          : 'w-14 h-20 sm:w-15 sm:h-22'
                                       }`}
                                     >
                                       <div className="absolute left-0 top-0 bottom-0 w-1.5 pointer-events-none bg-gradient-to-r from-black/40 via-black/20 to-transparent z-10" />
@@ -965,7 +1018,7 @@ export const LinhaDoTempo: React.FC<LinhaDoTempoProps> = ({
                                           loading="lazy"
                                         />
                                       ) : (
-                                        <div className="w-full h-full flex flex-col justify-between p-1 text-center bg-gradient-to-br from-stone-100 to-amber-50 dark:from-stone-900 dark:to-stone-800">
+                                        <div className="w-full h-full flex flex-col justify-between p-1.5 text-center bg-gradient-to-br from-stone-100 to-amber-50 dark:from-stone-900 dark:to-stone-800">
                                           <span className="text-[7.5px] font-cinzel text-amber-900 dark:text-amber-300 uppercase font-bold">
                                             {livro.ano}
                                           </span>
@@ -979,14 +1032,14 @@ export const LinhaDoTempo: React.FC<LinhaDoTempoProps> = ({
                                       )}
                                     </div>
 
-                                    {/* Título & Autor */}
+                                    {/* Número, Nível, Título & Autor */}
                                     <div className="min-w-0 flex-1 space-y-1">
-                                      <div className="flex items-center gap-1 text-[9.5px] text-stone-500 font-mono">
-                                        <span>#{livro.id}</span>
+                                      <div className="flex items-center gap-1.5 text-[10px] text-stone-500 dark:text-stone-400 font-mono tabular-nums">
+                                        <span className="font-bold text-stone-700 dark:text-stone-300">#{livro.id}</span>
                                         <span>·</span>
-                                        <span>Nível {livro.nivel}</span>
+                                        <span className="font-cinzel font-semibold">Nível {livro.nivel}</span>
                                         {livro.id > 60 && (
-                                          <span className="px-1 rounded text-[8.5px] bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 font-cinzel">
+                                          <span className="px-1.5 py-0.2 rounded text-[8.5px] bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 font-cinzel font-bold">
                                             Trilha B
                                           </span>
                                         )}
@@ -1009,14 +1062,14 @@ export const LinhaDoTempo: React.FC<LinhaDoTempoProps> = ({
 
                                   {/* Tese Síntese (visível no modo confortável) */}
                                   {densidade === 'confortavel' && (
-                                    <p className="text-[11px] text-stone-600 dark:text-stone-300 font-serif italic line-clamp-2 pt-1 border-t border-stone-100 dark:border-stone-800">
-                                      "{livro.tese}"
+                                    <p className="text-[11px] text-stone-600 dark:text-stone-300 font-serif italic line-clamp-2 pt-2 border-t border-stone-100 dark:border-stone-800/80 leading-relaxed">
+                                      &ldquo;{livro.tese}&rdquo;
                                     </p>
                                   )}
                                 </div>
 
-                                {/* Rodapé: Status de Leitura & Botão */}
-                                <div className="pt-2 border-t border-stone-100 dark:border-stone-800/80 flex items-center justify-between text-xs">
+                                {/* Rodapé: Status de Leitura & Ação com Ícone Lucide */}
+                                <div className="pt-2.5 border-t border-stone-100 dark:border-stone-800/80 flex items-center justify-between text-xs">
                                   {isLido ? (
                                     <span className="px-2 py-0.5 rounded-full text-[10.5px] font-semibold bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-200 border border-emerald-300 dark:border-emerald-800 flex items-center gap-1">
                                       <CheckCircle2 className="w-3 h-3 text-emerald-600" />
@@ -1034,8 +1087,9 @@ export const LinhaDoTempo: React.FC<LinhaDoTempoProps> = ({
                                     </span>
                                   )}
 
-                                  <span className="text-[11px] text-amber-800 dark:text-amber-400 font-cinzel font-semibold group-hover/card:translate-x-0.5 transition-transform inline-flex items-center gap-0.5">
-                                    Ver <ChevronRight className="w-3.5 h-3.5" />
+                                  <span className="text-[11px] text-amber-800 dark:text-amber-400 font-cinzel font-bold group-hover/card:translate-x-0.5 transition-transform inline-flex items-center gap-1">
+                                    <span>Abrir</span>
+                                    <ArrowUpRight className="w-3.5 h-3.5" />
                                   </span>
                                 </div>
                               </div>
@@ -1076,7 +1130,7 @@ export const LinhaDoTempo: React.FC<LinhaDoTempoProps> = ({
                         <h3 className="font-cinzel font-bold text-base text-stone-900 dark:text-stone-100">
                           {periodo.nome}
                         </h3>
-                        <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-stone-700">
+                        <span className="text-[10px] font-mono tabular-nums px-2 py-0.5 rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-stone-700">
                           {periodo.rotuloAnos}
                         </span>
                       </div>
@@ -1087,10 +1141,10 @@ export const LinhaDoTempo: React.FC<LinhaDoTempoProps> = ({
                   </div>
 
                   <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
-                    <span className="text-xs font-mono text-stone-600 dark:text-stone-400">
+                    <span className="text-xs font-mono tabular-nums text-stone-600 dark:text-stone-400">
                       <strong>{lidosNaEra}</strong> de {itens.length} lidas nesta era
                     </span>
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950 text-amber-900 dark:text-amber-200 font-bold border border-amber-300 dark:border-amber-800">
+                    <span className="text-[10px] font-mono tabular-nums px-2.5 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950 text-amber-900 dark:text-amber-200 font-bold border border-amber-300 dark:border-amber-800">
                       {itens.length} {itens.length === 1 ? 'obra' : 'obras'}
                     </span>
                   </div>
@@ -1124,7 +1178,8 @@ export const LinhaDoTempo: React.FC<LinhaDoTempoProps> = ({
                           {/* Lado Esquerdo: Capa + Identificação */}
                           <div className="flex items-start gap-4 flex-1 min-w-0">
                             {/* Miniatura da Capa Real */}
-                            <div className="w-16 h-24 sm:w-20 sm:h-28 rounded-md overflow-hidden shadow-md shrink-0 border border-stone-300 dark:border-stone-700 bg-stone-100 dark:bg-stone-800 relative group-hover:scale-105 transition-transform">
+                            <div className="w-16 h-24 sm:w-20 sm:h-28 rounded-lg overflow-hidden shadow-book shrink-0 border border-stone-300 dark:border-stone-700 bg-stone-100 dark:bg-stone-800 relative group-hover:scale-105 transition-transform">
+                              <div className="absolute left-0 top-0 bottom-0 w-1.5 pointer-events-none bg-gradient-to-r from-black/40 via-black/20 to-transparent z-10" />
                               {livro.capa_url ? (
                                 <img
                                   src={livro.capa_url}
@@ -1151,17 +1206,20 @@ export const LinhaDoTempo: React.FC<LinhaDoTempoProps> = ({
                             <div className="space-y-1.5 min-w-0 flex-1">
                               {/* Ano e Badges de Classificação */}
                               <div className="flex flex-wrap items-center gap-1.5 text-xs">
-                                <span className="px-2 py-0.5 rounded font-cinzel font-bold text-xs bg-amber-900 text-amber-100 dark:bg-amber-800 shadow-2xs">
+                                <span className="px-2 py-0.5 rounded-md font-cinzel font-bold text-xs tabular-nums bg-amber-900 text-amber-100 dark:bg-amber-800 shadow-2xs">
                                   {livro.ano}
                                 </span>
-                                <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${coresArea.badge}`}>
+                                <span
+                                  className="px-2 py-0.5 rounded-md text-[10px] font-cinzel font-bold text-white shadow-2xs"
+                                  style={{ backgroundColor: coresArea.hex }}
+                                >
                                   {livro.area}
                                 </span>
-                                <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-400 border border-stone-200 dark:border-stone-700">
+                                <span className="px-2 py-0.5 rounded-md text-[10px] font-mono tabular-nums bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-400 border border-stone-200 dark:border-stone-700">
                                   Nível {livro.nivel} · {livro.classe}
                                 </span>
                                 {livro.id > 60 && (
-                                  <span className="px-1.5 py-0.5 rounded text-[9px] font-cinzel bg-amber-50 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-800">
+                                  <span className="px-1.5 py-0.5 rounded-md text-[9px] font-cinzel font-bold bg-amber-50 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-800">
                                     Trilha B
                                   </span>
                                 )}
@@ -1169,15 +1227,16 @@ export const LinhaDoTempo: React.FC<LinhaDoTempoProps> = ({
 
                               {/* Título & Autor */}
                               <h4 className="font-serif font-bold text-base sm:text-lg text-stone-900 dark:text-stone-100 tracking-tight leading-snug group-hover:text-amber-800 dark:group-hover:text-amber-300 transition-colors">
-                                #{livro.id} {livro.titulo}
+                                <span className="font-mono text-sm text-stone-500 dark:text-stone-400 mr-1.5">#{livro.id}</span>
+                                {livro.titulo}
                               </h4>
-                              <p className="text-xs sm:text-sm text-stone-600 dark:text-stone-400 font-serif">
+                              <p className="text-xs sm:text-sm text-stone-600 dark:text-stone-400 font-serif italic">
                                 {livro.autor}
                               </p>
 
                               {/* Tese da Obra */}
-                              <p className="text-xs text-stone-700 dark:text-stone-300 font-serif italic line-clamp-2 pt-0.5 border-t border-stone-100 dark:border-stone-800/80">
-                                "{livro.tese}"
+                              <p className="text-xs text-stone-700 dark:text-stone-300 font-serif italic line-clamp-2 pt-1 border-t border-stone-100 dark:border-stone-800/80">
+                                &ldquo;{livro.tese}&rdquo;
                               </p>
                             </div>
                           </div>
@@ -1201,9 +1260,9 @@ export const LinhaDoTempo: React.FC<LinhaDoTempoProps> = ({
                               </span>
                             )}
 
-                            <div className="flex items-center gap-1 text-xs text-amber-800 dark:text-amber-400 font-cinzel font-semibold group-hover:translate-x-1 transition-transform">
-                              <span>Ver Obra</span>
-                              <ChevronRight className="w-4 h-4" />
+                            <div className="flex items-center gap-1 text-xs text-amber-800 dark:text-amber-400 font-cinzel font-bold group-hover:translate-x-0.5 transition-transform">
+                              <span>Abrir Obra</span>
+                              <ArrowUpRight className="w-4 h-4" />
                             </div>
                           </div>
                         </div>
@@ -1219,3 +1278,4 @@ export const LinhaDoTempo: React.FC<LinhaDoTempoProps> = ({
     </div>
   );
 };
+

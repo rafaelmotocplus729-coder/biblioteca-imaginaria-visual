@@ -18,7 +18,9 @@ import {
   X,
   Lightbulb,
   Hourglass,
-  Clock
+  Clock,
+  ArrowUp,
+  ArrowDown
 } from 'lucide-react';
 
 interface CommandPaletteProps {
@@ -90,7 +92,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       id: 'cmd-visao-estante',
       tipo: 'acao',
       titulo: 'Ver Estante Principal',
-      subtitulo: 'Modo de prateleira física dos 60 livros',
+      subtitulo: `Modo de prateleira física das ${livros.length} obras`,
       badge: 'Tecla E',
       icone: <BookOpen className="w-4 h-4 text-amber-600 dark:text-amber-400" />,
       acao: () => {
@@ -150,7 +152,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       id: 'cmd-diario-intelectual',
       tipo: 'acao',
       titulo: '05 — Abrir Diário Intelectual ("Caderno Real")',
-      subtitulo: 'Check-in semanal, Daily Log com símbolos (•, ○, -), termômetro e checkout',
+      subtitulo: 'Check-in semanal, Daily Log estruturado, termômetro e checkout',
       badge: 'Diário',
       icone: <NotebookPen className="w-4 h-4 text-amber-700 dark:text-amber-400" />,
       acao: () => {
@@ -242,7 +244,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         onClose();
       }
     })))
-  ], [modoVisualizacao, modoEscuro, onMudarVisao, onMudarModoVisualizacao, onToggleModoEscuro, onAbrirComparador, onAbrirCaderno, onAbrirRevisao, onAbrirBackup, onFiltrarNivel, onClose]);
+  ], [livros.length, modoVisualizacao, modoEscuro, onMudarVisao, onMudarModoVisualizacao, onToggleModoEscuro, onAbrirComparador, onAbrirCaderno, onAbrirRevisao, onAbrirBackup, onFiltrarNivel, onClose]);
 
   // Filtragem e busca ponderada
   const resultados = useMemo(() => {
@@ -276,7 +278,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       (a.subtitulo && a.subtitulo.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').includes(q))
     );
 
-    // Busca nos 60 livros
+    // Busca no acervo completo de obras
     const livrosFiltrados: ItemComando[] = livros
       .filter((livro) => {
         const idStr = `${livro.id}`;
@@ -363,7 +365,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/75 backdrop-blur-md flex items-start justify-center p-3 sm:p-6 pt-[12vh] sm:pt-[15vh] animate-fadeIn">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-stone-950/80 backdrop-blur-md flex items-start justify-center p-3 sm:p-6 pt-[12vh] sm:pt-[15vh] animate-fadeIn">
       {/* Clique no backdrop para fechar */}
       <div className="fixed inset-0" onClick={onClose} />
 
@@ -372,7 +374,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         onClick={(e) => e.stopPropagation()}
       >
         {/* Barra de Pesquisa Superior */}
-        <div className="flex items-center px-4 py-3.5 border-b border-stone-200 dark:border-stone-800/80 bg-stone-50/60 dark:bg-stone-900/60">
+        <div className="flex items-center px-4 py-3.5 border-b border-stone-200 dark:border-stone-800/80 bg-stone-50/70 dark:bg-stone-900/60">
           <Search className="w-5 h-5 text-amber-700 dark:text-amber-400 shrink-0 mr-3" />
           <input
             ref={inputRef}
@@ -383,7 +385,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
               setIndiceFocado(0);
             }}
             placeholder="Digite para buscar qualquer livro, autor, tese ou comando..."
-            className="w-full bg-transparent text-sm sm:text-base text-stone-900 dark:text-stone-100 placeholder:text-stone-400 focus:outline-none font-serif"
+            className="w-full bg-transparent text-sm sm:text-base text-stone-900 dark:text-stone-100 placeholder:text-stone-400 focus:outline-hidden font-serif"
           />
           {busca ? (
             <button
@@ -392,12 +394,13 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                 setIndiceFocado(0);
                 inputRef.current?.focus();
               }}
-              className="p-1 text-stone-400 hover:text-stone-600 dark:hover:text-stone-200"
+              className="p-1.5 rounded-lg text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 hover:bg-stone-200/70 dark:hover:bg-stone-800 transition-colors cursor-pointer"
+              title="Limpar busca"
             >
               <X className="w-4 h-4" />
             </button>
           ) : (
-            <kbd className="hidden sm:inline-block px-2 py-0.5 text-[10px] font-mono font-semibold text-stone-500 bg-stone-200 dark:bg-stone-800 rounded border border-stone-300 dark:border-stone-700">
+            <kbd className="hidden sm:inline-block px-2 py-0.5 text-[10px] font-mono font-semibold text-stone-500 dark:text-stone-400 bg-stone-200/90 dark:bg-stone-800 rounded-md border border-stone-300 dark:border-stone-700 shadow-2xs shrink-0">
               ESC para sair
             </kbd>
           )}
@@ -410,11 +413,12 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         >
           {resultados.length === 0 ? (
             <div className="p-8 text-center text-stone-500 dark:text-stone-400 font-serif italic text-sm">
-              Nenhuma obra ou comando correspondente a "{busca}".
+              Nenhuma obra ou comando correspondente a &ldquo;{busca}&rdquo;.
             </div>
           ) : (
             resultados.map((item, idx) => {
               const focado = idx === indiceFocado;
+              const isShortcutBadge = item.badge?.startsWith('Tecla ');
               return (
                 <div
                   key={item.id}
@@ -422,12 +426,12 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                   onMouseEnter={() => setIndiceFocado(idx)}
                   className={`flex items-center justify-between p-3 rounded-xl cursor-pointer transition-colors ${
                     focado
-                      ? 'bg-amber-100/70 dark:bg-amber-950/50 text-amber-950 dark:text-amber-100 ring-1 ring-amber-400/50'
+                      ? 'bg-amber-100/70 dark:bg-amber-950/50 text-amber-950 dark:text-amber-100 ring-1 ring-amber-500/50'
                       : 'hover:bg-stone-100/70 dark:hover:bg-stone-900/60'
                   }`}
                 >
                   <div className="flex items-center gap-3 min-w-0 pr-2">
-                    <div className="p-2 rounded-lg bg-stone-100 dark:bg-stone-800 shrink-0 shadow-xs">
+                    <div className="p-2 rounded-xl bg-stone-100 dark:bg-stone-800/90 border border-stone-200/70 dark:border-stone-700/70 shrink-0 shadow-2xs">
                       {item.icone}
                     </div>
                     <div className="min-w-0">
@@ -444,13 +448,19 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
 
                   <div className="flex items-center gap-2 shrink-0">
                     {item.badge && (
-                      <span
-                        className={`px-2 py-0.5 rounded text-[10px] font-cinzel font-semibold tracking-wider ${
-                          item.badgeColor || 'bg-stone-200 dark:bg-stone-800 text-stone-700 dark:text-stone-300'
-                        }`}
-                      >
-                        {item.badge}
-                      </span>
+                      isShortcutBadge ? (
+                        <kbd className="px-2 py-0.5 rounded-md text-[10px] font-mono font-semibold bg-stone-200/90 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border border-stone-300 dark:border-stone-700 shadow-2xs">
+                          {item.badge}
+                        </kbd>
+                      ) : (
+                        <span
+                          className={`px-2 py-0.5 rounded-md text-[10px] font-cinzel font-semibold tracking-wider tabular-nums ${
+                            item.badgeColor || 'bg-stone-200 dark:bg-stone-800 text-stone-700 dark:text-stone-300'
+                          }`}
+                        >
+                          {item.badge}
+                        </span>
+                      )
                     )}
                     {focado && <CornerDownLeft className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />}
                   </div>
@@ -461,13 +471,34 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         </div>
 
         {/* Rodapé Informativo de Teclas de Atalho */}
-        <div className="px-4 py-2.5 bg-stone-100/70 dark:bg-stone-900/70 border-t border-stone-200 dark:border-stone-800 text-[11px] text-stone-500 flex items-center justify-between font-mono">
+        <div className="px-4 py-2.5 bg-stone-100/80 dark:bg-stone-900/80 border-t border-stone-200 dark:border-stone-800 text-[11px] text-stone-500 dark:text-stone-400 flex items-center justify-between font-sans">
           <div className="flex items-center gap-3">
-            <span><kbd className="px-1.5 py-0.5 bg-stone-200 dark:bg-stone-800 rounded">↑</kbd> <kbd className="px-1.5 py-0.5 bg-stone-200 dark:bg-stone-800 rounded">↓</kbd> navegar</span>
-            <span><kbd className="px-1.5 py-0.5 bg-stone-200 dark:bg-stone-800 rounded">ENTER</kbd> abrir</span>
+            <span className="inline-flex items-center gap-1">
+              <kbd className="inline-flex items-center justify-center px-1.5 py-0.5 bg-stone-200/90 dark:bg-stone-800 text-stone-700 dark:text-stone-300 rounded-md border border-stone-300 dark:border-stone-700 shadow-2xs">
+                <ArrowUp className="w-2.5 h-2.5" />
+              </kbd>
+              <kbd className="inline-flex items-center justify-center px-1.5 py-0.5 bg-stone-200/90 dark:bg-stone-800 text-stone-700 dark:text-stone-300 rounded-md border border-stone-300 dark:border-stone-700 shadow-2xs">
+                <ArrowDown className="w-2.5 h-2.5" />
+              </kbd>
+              <span>navegar</span>
+            </span>
+            <span className="inline-flex items-center gap-1">
+              <kbd className="px-1.5 py-0.5 font-mono text-[10px] font-semibold bg-stone-200/90 dark:bg-stone-800 text-stone-700 dark:text-stone-300 rounded-md border border-stone-300 dark:border-stone-700 shadow-2xs">
+                ENTER
+              </kbd>
+              <span>abrir</span>
+            </span>
           </div>
           <div className="hidden sm:flex items-center gap-2">
-            <span>Atalhos: <kbd className="px-1 bg-stone-200 dark:bg-stone-800 rounded">E</kbd> Estante · <kbd className="px-1 bg-stone-200 dark:bg-stone-800 rounded">G</kbd> Grafo · <kbd className="px-1 bg-stone-200 dark:bg-stone-800 rounded">C</kbd> Capa/Lombada</span>
+            <span className="inline-flex items-center gap-1">
+              <span>Atalhos:</span>
+              <kbd className="px-1.5 py-0.5 font-mono text-[10px] font-semibold bg-stone-200/90 dark:bg-stone-800 text-stone-700 dark:text-stone-300 rounded-md border border-stone-300 dark:border-stone-700 shadow-2xs">E</kbd>
+              <span>Estante ·</span>
+              <kbd className="px-1.5 py-0.5 font-mono text-[10px] font-semibold bg-stone-200/90 dark:bg-stone-800 text-stone-700 dark:text-stone-300 rounded-md border border-stone-300 dark:border-stone-700 shadow-2xs">G</kbd>
+              <span>Grafo ·</span>
+              <kbd className="px-1.5 py-0.5 font-mono text-[10px] font-semibold bg-stone-200/90 dark:bg-stone-800 text-stone-700 dark:text-stone-300 rounded-md border border-stone-300 dark:border-stone-700 shadow-2xs">C</kbd>
+              <span>Capa/Lombada</span>
+            </span>
           </div>
         </div>
       </div>

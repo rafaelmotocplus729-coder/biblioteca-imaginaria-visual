@@ -5,7 +5,8 @@ import {
   Sparkles,
   Copy,
   MessageSquare,
-  FileCheck
+  FileCheck,
+  Wand2
 } from 'lucide-react';
 
 interface MenuFlutuanteSelecaoProps {
@@ -34,98 +35,109 @@ export const MenuFlutuanteSelecao: React.FC<MenuFlutuanteSelecaoProps> = ({
   if (!posicao || !textoSelecionado || textoSelecionado.trim().length === 0) return null;
 
   // Garante que o menu não transborde os cantos da viewport
-  const left = Math.max(12, Math.min(window.innerWidth - 420, posicao.x - 210));
-  const top = Math.max(10, posicao.y - 52);
+  const left = Math.max(12, Math.min(window.innerWidth - 480, posicao.x - 240));
+  const top = Math.max(10, posicao.y - 56);
 
   return (
     <div
       style={{ left: `${left}px`, top: `${top}px` }}
-      className="fixed z-50 flex items-center gap-1 p-1 bg-white/95 dark:bg-[#1a1b22]/95 backdrop-blur-md border border-stone-200/90 dark:border-stone-700/90 rounded-xl shadow-2xl animate-fadeIn text-stone-800 dark:text-stone-200 select-none"
+      className="fixed z-50 flex items-center gap-1 p-1.5 bg-[#fcfaf5]/95 dark:bg-[#14151a]/95 backdrop-blur-md border border-stone-300/90 dark:border-stone-700/90 rounded-2xl shadow-2xl ring-1 ring-black/5 dark:ring-white/5 animate-fadeIn text-stone-800 dark:text-stone-200 select-none"
       onMouseDown={(e) => e.preventDefault()} // Impede perda de seleção no clique
+      role="toolbar"
+      aria-label="Ferramentas de seleção e marginália"
     >
-      {/* Botão: Marca-texto amarelo */}
-      <button
-        type="button"
-        onClick={onDestacar}
-        className="px-2.5 py-1.5 rounded-lg hover:bg-amber-100 dark:hover:bg-yellow-500/20 text-amber-900 dark:text-yellow-300 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
-        title="Destacar com marca-texto amarelo (==texto==)"
-      >
-        <Highlighter className="w-3.5 h-3.5 text-amber-600 dark:text-yellow-400" />
-        <span className="hidden sm:inline">Destacar</span>
-      </button>
-
-      {/* Botão: Citação clássica */}
-      <button
-        type="button"
-        onClick={onCitar}
-        className="px-2.5 py-1.5 rounded-lg hover:bg-amber-100/70 dark:hover:bg-amber-950/60 text-amber-800 dark:text-amber-300 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
-        title="Formatar como citação de fonte (- #citação p. : &quot;...&quot;)"
-      >
-        <Quote className="w-3.5 h-3.5 text-amber-600" />
-        <span className="hidden sm:inline">Citação</span>
-      </button>
-
-      {/* Botão: Síntese pessoal */}
-      {onSintese && (
+      {/* GRUPO 1: GRIFO E EXCERTO */}
+      <div className="flex items-center gap-0.5">
         <button
           type="button"
-          onClick={onSintese}
-          className="px-2 py-1.5 rounded-lg hover:bg-emerald-100/70 dark:hover:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 text-xs font-medium flex items-center gap-1 transition cursor-pointer"
-          title="Marcar como síntese pessoal (- #síntese)"
+          onClick={onDestacar}
+          className="px-2.5 py-1.5 rounded-xl hover:bg-amber-100/90 dark:hover:bg-amber-500/15 text-stone-700 dark:text-stone-200 hover:text-amber-900 dark:hover:text-amber-200 text-xs font-medium flex items-center gap-1.5 transition cursor-pointer"
+          title="Grifar trecho com marca-texto (==texto==)"
         >
-          <FileCheck className="w-3.5 h-3.5 text-emerald-600" />
-          <span className="hidden md:inline">#síntese</span>
+          <Highlighter className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 shrink-0" />
+          <span className="hidden sm:inline">Grifar</span>
         </button>
-      )}
 
-      {/* Botão: Comentário Pessoal */}
-      {onComentario && (
         <button
           type="button"
-          onClick={onComentario}
-          className="px-2.5 py-1.5 rounded-lg bg-sky-50 dark:bg-sky-950/60 hover:bg-sky-100 dark:hover:bg-sky-900/60 text-sky-800 dark:text-sky-300 border border-sky-200/80 dark:border-sky-800 text-xs font-semibold flex items-center gap-1 transition cursor-pointer shadow-2xs"
-          title="Adicionar comentário pessoal (- #comentário)"
+          onClick={onCitar}
+          className="px-2.5 py-1.5 rounded-xl hover:bg-amber-100/80 dark:hover:bg-amber-950/60 text-stone-700 dark:text-stone-200 hover:text-amber-900 dark:hover:text-amber-200 text-xs font-medium flex items-center gap-1.5 transition cursor-pointer"
+          title="Inserir como excerto formal (- #citação p. : &quot;...&quot;)"
         >
-          <MessageSquare className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />
-          <span>#comentário</span>
+          <Quote className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400 shrink-0" />
+          <span className="hidden sm:inline">Citar</span>
         </button>
+      </div>
+
+      {/* GRUPO 2: MARGINÁLIA & SÍNTESE */}
+      {(onSintese || onComentario || onNotebooklm) && (
+        <>
+          <div className="w-px h-4 bg-stone-200 dark:bg-stone-700/80 mx-0.5 shrink-0" />
+          <div className="flex items-center gap-0.5">
+            {onSintese && (
+              <button
+                type="button"
+                onClick={onSintese}
+                className="px-2 py-1.5 rounded-xl hover:bg-emerald-100/80 dark:hover:bg-emerald-950/60 text-stone-700 dark:text-stone-300 hover:text-emerald-900 dark:hover:text-emerald-200 text-xs font-medium flex items-center gap-1.5 transition cursor-pointer"
+                title="Registrar síntese interpretativa (- #síntese)"
+              >
+                <FileCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                <span className="hidden md:inline">Síntese</span>
+              </button>
+            )}
+
+            {onComentario && (
+              <button
+                type="button"
+                onClick={onComentario}
+                className="px-2.5 py-1.5 rounded-xl hover:bg-sky-100/80 dark:hover:bg-sky-950/60 text-stone-700 dark:text-stone-300 hover:text-sky-900 dark:hover:text-sky-200 text-xs font-medium flex items-center gap-1.5 transition cursor-pointer"
+                title="Anotar glosa ou marginália pessoal (- #comentário)"
+              >
+                <MessageSquare className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400 shrink-0" />
+                <span className="hidden sm:inline">Marginália</span>
+              </button>
+            )}
+
+            {onNotebooklm && (
+              <button
+                type="button"
+                onClick={onNotebooklm}
+                className="px-2 py-1.5 rounded-xl hover:bg-indigo-100/80 dark:hover:bg-indigo-950/60 text-stone-700 dark:text-stone-300 hover:text-indigo-900 dark:hover:text-indigo-200 text-xs font-medium flex items-center gap-1.5 transition cursor-pointer"
+                title="Marcar síntese assistida (- #notebooklm)"
+              >
+                <Wand2 className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400 shrink-0" />
+                <span className="hidden lg:inline">NotebookLM</span>
+              </button>
+            )}
+          </div>
+        </>
       )}
 
-      {/* Botão: NotebookLM */}
-      {onNotebooklm && (
-        <button
-          type="button"
-          onClick={onNotebooklm}
-          className="px-2.5 py-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-950/60 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 text-indigo-800 dark:text-indigo-300 border border-indigo-200/80 dark:border-indigo-800 text-xs font-semibold flex items-center gap-1 transition cursor-pointer shadow-2xs"
-          title="Marcar como ideia/síntese do NotebookLM (- #notebooklm)"
-        >
-          <Sparkles className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
-          <span className="hidden sm:inline">#NotebookLM</span>
-        </button>
-      )}
+      <div className="w-px h-4 bg-stone-200 dark:bg-stone-700/80 mx-0.5 shrink-0" />
 
-      <div className="w-[1px] h-4 bg-stone-200 dark:bg-stone-700 mx-0.5" />
-
-      {/* BOTÃO PRINCIPAL: EXTRAIR PARA NOTA PERMANENTE */}
+      {/* AÇÃO PRIMÁRIA: EXTRAIR NOTA ATÔMICA */}
       <button
         type="button"
         onClick={onExtrairPermanente}
-        className="px-3 py-1.5 rounded-lg bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-bold flex items-center gap-1.5 shadow-xs transition cursor-pointer"
-        title="Gerar uma nova nota permanente a partir deste trecho"
+        className="px-3 py-1.5 rounded-xl bg-emerald-700 hover:bg-emerald-600 active:bg-emerald-800 text-white text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer shrink-0"
+        title="Extrair conceito atômico para o Zettelkasten (Nota Permanente)"
       >
-        <Sparkles className="w-3.5 h-3.5" />
-        <span>+ Criar Permanente</span>
+        <Sparkles className="w-3.5 h-3.5 text-emerald-200 shrink-0" />
+        <span>Extrair Nota Atômica</span>
       </button>
 
-      {/* Copiar citação com fonte */}
+      <div className="w-px h-4 bg-stone-200 dark:bg-stone-700/80 mx-0.5 shrink-0" />
+
+      {/* COPIAR EXCERTO */}
       <button
         type="button"
         onClick={onCopiar}
-        className="p-1.5 rounded-lg text-stone-500 hover:text-stone-800 dark:hover:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-800 transition cursor-pointer"
-        title="Copiar trecho"
+        className="p-1.5 rounded-xl text-stone-500 hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100 hover:bg-stone-200/60 dark:hover:bg-stone-800 transition cursor-pointer shrink-0"
+        title="Copiar trecho selecionado"
       >
         <Copy className="w-3.5 h-3.5" />
       </button>
     </div>
   );
 };
+

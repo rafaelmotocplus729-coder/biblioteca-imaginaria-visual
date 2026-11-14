@@ -57,8 +57,57 @@ import {
   Heading3,
   List,
   ListOrdered,
-  Minus
+  Minus,
+  GitBranch,
+  Zap,
+  Puzzle,
+  ScrollText,
+  Hash,
+  FolderOpen,
+  ArrowUpRight
 } from 'lucide-react';
+
+const renderBadgeRelacaoDialetica = (tipo?: TipoRelacaoDialetica | string) => {
+  switch (tipo) {
+    case 'contraponto':
+      return (
+        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-bold bg-rose-100/90 dark:bg-rose-950/70 text-rose-800 dark:text-rose-300 border border-rose-300/80 dark:border-rose-800">
+          <Zap className="w-3 h-3 text-rose-600 dark:text-rose-400 shrink-0" />
+          <span>Contraponto / Objeção</span>
+        </span>
+      );
+    case 'desenvolve':
+      return (
+        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-bold bg-emerald-100/90 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-300 border border-emerald-300/80 dark:border-emerald-800">
+          <GitBranch className="w-3 h-3 text-emerald-600 dark:text-emerald-400 shrink-0" />
+          <span>Desenvolve / Aprofunda</span>
+        </span>
+      );
+    case 'complementa':
+      return (
+        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-bold bg-purple-100/90 dark:bg-purple-950/70 text-purple-800 dark:text-purple-300 border border-purple-300/80 dark:border-purple-800">
+          <Puzzle className="w-3 h-3 text-purple-600 dark:text-purple-400 shrink-0" />
+          <span>Complementa / Afim</span>
+        </span>
+      );
+    case 'aplica':
+      return (
+        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-bold bg-amber-100/90 dark:bg-amber-950/70 text-amber-800 dark:text-amber-300 border border-amber-300/80 dark:border-amber-800">
+          <Lightbulb className="w-3 h-3 text-amber-600 dark:text-amber-400 shrink-0" />
+          <span>Aplica / Exemplo</span>
+        </span>
+      );
+    case 'origem':
+      return (
+        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-bold bg-stone-200/90 dark:bg-stone-800 text-stone-800 dark:text-stone-200 border border-stone-300/80 dark:border-stone-700">
+          <ScrollText className="w-3 h-3 text-stone-600 dark:text-stone-400 shrink-0" />
+          <span>Origem Histórica</span>
+        </span>
+      );
+    default:
+      return null;
+  }
+};
 
 interface ZettelkastenViewProps {
   onSelecionarLivroEstante?: (livroId: number) => void;
@@ -1977,76 +2026,89 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
         <div className="absolute inset-0 pointer-events-none bg-white/75 dark:bg-[#141518]/85 backdrop-blur-[0.5px] z-0" />
       )}
 
-      {/* BARRA DE FERRAMENTAS SUPERIOR (Redesign Unificado e Elegante) */}
-      <div className="relative z-10 flex flex-wrap items-center justify-between border-b border-stone-200/90 dark:border-stone-800/90 bg-stone-50/95 dark:bg-[#131417]/95 backdrop-blur-md px-3 sm:px-5 py-2.5 text-xs gap-2.5 shadow-2xs">
+      {/* BARRA DE FERRAMENTAS SUPERIOR (Redesign Editorial & Luhmann) */}
+      <div className="relative z-10 flex flex-wrap items-center justify-between border-b border-stone-200/90 dark:border-stone-800/90 bg-[#FBF8F3]/95 dark:bg-[#131417]/95 backdrop-blur-md px-3 sm:px-5 py-2.5 text-xs gap-2.5">
         {/* Lado Esquerdo: Sidebar Toggle, Abas Principais e Botão Nova Nota */}
-        <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+        <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap">
           <button
+            type="button"
             onClick={() => setSidebarAberta((prev) => !prev)}
-            className="p-1.5 rounded-xl border border-stone-200/90 dark:border-stone-800 text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 hover:bg-stone-200/70 dark:hover:bg-stone-800 transition cursor-pointer shadow-2xs"
-            title={sidebarAberta ? 'Recolher Painel Lateral' : 'Expandir Painel Lateral'}
+            className="h-9 px-2.5 rounded-xl border border-stone-300/80 dark:border-stone-800 bg-white/80 dark:bg-stone-900/90 text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 hover:border-amber-500/50 transition cursor-pointer flex items-center gap-1.5"
+            title={sidebarAberta ? 'Recolher Árvore do Cofre' : 'Expandir Árvore do Cofre'}
           >
             {sidebarAberta ? <PanelLeftClose className="w-4 h-4" /> : <PanelLeft className="w-4 h-4" />}
+            <span className="hidden xl:inline font-cinzel font-semibold text-[11px]">Cofre</span>
           </button>
 
           {/* Abas Principais Segmentadas */}
-          <div className="flex items-center bg-stone-200/70 dark:bg-stone-900/90 p-1 rounded-xl border border-stone-200/90 dark:border-stone-800 text-xs shadow-2xs">
+          <div className="flex items-center bg-stone-200/65 dark:bg-stone-900/90 p-1 rounded-xl border border-stone-300/70 dark:border-stone-800 text-xs">
             <button
+              type="button"
               onClick={() => setVisaoAtiva('acervo')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-cinzel font-bold transition cursor-pointer ${
                 visaoAtiva === 'acervo'
-                  ? 'bg-white dark:bg-stone-800 text-stone-900 dark:text-stone-100 shadow-xs border border-stone-200/60 dark:border-stone-700/60'
+                  ? 'bg-white dark:bg-stone-800 text-stone-900 dark:text-stone-100 shadow-2xs border border-stone-300/70 dark:border-stone-700'
                   : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
               }`}
             >
               <FileText className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
-              <span>Notas ({notasZettel.length})</span>
+              <span>Notas</span>
+              <span className="px-1.5 py-0.2 rounded text-[10px] font-mono tabular-nums bg-stone-100 dark:bg-stone-900 text-stone-600 dark:text-stone-400">
+                {notasZettel.length}
+              </span>
             </button>
             <button
+              type="button"
               onClick={() => setVisaoAtiva('inbox')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-cinzel font-bold transition cursor-pointer relative ${
                 visaoAtiva === 'inbox'
-                  ? 'bg-white dark:bg-stone-800 text-amber-900 dark:text-amber-200 shadow-xs border border-stone-200/60 dark:border-stone-700/60'
+                  ? 'bg-white dark:bg-stone-800 text-amber-900 dark:text-amber-200 shadow-2xs border border-stone-300/70 dark:border-stone-700'
                   : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
               }`}
-              title="04 - Caixa de Entrada & Captura Rápida (48h)"
+              title="04 - Caixa de Entrada & Captura Rápida (Regra de 48h)"
             >
               <Inbox className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
-              <span>04 Caixa de Entrada</span>
+              <span>Caixa de Entrada</span>
               {notasTemporarias.filter((t) => !t.processada).length > 0 && (
-                <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+                <span className="px-1.5 py-0.2 rounded-full text-[10px] font-mono font-bold bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border border-amber-300/70 dark:border-amber-800 tabular-nums">
+                  {notasTemporarias.filter((t) => !t.processada).length}
+                </span>
               )}
             </button>
             <button
+              type="button"
               onClick={() => setVisaoAtiva('diario')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-cinzel font-bold transition cursor-pointer relative ${
                 visaoAtiva === 'diario'
-                  ? 'bg-white dark:bg-stone-800 text-amber-900 dark:text-amber-200 shadow-xs border border-stone-200/60 dark:border-stone-700/60'
+                  ? 'bg-white dark:bg-stone-800 text-amber-900 dark:text-amber-200 shadow-2xs border border-stone-300/70 dark:border-stone-700'
                   : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
               }`}
               title="05 - O Diário Intelectual (Caderno Real)"
             >
               <BookMarked className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
-              <span>05 Diário Intelectual</span>
+              <span>Diário Intelectual</span>
             </button>
             <button
+              type="button"
               onClick={() => setVisaoAtiva('canvas')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-cinzel font-bold transition cursor-pointer ${
                 visaoAtiva === 'canvas'
-                  ? 'bg-white dark:bg-stone-800 text-purple-900 dark:text-purple-200 shadow-xs border border-stone-200/60 dark:border-stone-700/60'
+                  ? 'bg-white dark:bg-stone-800 text-purple-900 dark:text-purple-200 shadow-2xs border border-stone-300/70 dark:border-stone-700'
                   : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
               }`}
+              title="Mesa de Articulação Conceitual (Índices, Fontes e Permanentes)"
             >
               <LayoutGrid className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
-              <span>Canvas</span>
+              <span>Mesa / Canvas</span>
             </button>
           </div>
 
           {/* Botão Principal Nova Nota */}
           <button
+            type="button"
             onClick={() => abrirCriadorPermanente()}
-            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-emerald-700 to-emerald-600 hover:from-emerald-600 hover:to-emerald-500 text-white font-cinzel font-bold text-xs shadow-xs hover:shadow-sm transition cursor-pointer"
-            title="Criar nova nota permanente com suas próprias palavras"
+            className="flex items-center gap-1.5 h-9 px-3.5 rounded-xl bg-emerald-800 hover:bg-emerald-700 dark:bg-emerald-700 dark:hover:bg-emerald-600 text-white font-cinzel font-bold text-xs shadow-2xs transition cursor-pointer border border-emerald-900/20"
+            title="Criar nova nota no cofre Zettelkasten"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Nova Nota</span>
@@ -2054,14 +2116,15 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
         </div>
 
         {/* Lado Direito: Layout / Visualização, Ações da Nota e Ambiente */}
-        <div className="flex items-center gap-2 sm:gap-2.5 shrink-0 flex-wrap">
+        <div className="flex items-center gap-2 shrink-0 flex-wrap">
           {/* Controles de Layout (Painel Duplo e Largura) */}
-          <div className="flex items-center bg-stone-200/60 dark:bg-stone-900/90 p-1 rounded-xl border border-stone-200/90 dark:border-stone-800 text-xs shadow-2xs">
+          <div className="flex items-center h-9 bg-stone-200/60 dark:bg-stone-900/90 p-1 rounded-xl border border-stone-300/70 dark:border-stone-800 text-xs">
             <button
+              type="button"
               onClick={() => setSplitViewAtivo((prev) => !prev)}
-              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg transition cursor-pointer font-cinzel text-xs ${
+              className={`flex items-center gap-1.5 px-2.5 h-full rounded-lg transition cursor-pointer font-cinzel text-xs ${
                 splitViewAtivo
-                  ? 'bg-amber-100 dark:bg-amber-950/80 text-amber-900 dark:text-amber-200 font-bold shadow-2xs border border-amber-300 dark:border-amber-700'
+                  ? 'bg-white dark:bg-stone-800 text-amber-900 dark:text-amber-200 font-bold shadow-2xs border border-stone-300/70 dark:border-stone-700'
                   : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
               }`}
               title={
@@ -2074,12 +2137,15 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
               <span className="hidden md:inline">Painel Duplo</span>
             </button>
 
+            <div className="w-px h-3.5 bg-stone-300/70 dark:bg-stone-800 mx-0.5" />
+
             <button
+              type="button"
               onClick={() => {
                 const prox = larguraLeitura === 'focada' ? 'padrao' : larguraLeitura === 'padrao' ? 'ampla' : 'focada';
                 mudarLarguraLeitura(prox);
               }}
-              className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200 transition cursor-pointer font-cinzel text-xs"
+              className="flex items-center gap-1.5 px-2.5 h-full rounded-lg text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200 transition cursor-pointer font-cinzel text-xs"
               title={`Largura da Página: ${
                 larguraLeitura === 'focada'
                   ? 'Leitura Focada (72ch)'
@@ -2100,14 +2166,15 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
           </div>
 
           {/* Ações da Nota Ativa */}
-          {notaAtiva && (
-            <div className="flex items-center bg-stone-200/60 dark:bg-stone-900/90 p-1 rounded-xl border border-stone-200/90 dark:border-stone-800 text-xs shadow-2xs">
+          {notaAtiva && visaoAtiva === 'acervo' && (
+            <div className="flex items-center h-9 bg-stone-200/60 dark:bg-stone-900/90 p-1 rounded-xl border border-stone-300/70 dark:border-stone-800 text-xs">
               <button
+                type="button"
                 onClick={() => setModoEdicao((prev) => !prev)}
-                className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg font-cinzel text-xs font-bold transition cursor-pointer ${
+                className={`flex items-center gap-1.5 px-2.5 h-full rounded-lg font-cinzel text-xs font-bold transition cursor-pointer ${
                   modoEdicao
                     ? 'bg-amber-700 text-white shadow-2xs'
-                    : 'text-stone-700 dark:text-stone-300 hover:text-amber-900 dark:hover:text-amber-200'
+                    : 'text-stone-700 dark:text-stone-300 hover:bg-white dark:hover:bg-stone-800 hover:text-amber-900 dark:hover:text-amber-200'
                 }`}
                 title={modoEdicao ? 'Mudar para Modo Leitura (Ctrl+E)' : 'Mudar para Modo Edição (Ctrl+E)'}
               >
@@ -2125,8 +2192,9 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
               </button>
 
               <button
+                type="button"
                 onClick={handleCopiarWikilinkNota}
-                className="p-1.5 rounded-lg text-stone-600 dark:text-stone-400 hover:text-amber-800 dark:hover:text-amber-300 transition cursor-pointer"
+                className="px-2 h-full rounded-lg text-stone-600 dark:text-stone-400 hover:bg-white dark:hover:bg-stone-800 hover:text-amber-800 dark:hover:text-amber-300 transition cursor-pointer flex items-center"
                 title="Copiar Wikilink [[Título]] da nota"
               >
                 {linkCopiadoNotif ? (
@@ -2137,11 +2205,12 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
               </button>
 
               <button
+                type="button"
                 onClick={handleToggleRevisar}
-                className={`p-1.5 rounded-lg transition cursor-pointer ${
+                className={`px-2 h-full rounded-lg transition cursor-pointer flex items-center ${
                   notaAtiva.revisar
-                    ? 'text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-amber-950/80'
-                    : 'text-stone-500 hover:text-amber-700 dark:hover:text-amber-300'
+                    ? 'text-amber-800 dark:text-amber-300 bg-amber-100 dark:bg-amber-950/80'
+                    : 'text-stone-500 hover:bg-white dark:hover:bg-stone-800 hover:text-amber-700 dark:hover:text-amber-300'
                 }`}
                 title={notaAtiva.revisar ? 'Remover tag #revisar' : 'Marcar para #revisar'}
               >
@@ -2149,20 +2218,22 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
               </button>
 
               <button
+                type="button"
                 onClick={handleCopiarExportacao}
-                className="p-1.5 rounded-lg text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200 transition cursor-pointer"
-                title="Exportar Markdown formatado"
+                className="px-2 h-full rounded-lg text-stone-600 dark:text-stone-400 hover:bg-white dark:hover:bg-stone-800 hover:text-stone-900 dark:hover:text-stone-200 transition cursor-pointer flex items-center"
+                title="Copiar Markdown completo (com Frontmatter YAML)"
               >
                 {copiadoNotif ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
               </button>
 
               <button
+                type="button"
                 onClick={() => {
                   if (confirm(`Excluir permanentemente "${notaAtiva.titulo}"?`)) {
                     removerNotaZettel(notaAtiva.id);
                   }
                 }}
-                className="p-1.5 rounded-lg text-stone-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition cursor-pointer"
+                className="px-2 h-full rounded-lg text-stone-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition cursor-pointer flex items-center"
                 title="Excluir nota"
               >
                 <Trash2 className="w-3.5 h-3.5" />
@@ -2171,27 +2242,33 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
           )}
 
           {/* Ambiente e Sincronização */}
-          <div className="flex items-center bg-stone-200/60 dark:bg-stone-900/90 p-1 rounded-xl border border-stone-200/90 dark:border-stone-800 text-xs shadow-2xs">
+          <div className="flex items-center h-9 bg-stone-200/60 dark:bg-stone-900/90 p-1 rounded-xl border border-stone-300/70 dark:border-stone-800 text-xs">
             <button
+              type="button"
               onClick={() => setModalFundoAberto(true)}
-              className="p-1.5 rounded-lg text-stone-600 dark:text-stone-400 hover:text-amber-700 dark:hover:text-amber-300 transition cursor-pointer"
-              title="Escolher Pintura Clássica de Fundo"
+              className="px-2 h-full rounded-lg text-stone-600 dark:text-stone-400 hover:bg-white dark:hover:bg-stone-800 hover:text-amber-700 dark:hover:text-amber-300 transition cursor-pointer flex items-center"
+              title="Atmosfera & Pintura Clássica de Fundo"
             >
               <ImageIcon className="w-3.5 h-3.5" />
             </button>
 
             <button
+              type="button"
               onClick={() => setModalSupabaseAberto(true)}
-              className="p-1.5 rounded-lg text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition relative cursor-pointer"
-              title={supabaseMensagem ? `Supabase: ${supabaseMensagem}` : `Supabase: ${
-                supabaseStatus === 'conectado'
-                  ? 'Conectado à nuvem'
-                  : supabaseStatus === 'sincronizando'
-                  ? 'Sincronizando...'
-                  : supabaseStatus === 'erro'
-                  ? 'Erro de sincronização'
-                  : 'Desconectado'
-              } (Clique para gerenciar banco nuvem)`}
+              className="px-2 h-full rounded-lg text-stone-600 dark:text-stone-400 hover:bg-white dark:hover:bg-stone-800 hover:text-stone-900 dark:hover:text-stone-100 transition relative cursor-pointer flex items-center"
+              title={
+                supabaseMensagem
+                  ? `Supabase: ${supabaseMensagem}`
+                  : `Supabase: ${
+                      supabaseStatus === 'conectado'
+                        ? 'Conectado à nuvem'
+                        : supabaseStatus === 'sincronizando'
+                        ? 'Sincronizando...'
+                        : supabaseStatus === 'erro'
+                        ? 'Erro de sincronização'
+                        : 'Armazenamento Local (Clique para configurar nuvem)'
+                    }`
+              }
             >
               {supabaseStatus === 'conectado' ? (
                 <Cloud className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
@@ -2203,7 +2280,7 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                 <Database className="w-3.5 h-3.5 text-stone-500" />
               )}
               <span
-                className={`absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full ring-1 ring-white dark:ring-stone-900 ${
+                className={`absolute top-1 right-1 w-1.5 h-1.5 rounded-full ring-1 ring-white dark:ring-stone-900 ${
                   supabaseStatus === 'conectado'
                     ? 'bg-emerald-500'
                     : supabaseStatus === 'sincronizando'
@@ -2217,8 +2294,9 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
 
             {supabaseStatus === 'conectado' && (
               <button
+                type="button"
                 onClick={() => sincronizarSupabase()}
-                className="p-1.5 rounded-lg text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200 transition cursor-pointer"
+                className="px-2 h-full rounded-lg text-stone-600 dark:text-stone-400 hover:bg-white dark:hover:bg-stone-800 hover:text-stone-900 dark:hover:text-stone-200 transition cursor-pointer flex items-center"
                 title="Sincronizar com o Supabase agora"
               >
                 <RefreshCw className="w-3.5 h-3.5" />
@@ -2230,27 +2308,29 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
 
       {/* CORPO PRINCIPAL */}
       <div className="relative z-10 flex-1 flex overflow-hidden min-h-[760px]">
-        {/* SIDEBAR RETRÁTIL */}
+        {/* SIDEBAR RETRÁTIL (Árvore Arquitetônica do Cofre) */}
         {sidebarAberta && (
-          <aside className="w-64 sm:w-72 shrink-0 border-r border-stone-200 dark:border-stone-800 bg-stone-50/70 dark:bg-[#131417]/95 backdrop-blur flex flex-col transition-all">
+          <aside className="w-64 sm:w-72 shrink-0 border-r border-stone-200/90 dark:border-stone-800/90 bg-[#F9F6F0]/90 dark:bg-[#131417]/95 backdrop-blur flex flex-col transition-all">
             {/* Topo da Sidebar com Ações */}
-            <div className="p-3 border-b border-stone-200 dark:border-stone-800 flex items-center justify-between">
-              <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-stone-700 dark:text-stone-300">
-                <Folder className="w-3.5 h-3.5 text-amber-600" />
-                <span>Biblioteca</span>
+            <div className="px-3.5 py-3 border-b border-stone-200/80 dark:border-stone-800/80 flex items-center justify-between">
+              <div className="flex items-center gap-2 text-xs font-cinzel font-bold uppercase tracking-wider text-stone-800 dark:text-stone-200">
+                <FolderOpen className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
+                <span>Arquitetura do Cofre</span>
               </div>
               <div className="flex items-center gap-1 text-stone-500">
                 <button
+                  type="button"
                   onClick={() => abrirCriadorPermanente({ tipo: 'permanente' })}
-                  className="p-1 rounded hover:bg-stone-200 dark:hover:bg-stone-800 hover:text-stone-900 dark:hover:text-stone-100 cursor-pointer"
+                  className="p-1.5 rounded-lg hover:bg-stone-200/80 dark:hover:bg-stone-800 hover:text-stone-900 dark:hover:text-stone-100 cursor-pointer transition-colors"
                   title="Nova Nota Permanente"
                 >
                   <FilePlus className="w-3.5 h-3.5" />
                 </button>
                 <button
+                  type="button"
                   onClick={() => abrirCriadorPermanente({ tipo: 'indice' })}
-                  className="p-1 rounded hover:bg-stone-200 dark:hover:bg-stone-800 hover:text-stone-900 dark:hover:text-stone-100 cursor-pointer"
-                  title="Novo Macrotema"
+                  className="p-1.5 rounded-lg hover:bg-stone-200/80 dark:hover:bg-stone-800 hover:text-stone-900 dark:hover:text-stone-100 cursor-pointer transition-colors"
+                  title="Novo Macrotema (Índice)"
                 >
                   <FolderPlus className="w-3.5 h-3.5" />
                 </button>
@@ -2258,43 +2338,54 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
             </div>
 
             {/* Busca Rápida na Árvore */}
-            <div className="p-2 border-b border-stone-200 dark:border-stone-800">
+            <div className="p-2.5 border-b border-stone-200/80 dark:border-stone-800/80">
               <div className="relative">
-                <Search className="w-3 h-3 absolute left-2.5 top-1/2 -translate-y-1/2 text-stone-400" />
+                <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-stone-400 pointer-events-none" />
                 <input
                   type="text"
                   value={busca}
                   onChange={(e) => setBusca(e.target.value)}
-                  placeholder="Filtrar notas..."
-                  className="w-full pl-7 pr-2.5 py-1 text-xs rounded-md bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 text-stone-900 dark:text-stone-100 placeholder-stone-400 focus:outline-none focus:border-amber-600"
+                  placeholder="Filtrar títulos, #tags ou texto..."
+                  className="w-full h-8 pl-8 pr-7 text-xs rounded-lg bg-white dark:bg-stone-900 border border-stone-200/90 dark:border-stone-800 text-stone-900 dark:text-stone-100 placeholder-stone-400 focus:outline-none focus:border-amber-600 transition-colors"
                 />
+                {busca && (
+                  <button
+                    type="button"
+                    onClick={() => setBusca('')}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 cursor-pointer"
+                    title="Limpar filtro"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                )}
               </div>
             </div>
 
             {/* Lista em Árvore */}
-            <div className="flex-1 overflow-y-auto p-2 space-y-1 text-xs select-none">
+            <div className="flex-1 overflow-y-auto p-2.5 space-y-1.5 text-xs select-none custom-scrollbar">
               <div className="space-y-1">
                 {/* 00 - INÍCIO */}
                 <div>
                   <div
                     onClick={() => togglePasta('00 - INÍCIO')}
-                    className="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-stone-200/60 dark:hover:bg-stone-800/60 cursor-pointer text-stone-600 dark:text-stone-400"
+                    className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg hover:bg-stone-200/60 dark:hover:bg-stone-800/60 cursor-pointer text-stone-700 dark:text-stone-300 font-medium"
                   >
                     {pastasAbertas['00 - INÍCIO'] ? (
-                      <ChevronDown className="w-3 h-3 text-stone-400" />
+                      <ChevronDown className="w-3.5 h-3.5 text-stone-400 shrink-0" />
                     ) : (
-                      <ChevronRight className="w-3 h-3 text-stone-400" />
+                      <ChevronRight className="w-3.5 h-3.5 text-stone-400 shrink-0" />
                     )}
-                    <span>00 - INÍCIO</span>
+                    <Compass className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 shrink-0" />
+                    <span className="font-cinzel font-bold text-[11px] tracking-wide">00 · INÍCIO</span>
                   </div>
                   {pastasAbertas['00 - INÍCIO'] && (
-                    <div className="pl-4 space-y-0.5 mt-0.5">
+                    <div className="pl-5 space-y-0.5 mt-0.5">
                       <div
                         onClick={() => setVisaoAtiva('acervo')}
-                        className="px-2 py-1 rounded hover:bg-stone-200 dark:hover:bg-stone-800 cursor-pointer text-stone-600 dark:text-stone-300 flex items-center gap-1.5"
+                        className="px-2.5 py-1.5 rounded-lg hover:bg-stone-200/70 dark:hover:bg-stone-800 cursor-pointer text-stone-600 dark:text-stone-300 flex items-center gap-2"
                       >
-                        <Compass className="w-3 h-3 text-amber-600" />
-                        <span>Guia do Zettelkasten</span>
+                        <FileText className="w-3 h-3 text-amber-600 shrink-0" />
+                        <span className="truncate">Guia do Zettelkasten</span>
                       </div>
                     </div>
                   )}
@@ -2304,23 +2395,26 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                 <div>
                   <div
                     onClick={() => togglePasta('01 - ÍNDICE')}
-                    className="flex items-center justify-between px-2 py-1 rounded-md hover:bg-stone-200/60 dark:hover:bg-stone-800/60 cursor-pointer text-stone-700 dark:text-stone-300 font-medium"
+                    className="flex items-center justify-between px-2 py-1.5 rounded-lg hover:bg-stone-200/60 dark:hover:bg-stone-800/60 cursor-pointer text-stone-700 dark:text-stone-300 font-medium"
                   >
                     <div className="flex items-center gap-1.5">
                       {pastasAbertas['01 - ÍNDICE'] ? (
-                        <ChevronDown className="w-3 h-3 text-purple-600" />
+                        <ChevronDown className="w-3.5 h-3.5 text-purple-600 shrink-0" />
                       ) : (
-                        <ChevronRight className="w-3 h-3 text-purple-600" />
+                        <ChevronRight className="w-3.5 h-3.5 text-purple-600 shrink-0" />
                       )}
-                      <span>01 - ÍNDICE</span>
+                      <Folder className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400 shrink-0" />
+                      <span className="font-cinzel font-bold text-[11px] tracking-wide">01 · ÍNDICE</span>
                     </div>
-                    <span className="text-[10px] text-stone-400">{notasPorPasta.indices.length}</span>
+                    <span className="text-[10px] font-mono tabular-nums px-1.5 py-0.2 rounded bg-stone-200/70 dark:bg-stone-800 text-stone-600 dark:text-stone-400">
+                      {notasPorPasta.indices.length}
+                    </span>
                   </div>
 
                   {pastasAbertas['01 - ÍNDICE'] && (
-                    <div className="pl-4 space-y-0.5 mt-0.5">
+                    <div className="pl-5 space-y-0.5 mt-0.5 border-l border-stone-200/80 dark:border-stone-800 ml-3.5">
                       {notasPorPasta.indices.map((nota) => {
-                        const isSel = notaAtiva?.id === nota.id;
+                        const isSel = notaAtiva?.id === nota.id && visaoAtiva === 'acervo';
                         return (
                           <div
                             key={nota.id}
@@ -2328,13 +2422,13 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                               selecionarNotaZettel(nota.id);
                               setVisaoAtiva('acervo');
                             }}
-                            className={`px-2 py-1 rounded hover:bg-stone-200/70 dark:hover:bg-stone-800 cursor-pointer truncate flex items-center gap-1.5 ${
+                            className={`px-2.5 py-1.5 rounded-lg hover:bg-stone-200/70 dark:hover:bg-stone-800 cursor-pointer truncate flex items-center gap-2 transition-colors ${
                               isSel
-                                ? 'bg-purple-100 text-purple-900 dark:bg-purple-950/70 dark:text-purple-300 font-bold'
+                                ? 'bg-purple-100/90 text-purple-950 dark:bg-purple-950/70 dark:text-purple-200 font-semibold border border-purple-200/80 dark:border-purple-800/60'
                                 : 'text-stone-600 dark:text-stone-400'
                             }`}
                           >
-                            <span className="w-1.5 h-1.5 rounded-full bg-purple-500 shrink-0"></span>
+                            <span className="w-1.5 h-1.5 rounded-full bg-purple-500 shrink-0" />
                             <span className="truncate">{nota.titulo}</span>
                           </div>
                         );
@@ -2347,28 +2441,31 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                 <div>
                   <div
                     onClick={() => togglePasta('02 - REFERÊNCIAS')}
-                    className="flex items-center justify-between px-2 py-1 rounded-md hover:bg-stone-200/60 dark:hover:bg-stone-800/60 cursor-pointer text-stone-700 dark:text-stone-300 font-medium"
+                    className="flex items-center justify-between px-2 py-1.5 rounded-lg hover:bg-stone-200/60 dark:hover:bg-stone-800/60 cursor-pointer text-stone-700 dark:text-stone-300 font-medium"
                   >
                     <div className="flex items-center gap-1.5">
                       {pastasAbertas['02 - REFERÊNCIAS'] ? (
-                        <ChevronDown className="w-3 h-3 text-sky-600" />
+                        <ChevronDown className="w-3.5 h-3.5 text-sky-600 shrink-0" />
                       ) : (
-                        <ChevronRight className="w-3 h-3 text-sky-600" />
+                        <ChevronRight className="w-3.5 h-3.5 text-sky-600 shrink-0" />
                       )}
-                      <span>02 - REFERÊNCIAS</span>
+                      <BookOpen className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400 shrink-0" />
+                      <span className="font-cinzel font-bold text-[11px] tracking-wide">02 · REFERÊNCIAS</span>
                     </div>
-                    <span className="text-[10px] text-stone-400">{notasPorPasta.referencias.length}</span>
+                    <span className="text-[10px] font-mono tabular-nums px-1.5 py-0.2 rounded bg-stone-200/70 dark:bg-stone-800 text-stone-600 dark:text-stone-400">
+                      {notasPorPasta.referencias.length}
+                    </span>
                   </div>
 
                   {pastasAbertas['02 - REFERÊNCIAS'] && (
-                    <div className="pl-4 space-y-0.5 mt-0.5">
+                    <div className="pl-5 space-y-0.5 mt-0.5 border-l border-stone-200/80 dark:border-stone-800 ml-3.5">
                       {notasPorPasta.referencias.length === 0 ? (
-                        <div className="px-2 py-1 text-[11px] text-stone-400 italic">
+                        <div className="px-2.5 py-1.5 text-[11px] text-stone-400 italic">
                           Nenhuma fonte fichada ainda.
                         </div>
                       ) : (
                         notasPorPasta.referencias.map((nota) => {
-                          const isSel = notaAtiva?.id === nota.id;
+                          const isSel = notaAtiva?.id === nota.id && visaoAtiva === 'acervo';
                           return (
                             <div
                               key={nota.id}
@@ -2376,13 +2473,13 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                                 selecionarNotaZettel(nota.id);
                                 setVisaoAtiva('acervo');
                               }}
-                              className={`px-2 py-1 rounded hover:bg-stone-200/70 dark:hover:bg-stone-800 cursor-pointer truncate flex items-center gap-1.5 ${
+                              className={`px-2.5 py-1.5 rounded-lg hover:bg-stone-200/70 dark:hover:bg-stone-800 cursor-pointer truncate flex items-center gap-2 transition-colors ${
                                 isSel
-                                  ? 'bg-sky-100 text-sky-900 dark:bg-sky-950/70 dark:text-sky-300 font-bold'
+                                  ? 'bg-sky-100/90 text-sky-950 dark:bg-sky-950/70 dark:text-sky-200 font-semibold border border-sky-200/80 dark:border-sky-800/60'
                                   : 'text-stone-600 dark:text-stone-400'
                               }`}
                             >
-                              <span className="w-1.5 h-1.5 rounded-full bg-sky-500 shrink-0"></span>
+                              <span className="w-1.5 h-1.5 rounded-full bg-sky-500 shrink-0" />
                               <span className="truncate">{nota.titulo}</span>
                             </div>
                           );
@@ -2396,28 +2493,31 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                 <div>
                   <div
                     onClick={() => togglePasta('03 - PERMANENTES')}
-                    className="flex items-center justify-between px-2 py-1 rounded-md hover:bg-stone-200/60 dark:hover:bg-stone-800/60 cursor-pointer text-stone-700 dark:text-stone-300 font-medium"
+                    className="flex items-center justify-between px-2 py-1.5 rounded-lg hover:bg-stone-200/60 dark:hover:bg-stone-800/60 cursor-pointer text-stone-700 dark:text-stone-300 font-medium"
                   >
                     <div className="flex items-center gap-1.5">
                       {pastasAbertas['03 - PERMANENTES'] ? (
-                        <ChevronDown className="w-3 h-3 text-emerald-600" />
+                        <ChevronDown className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
                       ) : (
-                        <ChevronRight className="w-3 h-3 text-emerald-600" />
+                        <ChevronRight className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
                       )}
-                      <span>03 - PERMANENTES</span>
+                      <Lightbulb className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                      <span className="font-cinzel font-bold text-[11px] tracking-wide">03 · PERMANENTES</span>
                     </div>
-                    <span className="text-[10px] text-stone-400">{notasPorPasta.permanentes.length}</span>
+                    <span className="text-[10px] font-mono tabular-nums px-1.5 py-0.2 rounded bg-stone-200/70 dark:bg-stone-800 text-stone-600 dark:text-stone-400">
+                      {notasPorPasta.permanentes.length}
+                    </span>
                   </div>
 
                   {pastasAbertas['03 - PERMANENTES'] && (
-                    <div className="pl-4 space-y-0.5 mt-0.5 max-h-60 overflow-y-auto">
+                    <div className="pl-5 space-y-0.5 mt-0.5 max-h-64 overflow-y-auto border-l border-stone-200/80 dark:border-stone-800 ml-3.5 custom-scrollbar">
                       {notasPorPasta.permanentes.length === 0 ? (
-                        <div className="px-2 py-1 text-[11px] text-stone-400 italic">
+                        <div className="px-2.5 py-1.5 text-[11px] text-stone-400 italic">
                           Nenhuma nota permanente criada ainda.
                         </div>
                       ) : (
                         notasPorPasta.permanentes.map((nota) => {
-                          const isSel = notaAtiva?.id === nota.id;
+                          const isSel = notaAtiva?.id === nota.id && visaoAtiva === 'acervo';
                           return (
                             <div
                               key={nota.id}
@@ -2425,13 +2525,13 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                                 selecionarNotaZettel(nota.id);
                                 setVisaoAtiva('acervo');
                               }}
-                              className={`px-2 py-1 rounded hover:bg-stone-200/70 dark:hover:bg-stone-800 cursor-pointer truncate flex items-center gap-1.5 ${
+                              className={`px-2.5 py-1.5 rounded-lg hover:bg-stone-200/70 dark:hover:bg-stone-800 cursor-pointer truncate flex items-center gap-2 transition-colors ${
                                 isSel
-                                  ? 'bg-emerald-100 text-emerald-900 dark:bg-emerald-950/70 dark:text-emerald-300 font-bold'
+                                  ? 'bg-emerald-100/90 text-emerald-950 dark:bg-emerald-950/70 dark:text-emerald-200 font-semibold border border-emerald-200/80 dark:border-emerald-800/60'
                                   : 'text-stone-600 dark:text-stone-400'
                               }`}
                             >
-                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0"></span>
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
                               <span className="truncate">{nota.titulo}</span>
                             </div>
                           );
@@ -2448,18 +2548,18 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                       togglePasta('04 - CAIXA DE ENTRADA');
                       setVisaoAtiva('inbox');
                     }}
-                    className={`flex items-center justify-between px-2 py-1 rounded-md hover:bg-stone-200/60 dark:hover:bg-stone-800/60 cursor-pointer font-medium ${
+                    className={`flex items-center justify-between px-2 py-1.5 rounded-lg hover:bg-stone-200/60 dark:hover:bg-stone-800/60 cursor-pointer font-medium transition-colors ${
                       visaoAtiva === 'inbox'
-                        ? 'text-amber-800 dark:text-amber-300 font-bold bg-amber-50 dark:bg-amber-950/40'
+                        ? 'text-amber-900 dark:text-amber-200 font-bold bg-amber-100/80 dark:bg-amber-950/50 border border-amber-200/80 dark:border-amber-800/60'
                         : 'text-stone-700 dark:text-stone-300'
                     }`}
                   >
-                    <div className="flex items-center gap-1.5">
-                      <Inbox className="w-3 h-3 text-amber-600" />
-                      <span>04 - CAIXA DE ENTRADA</span>
+                    <div className="flex items-center gap-1.5 pl-1">
+                      <Inbox className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 shrink-0" />
+                      <span className="font-cinzel font-bold text-[11px] tracking-wide">04 · CAIXA DE ENTRADA</span>
                     </div>
                     {notasTemporarias.filter((t) => !t.processada).length > 0 && (
-                      <span className="text-[10px] px-1.5 rounded-full bg-amber-200 dark:bg-amber-900 text-amber-900 dark:text-amber-200 font-bold">
+                      <span className="text-[10px] font-mono tabular-nums px-1.5 rounded-full bg-amber-200 dark:bg-amber-900 text-amber-900 dark:text-amber-200 font-bold">
                         {notasTemporarias.filter((t) => !t.processada).length}
                       </span>
                     )}
@@ -2473,68 +2573,73 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                       togglePasta('05 - DIÁRIO INTELECTUAL');
                       setVisaoAtiva('diario');
                     }}
-                    className={`flex items-center justify-between px-2 py-1 rounded-md hover:bg-stone-200/60 dark:hover:bg-stone-800/60 cursor-pointer font-medium ${
+                    className={`flex items-center justify-between px-2 py-1.5 rounded-lg hover:bg-stone-200/60 dark:hover:bg-stone-800/60 cursor-pointer font-medium transition-colors ${
                       visaoAtiva === 'diario'
-                        ? 'text-amber-800 dark:text-amber-300 font-bold bg-amber-50 dark:bg-amber-950/40'
+                        ? 'text-amber-900 dark:text-amber-200 font-bold bg-amber-100/80 dark:bg-amber-950/50 border border-amber-200/80 dark:border-amber-800/60'
                         : 'text-stone-700 dark:text-stone-300'
                     }`}
                   >
-                    <div className="flex items-center gap-1.5">
-                      <BookMarked className="w-3 h-3 text-amber-600" />
-                      <span>05 - DIÁRIO INTELECTUAL</span>
+                    <div className="flex items-center gap-1.5 pl-1">
+                      <BookMarked className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 shrink-0" />
+                      <span className="font-cinzel font-bold text-[11px] tracking-wide">05 · DIÁRIO INTELECTUAL</span>
                     </div>
-                    <span className="text-[9px] px-1.5 py-0.2 rounded font-cinzel font-semibold bg-stone-200 dark:bg-stone-800 text-stone-600 dark:text-stone-400">
-                      Caderno Real
+                    <span className="text-[9px] px-1.5 py-0.2 rounded font-cinzel font-semibold bg-stone-200/80 dark:bg-stone-800 text-stone-600 dark:text-stone-400">
+                      Caderno
                     </span>
                   </div>
                 </div>
 
-                {/* MODELO */}
-                <div>
+                {/* MODELOS & TEMPLATES */}
+                <div className="pt-2 border-t border-stone-200/70 dark:border-stone-800/80">
                   <div
                     onClick={() => togglePasta('MODELO')}
-                    className="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-stone-200/60 dark:hover:bg-stone-800/60 cursor-pointer text-stone-500"
+                    className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg hover:bg-stone-200/60 dark:hover:bg-stone-800/60 cursor-pointer text-stone-500 dark:text-stone-400"
                   >
-                    {pastasAbertas.MODELO ? <ChevronDown className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
-                    <span>MODELO</span>
+                    {pastasAbertas.MODELO ? <ChevronDown className="w-3.5 h-3.5" /> : <ChevronRight className="w-3.5 h-3.5" />}
+                    <span className="font-cinzel font-bold text-[10.5px] uppercase tracking-wider">Modelos Luhmann</span>
                   </div>
                   {pastasAbertas.MODELO && (
-                    <div className="pl-4 space-y-0.5 mt-0.5 text-stone-500 text-[11px]">
+                    <div className="pl-5 space-y-1 mt-0.5 text-stone-500 dark:text-stone-400 text-[11px] border-l border-stone-200/80 dark:border-stone-800 ml-3.5">
                       <div
                         onClick={() => abrirCriadorPermanente({ tipo: 'indice' })}
-                        className="hover:text-stone-800 dark:hover:text-stone-200 cursor-pointer py-0.5"
+                        className="hover:text-purple-700 dark:hover:text-purple-300 cursor-pointer py-1 px-2 rounded hover:bg-stone-200/50 dark:hover:bg-stone-800/50 flex items-center gap-1.5"
                       >
-                        Template — Nota Índice
+                        <Plus className="w-3 h-3 text-purple-500" />
+                        <span>Novo Macrotema (Índice)</span>
                       </div>
                       <div
                         onClick={() => abrirCriadorPermanente({ tipo: 'referencia' })}
-                        className="hover:text-stone-800 dark:hover:text-stone-200 cursor-pointer py-0.5"
+                        className="hover:text-sky-700 dark:hover:text-sky-300 cursor-pointer py-1 px-2 rounded hover:bg-stone-200/50 dark:hover:bg-stone-800/50 flex items-center gap-1.5"
                       >
-                        Template — Nota Referência
+                        <Plus className="w-3 h-3 text-sky-500" />
+                        <span>Novo Fichamento (Referência)</span>
                       </div>
                       <div
                         onClick={() => abrirCriadorPermanente({ tipo: 'permanente' })}
-                        className="hover:text-stone-800 dark:hover:text-stone-200 cursor-pointer py-0.5"
+                        className="hover:text-emerald-700 dark:hover:text-emerald-300 cursor-pointer py-1 px-2 rounded hover:bg-stone-200/50 dark:hover:bg-stone-800/50 flex items-center gap-1.5"
                       >
-                        Template — Nota Permanente
+                        <Plus className="w-3 h-3 text-emerald-500" />
+                        <span>Nova Ideia Permanente</span>
                       </div>
                     </div>
                   )}
                 </div>
 
-                {/* Rascunho / Canvas */}
+                {/* Mesa de Articulação / Canvas */}
                 <div>
                   <div
                     onClick={() => {
                       togglePasta('Rascunho');
                       setVisaoAtiva('canvas');
                     }}
-                    className={`flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-stone-200/60 dark:hover:bg-stone-800/60 cursor-pointer text-stone-500 ${
-                      visaoAtiva === 'canvas' ? 'text-purple-700 dark:text-purple-300 font-bold' : ''
+                    className={`flex items-center gap-1.5 px-2 py-1.5 rounded-lg hover:bg-stone-200/60 dark:hover:bg-stone-800/60 cursor-pointer transition-colors ${
+                      visaoAtiva === 'canvas'
+                        ? 'text-purple-900 dark:text-purple-200 font-bold bg-purple-100/80 dark:bg-purple-950/50 border border-purple-200/80 dark:border-purple-800/60'
+                        : 'text-stone-600 dark:text-stone-400'
                     }`}
                   >
-                    {pastasAbertas.Rascunho ? <ChevronDown className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
-                    <span>Rascunho / Canvas</span>
+                    <LayoutGrid className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400 ml-1 shrink-0" />
+                    <span className="font-cinzel font-bold text-[11px] tracking-wide">Mesa de Articulação (Canvas)</span>
                   </div>
                 </div>
               </div>
@@ -2554,71 +2659,206 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
             /* VISÃO 05 - O DIÁRIO INTELECTUAL ("CADERNO REAL" - PRD) */
             <DiarioCadernoReal />
           ) : visaoAtiva === 'canvas' ? (
-            /* VISÃO CANVAS DE ARTICULAÇÃO */
-            <div className="max-w-5xl mx-auto w-full p-6 sm:p-10 space-y-6">
-              <div className="border-b border-stone-200 dark:border-stone-800 pb-4 flex items-center justify-between">
-                <div>
-                  <span className="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-900 dark:bg-purple-950 dark:text-purple-300 border border-purple-200 dark:border-purple-800">
-                    Mesa de Articulação / Canvas
-                  </span>
-                  <h2 className="text-2xl sm:text-3xl font-serif font-bold text-stone-900 dark:text-stone-100 mt-2">
-                    {canvasZettel[0]?.titulo || 'Mesa de Articulação Conceitual'}
+            /* VISÃO MESA DE ARTICULAÇÃO CONCEITUAL (CANVAS INTERATIVO LUHMANN) */
+            <div className="max-w-7xl mx-auto w-full p-5 sm:p-8 lg:p-10 space-y-6">
+              <div className="surface-parchment rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="inline-flex items-center gap-1.5 text-[10px] font-cinzel font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-md bg-purple-100 text-purple-900 dark:bg-purple-950/80 dark:text-purple-300 border border-purple-200 dark:border-purple-800">
+                      <LayoutGrid className="w-3 h-3" />
+                      <span>Mesa de Articulação Conceitual</span>
+                    </span>
+                    <span className="text-xs font-mono text-stone-500 dark:text-stone-400 tabular-nums">
+                      {todosIndices.length} macrotemas · {todasReferencias.length} fontes · {todasPermanentes.length} permanentes
+                    </span>
+                  </div>
+                  <h2 className="text-xl sm:text-2xl font-serif font-bold text-stone-900 dark:text-stone-100">
+                    {canvasZettel[0]?.titulo || 'Arquitetura Dialética: Índices, Fontes e Conceitos Atômicos'}
                   </h2>
+                  <p className="text-xs text-stone-600 dark:text-stone-400 font-serif italic">
+                    Navegue pela cadeia completa do método Niklas Luhmann: dos Macrotemas (`01`) às Fontes Fichadas (`02`) e suas Notas Permanentes (`03`).
+                  </p>
                 </div>
-                <button
-                  onClick={() => setVisaoAtiva('acervo')}
-                  className="text-xs text-amber-700 dark:text-amber-400 hover:underline font-bold"
-                >
-                  Voltar ao Leitor
-                </button>
+                <div className="flex items-center gap-2 shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => abrirCriadorPermanente({ tipo: 'permanente' })}
+                    className="px-3.5 py-2 rounded-xl bg-emerald-800 hover:bg-emerald-700 text-white font-cinzel font-bold text-xs flex items-center gap-1.5 cursor-pointer shadow-2xs"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    <span>Nova Permanente</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setVisaoAtiva('acervo')}
+                    className="px-3.5 py-2 rounded-xl bg-white dark:bg-stone-900 hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-800 dark:text-stone-200 border border-stone-300 dark:border-stone-700 font-cinzel font-bold text-xs cursor-pointer"
+                  >
+                    Voltar ao Leitor
+                  </button>
+                </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                <div className="p-4 rounded-xl bg-sky-50/70 dark:bg-sky-950/20 border border-sky-200 dark:border-sky-900 space-y-2.5">
-                  <div className="text-xs font-bold text-sky-800 dark:text-sky-300 uppercase">1. Fontes Fichadas ({todasReferencias.length})</div>
-                  {todasReferencias.slice(0, 3).map((r) => (
-                    <div
-                      key={r.id}
-                      onClick={() => {
-                        selecionarNotaZettel(r.id);
-                        setVisaoAtiva('acervo');
-                      }}
-                      className="p-3 rounded-lg bg-white dark:bg-stone-900 border border-sky-200 dark:border-sky-800 shadow-2xs cursor-pointer hover:border-sky-400"
-                    >
-                      <div className="font-bold text-xs text-stone-900 dark:text-stone-100 truncate">{r.titulo}</div>
-                      <div className="text-[11px] text-stone-500">Nota de Referência</div>
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 items-start">
+                {/* Coluna 1: Macrotemas / Índices */}
+                <div className="surface-editorial rounded-2xl p-4 sm:p-5 space-y-3.5">
+                  <div className="flex items-center justify-between pb-2.5 border-b border-stone-200/80 dark:border-stone-800">
+                    <div className="flex items-center gap-2">
+                      <Folder className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+                      <h3 className="text-xs font-cinzel font-bold uppercase tracking-wider text-stone-900 dark:text-stone-100">
+                        1. Macrotemas ({todosIndices.length})
+                      </h3>
                     </div>
-                  ))}
-                  {todasReferencias.length === 0 && (
-                    <div className="text-xs text-stone-400 italic">Nenhuma fonte fichada ainda.</div>
-                  )}
+                    <button
+                      type="button"
+                      onClick={() => abrirCriadorPermanente({ tipo: 'indice' })}
+                      className="text-[11px] font-cinzel font-bold text-purple-700 dark:text-purple-300 hover:underline flex items-center gap-1 cursor-pointer"
+                    >
+                      <Plus className="w-3 h-3" />
+                      <span>Novo</span>
+                    </button>
+                  </div>
+
+                  <div className="space-y-2 max-h-[500px] overflow-y-auto pr-1 custom-scrollbar">
+                    {todosIndices.map((idx) => {
+                      const numPrefix = idx.titulo.match(/^(\d+)/)?.[1];
+                      const qtdRefs = todasReferencias.filter(
+                        (r) => r.tema?.includes(idx.titulo) || (numPrefix && r.id.startsWith(`${numPrefix}.`))
+                      ).length;
+                      const qtdPerms = todasPermanentes.filter(
+                        (p) => p.tema?.includes(idx.titulo) || (numPrefix && p.id.startsWith(`${numPrefix}.`))
+                      ).length;
+
+                      return (
+                        <div
+                          key={idx.id}
+                          onClick={() => {
+                            selecionarNotaZettel(idx.id);
+                            setVisaoAtiva('acervo');
+                          }}
+                          className="group p-3 rounded-xl bg-stone-50/80 dark:bg-stone-900/70 hover:bg-purple-50/60 dark:hover:bg-purple-950/30 border border-stone-200/90 dark:border-stone-800 hover:border-purple-400 dark:hover:border-purple-700 transition cursor-pointer flex items-center justify-between gap-2"
+                        >
+                          <div className="min-w-0">
+                            <div className="font-serif font-bold text-xs sm:text-sm text-stone-900 dark:text-stone-100 group-hover:text-purple-900 dark:group-hover:text-purple-200 truncate">
+                              {idx.titulo}
+                            </div>
+                            <div className="text-[10px] font-mono text-stone-500 dark:text-stone-400 mt-0.5 tabular-nums">
+                              {qtdRefs} ref · {qtdPerms} perm
+                            </div>
+                          </div>
+                          <ArrowUpRight className="w-3.5 h-3.5 text-stone-400 group-hover:text-purple-600 shrink-0" />
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
 
-                <div className="p-4 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900 space-y-2.5">
-                  <div className="text-xs font-bold text-emerald-800 dark:text-emerald-300 uppercase">2. Ideias Conectadas ({todasPermanentes.length})</div>
-                  {todasPermanentes.slice(0, 3).map((p) => (
-                    <div
-                      key={p.id}
-                      onClick={() => {
-                        selecionarNotaZettel(p.id);
-                        setVisaoAtiva('acervo');
-                      }}
-                      className="p-3 rounded-lg bg-white dark:bg-stone-900 border border-emerald-200 dark:border-emerald-800 shadow-2xs cursor-pointer hover:border-emerald-400"
-                    >
-                      <div className="font-bold text-xs text-emerald-800 dark:text-emerald-300 truncate">{p.titulo}</div>
-                      <div className="text-[11px] text-stone-500 truncate">{p.relacao || 'Sem relação direta'}</div>
+                {/* Coluna 2: Fontes Fichadas (02 - REFERÊNCIAS) */}
+                <div className="surface-editorial rounded-2xl p-4 sm:p-5 space-y-3.5">
+                  <div className="flex items-center justify-between pb-2.5 border-b border-stone-200/80 dark:border-stone-800">
+                    <div className="flex items-center gap-2">
+                      <BookOpen className="w-4 h-4 text-sky-600 dark:text-sky-400" />
+                      <h3 className="text-xs font-cinzel font-bold uppercase tracking-wider text-stone-900 dark:text-stone-100">
+                        2. Fontes Fichadas ({todasReferencias.length})
+                      </h3>
                     </div>
-                  ))}
-                  {todasPermanentes.length === 0 && (
-                    <div className="text-xs text-stone-400 italic">Nenhuma ideia permanente ainda.</div>
-                  )}
+                    <button
+                      type="button"
+                      onClick={() => abrirCriadorPermanente({ tipo: 'referencia' })}
+                      className="text-[11px] font-cinzel font-bold text-sky-700 dark:text-sky-300 hover:underline flex items-center gap-1 cursor-pointer"
+                    >
+                      <Plus className="w-3 h-3" />
+                      <span>Fichar</span>
+                    </button>
+                  </div>
+
+                  <div className="space-y-2 max-h-[500px] overflow-y-auto pr-1 custom-scrollbar">
+                    {todasReferencias.length === 0 ? (
+                      <div className="text-xs text-stone-400 italic py-6 text-center">
+                        Nenhuma fonte fichada ainda.
+                      </div>
+                    ) : (
+                      todasReferencias.map((r) => (
+                        <div
+                          key={r.id}
+                          onClick={() => {
+                            selecionarNotaZettel(r.id);
+                            setVisaoAtiva('acervo');
+                          }}
+                          className="group p-3 rounded-xl bg-stone-50/80 dark:bg-stone-900/70 hover:bg-sky-50/60 dark:hover:bg-sky-950/30 border border-stone-200/90 dark:border-stone-800 hover:border-sky-400 dark:hover:border-sky-700 transition cursor-pointer flex items-center justify-between gap-2"
+                        >
+                          <div className="min-w-0">
+                            <div className="font-serif font-bold text-xs sm:text-sm text-stone-900 dark:text-stone-100 group-hover:text-sky-900 dark:group-hover:text-sky-200 truncate">
+                              {r.titulo}
+                            </div>
+                            <div className="flex items-center gap-2 text-[10px] text-stone-500 dark:text-stone-400 mt-0.5 font-mono">
+                              <span>{r.id}</span>
+                              {r.tema && (
+                                <span className="truncate text-purple-700 dark:text-purple-400">
+                                  · {r.tema.replace(/\[\[|\]\]/g, '')}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                          <ArrowUpRight className="w-3.5 h-3.5 text-stone-400 group-hover:text-sky-600 shrink-0" />
+                        </div>
+                      ))
+                    )}
+                  </div>
                 </div>
 
-                <div className="p-4 rounded-xl bg-amber-50/80 dark:bg-amber-950/30 border border-amber-300 dark:border-amber-800 space-y-2.5">
-                  <div className="text-xs font-bold text-amber-900 dark:text-amber-300 uppercase">3. Tese Emergente</div>
-                  <p className="text-xs sm:text-sm text-stone-800 dark:text-stone-200 font-serif leading-relaxed">
-                    Conforme você cria notas permanentes e as conecta, use este espaço para organizar argumentos e teses para artigos, resumos e produções intelectuais.
-                  </p>
+                {/* Coluna 3: Ideias Permanentes Conectadas (03 - PERMANENTES) */}
+                <div className="surface-editorial rounded-2xl p-4 sm:p-5 space-y-3.5">
+                  <div className="flex items-center justify-between pb-2.5 border-b border-stone-200/80 dark:border-stone-800">
+                    <div className="flex items-center gap-2">
+                      <Lightbulb className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                      <h3 className="text-xs font-cinzel font-bold uppercase tracking-wider text-stone-900 dark:text-stone-100">
+                        3. Notas Permanentes ({todasPermanentes.length})
+                      </h3>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => abrirCriadorPermanente({ tipo: 'permanente' })}
+                      className="text-[11px] font-cinzel font-bold text-emerald-700 dark:text-emerald-300 hover:underline flex items-center gap-1 cursor-pointer"
+                    >
+                      <Plus className="w-3 h-3" />
+                      <span>Extrair</span>
+                    </button>
+                  </div>
+
+                  <div className="space-y-2.5 max-h-[500px] overflow-y-auto pr-1 custom-scrollbar">
+                    {todasPermanentes.length === 0 ? (
+                      <div className="text-xs text-stone-400 italic py-6 text-center">
+                        Nenhuma ideia permanente criada ainda.
+                      </div>
+                    ) : (
+                      todasPermanentes.map((p) => (
+                        <div
+                          key={p.id}
+                          onClick={() => {
+                            selecionarNotaZettel(p.id);
+                            setVisaoAtiva('acervo');
+                          }}
+                          className="group p-3.5 rounded-xl bg-stone-50/80 dark:bg-stone-900/70 hover:bg-emerald-50/50 dark:hover:bg-emerald-950/30 border border-stone-200/90 dark:border-stone-800 hover:border-emerald-400 dark:hover:border-emerald-700 transition cursor-pointer space-y-1.5"
+                        >
+                          <div className="flex items-start justify-between gap-2">
+                            <div className="font-serif font-bold text-xs sm:text-sm text-stone-900 dark:text-stone-100 group-hover:text-emerald-900 dark:group-hover:text-emerald-200 leading-snug">
+                              {p.titulo}
+                            </div>
+                            <ArrowUpRight className="w-3.5 h-3.5 text-stone-400 group-hover:text-emerald-600 shrink-0 mt-0.5" />
+                          </div>
+                          <div className="flex flex-wrap items-center gap-1.5 text-[10px]">
+                            <span className="font-mono text-stone-500 dark:text-stone-400">{p.id}</span>
+                            {p.tipoRelacao && renderBadgeRelacaoDialetica(p.tipoRelacao)}
+                          </div>
+                          {p.referencia && (
+                            <div className="text-[10.5px] text-sky-700 dark:text-sky-400 truncate font-serif italic">
+                              Fonte: {p.referencia.replace(/\[\[|\]\]/g, '')}
+                            </div>
+                          )}
+                        </div>
+                      ))
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -2715,12 +2955,7 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                           {notaAtiva.tipoRelacao && (
                             <div className="flex items-center gap-4 text-xs">
                               <span className="w-20 text-stone-400 font-medium">Dialética</span>
-                              <span className="px-2 py-0.5 rounded text-[11px] font-bold bg-purple-100 dark:bg-purple-950/60 text-purple-800 dark:text-purple-300 border border-purple-300 dark:border-purple-800">
-                                {notaAtiva.tipoRelacao === 'contraponto' ? '⚡ Contraponto / Objeção' :
-                                 notaAtiva.tipoRelacao === 'desenvolve' ? '🌲 Desenvolve / Aprofunda' :
-                                 notaAtiva.tipoRelacao === 'complementa' ? '🧩 Complementa / Afim' :
-                                 notaAtiva.tipoRelacao === 'aplica' ? '💡 Aplica / Exemplo' : '📜 Origem Histórica'}
-                              </span>
+                              {renderBadgeRelacaoDialetica(notaAtiva.tipoRelacao)}
                             </div>
                           )}
                         </div>
@@ -3075,12 +3310,7 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                             <div className="flex items-center gap-4 text-xs pt-1 border-t border-stone-200 dark:border-stone-800">
                               <span className="w-20 text-stone-400 font-medium">Dialética</span>
                               <div className="flex items-center gap-2">
-                                <span className="px-2 py-0.5 rounded text-[11px] font-bold bg-purple-100 dark:bg-purple-950/60 text-purple-800 dark:text-purple-300 border border-purple-300 dark:border-purple-800">
-                                  {notaSecundaria.tipoRelacao === 'contraponto' ? '⚡ Contraponto / Objeção' :
-                                   notaSecundaria.tipoRelacao === 'desenvolve' ? '🌲 Desenvolve / Aprofunda' :
-                                   notaSecundaria.tipoRelacao === 'complementa' ? '🧩 Complementa / Afim' :
-                                   notaSecundaria.tipoRelacao === 'aplica' ? '💡 Aplica / Exemplo' : '📜 Origem Histórica'}
-                                </span>
+                                {renderBadgeRelacaoDialetica(notaSecundaria.tipoRelacao)}
                                 {notaSecundaria.justificativaRelacao && (
                                   <span className="text-xs text-stone-500 italic">"{notaSecundaria.justificativaRelacao}"</span>
                                 )}
@@ -3603,8 +3833,11 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                         <div className="pt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 text-stone-700 dark:text-stone-300">
                           {/* Linha ID */}
                           <div className="p-2 rounded-xl bg-white/70 dark:bg-stone-900/60 border border-stone-200/60 dark:border-stone-800 flex items-center justify-between">
-                            <span className="text-[11px] font-mono text-stone-400 font-semibold uppercase">≡ ID</span>
-                            <span className="font-mono text-xs text-stone-800 dark:text-stone-200 truncate ml-2 font-bold">{notaAtiva.id}</span>
+                            <span className="text-[11px] font-mono text-stone-400 font-semibold uppercase flex items-center gap-1">
+                              <Hash className="w-3 h-3 text-amber-600" />
+                              <span>ID</span>
+                            </span>
+                            <span className="font-mono text-xs text-stone-800 dark:text-stone-200 truncate ml-2 font-bold tabular-nums">{notaAtiva.id}</span>
                           </div>
 
                           {/* Linha Tema */}
@@ -3641,7 +3874,7 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                           {notaAtiva.pagina && (
                             <div className="p-2 rounded-xl bg-white/70 dark:bg-stone-900/60 border border-stone-200/60 dark:border-stone-800 flex items-center justify-between">
                               <span className="text-[11px] text-stone-400 font-medium shrink-0">Página</span>
-                              <span className="font-mono text-xs font-bold text-stone-800 dark:text-stone-200">p. {notaAtiva.pagina}</span>
+                              <span className="font-mono text-xs font-bold text-stone-800 dark:text-stone-200 tabular-nums">p. {notaAtiva.pagina}</span>
                             </div>
                           )}
 
@@ -3685,12 +3918,7 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                                 <span>Dialética</span>
                               </div>
                               <div className="flex items-center gap-2">
-                                <span className="px-2 py-0.5 rounded text-[11px] font-bold bg-purple-100 dark:bg-purple-950/80 text-purple-800 dark:text-purple-300 border border-purple-300 dark:border-purple-800">
-                                  {notaAtiva.tipoRelacao === 'contraponto' ? '⚡ Contraponto / Objeção' :
-                                   notaAtiva.tipoRelacao === 'desenvolve' ? '🌲 Desenvolve / Aprofunda' :
-                                   notaAtiva.tipoRelacao === 'complementa' ? '🧩 Complementa / Afim' :
-                                   notaAtiva.tipoRelacao === 'aplica' ? '💡 Aplica / Exemplo' : '📜 Origem Histórica'}
-                                </span>
+                                {renderBadgeRelacaoDialetica(notaAtiva.tipoRelacao)}
                                 {notaAtiva.justificativaRelacao && (
                                   <span className="text-xs text-stone-600 dark:text-stone-300 italic">"{notaAtiva.justificativaRelacao}"</span>
                                 )}
@@ -3961,7 +4189,7 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                                 <h2 className="text-lg sm:text-xl font-serif font-bold text-stone-900 dark:text-stone-100">
                                   Referências e Obras
                                 </h2>
-                                <span className="px-2 py-0.5 rounded-full text-xs font-mono font-bold bg-sky-100 dark:bg-sky-950/70 text-sky-800 dark:text-sky-300">
+                                <span className="px-2 py-0.5 rounded-full text-xs font-mono font-bold bg-sky-100 dark:bg-sky-950/70 text-sky-800 dark:text-sky-300 tabular-nums">
                                   {itensDoIndiceAtivo.refs.length}
                                 </span>
                               </div>
@@ -4014,7 +4242,7 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                                 <h2 className="text-lg sm:text-xl font-serif font-bold text-stone-900 dark:text-stone-100">
                                   Notas Relacionadas e Ideias
                                 </h2>
-                                <span className="px-2 py-0.5 rounded-full text-xs font-mono font-bold bg-emerald-100 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-300">
+                                <span className="px-2 py-0.5 rounded-full text-xs font-mono font-bold bg-emerald-100 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-300 tabular-nums">
                                   {itensDoIndiceAtivo.perms.length}
                                 </span>
                               </div>
@@ -4054,11 +4282,7 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                                       </div>
                                       <div className="flex items-center gap-2 mt-0.5">
                                         <span className="text-[10px] text-stone-400 font-mono truncate">{perm.id}</span>
-                                        {perm.tipoRelacao && (
-                                          <span className="text-[9px] px-1.5 py-0.2 rounded bg-purple-100 dark:bg-purple-950 text-purple-700 dark:text-purple-300 font-semibold truncate">
-                                            {perm.tipoRelacao}
-                                          </span>
-                                        )}
+                                        {perm.tipoRelacao && renderBadgeRelacaoDialetica(perm.tipoRelacao)}
                                       </div>
                                     </div>
                                   </div>
@@ -4108,15 +4332,16 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                 </div>
               </div>
 
-              {/* BOTÃO FLUTUANTE DE EDIÇÃO RÁPIDA (FAB) - Item 3 */}
+              {/* BOTÃO FLUTUANTE DE EDIÇÃO RÁPIDA (FAB) */}
               {!modoEdicao && notaAtiva && (
                 <button
                   onClick={() => setModoEdicao(true)}
-                  className="fixed bottom-14 right-8 z-30 flex items-center gap-2 px-4 py-2.5 rounded-full bg-amber-700 hover:bg-amber-600 active:scale-95 text-white font-bold text-xs shadow-xl hover:shadow-2xl transition-all cursor-pointer backdrop-blur group"
+                  className="fixed bottom-14 right-6 z-30 flex items-center gap-2 px-4 py-2.5 rounded-full bg-amber-700 hover:bg-amber-600 active:scale-95 text-white font-bold text-xs shadow-xl hover:shadow-2xl transition-all cursor-pointer backdrop-blur group border border-amber-500/30"
                   title="Editar esta nota sem precisar rolar para cima (Ctrl+E)"
                 >
-                  <Edit3 className="w-4 h-4 transition-transform group-hover:scale-110" />
-                  <span className="hidden sm:inline">Editar Nota (Ctrl+E)</span>
+                  <Edit3 className="w-3.5 h-3.5 transition-transform group-hover:scale-110" />
+                  <span className="hidden sm:inline">Editar Nota</span>
+                  <kbd className="hidden md:inline-block px-1.5 py-0.5 text-[9px] font-mono bg-amber-800/80 text-amber-100 rounded border border-amber-600/50">Ctrl+E</kbd>
                 </button>
               )}
             </>
@@ -4141,29 +4366,34 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
           )}
 
           {/* BARRA INFERIOR DE STATUS */}
-          <div className="border-t border-stone-200 dark:border-stone-800 bg-stone-50/80 dark:bg-[#121316]/90 px-4 py-2 flex items-center justify-between text-[11px] text-stone-500 font-sans z-10">
+          <div className="border-t border-stone-200 dark:border-stone-800 bg-stone-50/90 dark:bg-[#121316]/95 px-4 py-2 flex items-center justify-between text-[11px] text-stone-500 font-sans z-10">
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setBacklinksAberto((prev) => !prev)}
-                className="hover:text-amber-800 dark:hover:text-amber-300 flex items-center gap-1 cursor-pointer"
+                className="hover:text-amber-800 dark:hover:text-amber-300 flex items-center gap-1.5 cursor-pointer font-medium transition-colors"
                 title="Exibir Conexões Reversas / Backlinks"
               >
                 <LinkIcon className="w-3 h-3 text-amber-600" />
-                <span>
-                  {backlinks.length} {backlinks.length === 1 ? 'link inverso' : 'links inversos'}
+                <span className="tabular-nums">
+                  {backlinks.length} {backlinks.length === 1 ? 'conexão reversa' : 'conexões reversas'}
                 </span>
               </button>
             </div>
 
-            <div className="flex items-center gap-3 font-mono text-[11px]">
+            <div className="flex items-center gap-3 font-mono text-[11px] tabular-nums">
               <span>{statsNota.palavras.toLocaleString('pt-BR')} palavras</span>
-              <span className="text-stone-300 dark:text-stone-700">|</span>
+              <span className="text-stone-300 dark:text-stone-700">·</span>
               <span>{statsNota.caracteres.toLocaleString('pt-BR')} caracteres</span>
-              <span className="text-stone-300 dark:text-stone-700">|</span>
-              <span className="flex items-center gap-1 text-stone-600 dark:text-stone-400 font-sans">
-                <LayoutGrid className="w-3 h-3 text-purple-600" />
-                <span>Canvas</span>
-              </span>
+              <span className="text-stone-300 dark:text-stone-700">·</span>
+              <button
+                type="button"
+                onClick={() => setVisaoAtiva(visaoAtiva === 'canvas' ? 'acervo' : 'canvas')}
+                className="flex items-center gap-1 text-stone-600 dark:text-stone-400 hover:text-amber-700 dark:hover:text-amber-400 font-sans font-medium cursor-pointer transition-colors"
+                title="Alternar para a Mesa de Articulação Conceitual"
+              >
+                <LayoutGrid className="w-3 h-3 text-purple-600 dark:text-purple-400" />
+                <span>Mesa Conceitual</span>
+              </button>
             </div>
           </div>
         </main>
