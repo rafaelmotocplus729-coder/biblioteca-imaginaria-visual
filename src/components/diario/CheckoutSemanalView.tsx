@@ -10,7 +10,7 @@ import {
 } from 'lucide-react';
 
 interface CheckoutSemanalViewProps {
-  checkout: CheckoutSemanal;
+  checkout?: CheckoutSemanal;
   diasDaSemana: DiaLog[];
   onIniciarProximaSemana?: () => void;
 }
@@ -22,12 +22,13 @@ export const CheckoutSemanalView: React.FC<CheckoutSemanalViewProps> = ({
 }) => {
   const { salvarCheckoutSemanal } = useBibliotecaStore();
 
-  const [balancoBom, setBalancoBom] = useState(checkout.balancoBom);
-  const [balancoRuim, setBalancoRuim] = useState(checkout.balancoRuim);
-  const [concluido, setConcluido] = useState(checkout.concluido);
+  const [balancoBom, setBalancoBom] = useState(checkout?.balancoBom || '');
+  const [balancoRuim, setBalancoRuim] = useState(checkout?.balancoRuim || '');
+  const [concluido, setConcluido] = useState(checkout?.concluido || false);
   const [salvoFeedback, setSalvoFeedback] = useState(false);
 
   useEffect(() => {
+    if (!checkout) return;
     setBalancoBom(checkout.balancoBom);
     setBalancoRuim(checkout.balancoRuim);
     setConcluido(checkout.concluido);
@@ -70,6 +71,16 @@ export const CheckoutSemanalView: React.FC<CheckoutSemanalViewProps> = ({
       taxaConclusao
     };
   }, [diasDaSemana]);
+
+  if (!checkout) {
+    return (
+      <div className="surface-editorial rounded-2xl p-8 text-center max-w-2xl mx-auto space-y-3">
+        <p className="text-sm font-serif text-stone-600 dark:text-stone-400">
+          Nenhum checkout semanal disponível para esta semana.
+        </p>
+      </div>
+    );
+  }
 
   const handleSalvar = (fechar = false) => {
     const atualizado: CheckoutSemanal = {

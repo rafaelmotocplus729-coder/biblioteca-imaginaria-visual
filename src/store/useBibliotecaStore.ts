@@ -26,11 +26,11 @@ import {
   CANVAS_ZETTEL_INICIAL
 } from '../data/zettelkastenPadrao';
 import {
-  CADERNO_VOLUME_INICIAL,
-  CHECKIN_SEMANAL_INICIAL,
-  DIAS_LOGS_INICIAIS,
-  CHECKOUT_SEMANAL_INICIAL,
-  PAGINAS_LIVRES_INICIAIS
+  calcularDomingoDaSemana,
+  chaveDiaCaderno,
+  formatarDataISO,
+  gerarCicloSemanal,
+  somarDiasData
 } from '../data/diarioPadrao';
 import {
   isSupabaseConfigured,
@@ -136,9 +136,11 @@ interface BibliotecaState {
   exportarZettelkastenMarkdown: () => string;
 
   // Ações do Caderno Real (Diário Intelectual)
-  criarCadernoVolume: (titulo?: string, dataInicio?: string) => string;
+  criarCadernoVolume: (titulo?: string, dataInicio?: string, descricao?: string) => string;
   concluirCadernoVolume: (cadernoId: string) => void;
+  removerCadernoVolume: (cadernoId: string) => void;
   setCadernoAtivoId: (cadernoId: string) => void;
+  criarProximaSemanaCaderno: (cadernoId: string) => { semanaId: string; primeiroDia: string } | null;
   salvarCheckinSemanal: (checkin: CheckinSemanal) => void;
   salvarCheckoutSemanal: (checkout: CheckoutSemanal) => void;
   adicionarItemDiaLog: (dataStr: string, item: Omit<ItemDailyLog, 'id' | 'criadoEm'>) => void;
@@ -236,7 +238,8 @@ function salvarNoLocalStorage(estado: {
   estiloDotGridAtivo?: boolean;
 }) {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(estado));
+    const anterior = carregarDoLocalStorage() || {};
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...anterior, ...estado }));
   } catch (e) {
     console.error('Erro ao salvar no localStorage:', e);
   }
@@ -452,7 +455,82 @@ function filtrarMockupsTemporarias(salvas?: NotaTemporaria[]): NotaTemporaria[] 
   return salvas.filter((t) => !['temp-1', 'temp-2', 'temp-3'].includes(t.id));
 }
 
+const IDS_ITENS_DIARIO_MOCK = new Set([
+  'item-09-1', 'item-09-2', 'item-09-3',
+  'item-10-1', 'item-10-2', 'item-10-3',
+  'item-11-1', 'item-11-2', 'item-11-3', 'item-11-4',
+  'item-12-1', 'item-12-2', 'item-12-3', 'item-12-4',
+  'item-13-1', 'item-14-1', 'item-15-1'
+]);
+
+function limparDadosMockadosDiario(salvoRaw: ReturnType<typeof carregarDoLocalStorage>) {
+  if (!salvoRaw) {
+    return {
+      cadernosVolumes: [] as CadernoVolume[],
+      cadernoAtivoId: '',
+      checkinsSemanais: [] as CheckinSemanal[],
+      diasLogs: {} as Record<string, DiaLog>,
+      checkoutsSemanais: [] as CheckoutSemanal[],
+      paginasLivresCaderno: [] as PaginaLivreCaderno[]
+    };
+  }
+
+  const volumesRaw: CadernoVolume[] = Array.isArray(salvoRaw.cadernosVolumes) ? salvoRaw.cadernosVolumes : [];
+  const checkinsRaw: CheckinSemanal[] = Array.isArray(salvoRaw.checkinsSemanais) ? salvoRaw.checkinsSemanais : [];
+  const checkoutsRaw: CheckoutSemanal[] = Array.isArray(salvoRaw.checkoutsSemanais) ? salvoRaw.checkoutsSemanais : [];
+  const paginasRaw: PaginaLivreCaderno[] = Array.isArray(salvoRaw.paginasLivresCaderno) ? salvoRaw.paginasLivresCaderno : [];
+  const diasRaw: Record<string, DiaLog> = salvoRaw.diasLogs && typeof salvoRaw.diasLogs === 'object' ? salvoRaw.diasLogs : {};
+
+  // Remover páginas livres mockadas
+  const paginasLimpas = paginasRaw.filter((p) => p.id !== 'pag-livre-1' && p.id !== 'pag-livre-2');
+
+  // Remover checkins e checkouts mockados
+  const checkinsLimpos = checkinsRaw.filter((c) => c.id !== 'semana-2026-W46');
+  const checkoutsLimpos = checkoutsRaw.filter((c) => c.id !== 'checkout-2026-W46');
+
+  // Filtrar itens mockados dos dias e remover dias do vol-1 que só continham mock
+  const diasLimpos: Record<string, DiaLog> = {};
+  Object.entries(diasRaw).forEach(([k, dia]) => {
+    const itensReais = (dia.itens || []).filter((it) => !IDS_ITENS_DIARIO_MOCK.has(it.id));
+    const ehDiaMockVol1 =
+      dia.cadernoId === 'vol-1' &&
+      dia.semanaId === '2026-W46' &&
+      itensReais.length === 0;
+    if (!ehDiaMockVol1) {
+      const chaveFinal = k.includes('::') ? k : chaveDiaCaderno(dia.cadernoId || 'vol-1', dia.data);
+      diasLimpos[chaveFinal] = {
+        ...dia,
+        id: chaveFinal,
+        itens: itensReais
+      };
+    }
+  });
+
+  // Remover vol-1 se ele era apenas o volume mockado sem dados reais
+  const vol1TemDadosReais =
+    checkinsLimpos.some((c) => c.cadernoId === 'vol-1') ||
+    Object.values(diasLimpos).some((d) => d.cadernoId === 'vol-1') ||
+    paginasLimpas.some((p) => p.cadernoId === 'vol-1');
+
+  const volumesLimpos = volumesRaw.filter((v) => !(v.id === 'vol-1' && !vol1TemDadosReais));
+
+  let cadernoAtivoId = typeof salvoRaw.cadernoAtivoId === 'string' ? salvoRaw.cadernoAtivoId : '';
+  if (!volumesLimpos.some((v) => v.id === cadernoAtivoId)) {
+    cadernoAtivoId = volumesLimpos.find((v) => v.ativo)?.id || volumesLimpos[0]?.id || '';
+  }
+
+  return {
+    cadernosVolumes: volumesLimpos,
+    cadernoAtivoId,
+    checkinsSemanais: checkinsLimpos,
+    diasLogs: diasLimpos,
+    checkoutsSemanais: checkoutsLimpos,
+    paginasLivresCaderno: paginasLimpas
+  };
+}
+
 const salvo = carregarDoLocalStorage();
+const diarioInicialLimpo = limparDadosMockadosDiario(salvo);
 
 // Sincronizar livros enriquecidos com capas atualizadas em português
 function sincronizarLivrosComEnriquecidos(livrosSalvos?: Livro[]): Livro[] {
@@ -503,24 +581,14 @@ export const useBibliotecaStore = create<BibliotecaState>((set, get) => ({
   canvasZettel: salvo?.canvasZettel || [CANVAS_ZETTEL_INICIAL],
   notaZettelSelecionadaId: null,
 
-  // Caderno Real / Diário Intelectual (PRD)
-  cadernosVolumes: salvo?.cadernosVolumes && salvo.cadernosVolumes.length > 0
-    ? salvo.cadernosVolumes
-    : [CADERNO_VOLUME_INICIAL],
-  cadernoAtivoId: salvo?.cadernoAtivoId || CADERNO_VOLUME_INICIAL.id,
-  checkinsSemanais: salvo?.checkinsSemanais && salvo.checkinsSemanais.length > 0
-    ? salvo.checkinsSemanais
-    : [CHECKIN_SEMANAL_INICIAL],
-  diasLogs: salvo?.diasLogs && Object.keys(salvo.diasLogs).length > 0
-    ? salvo.diasLogs
-    : DIAS_LOGS_INICIAIS,
-  checkoutsSemanais: salvo?.checkoutsSemanais && salvo.checkoutsSemanais.length > 0
-    ? salvo.checkoutsSemanais
-    : [CHECKOUT_SEMANAL_INICIAL],
-  paginasLivresCaderno: salvo?.paginasLivresCaderno && salvo.paginasLivresCaderno.length > 0
-    ? salvo.paginasLivresCaderno
-    : PAGINAS_LIVRES_INICIAIS,
-  legendaSimbolosVisivel: salvo?.legendaSimbolosVisivel ?? true,
+  // Caderno Real / Diário Intelectual (Sem dados mockados)
+  cadernosVolumes: diarioInicialLimpo.cadernosVolumes,
+  cadernoAtivoId: diarioInicialLimpo.cadernoAtivoId,
+  checkinsSemanais: diarioInicialLimpo.checkinsSemanais,
+  diasLogs: diarioInicialLimpo.diasLogs,
+  checkoutsSemanais: diarioInicialLimpo.checkoutsSemanais,
+  paginasLivresCaderno: diarioInicialLimpo.paginasLivresCaderno,
+  legendaSimbolosVisivel: salvo?.legendaSimbolosVisivel ?? false,
   estiloDotGridAtivo: salvo?.estiloDotGridAtivo ?? true,
 
   // Supabase Backend de Dados
@@ -1457,22 +1525,38 @@ ${livro.sinopse_editorial || livro.tese}
   // ==========================================
   // AÇÕES DO CADERNO REAL (DIÁRIO INTELECTUAL)
   // ==========================================
-  criarCadernoVolume: (titulo, dataInicio) => {
+  criarCadernoVolume: (titulo, dataInicio, descricao) => {
     const id = `vol-${Date.now()}`;
-    const hoje = new Date().toISOString().split('T')[0];
+    const hoje = formatarDataISO(new Date());
+    const domingoInicio = calcularDomingoDaSemana(dataInicio || hoje);
     const novoVolume: CadernoVolume = {
       id,
-      titulo: titulo?.trim() || `Caderno Real — Vol. ${get().cadernosVolumes.length + 1}`,
-      dataInicio: dataInicio || hoje,
+      titulo: titulo?.trim() || `Caderno — Vol. ${get().cadernosVolumes.length + 1}`,
+      dataInicio: domingoInicio,
       dataFim: null,
       ativo: true,
+      descricao: descricao?.trim() || undefined,
       criadoEm: new Date().toISOString()
     };
+
+    const cicloInicial = gerarCicloSemanal(id, domingoInicio, 3, 1);
+
     const novosVolumes = [
       ...get().cadernosVolumes.map((v) => ({ ...v, ativo: false })),
       novoVolume
     ];
-    set({ cadernosVolumes: novosVolumes, cadernoAtivoId: id });
+    const novosCheckins = [...get().checkinsSemanais, cicloInicial.checkin];
+    const novosDias = { ...get().diasLogs, ...cicloInicial.dias };
+    const novosCheckouts = [...get().checkoutsSemanais, cicloInicial.checkout];
+
+    set({
+      cadernosVolumes: novosVolumes,
+      cadernoAtivoId: id,
+      checkinsSemanais: novosCheckins,
+      diasLogs: novosDias,
+      checkoutsSemanais: novosCheckouts
+    });
+
     salvarNoLocalStorage({
       livros: get().livros,
       relacoes: get().relacoes,
@@ -1488,9 +1572,9 @@ ${livro.sinopse_editorial || livro.tese}
       desfoqueFundoZettelkasten: get().desfoqueFundoZettelkasten,
       cadernosVolumes: novosVolumes,
       cadernoAtivoId: id,
-      checkinsSemanais: get().checkinsSemanais,
-      diasLogs: get().diasLogs,
-      checkoutsSemanais: get().checkoutsSemanais,
+      checkinsSemanais: novosCheckins,
+      diasLogs: novosDias,
+      checkoutsSemanais: novosCheckouts,
       paginasLivresCaderno: get().paginasLivresCaderno,
       legendaSimbolosVisivel: get().legendaSimbolosVisivel,
       estiloDotGridAtivo: get().estiloDotGridAtivo
@@ -1499,7 +1583,7 @@ ${livro.sinopse_editorial || livro.tese}
   },
 
   concluirCadernoVolume: (cadernoId) => {
-    const hoje = new Date().toISOString().split('T')[0];
+    const hoje = formatarDataISO(new Date());
     const novosVolumes = get().cadernosVolumes.map((v) =>
       v.id === cadernoId ? { ...v, ativo: false, dataFim: hoje } : v
     );
@@ -1511,17 +1595,50 @@ ${livro.sinopse_editorial || livro.tese}
       sessoesRevisao: get().sessoesRevisao,
       horasPorSemana: get().horasPorSemana,
       modoEscuro: get().modoEscuro,
-      notasZettel: get().notasZettel,
-      notasTemporarias: get().notasTemporarias,
-      canvasZettel: get().canvasZettel,
       cadernosVolumes: novosVolumes,
-      cadernoAtivoId: get().cadernoAtivoId,
-      checkinsSemanais: get().checkinsSemanais,
-      diasLogs: get().diasLogs,
-      checkoutsSemanais: get().checkoutsSemanais,
-      paginasLivresCaderno: get().paginasLivresCaderno,
-      legendaSimbolosVisivel: get().legendaSimbolosVisivel,
-      estiloDotGridAtivo: get().estiloDotGridAtivo
+      cadernoAtivoId: get().cadernoAtivoId
+    });
+  },
+
+  removerCadernoVolume: (cadernoId) => {
+    const novosVolumes = get().cadernosVolumes.filter((v) => v.id !== cadernoId);
+    const novosCheckins = get().checkinsSemanais.filter((c) => c.cadernoId !== cadernoId);
+    const novosCheckouts = get().checkoutsSemanais.filter((c) => c.cadernoId !== cadernoId);
+    const novasPaginas = get().paginasLivresCaderno.filter((p) => p.cadernoId !== cadernoId);
+    const novosDias: Record<string, DiaLog> = {};
+    Object.entries(get().diasLogs).forEach(([k, d]) => {
+      if (d.cadernoId !== cadernoId) {
+        novosDias[k] = d;
+      }
+    });
+
+    const proximoAtivo =
+      get().cadernoAtivoId === cadernoId
+        ? novosVolumes.find((v) => v.ativo)?.id || novosVolumes[0]?.id || ''
+        : get().cadernoAtivoId;
+
+    set({
+      cadernosVolumes: novosVolumes,
+      cadernoAtivoId: proximoAtivo,
+      checkinsSemanais: novosCheckins,
+      diasLogs: novosDias,
+      checkoutsSemanais: novosCheckouts,
+      paginasLivresCaderno: novasPaginas
+    });
+
+    salvarNoLocalStorage({
+      livros: get().livros,
+      relacoes: get().relacoes,
+      progressos: get().progressos,
+      sessoesRevisao: get().sessoesRevisao,
+      horasPorSemana: get().horasPorSemana,
+      modoEscuro: get().modoEscuro,
+      cadernosVolumes: novosVolumes,
+      cadernoAtivoId: proximoAtivo,
+      checkinsSemanais: novosCheckins,
+      diasLogs: novosDias,
+      checkoutsSemanais: novosCheckouts,
+      paginasLivresCaderno: novasPaginas
     });
   },
 
@@ -1534,18 +1651,64 @@ ${livro.sinopse_editorial || livro.tese}
       sessoesRevisao: get().sessoesRevisao,
       horasPorSemana: get().horasPorSemana,
       modoEscuro: get().modoEscuro,
-      notasZettel: get().notasZettel,
-      notasTemporarias: get().notasTemporarias,
-      canvasZettel: get().canvasZettel,
-      cadernosVolumes: get().cadernosVolumes,
-      cadernoAtivoId: cadernoId,
-      checkinsSemanais: get().checkinsSemanais,
-      diasLogs: get().diasLogs,
-      checkoutsSemanais: get().checkoutsSemanais,
-      paginasLivresCaderno: get().paginasLivresCaderno,
-      legendaSimbolosVisivel: get().legendaSimbolosVisivel,
-      estiloDotGridAtivo: get().estiloDotGridAtivo
+      cadernoAtivoId: cadernoId
     });
+  },
+
+  criarProximaSemanaCaderno: (cadernoId) => {
+    const volume = get().cadernosVolumes.find((v) => v.id === cadernoId);
+    if (!volume) return null;
+
+    const diasDoVol = Object.values(get().diasLogs)
+      .filter((d) => d.cadernoId === cadernoId)
+      .sort((a, b) => a.data.localeCompare(b.data));
+    const checkinsDoVol = get().checkinsSemanais.filter((c) => c.cadernoId === cadernoId);
+    const checkoutsDoVol = get().checkoutsSemanais.filter((c) => c.cadernoId === cadernoId);
+    const paginasDoVol = get().paginasLivresCaderno.filter((p) => p.cadernoId === cadernoId);
+
+    const ultimaData = diasDoVol.length > 0 ? diasDoVol[diasDoVol.length - 1].data : volume.dataInicio;
+    const proximoDomingo = diasDoVol.length > 0
+      ? calcularDomingoDaSemana(somarDiasData(ultimaData, 1))
+      : calcularDomingoDaSemana(volume.dataInicio);
+
+    const maiorPagina = Math.max(
+      2,
+      ...diasDoVol.map((d) => d.paginaNumero || 0),
+      ...checkinsDoVol.map((c) => c.paginaNumero || 0),
+      ...checkoutsDoVol.map((c) => c.paginaNumero || 0),
+      ...paginasDoVol.map((p) => p.paginaNumero || 0)
+    );
+
+    const novoCiclo = gerarCicloSemanal(
+      cadernoId,
+      proximoDomingo,
+      maiorPagina + 1,
+      checkinsDoVol.length + 1
+    );
+
+    const novosCheckins = [...get().checkinsSemanais, novoCiclo.checkin];
+    const novosDias = { ...get().diasLogs, ...novoCiclo.dias };
+    const novosCheckouts = [...get().checkoutsSemanais, novoCiclo.checkout];
+
+    set({
+      checkinsSemanais: novosCheckins,
+      diasLogs: novosDias,
+      checkoutsSemanais: novosCheckouts
+    });
+
+    salvarNoLocalStorage({
+      livros: get().livros,
+      relacoes: get().relacoes,
+      progressos: get().progressos,
+      sessoesRevisao: get().sessoesRevisao,
+      horasPorSemana: get().horasPorSemana,
+      modoEscuro: get().modoEscuro,
+      checkinsSemanais: novosCheckins,
+      diasLogs: novosDias,
+      checkoutsSemanais: novosCheckouts
+    });
+
+    return { semanaId: novoCiclo.semanaId, primeiroDia: novoCiclo.domingoStr };
   },
 
   salvarCheckinSemanal: (checkin) => {
@@ -1562,17 +1725,7 @@ ${livro.sinopse_editorial || livro.tese}
       sessoesRevisao: get().sessoesRevisao,
       horasPorSemana: get().horasPorSemana,
       modoEscuro: get().modoEscuro,
-      notasZettel: get().notasZettel,
-      notasTemporarias: get().notasTemporarias,
-      canvasZettel: get().canvasZettel,
-      cadernosVolumes: get().cadernosVolumes,
-      cadernoAtivoId: get().cadernoAtivoId,
-      checkinsSemanais: novos,
-      diasLogs: get().diasLogs,
-      checkoutsSemanais: get().checkoutsSemanais,
-      paginasLivresCaderno: get().paginasLivresCaderno,
-      legendaSimbolosVisivel: get().legendaSimbolosVisivel,
-      estiloDotGridAtivo: get().estiloDotGridAtivo
+      checkinsSemanais: novos
     });
   },
 
@@ -1590,28 +1743,26 @@ ${livro.sinopse_editorial || livro.tese}
       sessoesRevisao: get().sessoesRevisao,
       horasPorSemana: get().horasPorSemana,
       modoEscuro: get().modoEscuro,
-      notasZettel: get().notasZettel,
-      notasTemporarias: get().notasTemporarias,
-      canvasZettel: get().canvasZettel,
-      cadernosVolumes: get().cadernosVolumes,
-      cadernoAtivoId: get().cadernoAtivoId,
-      checkinsSemanais: get().checkinsSemanais,
-      diasLogs: get().diasLogs,
-      checkoutsSemanais: novos,
-      paginasLivresCaderno: get().paginasLivresCaderno,
-      legendaSimbolosVisivel: get().legendaSimbolosVisivel,
-      estiloDotGridAtivo: get().estiloDotGridAtivo
+      checkoutsSemanais: novos
     });
   },
 
   adicionarItemDiaLog: (dataStr, item) => {
+    const cadernoId = get().cadernoAtivoId || get().cadernosVolumes[0]?.id || '';
+    if (!cadernoId) return;
+
     const logs = { ...get().diasLogs };
-    const diaAtual = logs[dataStr] || {
-      id: dataStr,
+    const chavePreferida = chaveDiaCaderno(cadernoId, dataStr);
+    const chaveExistente = Object.keys(logs).find(
+      (k) => logs[k].cadernoId === cadernoId && logs[k].data === dataStr
+    ) || chavePreferida;
+
+    const diaAtual = logs[chaveExistente] || {
+      id: chaveExistente,
       data: dataStr,
-      semanaId: `semana-${dataStr.slice(0, 7)}`,
-      cadernoId: get().cadernoAtivoId,
-      paginaNumero: Object.keys(logs).length + 4,
+      semanaId: `${cadernoId}-sem-avulsa`,
+      cadernoId,
+      paginaNumero: Object.values(logs).filter((d) => d.cadernoId === cadernoId).length + 4,
       revisado: false,
       dataRevisao: null,
       itens: [],
@@ -1624,7 +1775,7 @@ ${livro.sinopse_editorial || livro.tese}
       criadoEm: new Date().toISOString()
     };
 
-    logs[dataStr] = {
+    logs[chaveExistente] = {
       ...diaAtual,
       itens: [...diaAtual.itens, novoItem]
     };
@@ -1637,26 +1788,20 @@ ${livro.sinopse_editorial || livro.tese}
       sessoesRevisao: get().sessoesRevisao,
       horasPorSemana: get().horasPorSemana,
       modoEscuro: get().modoEscuro,
-      notasZettel: get().notasZettel,
-      notasTemporarias: get().notasTemporarias,
-      canvasZettel: get().canvasZettel,
-      cadernosVolumes: get().cadernosVolumes,
-      cadernoAtivoId: get().cadernoAtivoId,
-      checkinsSemanais: get().checkinsSemanais,
-      diasLogs: logs,
-      checkoutsSemanais: get().checkoutsSemanais,
-      paginasLivresCaderno: get().paginasLivresCaderno,
-      legendaSimbolosVisivel: get().legendaSimbolosVisivel,
-      estiloDotGridAtivo: get().estiloDotGridAtivo
+      diasLogs: logs
     });
   },
 
   atualizarItemDiaLog: (dataStr, itemId, patch) => {
+    const cadernoId = get().cadernoAtivoId || get().cadernosVolumes[0]?.id || '';
     const logs = { ...get().diasLogs };
-    const dia = logs[dataStr];
+    const chave = Object.keys(logs).find(
+      (k) => logs[k].cadernoId === cadernoId && logs[k].data === dataStr
+    ) || chaveDiaCaderno(cadernoId, dataStr);
+    const dia = logs[chave];
     if (!dia) return;
 
-    logs[dataStr] = {
+    logs[chave] = {
       ...dia,
       itens: dia.itens.map((it) => (it.id === itemId ? { ...it, ...patch } : it))
     };
@@ -1669,26 +1814,20 @@ ${livro.sinopse_editorial || livro.tese}
       sessoesRevisao: get().sessoesRevisao,
       horasPorSemana: get().horasPorSemana,
       modoEscuro: get().modoEscuro,
-      notasZettel: get().notasZettel,
-      notasTemporarias: get().notasTemporarias,
-      canvasZettel: get().canvasZettel,
-      cadernosVolumes: get().cadernosVolumes,
-      cadernoAtivoId: get().cadernoAtivoId,
-      checkinsSemanais: get().checkinsSemanais,
-      diasLogs: logs,
-      checkoutsSemanais: get().checkoutsSemanais,
-      paginasLivresCaderno: get().paginasLivresCaderno,
-      legendaSimbolosVisivel: get().legendaSimbolosVisivel,
-      estiloDotGridAtivo: get().estiloDotGridAtivo
+      diasLogs: logs
     });
   },
 
   removerItemDiaLog: (dataStr, itemId) => {
+    const cadernoId = get().cadernoAtivoId || get().cadernosVolumes[0]?.id || '';
     const logs = { ...get().diasLogs };
-    const dia = logs[dataStr];
+    const chave = Object.keys(logs).find(
+      (k) => logs[k].cadernoId === cadernoId && logs[k].data === dataStr
+    ) || chaveDiaCaderno(cadernoId, dataStr);
+    const dia = logs[chave];
     if (!dia) return;
 
-    logs[dataStr] = {
+    logs[chave] = {
       ...dia,
       itens: dia.itens.filter((it) => it.id !== itemId)
     };
@@ -1701,26 +1840,20 @@ ${livro.sinopse_editorial || livro.tese}
       sessoesRevisao: get().sessoesRevisao,
       horasPorSemana: get().horasPorSemana,
       modoEscuro: get().modoEscuro,
-      notasZettel: get().notasZettel,
-      notasTemporarias: get().notasTemporarias,
-      canvasZettel: get().canvasZettel,
-      cadernosVolumes: get().cadernosVolumes,
-      cadernoAtivoId: get().cadernoAtivoId,
-      checkinsSemanais: get().checkinsSemanais,
-      diasLogs: logs,
-      checkoutsSemanais: get().checkoutsSemanais,
-      paginasLivresCaderno: get().paginasLivresCaderno,
-      legendaSimbolosVisivel: get().legendaSimbolosVisivel,
-      estiloDotGridAtivo: get().estiloDotGridAtivo
+      diasLogs: logs
     });
   },
 
   reordenarItensDiaLog: (dataStr, novosItens) => {
+    const cadernoId = get().cadernoAtivoId || get().cadernosVolumes[0]?.id || '';
     const logs = { ...get().diasLogs };
-    const dia = logs[dataStr];
+    const chave = Object.keys(logs).find(
+      (k) => logs[k].cadernoId === cadernoId && logs[k].data === dataStr
+    ) || chaveDiaCaderno(cadernoId, dataStr);
+    const dia = logs[chave];
     if (!dia) return;
 
-    logs[dataStr] = {
+    logs[chave] = {
       ...dia,
       itens: novosItens
     };
@@ -1733,35 +1866,33 @@ ${livro.sinopse_editorial || livro.tese}
       sessoesRevisao: get().sessoesRevisao,
       horasPorSemana: get().horasPorSemana,
       modoEscuro: get().modoEscuro,
-      notasZettel: get().notasZettel,
-      notasTemporarias: get().notasTemporarias,
-      canvasZettel: get().canvasZettel,
-      cadernosVolumes: get().cadernosVolumes,
-      cadernoAtivoId: get().cadernoAtivoId,
-      checkinsSemanais: get().checkinsSemanais,
-      diasLogs: logs,
-      checkoutsSemanais: get().checkoutsSemanais,
-      paginasLivresCaderno: get().paginasLivresCaderno,
-      legendaSimbolosVisivel: get().legendaSimbolosVisivel,
-      estiloDotGridAtivo: get().estiloDotGridAtivo
+      diasLogs: logs
     });
   },
 
   atualizarTermometroDia: (dataStr, texto, humor) => {
+    const cadernoId = get().cadernoAtivoId || get().cadernosVolumes[0]?.id || '';
+    if (!cadernoId) return;
+
     const logs = { ...get().diasLogs };
-    const dia = logs[dataStr] || {
-      id: dataStr,
+    const chavePreferida = chaveDiaCaderno(cadernoId, dataStr);
+    const chave = Object.keys(logs).find(
+      (k) => logs[k].cadernoId === cadernoId && logs[k].data === dataStr
+    ) || chavePreferida;
+
+    const dia = logs[chave] || {
+      id: chave,
       data: dataStr,
-      semanaId: `semana-${dataStr.slice(0, 7)}`,
-      cadernoId: get().cadernoAtivoId,
-      paginaNumero: Object.keys(logs).length + 4,
+      semanaId: `${cadernoId}-sem-avulsa`,
+      cadernoId,
+      paginaNumero: Object.values(logs).filter((d) => d.cadernoId === cadernoId).length + 4,
       revisado: false,
       dataRevisao: null,
       itens: [],
       termometro: { texto: '', humor: '', atualizadoEm: '' }
     };
 
-    logs[dataStr] = {
+    logs[chave] = {
       ...dia,
       termometro: {
         texto,
@@ -1778,31 +1909,23 @@ ${livro.sinopse_editorial || livro.tese}
       sessoesRevisao: get().sessoesRevisao,
       horasPorSemana: get().horasPorSemana,
       modoEscuro: get().modoEscuro,
-      notasZettel: get().notasZettel,
-      notasTemporarias: get().notasTemporarias,
-      canvasZettel: get().canvasZettel,
-      cadernosVolumes: get().cadernosVolumes,
-      cadernoAtivoId: get().cadernoAtivoId,
-      checkinsSemanais: get().checkinsSemanais,
-      diasLogs: logs,
-      checkoutsSemanais: get().checkoutsSemanais,
-      paginasLivresCaderno: get().paginasLivresCaderno,
-      legendaSimbolosVisivel: get().legendaSimbolosVisivel,
-      estiloDotGridAtivo: get().estiloDotGridAtivo
+      diasLogs: logs
     });
   },
 
   revisarFecharDia: (dataStr, acoesPendentes) => {
+    const cadernoId = get().cadernoAtivoId || get().cadernosVolumes[0]?.id || '';
     const logs = { ...get().diasLogs };
-    const dia = logs[dataStr];
+    const chave = Object.keys(logs).find(
+      (k) => logs[k].cadernoId === cadernoId && logs[k].data === dataStr
+    ) || chaveDiaCaderno(cadernoId, dataStr);
+    const dia = logs[chave];
     if (!dia) return;
 
     let itensAtualizados = [...dia.itens];
 
     if (acoesPendentes) {
-      const dataObj = new Date(dataStr + 'T12:00:00');
-      dataObj.setDate(dataObj.getDate() + 1);
-      const dataAmanhaStr = dataObj.toISOString().split('T')[0];
+      const dataAmanhaStr = somarDiasData(dataStr, 1);
 
       Object.entries(acoesPendentes).forEach(([itemId, decisao]) => {
         const itemIndex = itensAtualizados.findIndex((it) => it.id === itemId);
@@ -1817,12 +1940,16 @@ ${livro.sinopse_editorial || livro.tese}
           const destino = decisao.dataDestino || dataAmanhaStr;
           itensAtualizados[itemIndex] = { ...itemOrig, estado: 'migrado', migradoPara: destino };
 
-          const diaDestino = logs[destino] || {
-            id: destino,
+          const chaveDestino = Object.keys(logs).find(
+            (k) => logs[k].cadernoId === dia.cadernoId && logs[k].data === destino
+          ) || chaveDiaCaderno(dia.cadernoId, destino);
+
+          const diaDestino = logs[chaveDestino] || {
+            id: chaveDestino,
             data: destino,
             semanaId: dia.semanaId,
             cadernoId: dia.cadernoId,
-            paginaNumero: Object.keys(logs).length + 4,
+            paginaNumero: Object.values(logs).filter((d) => d.cadernoId === dia.cadernoId).length + 4,
             revisado: false,
             dataRevisao: null,
             itens: [],
@@ -1839,7 +1966,7 @@ ${livro.sinopse_editorial || livro.tese}
             criadoEm: new Date().toISOString()
           };
 
-          logs[destino] = {
+          logs[chaveDestino] = {
             ...diaDestino,
             itens: [...diaDestino.itens, novoItemMigrado]
           };
@@ -1847,7 +1974,7 @@ ${livro.sinopse_editorial || livro.tese}
       });
     }
 
-    logs[dataStr] = {
+    logs[chave] = {
       ...dia,
       itens: itensAtualizados,
       revisado: true,
@@ -1862,17 +1989,7 @@ ${livro.sinopse_editorial || livro.tese}
       sessoesRevisao: get().sessoesRevisao,
       horasPorSemana: get().horasPorSemana,
       modoEscuro: get().modoEscuro,
-      notasZettel: get().notasZettel,
-      notasTemporarias: get().notasTemporarias,
-      canvasZettel: get().canvasZettel,
-      cadernosVolumes: get().cadernosVolumes,
-      cadernoAtivoId: get().cadernoAtivoId,
-      checkinsSemanais: get().checkinsSemanais,
-      diasLogs: logs,
-      checkoutsSemanais: get().checkoutsSemanais,
-      paginasLivresCaderno: get().paginasLivresCaderno,
-      legendaSimbolosVisivel: get().legendaSimbolosVisivel,
-      estiloDotGridAtivo: get().estiloDotGridAtivo
+      diasLogs: logs
     });
   },
 

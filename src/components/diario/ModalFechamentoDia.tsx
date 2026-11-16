@@ -271,11 +271,11 @@ export const ModalFechamentoDia: React.FC<ModalFechamentoDiaProps> = ({
             </div>
 
             <textarea
-              rows={3}
+              rows={5}
               value={textoTermometro}
               onChange={(e) => setTextoTermometro(e.target.value)}
               placeholder="Como você se sentiu hoje? O que pesou ou o que fluiu? Nem que seja uma única frase honesta..."
-              className="w-full p-3 rounded-2xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 text-stone-900 dark:text-stone-100 placeholder-stone-400 font-serif text-xs leading-relaxed focus:outline-none focus:ring-2 focus:ring-amber-500/40"
+              className="w-full min-h-[140px] p-3.5 rounded-xl bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 text-stone-900 dark:text-stone-100 placeholder-stone-400 font-serif text-sm leading-relaxed focus:outline-none focus:ring-2 focus:ring-amber-600/30 focus:border-amber-600 resize-y"
             />
 
             {/* Tons de Humor do Dia */}

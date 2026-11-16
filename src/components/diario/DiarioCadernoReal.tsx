@@ -1,7 +1,7 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useBibliotecaStore } from '../../store/useBibliotecaStore';
-import { ItemIndiceNavegacao } from './IndiceCadernoModal';
-import { IndiceCadernoModal } from './IndiceCadernoModal';
+import { calcularDomingoDaSemana, formatarDataISO, somarDiasData } from '../../data/diarioPadrao';
+import { ItemIndiceNavegacao, IndiceCadernoModal } from './IndiceCadernoModal';
 import { HistoricoVolumesModal } from './HistoricoVolumesModal';
 import { CheckinSemanalView } from './CheckinSemanalView';
 import { DailyLogView } from './DailyLogView';
@@ -20,7 +20,8 @@ import {
   Sparkles,
   Layers,
   Check,
-  Feather
+  Plus,
+  HelpCircle
 } from 'lucide-react';
 
 export const DiarioCadernoReal: React.FC = () => {
@@ -32,52 +33,186 @@ export const DiarioCadernoReal: React.FC = () => {
     checkoutsSemanais,
     paginasLivresCaderno,
     estiloDotGridAtivo,
-    toggleEstiloDotGrid
+    toggleEstiloDotGrid,
+    legendaSimbolosVisivel,
+    toggleLegendaSimbolos,
+    criarCadernoVolume,
+    criarProximaSemanaCaderno
   } = useBibliotecaStore();
 
   // Estados de navegação interna no caderno
   const [secaoAtiva, setSecaoAtiva] = useState<'checkin' | 'dias' | 'checkout' | 'livres'>('dias');
-  const [diaSelecionadoData, setDiaSelecionadoData] = useState<string>('2026-11-12'); // Quinta (Hoje)
+  const [semanaAtivaId, setSemanaAtivaId] = useState<string>('');
+  const [diaSelecionadoData, setDiaSelecionadoData] = useState<string>('');
   const [paginaLivreIdAtiva, setPaginaLivreIdAtiva] = useState<string>('');
+
+  // Estados para criação do primeiro caderno (quando vazio)
+  const [primeiroTitulo, setPrimeiroTitulo] = useState('');
+  const [primeiraData, setPrimeiraData] = useState(formatarDataISO(new Date()));
 
   // Modais
   const [modalIndiceAberto, setModalIndiceAberto] = useState(false);
   const [modalHistoricoAberto, setModalHistoricoAberto] = useState(false);
+  const [abrirCriacaoNoModal, setAbrirCriacaoNoModal] = useState(false);
 
   // Volume ativo
-  const volumeAtivo =
-    cadernosVolumes.find((v) => v.id === cadernoAtivoId) ||
-    cadernosVolumes[0] || {
-      id: 'vol-1',
-      titulo: 'Caderno Real — Vol. I (2026)',
-      dataInicio: '2026-11-09',
-      dataFim: null,
-      ativo: true,
-      criadoEm: new Date().toISOString()
-    };
+  const volumeAtivo = useMemo(() => {
+    return (
+      cadernosVolumes.find((v) => v.id === cadernoAtivoId) ||
+      cadernosVolumes[0] ||
+      null
+    );
+  }, [cadernosVolumes, cadernoAtivoId]);
 
-  // Checkin e checkout ativos
-  const checkinAtivo = checkinsSemanais[0];
-  const checkoutAtivo = checkoutsSemanais[0];
+  // Dados filtrados estritamente pelo volume ativo
+  const checkinsDoVolume = useMemo(() => {
+    if (!volumeAtivo) return [];
+    return checkinsSemanais
+      .filter((c) => c.cadernoId === volumeAtivo.id)
+      .sort((a, b) => a.dataInicio.localeCompare(b.dataInicio));
+  }, [checkinsSemanais, volumeAtivo]);
 
-  // Lista ordenada de dias da semana
-  const diasOrdenados = useMemo(() => {
-    return Object.values(diasLogs).sort((a, b) => a.data.localeCompare(b.data));
-  }, [diasLogs]);
+  const checkoutsDoVolume = useMemo(() => {
+    if (!volumeAtivo) return [];
+    return checkoutsSemanais.filter((c) => c.cadernoId === volumeAtivo.id);
+  }, [checkoutsSemanais, volumeAtivo]);
 
-  // Dia ativo
-  const diaAtivo = diasLogs[diaSelecionadoData] || diasOrdenados[0];
+  const paginasLivresDoVolume = useMemo(() => {
+    if (!volumeAtivo) return [];
+    return paginasLivresCaderno.filter((p) => p.cadernoId === volumeAtivo.id);
+  }, [paginasLivresCaderno, volumeAtivo]);
 
-  // Índice para navegação anterior/próximo nos dias
-  const indiceDiaAtual = diasOrdenados.findIndex((d) => d.data === diaAtivo?.data);
+  const diasDoVolumeMap = useMemo(() => {
+    if (!volumeAtivo) return {};
+    const filtrado: Record<string, typeof diasLogs[string]> = {};
+    Object.entries(diasLogs).forEach(([k, d]) => {
+      if (d.cadernoId === volumeAtivo.id) {
+        filtrado[k] = d;
+      }
+    });
+    return filtrado;
+  }, [diasLogs, volumeAtivo]);
 
-  // Manipulador de navegação a partir do Índice
+  const todosDiasDoVolume = useMemo(() => {
+    return Object.values(diasDoVolumeMap).sort((a, b) => a.data.localeCompare(b.data));
+  }, [diasDoVolumeMap]);
+
+  // Sincronizar semana ativa quando muda o volume
+  useEffect(() => {
+    if (!volumeAtivo) {
+      setSemanaAtivaId('');
+      setDiaSelecionadoData('');
+      return;
+    }
+
+    const semanaValida = checkinsDoVolume.some((c) => c.semanaId === semanaAtivaId);
+    if (!semanaValida) {
+      const ultimaSemana = checkinsDoVolume[checkinsDoVolume.length - 1];
+      setSemanaAtivaId(ultimaSemana?.semanaId || '');
+    }
+  }, [volumeAtivo?.id, checkinsDoVolume, semanaAtivaId]);
+
+  // Checkin e Checkout da semana ativa
+  const checkinAtivo = useMemo(() => {
+    return (
+      checkinsDoVolume.find((c) => c.semanaId === semanaAtivaId) ||
+      checkinsDoVolume[checkinsDoVolume.length - 1]
+    );
+  }, [checkinsDoVolume, semanaAtivaId]);
+
+  const checkoutAtivo = useMemo(() => {
+    const semId = checkinAtivo?.semanaId || semanaAtivaId;
+    return (
+      checkoutsDoVolume.find((c) => c.semanaId === semId) ||
+      checkoutsDoVolume[checkoutsDoVolume.length - 1]
+    );
+  }, [checkoutsDoVolume, checkinAtivo, semanaAtivaId]);
+
+  // Dias da semana ativa (7 dias: Dia 01 Domingo .. Dia 07 Sábado)
+  const diasDaSemanaAtual = useMemo(() => {
+    const semId = checkinAtivo?.semanaId || semanaAtivaId;
+    if (!semId) return todosDiasDoVolume;
+    const daSemana = todosDiasDoVolume.filter((d) => d.semanaId === semId);
+    return daSemana.length > 0 ? daSemana : todosDiasDoVolume;
+  }, [todosDiasDoVolume, checkinAtivo, semanaAtivaId]);
+
+  // Garantir que diaSelecionadoData aponte sempre para um dia válido do volume
+  useEffect(() => {
+    if (todosDiasDoVolume.length === 0) {
+      setDiaSelecionadoData('');
+      return;
+    }
+
+    const existeNaSemana = diasDaSemanaAtual.some((d) => d.data === diaSelecionadoData);
+    if (!existeNaSemana) {
+      const hojeStr = formatarDataISO(new Date());
+      const hojeNaSemana = diasDaSemanaAtual.find((d) => d.data === hojeStr);
+      setDiaSelecionadoData(hojeNaSemana?.data || diasDaSemanaAtual[0]?.data || todosDiasDoVolume[0].data);
+    }
+  }, [volumeAtivo?.id, semanaAtivaId, diasDaSemanaAtual, todosDiasDoVolume, diaSelecionadoData]);
+
+  // Dia ativo e navegação global entre todos os dias do volume
+  const diaAtivo = useMemo(() => {
+    return (
+      todosDiasDoVolume.find((d) => d.data === diaSelecionadoData) ||
+      diasDaSemanaAtual[0] ||
+      todosDiasDoVolume[0]
+    );
+  }, [todosDiasDoVolume, diasDaSemanaAtual, diaSelecionadoData]);
+
+  const indiceDiaGlobal = todosDiasDoVolume.findIndex((d) => d.data === diaAtivo?.data);
+  const indiceDiaNaSemana = diasDaSemanaAtual.findIndex((d) => d.data === diaAtivo?.data);
+
+  const handleSelecionarDia = (dataStr: string, semanaId?: string) => {
+    if (semanaId && semanaId !== semanaAtivaId) {
+      setSemanaAtivaId(semanaId);
+    }
+    setDiaSelecionadoData(dataStr);
+  };
+
+  const handleDiaAnterior = () => {
+    if (indiceDiaGlobal > 0) {
+      const anterior = todosDiasDoVolume[indiceDiaGlobal - 1];
+      handleSelecionarDia(anterior.data, anterior.semanaId);
+    }
+  };
+
+  const handleProximoDia = () => {
+    if (indiceDiaGlobal >= 0 && indiceDiaGlobal < todosDiasDoVolume.length - 1) {
+      const proximo = todosDiasDoVolume[indiceDiaGlobal + 1];
+      handleSelecionarDia(proximo.data, proximo.semanaId);
+    }
+  };
+
+  const handleCriarNovaSemana = () => {
+    if (!volumeAtivo) return;
+    const res = criarProximaSemanaCaderno(volumeAtivo.id);
+    if (res) {
+      setSemanaAtivaId(res.semanaId);
+      setDiaSelecionadoData(res.primeiroDia);
+      setSecaoAtiva('dias');
+    }
+  };
+
+  const handleCriarPrimeiroCaderno = (e: React.FormEvent) => {
+    e.preventDefault();
+    const tituloFinal = primeiroTitulo.trim() || 'Meu Caderno — Ciclo I';
+    const novoId = criarCadernoVolume(tituloFinal, primeiraData);
+    if (novoId) {
+      const domingo = calcularDomingoDaSemana(primeiraData);
+      setDiaSelecionadoData(domingo);
+      setSecaoAtiva('dias');
+      setPrimeiroTitulo('');
+    }
+  };
+
   const handleNavegarPeloIndice = (item: ItemIndiceNavegacao) => {
     if (item.tipo === 'checkin') {
       setSecaoAtiva('checkin');
     } else if (item.tipo === 'dia' && item.dataReferencia) {
+      const diaEncontrado = todosDiasDoVolume.find((d) => d.data === item.dataReferencia);
       setSecaoAtiva('dias');
-      setDiaSelecionadoData(item.dataReferencia);
+      handleSelecionarDia(item.dataReferencia, diaEncontrado?.semanaId);
     } else if (item.tipo === 'checkout') {
       setSecaoAtiva('checkout');
     } else if (item.tipo === 'pagina_livre') {
@@ -86,211 +221,419 @@ export const DiarioCadernoReal: React.FC = () => {
     }
   };
 
-  return (
-    <div
-      className={`min-h-[85vh] p-3 sm:p-6 transition-all ${
-        estiloDotGridAtivo ? 'dot-grid-paper' : ''
-      }`}
-    >
-      <div className="max-w-6xl xl:max-w-7xl mx-auto space-y-6">
-        {/* ======================================================== */}
-        {/* CABEÇALHO DO CADERNO (MÓDULO 1: METADADOS DO VOLUME)     */}
-        {/* ======================================================== */}
-        <div className="bg-[#fcfaf5]/95 dark:bg-[#15161b]/95 backdrop-blur-md border border-stone-200/90 dark:border-stone-800 rounded-2xl p-5 sm:p-6 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="flex items-center gap-3.5">
-            <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-br from-stone-900 via-amber-950 to-stone-900 text-amber-200 flex items-center justify-center shadow-md ring-1 ring-amber-600/30 shrink-0">
-              <BookMarked className="w-6 h-6 text-amber-300" />
+  // =========================================================================
+  // ESTADO VAZIO (SEM DADOS MOCKADOS) — CRIAÇÃO DIRETA DO PRIMEIRO CADERNO
+  // =========================================================================
+  if (!volumeAtivo) {
+    const domingoPreview = calcularDomingoDaSemana(primeiraData || formatarDataISO(new Date()));
+    const sabadoPreview = somarDiasData(domingoPreview, 6);
+
+    return (
+      <div
+        className={`min-h-[80vh] p-4 sm:p-8 flex items-center justify-center ${
+          estiloDotGridAtivo ? 'dot-grid-paper' : ''
+        }`}
+      >
+        <div className="surface-editorial rounded-2xl max-w-xl w-full p-6 sm:p-8 space-y-6">
+          <div className="flex items-start gap-4 border-b border-stone-200 dark:border-stone-800 pb-5">
+            <div className="w-12 h-12 rounded-xl bg-stone-900 dark:bg-amber-800 text-amber-200 flex items-center justify-center shrink-0">
+              <BookMarked className="w-6 h-6" />
             </div>
-
             <div>
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-[10.5px] font-cinzel font-bold uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-300 border border-amber-300 dark:border-amber-800 flex items-center gap-1.5 shadow-2xs">
-                  <Feather className="w-3 h-3 text-amber-700 dark:text-amber-400" />
-                  <span>05 — O DIÁRIO INTELECTUAL</span>
-                </span>
-                <span className="text-xs text-stone-500 dark:text-stone-400 font-serif italic">
-                  Metodologia “Caderno Real”
-                </span>
-              </div>
-
-              <h2 className="text-xl sm:text-2xl font-serif font-bold text-stone-900 dark:text-stone-100 mt-1 tracking-tight">
-                {volumeAtivo.titulo}
+              <h2 className="text-2xl font-serif font-bold text-stone-900 dark:text-stone-100">
+                Crie seu Primeiro Caderno
               </h2>
-
-              <p className="text-[11px] text-stone-500 dark:text-stone-400 font-mono tabular-nums mt-0.5">
-                Início: {volumeAtivo.dataInicio.split('-').reverse().join('/')}
-                {volumeAtivo.dataFim
-                  ? ` · Término: ${volumeAtivo.dataFim.split('-').reverse().join('/')}`
-                  : ' · Volume Ativo (Em aberto)'}
+              <p className="text-sm text-stone-600 dark:text-stone-400 font-serif mt-1 leading-relaxed">
+                Cada caderno organiza seus ciclos semanais com o <strong>Dia 01 começando sempre no Domingo</strong>, seguido de Segunda a Sábado, Termômetro diário e páginas livres.
               </p>
             </div>
           </div>
 
-          {/* Barra de Ferramentas Editorial do Caderno */}
-          <div className="flex items-center gap-2 flex-wrap self-end md:self-center">
-            {/* Botão do Índice Dinâmico */}
+          <form onSubmit={handleCriarPrimeiroCaderno} className="space-y-4">
+            <div>
+              <label
+                htmlFor="primeiro-caderno-titulo"
+                className="block text-xs font-cinzel font-bold text-stone-700 dark:text-stone-300 mb-1.5"
+              >
+                Título do Caderno
+              </label>
+              <input
+                id="primeiro-caderno-titulo"
+                type="text"
+                value={primeiroTitulo}
+                onChange={(e) => setPrimeiroTitulo(e.target.value)}
+                placeholder="Ex: Caderno Real — Novembro 2026"
+                className="w-full px-4 py-3 rounded-xl bg-[#fcfaf5] dark:bg-stone-900 border border-stone-300 dark:border-stone-700 text-sm font-serif text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-amber-600/30 focus:border-amber-600"
+                autoFocus
+              />
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label
+                  htmlFor="primeiro-caderno-data"
+                  className="block text-xs font-cinzel font-bold text-stone-700 dark:text-stone-300 mb-1.5"
+                >
+                  Semana de Referência
+                </label>
+                <input
+                  id="primeiro-caderno-data"
+                  type="date"
+                  value={primeiraData}
+                  onChange={(e) => setPrimeiraData(e.target.value)}
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#fcfaf5] dark:bg-stone-900 border border-stone-300 dark:border-stone-700 text-xs font-mono text-stone-900 dark:text-stone-100"
+                  required
+                />
+              </div>
+
+              <div className="p-3 rounded-xl bg-[#FBF8F3] dark:bg-stone-900/70 border border-stone-200 dark:border-stone-800 flex flex-col justify-center">
+                <span className="text-[11px] font-cinzel font-bold text-amber-800 dark:text-amber-400">
+                  Dia 01 (Domingo)
+                </span>
+                <span className="text-xs font-mono text-stone-700 dark:text-stone-300 tabular-nums mt-0.5">
+                  {domingoPreview.split('-').reverse().join('/')} a {sabadoPreview.split('-').reverse().join('/')}
+                </span>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              className="w-full py-3 px-5 rounded-xl bg-amber-800 hover:bg-amber-700 text-white font-cinzel font-bold text-xs flex items-center justify-center gap-2 transition-colors cursor-pointer"
+            >
+              <Plus className="w-4 h-4" />
+              <span>Criar Caderno & Iniciar no Domingo (Dia 01)</span>
+            </button>
+          </form>
+        </div>
+      </div>
+    );
+  }
+
+  const totalPaginasVolume =
+    checkinsDoVolume.length +
+    todosDiasDoVolume.length +
+    checkoutsDoVolume.length +
+    paginasLivresDoVolume.length +
+    2;
+
+  const hojeStr = formatarDataISO(new Date());
+
+  return (
+    <div
+      className={`min-h-[85vh] p-3 sm:p-6 transition-colors ${
+        estiloDotGridAtivo ? 'dot-grid-paper' : ''
+      }`}
+    >
+      <div className="max-w-6xl xl:max-w-7xl mx-auto space-y-5">
+        {/* CABEÇALHO DO CADERNO */}
+        <header className="surface-editorial rounded-2xl px-5 py-4 sm:px-6 sm:py-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex items-center gap-3.5 min-w-0">
+            <div className="w-10 h-10 rounded-xl bg-stone-900 dark:bg-amber-800 text-amber-200 flex items-center justify-center shrink-0">
+              <BookMarked className="w-5 h-5" />
+            </div>
+
+            <div className="min-w-0">
+              <div className="flex items-center gap-2 flex-wrap text-xs text-stone-500 dark:text-stone-400">
+                <span className="font-cinzel font-bold uppercase tracking-wider text-amber-800 dark:text-amber-400">
+                  Diário Intelectual
+                </span>
+                <span>·</span>
+                <span className="font-mono tabular-nums">
+                  Dia 01 (Dom): {volumeAtivo.dataInicio.split('-').reverse().join('/')}
+                  {volumeAtivo.dataFim
+                    ? ` · Concluído em ${volumeAtivo.dataFim.split('-').reverse().join('/')}`
+                    : ''}
+                </span>
+              </div>
+
+              <h2 className="text-xl sm:text-2xl font-serif font-bold text-stone-900 dark:text-stone-100 mt-0.5 tracking-tight truncate">
+                {volumeAtivo.titulo}
+              </h2>
+            </div>
+          </div>
+
+          {/* Barra de Ações do Caderno */}
+          <div className="flex items-center gap-2 flex-wrap shrink-0">
+            <button
+              type="button"
+              onClick={() => {
+                setAbrirCriacaoNoModal(true);
+                setModalHistoricoAberto(true);
+              }}
+              className="px-3.5 py-2 rounded-xl bg-amber-800 hover:bg-amber-700 text-white font-cinzel font-bold text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
+            >
+              <Plus className="w-3.5 h-3.5" />
+              <span>Novo Caderno</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setAbrirCriacaoNoModal(false);
+                setModalHistoricoAberto(true);
+              }}
+              className="px-3 py-2 rounded-xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 hover:border-stone-400 text-stone-700 dark:text-stone-200 text-xs font-cinzel font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
+              title="Alternar ou gerenciar cadernos"
+            >
+              <Archive className="w-3.5 h-3.5 text-stone-500 dark:text-stone-400" />
+              <span>Cadernos ({cadernosVolumes.length})</span>
+            </button>
+
             <button
               type="button"
               onClick={() => setModalIndiceAberto(true)}
-              className="px-3.5 py-2 rounded-xl bg-white dark:bg-stone-900 border border-stone-300/90 dark:border-stone-700 hover:border-amber-500 dark:hover:border-amber-600 text-stone-800 dark:text-stone-200 font-cinzel font-bold text-xs flex items-center gap-1.5 shadow-2xs transition cursor-pointer"
+              className="px-3 py-2 rounded-xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 hover:border-stone-400 text-stone-700 dark:text-stone-200 font-cinzel font-bold text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
               title="Abrir Índice com Paginação Sequencial"
             >
               <Bookmark className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
               <span>Índice</span>
-              <span className="font-mono tabular-nums text-[10.5px] px-1.5 py-0.2 rounded bg-amber-100/80 dark:bg-amber-950/80 text-amber-900 dark:text-amber-300">
-                {Object.keys(diasLogs).length + 5} págs
+              <span className="font-mono tabular-nums text-[11px] text-stone-500 dark:text-stone-400">
+                {totalPaginasVolume}p
               </span>
             </button>
 
-            {/* Alternar Dot Grid */}
             <button
               type="button"
               onClick={toggleEstiloDotGrid}
-              className={`px-3 py-2 rounded-xl border text-xs font-medium flex items-center gap-1.5 transition cursor-pointer shadow-2xs ${
+              className={`px-3 py-2 rounded-xl border text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer ${
                 estiloDotGridAtivo
-                  ? 'bg-amber-100 dark:bg-amber-950/90 text-amber-900 dark:text-amber-200 border-amber-400 dark:border-amber-700 font-semibold'
-                  : 'bg-white dark:bg-stone-900 text-stone-600 dark:text-stone-400 border-stone-300/90 dark:border-stone-700 hover:border-amber-400'
+                  ? 'bg-stone-200/75 dark:bg-stone-800 text-stone-900 dark:text-stone-100 border-stone-300 dark:border-stone-600 font-semibold'
+                  : 'bg-white dark:bg-stone-900 text-stone-600 dark:text-stone-400 border-stone-200 dark:border-stone-700 hover:border-stone-400'
               }`}
-              title={
-                estiloDotGridAtivo
-                  ? 'Desativar Papel Pontilhado (Dot Grid)'
-                  : 'Ativar Papel Pontilhado (Dot Grid)'
-              }
+              title="Alternar papel pontilhado"
             >
-              <Grid className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
-              <span className="hidden sm:inline">Papel Pontilhado</span>
+              <Grid className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Pontilhado</span>
             </button>
 
-            {/* Histórico de Volumes */}
             <button
               type="button"
-              onClick={() => setModalHistoricoAberto(true)}
-              className="px-3 py-2 rounded-xl bg-white dark:bg-stone-900 border border-stone-300/90 dark:border-stone-700 hover:border-amber-500 dark:hover:border-amber-600 text-stone-700 dark:text-stone-300 text-xs font-medium flex items-center gap-1.5 shadow-2xs transition cursor-pointer"
-              title="Arquivo & Histórico de Volumes"
+              onClick={toggleLegendaSimbolos}
+              className={`px-3 py-2 rounded-xl border text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer ${
+                legendaSimbolosVisivel
+                  ? 'bg-stone-200/75 dark:bg-stone-800 text-stone-900 dark:text-stone-100 border-stone-300 dark:border-stone-600 font-semibold'
+                  : 'bg-white dark:bg-stone-900 text-stone-600 dark:text-stone-400 border-stone-200 dark:border-stone-700 hover:border-stone-400'
+              }`}
+              title="Mostrar ou ocultar legenda de símbolos"
             >
-              <Archive className="w-3.5 h-3.5 text-stone-500 dark:text-stone-400" />
-              <span className="hidden sm:inline">Volumes</span>
+              <HelpCircle className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
+              <span className="hidden sm:inline">Símbolos</span>
             </button>
           </div>
-        </div>
+        </header>
 
-        {/* ======================================================== */}
-        {/* NAVEGADOR DO CICLO SEMANAL (MÓDULOS 3, 4 e 7)             */}
-        {/* ======================================================== */}
-        <div className="bg-[#fcfaf5]/90 dark:bg-[#15161b]/90 backdrop-blur-sm border border-stone-200/90 dark:border-stone-800 rounded-2xl p-2.5 sm:p-3 flex flex-col lg:flex-row lg:items-center justify-between gap-3 shadow-2xs">
-          {/* Seletor Macro das Etapas do Ciclo */}
-          <div className="flex items-center bg-stone-200/60 dark:bg-stone-900 p-1 rounded-xl border border-stone-300/60 dark:border-stone-800 text-xs overflow-x-auto scrollbar-none">
-            <button
-              type="button"
-              onClick={() => setSecaoAtiva('checkin')}
-              className={`px-3 py-1.5 rounded-lg font-cinzel font-bold transition flex items-center gap-1.5 shrink-0 cursor-pointer ${
-                secaoAtiva === 'checkin'
-                  ? 'bg-white dark:bg-stone-800 text-amber-900 dark:text-amber-200 shadow-2xs border border-amber-200/60 dark:border-amber-800/50'
-                  : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
-              }`}
-            >
-              <Sparkles className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
-              <span>Check-in Semanal</span>
-              <span className="text-[10px] font-mono tabular-nums opacity-65">Pág. 3</span>
-            </button>
+        {/* NAVEGAÇÃO UNIFICADA DE SEMANAS, ETAPAS E DIAS */}
+        <nav
+          aria-label="Navegação do Caderno"
+          className="surface-editorial rounded-2xl p-3 sm:p-4 space-y-3"
+        >
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+            {/* Etapas do Ciclo */}
+            <div className="flex items-center bg-[#FBF8F3] dark:bg-stone-900 p-1 rounded-xl border border-stone-200 dark:border-stone-800 text-xs overflow-x-auto scrollbar-none gap-1">
+              <button
+                type="button"
+                onClick={() => setSecaoAtiva('checkin')}
+                className={`px-3 py-1.5 rounded-lg font-cinzel font-bold transition-colors flex items-center gap-1.5 shrink-0 cursor-pointer ${
+                  secaoAtiva === 'checkin'
+                    ? 'bg-white dark:bg-stone-800 text-stone-900 dark:text-amber-200 border border-stone-200 dark:border-stone-700'
+                    : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
+                }`}
+              >
+                <Sparkles className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
+                <span>Check-in</span>
+                {checkinAtivo && (
+                  <span className="text-[11px] font-mono tabular-nums opacity-65">
+                    P.{checkinAtivo.paginaNumero}
+                  </span>
+                )}
+              </button>
 
-            <button
-              type="button"
-              onClick={() => setSecaoAtiva('dias')}
-              className={`px-3 py-1.5 rounded-lg font-cinzel font-bold transition flex items-center gap-1.5 shrink-0 cursor-pointer ${
-                secaoAtiva === 'dias'
-                  ? 'bg-white dark:bg-stone-800 text-amber-900 dark:text-amber-200 shadow-2xs border border-amber-200/60 dark:border-amber-800/50'
-                  : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
-              }`}
-            >
-              <Calendar className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
-              <span>Dias da Semana</span>
-              <span className="text-[10px] font-mono tabular-nums opacity-65">Págs. 4–10</span>
-            </button>
+              <button
+                type="button"
+                onClick={() => setSecaoAtiva('dias')}
+                className={`px-3 py-1.5 rounded-lg font-cinzel font-bold transition-colors flex items-center gap-1.5 shrink-0 cursor-pointer ${
+                  secaoAtiva === 'dias'
+                    ? 'bg-white dark:bg-stone-800 text-stone-900 dark:text-amber-200 border border-stone-200 dark:border-stone-700'
+                    : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
+                }`}
+              >
+                <Calendar className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
+                <span>Dias da Semana</span>
+                {diasDaSemanaAtual.length > 0 && (
+                  <span className="text-[11px] font-mono tabular-nums opacity-65">
+                    P.{diasDaSemanaAtual[0].paginaNumero}–{diasDaSemanaAtual[diasDaSemanaAtual.length - 1].paginaNumero}
+                  </span>
+                )}
+              </button>
 
-            <button
-              type="button"
-              onClick={() => setSecaoAtiva('checkout')}
-              className={`px-3 py-1.5 rounded-lg font-cinzel font-bold transition flex items-center gap-1.5 shrink-0 cursor-pointer ${
-                secaoAtiva === 'checkout'
-                  ? 'bg-white dark:bg-stone-800 text-amber-900 dark:text-amber-200 shadow-2xs border border-amber-200/60 dark:border-amber-800/50'
-                  : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
-              }`}
-            >
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-              <span>Checkout Semanal</span>
-              <span className="text-[10px] font-mono tabular-nums opacity-65">Pág. 11</span>
-            </button>
+              <button
+                type="button"
+                onClick={() => setSecaoAtiva('checkout')}
+                className={`px-3 py-1.5 rounded-lg font-cinzel font-bold transition-colors flex items-center gap-1.5 shrink-0 cursor-pointer ${
+                  secaoAtiva === 'checkout'
+                    ? 'bg-white dark:bg-stone-800 text-stone-900 dark:text-amber-200 border border-stone-200 dark:border-stone-700'
+                    : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
+                }`}
+              >
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-700 dark:text-emerald-400" />
+                <span>Checkout</span>
+                {checkoutAtivo && (
+                  <span className="text-[11px] font-mono tabular-nums opacity-65">
+                    P.{checkoutAtivo.paginaNumero}
+                  </span>
+                )}
+              </button>
 
-            <button
-              type="button"
-              onClick={() => setSecaoAtiva('livres')}
-              className={`px-3 py-1.5 rounded-lg font-cinzel font-bold transition flex items-center gap-1.5 shrink-0 cursor-pointer ${
-                secaoAtiva === 'livres'
-                  ? 'bg-white dark:bg-stone-800 text-amber-900 dark:text-amber-200 shadow-2xs border border-amber-200/60 dark:border-amber-800/50'
-                  : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
-              }`}
-            >
-              <Layers className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
-              <span>Páginas Livres</span>
-              <span className="text-[10px] font-mono tabular-nums opacity-65">
-                ({paginasLivresCaderno.length})
-              </span>
-            </button>
-          </div>
+              <button
+                type="button"
+                onClick={() => setSecaoAtiva('livres')}
+                className={`px-3 py-1.5 rounded-lg font-cinzel font-bold transition-colors flex items-center gap-1.5 shrink-0 cursor-pointer ${
+                  secaoAtiva === 'livres'
+                    ? 'bg-white dark:bg-stone-800 text-stone-900 dark:text-amber-200 border border-stone-200 dark:border-stone-700'
+                    : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
+                }`}
+              >
+                <Layers className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+                <span>Páginas Livres</span>
+                <span className="text-[11px] font-mono tabular-nums opacity-65">
+                  ({paginasLivresDoVolume.length})
+                </span>
+              </button>
+            </div>
 
-          {/* Subnavegador dos Dias da Semana (quando em 'dias') */}
-          {secaoAtiva === 'dias' && (
-            <div className="flex items-center gap-1 sm:gap-1.5 overflow-x-auto scrollbar-none py-1">
-              {diasOrdenados.map((d) => {
-                const [, , diaNum] = d.data.split('-');
-                const isSelected = d.data === diaSelecionadoData;
-                const dataObj = new Date(d.data + 'T12:00:00');
-                const siglaSemana = dataObj
-                  .toLocaleDateString('pt-BR', { weekday: 'short' })
-                  .slice(0, 3);
-                const isHoje = d.data === '2026-11-12';
-
+            {/* Seletor de Semanas do Caderno + Botão Nova Semana */}
+            <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none">
+              {checkinsDoVolume.map((sem, idx) => {
+                const ativa = sem.semanaId === checkinAtivo?.semanaId;
                 return (
                   <button
-                    key={d.data}
+                    key={sem.id}
                     type="button"
-                    onClick={() => setDiaSelecionadoData(d.data)}
-                    className={`px-2.5 py-1.5 rounded-xl text-xs font-mono tabular-nums transition flex flex-col items-center shrink-0 cursor-pointer border ${
-                      isSelected
-                        ? 'bg-amber-800 text-white font-bold shadow-2xs border-amber-700 ring-2 ring-amber-600/20'
-                        : 'bg-white dark:bg-stone-900 text-stone-700 dark:text-stone-300 border-stone-200/80 dark:border-stone-800 hover:bg-stone-100 dark:hover:bg-stone-800'
+                    onClick={() => {
+                      setSemanaAtivaId(sem.semanaId);
+                      if (secaoAtiva === 'dias') {
+                        const primeiroDia = todosDiasDoVolume.find((d) => d.semanaId === sem.semanaId);
+                        if (primeiroDia) setDiaSelecionadoData(primeiroDia.data);
+                      }
+                    }}
+                    className={`px-2.5 py-1.5 rounded-lg text-xs font-mono tabular-nums border transition-colors shrink-0 cursor-pointer ${
+                      ativa
+                        ? 'bg-stone-900 dark:bg-amber-800 text-white border-stone-900 dark:border-amber-700 font-bold'
+                        : 'bg-white dark:bg-stone-900 text-stone-600 dark:text-stone-400 border-stone-200 dark:border-stone-700 hover:border-stone-400'
                     }`}
                   >
-                    <span className="text-[9.5px] uppercase font-cinzel tracking-tight flex items-center gap-0.5">
-                      <span>{siglaSemana}</span>
-                      {d.revisado && (
-                        <Check
-                          className={`w-2.5 h-2.5 ${
-                            isSelected ? 'text-amber-200' : 'text-emerald-600 dark:text-emerald-400'
-                          }`}
-                        />
-                      )}
-                    </span>
-                    <span className="text-xs font-bold leading-tight flex items-center gap-1 mt-0.5">
-                      <span>{diaNum}</span>
-                      {isHoje && (
-                        <span
-                          className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0"
-                          title="Hoje"
-                        />
-                      )}
-                    </span>
+                    Sem {idx + 1}
                   </button>
                 );
               })}
+
+              <button
+                type="button"
+                onClick={handleCriarNovaSemana}
+                className="px-2.5 py-1.5 rounded-lg text-xs font-cinzel font-bold border border-dashed border-stone-300 dark:border-stone-700 text-stone-700 dark:text-stone-300 hover:border-amber-600 hover:text-amber-800 dark:hover:text-amber-300 transition-colors shrink-0 cursor-pointer flex items-center gap-1"
+                title="Criar próximo ciclo semanal (Domingo a Sábado)"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span>Nova Semana</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Tira Integrada: < Dia Anterior | D01 Dom .. D07 Sáb | Próximo Dia > */}
+          {secaoAtiva === 'dias' && diasDaSemanaAtual.length > 0 && (
+            <div className="flex items-center gap-2 pt-2.5 border-t border-stone-200/80 dark:border-stone-800">
+              <button
+                type="button"
+                disabled={indiceDiaGlobal <= 0}
+                onClick={handleDiaAnterior}
+                title="Dia Anterior"
+                aria-label="Dia Anterior"
+                className="px-2.5 py-2.5 rounded-xl bg-[#FBF8F3] dark:bg-stone-900 border border-stone-200 dark:border-stone-800 text-stone-700 dark:text-stone-300 hover:border-amber-600 hover:text-amber-800 dark:hover:text-amber-300 disabled:opacity-30 disabled:pointer-events-none transition-colors cursor-pointer shrink-0 flex items-center gap-1 text-xs font-cinzel font-bold"
+              >
+                <ChevronLeft className="w-4 h-4" />
+                <span className="hidden xl:inline">Anterior</span>
+              </button>
+
+              <div className="flex-1 flex overflow-x-auto scrollbar-none sm:grid sm:grid-cols-7 gap-1.5">
+                {diasDaSemanaAtual.map((d, idx) => {
+                  const [, mesNum, diaNum] = d.data.split('-');
+                  const isSelected = d.data === diaAtivo?.data;
+                  const dataObj = new Date(d.data + 'T12:00:00');
+                  const siglaSemana = dataObj
+                    .toLocaleDateString('pt-BR', { weekday: 'short' })
+                    .replace('.', '')
+                    .slice(0, 3);
+                  const isHoje = d.data === hojeStr;
+                  const numDiaCiclo = String(idx + 1).padStart(2, '0');
+
+                  return (
+                    <button
+                      key={d.data}
+                      type="button"
+                      onClick={() => handleSelecionarDia(d.data, d.semanaId)}
+                      className={`min-w-[58px] sm:min-w-0 shrink-0 px-2 py-1.5 rounded-xl text-xs transition-colors flex flex-col items-center cursor-pointer border ${
+                        isSelected
+                          ? 'bg-stone-900 dark:bg-amber-800 text-white font-bold border-stone-900 dark:border-amber-700'
+                          : 'bg-[#FBF8F3] dark:bg-stone-900 text-stone-700 dark:text-stone-300 border-stone-200/90 dark:border-stone-800 hover:border-stone-400'
+                      }`}
+                    >
+                      <span className="text-[10px] font-mono opacity-70 tabular-nums">
+                        D{numDiaCiclo}
+                      </span>
+                      <span className="text-[11px] uppercase font-cinzel tracking-tight flex items-center gap-0.5">
+                        <span>{siglaSemana}</span>
+                        {d.revisado && (
+                          <Check
+                            className={`w-3 h-3 ${
+                              isSelected ? 'text-amber-200' : 'text-emerald-600 dark:text-emerald-400'
+                            }`}
+                          />
+                        )}
+                      </span>
+                      <span className="text-[11px] font-mono font-semibold tabular-nums flex items-center gap-1">
+                        <span>{diaNum}/{mesNum}</span>
+                        {isHoje && (
+                          <span
+                            className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0"
+                            title="Hoje"
+                          />
+                        )}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {indiceDiaGlobal < todosDiasDoVolume.length - 1 ? (
+                <button
+                  type="button"
+                  onClick={handleProximoDia}
+                  title="Próximo Dia"
+                  aria-label="Próximo Dia"
+                  className="px-2.5 py-2.5 rounded-xl bg-[#FBF8F3] dark:bg-stone-900 border border-stone-200 dark:border-stone-800 text-stone-700 dark:text-stone-300 hover:border-amber-600 hover:text-amber-800 dark:hover:text-amber-300 transition-colors cursor-pointer shrink-0 flex items-center gap-1 text-xs font-cinzel font-bold"
+                >
+                  <span className="hidden xl:inline">Próximo</span>
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={handleCriarNovaSemana}
+                  title="Criar e avançar para a Próxima Semana (Domingo)"
+                  aria-label="Próxima Semana"
+                  className="px-2.5 py-2.5 rounded-xl bg-amber-800 hover:bg-amber-700 text-white transition-colors cursor-pointer shrink-0 flex items-center gap-1 text-xs font-cinzel font-bold"
+                >
+                  <span className="hidden xl:inline">Próx. Sem</span>
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              )}
             </div>
           )}
-        </div>
+        </nav>
 
-        {/* ======================================================== */}
-        {/* ÁREA DE EXIBIÇÃO DA SEÇÃO ATIVA                          */}
-        {/* ======================================================== */}
+        <LegendaSimbolosFlutuante />
+
+        {/* ÁREA DE CONTEÚDO DA SEÇÃO ATIVA */}
         <main className="transition-all animate-fadeIn">
           {secaoAtiva === 'checkin' ? (
             <CheckinSemanalView
@@ -298,50 +641,30 @@ export const DiarioCadernoReal: React.FC = () => {
               onAvancarParaDias={() => setSecaoAtiva('dias')}
             />
           ) : secaoAtiva === 'dias' ? (
-            <div className="space-y-4">
-              {/* Barra de Navegação Anterior / Próximo Dia */}
-              <div className="flex items-center justify-between text-xs font-cinzel text-stone-600 dark:text-stone-400 px-1">
+            diaAtivo ? (
+              <DailyLogView
+                dia={diaAtivo}
+                diaNumeroNoCiclo={(indiceDiaNaSemana >= 0 ? indiceDiaNaSemana : 0) + 1}
+              />
+            ) : (
+              <div className="surface-editorial rounded-2xl p-8 text-center space-y-3">
+                <p className="text-sm font-serif text-stone-600 dark:text-stone-400">
+                  Este caderno ainda não possui dias gerados.
+                </p>
                 <button
                   type="button"
-                  disabled={indiceDiaAtual <= 0}
-                  onClick={() => {
-                    if (indiceDiaAtual > 0) {
-                      setDiaSelecionadoData(diasOrdenados[indiceDiaAtual - 1].data);
-                    }
-                  }}
-                  className="px-3 py-1.5 rounded-xl bg-[#fcfaf5] dark:bg-stone-900 border border-stone-200/80 dark:border-stone-800 flex items-center gap-1.5 hover:border-amber-400 hover:text-amber-800 dark:hover:text-amber-300 disabled:opacity-35 disabled:pointer-events-none transition cursor-pointer shadow-2xs"
+                  onClick={handleCriarNovaSemana}
+                  className="px-4 py-2 rounded-xl bg-amber-800 text-white text-xs font-cinzel font-bold cursor-pointer"
                 >
-                  <ChevronLeft className="w-3.5 h-3.5" />
-                  <span>Dia Anterior</span>
-                </button>
-
-                <span className="font-mono tabular-nums text-[11px] px-3 py-1 rounded-full bg-stone-100 dark:bg-stone-900 text-stone-500 dark:text-stone-400 border border-stone-200/70 dark:border-stone-800">
-                  Dia {indiceDiaAtual + 1} de {diasOrdenados.length} no Ciclo Semanal
-                </span>
-
-                <button
-                  type="button"
-                  disabled={indiceDiaAtual >= diasOrdenados.length - 1}
-                  onClick={() => {
-                    if (indiceDiaAtual < diasOrdenados.length - 1) {
-                      setDiaSelecionadoData(diasOrdenados[indiceDiaAtual + 1].data);
-                    }
-                  }}
-                  className="px-3 py-1.5 rounded-xl bg-[#fcfaf5] dark:bg-stone-900 border border-stone-200/80 dark:border-stone-800 flex items-center gap-1.5 hover:border-amber-400 hover:text-amber-800 dark:hover:text-amber-300 disabled:opacity-35 disabled:pointer-events-none transition cursor-pointer shadow-2xs"
-                >
-                  <span>Próximo Dia</span>
-                  <ChevronRight className="w-3.5 h-3.5" />
+                  Gerar Semana (Dia 01 · Domingo)
                 </button>
               </div>
-
-              {/* Componente do Daily Log do Dia Selecionado */}
-              <DailyLogView dia={diaAtivo} />
-            </div>
+            )
           ) : secaoAtiva === 'checkout' ? (
             <CheckoutSemanalView
               checkout={checkoutAtivo}
-              diasDaSemana={diasOrdenados}
-              onIniciarProximaSemana={() => setSecaoAtiva('checkin')}
+              diasDaSemana={diasDaSemanaAtual}
+              onIniciarProximaSemana={handleCriarNovaSemana}
             />
           ) : (
             <PaginasLivresView paginaSelecionadaId={paginaLivreIdAtiva} />
@@ -349,33 +672,27 @@ export const DiarioCadernoReal: React.FC = () => {
         </main>
       </div>
 
-      {/* ======================================================== */}
-      {/* MODAL 1: ÍNDICE DINÂMICO & PAGINAÇÃO SEQUENCIAL          */}
-      {/* ======================================================== */}
+      {/* Modal de Índice Dinâmico */}
       <IndiceCadernoModal
         isOpen={modalIndiceAberto}
         onClose={() => setModalIndiceAberto(false)}
         volume={volumeAtivo}
-        checkins={checkinsSemanais}
-        diasLogs={diasLogs}
-        checkouts={checkoutsSemanais}
-        paginasLivres={paginasLivresCaderno}
+        checkins={checkinsDoVolume}
+        diasLogs={diasDoVolumeMap}
+        checkouts={checkoutsDoVolume}
+        paginasLivres={paginasLivresDoVolume}
         onSelecionarPagina={handleNavegarPeloIndice}
       />
 
-      {/* ======================================================== */}
-      {/* MODAL 2: HISTÓRICO DE VOLUMES PASSADOS                   */}
-      {/* ======================================================== */}
+      {/* Modal de Cadernos / Volumes */}
       <HistoricoVolumesModal
         isOpen={modalHistoricoAberto}
         onClose={() => setModalHistoricoAberto(false)}
+        abrirCriacaoDireto={abrirCriacaoNoModal}
+        onCadernoCriado={() => {
+          setSecaoAtiva('dias');
+        }}
       />
-
-      {/* ======================================================== */}
-      {/* MÓDULO 8: LEGENDA FLUTUANTE ONBOARDING                   */}
-      {/* ======================================================== */}
-      <LegendaSimbolosFlutuante />
     </div>
   );
 };
-

@@ -32,15 +32,18 @@ export const PaginasLivresView: React.FC<PaginasLivresViewProps> = ({
   const [conteudo, setConteudo] = useState('');
   const [salvoFeedback, setSalvoFeedback] = useState(false);
 
+  const paginasDoCaderno = paginasLivresCaderno.filter((p) => p.cadernoId === cadernoAtivoId);
+  const diasDoCaderno = Object.values(diasLogs).filter((d) => d.cadernoId === cadernoAtivoId);
+
   // Próximo número de página sequencial
   const proximoNumeroPagina =
     Math.max(
-      12,
-      ...paginasLivresCaderno.map((p) => p.paginaNumero),
-      Object.keys(diasLogs).length + 5
+      11,
+      ...paginasDoCaderno.map((p) => p.paginaNumero),
+      ...diasDoCaderno.map((d) => d.paginaNumero + 1)
     ) + 1;
 
-  const paginaAtiva = paginasLivresCaderno.find((p) => p.id === idAtiva) || paginasLivresCaderno[0];
+  const paginaAtiva = paginasDoCaderno.find((p) => p.id === idAtiva) || paginasDoCaderno[0];
 
   const handleIniciarCriacao = () => {
     const nova: PaginaLivreCaderno = {
@@ -106,9 +109,9 @@ export const PaginasLivresView: React.FC<PaginasLivresViewProps> = ({
       </div>
 
       {/* Seletor de Páginas Livres */}
-      {paginasLivresCaderno.length > 1 && (
+      {paginasDoCaderno.length > 1 && (
         <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
-          {paginasLivresCaderno.map((p) => (
+          {paginasDoCaderno.map((p) => (
             <button
               key={p.id}
               onClick={() => {

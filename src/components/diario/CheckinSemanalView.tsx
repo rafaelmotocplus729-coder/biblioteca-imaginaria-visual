@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 
 interface CheckinSemanalViewProps {
-  checkin: CheckinSemanal;
+  checkin?: CheckinSemanal;
   onAvancarParaDias?: () => void;
 }
 
@@ -22,13 +22,13 @@ export const CheckinSemanalView: React.FC<CheckinSemanalViewProps> = ({
 }) => {
   const { salvarCheckinSemanal } = useBibliotecaStore();
 
-  const [paragrafo, setParagrafo] = useState(checkin.paragrafoIntencao);
-  const [dataInicio, setDataInicio] = useState(checkin.dataInicio);
-  const [dataFim, setDataFim] = useState(checkin.dataFim);
+  const [paragrafo, setParagrafo] = useState(checkin?.paragrafoIntencao || '');
+  const [dataInicio, setDataInicio] = useState(checkin?.dataInicio || '');
+  const [dataFim, setDataFim] = useState(checkin?.dataFim || '');
 
-  const [tarefas, setTarefas] = useState<string[]>(checkin.focoTarefas || []);
-  const [compromissos, setCompromissos] = useState<string[]>(checkin.focoCompromissos || []);
-  const [metas, setMetas] = useState<string[]>(checkin.focoMetas || []);
+  const [tarefas, setTarefas] = useState<string[]>(checkin?.focoTarefas || []);
+  const [compromissos, setCompromissos] = useState<string[]>(checkin?.focoCompromissos || []);
+  const [metas, setMetas] = useState<string[]>(checkin?.focoMetas || []);
 
   const [novaTarefa, setNovaTarefa] = useState('');
   const [novoCompromisso, setNovoCompromisso] = useState('');
@@ -38,6 +38,7 @@ export const CheckinSemanalView: React.FC<CheckinSemanalViewProps> = ({
 
   // Sincronizar se prop checkin mudar
   useEffect(() => {
+    if (!checkin) return;
     setParagrafo(checkin.paragrafoIntencao);
     setDataInicio(checkin.dataInicio);
     setDataFim(checkin.dataFim);
@@ -45,6 +46,25 @@ export const CheckinSemanalView: React.FC<CheckinSemanalViewProps> = ({
     setCompromissos(checkin.focoCompromissos || []);
     setMetas(checkin.focoMetas || []);
   }, [checkin]);
+
+  if (!checkin) {
+    return (
+      <div className="surface-editorial rounded-2xl p-8 text-center max-w-2xl mx-auto space-y-3">
+        <p className="text-sm font-serif text-stone-600 dark:text-stone-400">
+          Nenhum check-in semanal selecionado para esta semana.
+        </p>
+        {onAvancarParaDias && (
+          <button
+            type="button"
+            onClick={onAvancarParaDias}
+            className="px-4 py-2 rounded-xl bg-amber-800 text-white text-xs font-cinzel font-bold cursor-pointer"
+          >
+            Ir para os Dias
+          </button>
+        )}
+      </div>
+    );
+  }
 
   // Salvar alterações
   const handleSalvar = (concluir = false) => {
