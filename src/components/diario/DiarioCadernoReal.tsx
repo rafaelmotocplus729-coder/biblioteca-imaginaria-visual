@@ -21,8 +21,84 @@ import {
   Layers,
   Check,
   Plus,
-  HelpCircle
+  HelpCircle,
+  RefreshCw,
+  Database,
+  Copy
 } from 'lucide-react';
+
+const SQL_AGENDA_MINIMO = `CREATE TABLE IF NOT EXISTS public.cadernos_volumes (
+  id TEXT PRIMARY KEY,
+  titulo TEXT NOT NULL,
+  data_inicio TEXT NOT NULL,
+  data_fim TEXT,
+  ativo BOOLEAN DEFAULT TRUE,
+  descricao TEXT,
+  criado_em TIMESTAMPTZ DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL,
+  data_atualizacao TIMESTAMPTZ DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
+);
+CREATE TABLE IF NOT EXISTS public.checkins_semanais (
+  id TEXT PRIMARY KEY,
+  semana_id TEXT NOT NULL,
+  caderno_id TEXT NOT NULL,
+  data_inicio TEXT NOT NULL,
+  data_fim TEXT NOT NULL,
+  pagina_numero INTEGER NOT NULL DEFAULT 1,
+  paragrafo_intencao TEXT DEFAULT '',
+  foco_tarefas JSONB DEFAULT '[]'::jsonb,
+  foco_compromissos JSONB DEFAULT '[]'::jsonb,
+  foco_metas JSONB DEFAULT '[]'::jsonb,
+  concluido BOOLEAN DEFAULT FALSE,
+  criado_em TIMESTAMPTZ DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL,
+  data_atualizacao TIMESTAMPTZ DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
+);
+CREATE TABLE IF NOT EXISTS public.dias_logs (
+  id TEXT PRIMARY KEY,
+  data TEXT NOT NULL,
+  semana_id TEXT NOT NULL,
+  caderno_id TEXT NOT NULL,
+  pagina_numero INTEGER NOT NULL DEFAULT 1,
+  revisado BOOLEAN DEFAULT FALSE,
+  data_revisao TEXT,
+  itens JSONB DEFAULT '[]'::jsonb,
+  termometro JSONB DEFAULT '{"texto":"","humor":"","atualizadoEm":""}'::jsonb,
+  data_atualizacao TIMESTAMPTZ DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
+);
+CREATE TABLE IF NOT EXISTS public.checkouts_semanais (
+  id TEXT PRIMARY KEY,
+  semana_id TEXT NOT NULL,
+  caderno_id TEXT NOT NULL,
+  pagina_numero INTEGER NOT NULL DEFAULT 1,
+  balanco_bom TEXT DEFAULT '',
+  balanco_ruim TEXT DEFAULT '',
+  concluido BOOLEAN DEFAULT FALSE,
+  data_fechamento TEXT,
+  data_atualizacao TIMESTAMPTZ DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
+);
+CREATE TABLE IF NOT EXISTS public.paginas_livres_caderno (
+  id TEXT PRIMARY KEY,
+  caderno_id TEXT NOT NULL,
+  pagina_numero INTEGER NOT NULL DEFAULT 1,
+  titulo TEXT NOT NULL,
+  conteudo TEXT DEFAULT '',
+  data_criacao TIMESTAMPTZ DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL,
+  data_atualizacao TIMESTAMPTZ DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
+);
+ALTER TABLE public.cadernos_volumes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.checkins_semanais ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.dias_logs ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.checkouts_semanais ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.paginas_livres_caderno ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Permitir tudo em cadernos_volumes" ON public.cadernos_volumes;
+CREATE POLICY "Permitir tudo em cadernos_volumes" ON public.cadernos_volumes FOR ALL USING (true) WITH CHECK (true);
+DROP POLICY IF EXISTS "Permitir tudo em checkins_semanais" ON public.checkins_semanais;
+CREATE POLICY "Permitir tudo em checkins_semanais" ON public.checkins_semanais FOR ALL USING (true) WITH CHECK (true);
+DROP POLICY IF EXISTS "Permitir tudo em dias_logs" ON public.dias_logs;
+CREATE POLICY "Permitir tudo em dias_logs" ON public.dias_logs FOR ALL USING (true) WITH CHECK (true);
+DROP POLICY IF EXISTS "Permitir tudo em checkouts_semanais" ON public.checkouts_semanais;
+CREATE POLICY "Permitir tudo em checkouts_semanais" ON public.checkouts_semanais FOR ALL USING (true) WITH CHECK (true);
+DROP POLICY IF EXISTS "Permitir tudo em paginas_livres_caderno" ON public.paginas_livres_caderno;
+CREATE POLICY "Permitir tudo em paginas_livres_caderno" ON public.paginas_livres_caderno FOR ALL USING (true) WITH CHECK (true);`;
 
 export const DiarioCadernoReal: React.FC = () => {
   const {
@@ -37,8 +113,12 @@ export const DiarioCadernoReal: React.FC = () => {
     legendaSimbolosVisivel,
     toggleLegendaSimbolos,
     criarCadernoVolume,
-    criarProximaSemanaCaderno
+    criarProximaSemanaCaderno,
+    supabaseStatus,
+    agendaTabelaAusente,
+    sincronizarSupabase
   } = useBibliotecaStore();
+  const [sqlCopiado, setSqlCopiado] = useState(false);
 
   // Estados de navegação interna no caderno
   const [secaoAtiva, setSecaoAtiva] = useState<'checkin' | 'dias' | 'checkout' | 'livres'>('dias');
@@ -419,8 +499,67 @@ export const DiarioCadernoReal: React.FC = () => {
               <HelpCircle className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
               <span className="hidden sm:inline">Símbolos</span>
             </button>
+
+            <button
+              type="button"
+              onClick={() => void sincronizarSupabase()}
+              disabled={supabaseStatus === 'sincronizando'}
+              className="px-3 py-2 rounded-xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 hover:border-amber-500 text-stone-700 dark:text-stone-200 text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer disabled:opacity-60"
+              title="Sincronizar Agenda e Notas com o Supabase"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 ${supabaseStatus === 'sincronizando' ? 'animate-spin' : ''}`} />
+              <span className="hidden sm:inline">
+                {supabaseStatus === 'sincronizando' ? 'Sincronizando...' : 'Sincronizar'}
+              </span>
+            </button>
           </div>
         </header>
+
+        {agendaTabelaAusente && (
+          <div className="rounded-2xl border border-amber-300 dark:border-amber-800 bg-amber-50/90 dark:bg-amber-950/40 px-4 py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+            <div className="flex items-start gap-2.5 text-amber-950 dark:text-amber-200">
+              <Database className="w-4 h-4 text-amber-700 dark:text-amber-400 shrink-0 mt-0.5" />
+              <div>
+                <p className="font-semibold">
+                  Tabelas da Agenda ainda não foram criadas no seu Supabase
+                </p>
+                <p className="text-amber-800 dark:text-amber-300/90 mt-0.5">
+                  Seus dados estão salvos localmente. Para sincronizar a Agenda entre notebook e domínio, execute o SQL no{' '}
+                  <a
+                    href="https://supabase.com/dashboard/project/meeinyzahufzttyqouwg/sql/new"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="underline font-semibold hover:text-amber-950 dark:hover:text-amber-100"
+                  >
+                    SQL Editor do Supabase
+                  </a>{' '}
+                  e clique em Sincronizar.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 shrink-0">
+              <button
+                type="button"
+                onClick={() => {
+                  navigator.clipboard?.writeText(SQL_AGENDA_MINIMO);
+                  setSqlCopiado(true);
+                  setTimeout(() => setSqlCopiado(false), 2500);
+                }}
+                className="px-3 py-1.5 rounded-lg bg-amber-800 hover:bg-amber-700 text-white font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
+              >
+                {sqlCopiado ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                <span>{sqlCopiado ? 'SQL Copiado!' : 'Copiar SQL'}</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => void sincronizarSupabase()}
+                className="px-3 py-1.5 rounded-lg bg-white dark:bg-stone-900 border border-amber-300 dark:border-amber-700 text-amber-900 dark:text-amber-200 font-semibold hover:bg-amber-100 dark:hover:bg-amber-900/40 transition-colors cursor-pointer"
+              >
+                Verificar
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* NAVEGAÇÃO UNIFICADA DE SEMANAS, ETAPAS E DIAS */}
         <nav

@@ -41,7 +41,17 @@ import {
   removerTemporariaDoSupabase,
   saveSupabaseConfig,
   clearSupabaseConfig,
-  testarConexaoSupabase
+  testarConexaoSupabase,
+  sincronizarAgendaDoSupabase,
+  salvarVolumeNoSupabase,
+  salvarVolumesNoSupabase,
+  removerVolumeDoSupabase,
+  salvarCheckinNoSupabase,
+  salvarCheckoutNoSupabase,
+  salvarDiaLogNoSupabase,
+  salvarDiasLogsNoSupabase,
+  salvarPaginaLivreNoSupabase,
+  removerPaginaLivreDoSupabase
 } from '../lib/supabase';
 
 interface BibliotecaState {
@@ -69,6 +79,7 @@ interface BibliotecaState {
   // Supabase Backend de Dados
   supabaseStatus: 'conectado' | 'desconectado' | 'sincronizando' | 'erro';
   supabaseMensagem: string;
+  agendaTabelaAusente: boolean;
   sincronizarSupabase: () => Promise<boolean>;
   conectarSupabase: (url: string, anonKey: string) => Promise<{ ok: boolean; mensagem: string }>;
   desconectarSupabase: () => void;
@@ -594,6 +605,7 @@ export const useBibliotecaStore = create<BibliotecaState>((set, get) => ({
   // Supabase Backend de Dados
   supabaseStatus: isSupabaseConfigured() ? 'conectado' : 'desconectado',
   supabaseMensagem: isSupabaseConfigured() ? 'Supabase configurado e pronto para sincronizar.' : 'Modo local (armazenamento no navegador).',
+  agendaTabelaAusente: false,
 
   // Wallpaper / Fundo do Zettelkasten
   fundoZettelkasten: salvo?.fundoZettelkasten || 'caravaggio',
@@ -1037,53 +1049,257 @@ export const useBibliotecaStore = create<BibliotecaState>((set, get) => ({
     return [headers.join(','), ...rows].join('\n');
   },
 
-  // Ações do Zettelkasten
+  // Ações do Zettelkasten e Agenda (Supabase)
   sincronizarSupabase: async () => {
     if (!isSupabaseConfigured()) {
       set({ supabaseStatus: 'desconectado', supabaseMensagem: 'Supabase não configurado. Dados salvos apenas localmente.' });
       return false;
     }
 
-    set({ supabaseStatus: 'sincronizando', supabaseMensagem: 'Conectando ao Supabase e baixando notas...' });
+    set({ supabaseStatus: 'sincronizando', supabaseMensagem: 'Conectando ao Supabase e sincronizando notas e agenda...' });
     try {
-      const dados = await sincronizarDoSupabase();
-      if (dados && dados.notas.length > 0) {
-        // Mesclar garantindo os 5 índices fundamentais
-        const indicesExistentes = new Set(dados.notas.filter((n) => n.tipo === 'indice').map((n) => n.id));
+      const [dados, agendaDados] = await Promise.all([
+        sincronizarDoSupabase(),
+        sincronizarAgendaDoSupabase()
+      ]);
+
+      // 1. Mesclagem bidirecional do Zettelkasten (preserva notas locais feitas no notebook)
+      let notasFinais = get().notasZettel;
+      let temporariasFinais = get().notasTemporarias;
+
+      if (dados) {
+        const remotasMap = new Map<string, NotaZettel>();
+        dados.notas.forEach((n) => remotasMap.set(n.id, n));
+
+        const locais = get().notasZettel;
+        const paraEnviarNotas: NotaZettel[] = [];
+
+        locais.forEach((local) => {
+          const remota = remotasMap.get(local.id);
+          if (!remota) {
+            remotasMap.set(local.id, local);
+            paraEnviarNotas.push(local);
+          } else {
+            const tLocal = new Date(local.dataAtualizacao || local.dataCriacao || 0).getTime();
+            const tRemota = new Date(remota.dataAtualizacao || remota.dataCriacao || 0).getTime();
+            if (tLocal > tRemota) {
+              remotasMap.set(local.id, local);
+              paraEnviarNotas.push(local);
+            }
+          }
+        });
+
+        // Garantir os 5 índices fundamentais
+        const indicesExistentes = new Set(
+          Array.from(remotasMap.values()).filter((n) => n.tipo === 'indice').map((n) => n.id)
+        );
         const faltantes = NOTAS_ZETTEL_INICIAIS.filter((idx) => !indicesExistentes.has(idx.id));
-        const notasFinais = [...faltantes, ...dados.notas];
+        notasFinais = [...faltantes, ...Array.from(remotasMap.values())];
 
-        set({
-          notasZettel: notasFinais,
-          notasTemporarias: dados.temporarias,
-          supabaseStatus: 'conectado',
-          supabaseMensagem: `Sincronizado com a nuvem às ${new Date().toLocaleTimeString('pt-BR')} (${notasFinais.length} notas).`
-        });
-
-        salvarNoLocalStorage({
-          livros: get().livros,
-          relacoes: get().relacoes,
-          progressos: get().progressos,
-          sessoesRevisao: get().sessoesRevisao,
-          horasPorSemana: get().horasPorSemana,
-          modoEscuro: get().modoEscuro,
-          notasZettel: notasFinais,
-          notasTemporarias: dados.temporarias,
-          canvasZettel: get().canvasZettel
-        });
-        return true;
-      } else {
-        // Se a tabela do Supabase estiver vazia, sobe as notas locais
-        const notasLocais = get().notasZettel;
-        for (const nota of notasLocais) {
+        for (const nota of paraEnviarNotas) {
           await salvarNotaNoSupabase(nota);
         }
-        set({
-          supabaseStatus: 'conectado',
-          supabaseMensagem: `Banco nuvem inicializado com sucesso (${notasLocais.length} notas enviadas).`
-        });
-        return true;
+
+        // Mesclar notas temporárias (Inbox)
+        const tempMap = new Map<string, NotaTemporaria>();
+        dados.temporarias.forEach((t) => tempMap.set(t.id, t));
+        for (const localTemp of get().notasTemporarias) {
+          if (!tempMap.has(localTemp.id)) {
+            tempMap.set(localTemp.id, localTemp);
+            await salvarTemporariaNoSupabase(localTemp);
+          }
+        }
+        temporariasFinais = Array.from(tempMap.values()).sort(
+          (a, b) => new Date(b.dataCriacao).getTime() - new Date(a.dataCriacao).getTime()
+        );
       }
+
+      // 2. Mesclagem bidirecional da Agenda / Caderno Real
+      let agendaTabelaAusente = false;
+      let volumesFinais = get().cadernosVolumes;
+      let cadernoAtivoFinal = get().cadernoAtivoId;
+      let checkinsFinais = get().checkinsSemanais;
+      let diasLogsFinais = get().diasLogs;
+      let checkoutsFinais = get().checkoutsSemanais;
+      let paginasLivresFinais = get().paginasLivresCaderno;
+
+      if (agendaDados?.tabelaAusente) {
+        agendaTabelaAusente = true;
+      } else if (agendaDados) {
+        // Volumes
+        const volMap = new Map<string, CadernoVolume>();
+        agendaDados.volumes.forEach((v) => volMap.set(v.id, v));
+        const volsParaEnviar: CadernoVolume[] = [];
+        get().cadernosVolumes.forEach((localVol) => {
+          if (!volMap.has(localVol.id)) {
+            volMap.set(localVol.id, localVol);
+            volsParaEnviar.push(localVol);
+          }
+        });
+        volumesFinais = Array.from(volMap.values());
+        if (volsParaEnviar.length > 0) {
+          await salvarVolumesNoSupabase(volsParaEnviar);
+        }
+
+        if (!volumesFinais.some((v) => v.id === cadernoAtivoFinal)) {
+          cadernoAtivoFinal = volumesFinais.find((v) => v.ativo)?.id || volumesFinais[0]?.id || '';
+        }
+
+        // Checkins semanais
+        const checkinMap = new Map<string, CheckinSemanal>();
+        agendaDados.checkins.forEach((c) => checkinMap.set(c.id, c));
+        for (const localC of get().checkinsSemanais) {
+          const remC = checkinMap.get(localC.id);
+          if (!remC) {
+            checkinMap.set(localC.id, localC);
+            await salvarCheckinNoSupabase(localC);
+          } else if (
+            (localC.paragrafoIntencao && !remC.paragrafoIntencao) ||
+            (localC.concluido && !remC.concluido) ||
+            localC.focoTarefas.length > remC.focoTarefas.length ||
+            localC.focoCompromissos.length > remC.focoCompromissos.length ||
+            localC.focoMetas.length > remC.focoMetas.length
+          ) {
+            checkinMap.set(localC.id, localC);
+            await salvarCheckinNoSupabase(localC);
+          }
+        }
+        checkinsFinais = Array.from(checkinMap.values());
+
+        // Checkouts semanais
+        const checkoutMap = new Map<string, CheckoutSemanal>();
+        agendaDados.checkouts.forEach((c) => checkoutMap.set(c.id, c));
+        for (const localCo of get().checkoutsSemanais) {
+          const remCo = checkoutMap.get(localCo.id);
+          if (!remCo) {
+            checkoutMap.set(localCo.id, localCo);
+            await salvarCheckoutNoSupabase(localCo);
+          } else if (
+            (localCo.balancoBom && !remCo.balancoBom) ||
+            (localCo.balancoRuim && !remCo.balancoRuim) ||
+            (localCo.concluido && !remCo.concluido)
+          ) {
+            checkoutMap.set(localCo.id, localCo);
+            await salvarCheckoutNoSupabase(localCo);
+          }
+        }
+        checkoutsFinais = Array.from(checkoutMap.values());
+
+        // Dias Logs (merge por item ID + termômetro mais recente)
+        const diasMap = new Map<string, DiaLog>();
+        agendaDados.diasLogs.forEach((d) => diasMap.set(d.id, d));
+        const diasParaEnviar: DiaLog[] = [];
+
+        Object.values(get().diasLogs).forEach((localDia) => {
+          const remDia = diasMap.get(localDia.id);
+          if (!remDia) {
+            diasMap.set(localDia.id, localDia);
+            diasParaEnviar.push(localDia);
+          } else {
+            const itensMap = new Map<string, ItemDailyLog>();
+            remDia.itens.forEach((it) => itensMap.set(it.id, it));
+            let houveAlteracaoLocal = false;
+
+            localDia.itens.forEach((it) => {
+              const remIt = itensMap.get(it.id);
+              if (!remIt) {
+                itensMap.set(it.id, it);
+                houveAlteracaoLocal = true;
+              } else if (JSON.stringify(it) !== JSON.stringify(remIt)) {
+                itensMap.set(it.id, it);
+                houveAlteracaoLocal = true;
+              }
+            });
+
+            const tLocalTerm = new Date(localDia.termometro?.atualizadoEm || 0).getTime();
+            const tRemTerm = new Date(remDia.termometro?.atualizadoEm || 0).getTime();
+            const termometroFinal = tLocalTerm >= tRemTerm && (localDia.termometro?.texto || localDia.termometro?.humor)
+              ? localDia.termometro
+              : remDia.termometro;
+
+            if (tLocalTerm > tRemTerm) houveAlteracaoLocal = true;
+
+            const mesclado: DiaLog = {
+              ...remDia,
+              revisado: localDia.revisado || remDia.revisado,
+              dataRevisao: localDia.dataRevisao || remDia.dataRevisao,
+              itens: Array.from(itensMap.values()),
+              termometro: termometroFinal
+            };
+            diasMap.set(localDia.id, mesclado);
+            if (houveAlteracaoLocal) {
+              diasParaEnviar.push(mesclado);
+            }
+          }
+        });
+
+        if (diasParaEnviar.length > 0) {
+          await salvarDiasLogsNoSupabase(diasParaEnviar);
+        }
+
+        const novoDiasRecord: Record<string, DiaLog> = {};
+        diasMap.forEach((d) => {
+          novoDiasRecord[d.id] = d;
+        });
+        diasLogsFinais = novoDiasRecord;
+
+        // Páginas livres
+        const pagMap = new Map<string, PaginaLivreCaderno>();
+        agendaDados.paginasLivres.forEach((p) => pagMap.set(p.id, p));
+        for (const localPag of get().paginasLivresCaderno) {
+          const remPag = pagMap.get(localPag.id);
+          if (!remPag) {
+            pagMap.set(localPag.id, localPag);
+            await salvarPaginaLivreNoSupabase(localPag);
+          } else {
+            const tLocal = new Date(localPag.dataAtualizacao || localPag.dataCriacao || 0).getTime();
+            const tRem = new Date(remPag.dataAtualizacao || remPag.dataCriacao || 0).getTime();
+            if (tLocal > tRem) {
+              pagMap.set(localPag.id, localPag);
+              await salvarPaginaLivreNoSupabase(localPag);
+            }
+          }
+        }
+        paginasLivresFinais = Array.from(pagMap.values());
+      }
+
+      const horaSync = new Date().toLocaleTimeString('pt-BR');
+      const msgStatus = agendaTabelaAusente
+        ? `Notas sincronizadas às ${horaSync} (${notasFinais.length} notas). Crie as tabelas da Agenda no Supabase para sincronizar o Diário.`
+        : `Sincronizado às ${horaSync} (${notasFinais.length} notas · ${volumesFinais.length} cadernos).`;
+
+      set({
+        notasZettel: notasFinais,
+        notasTemporarias: temporariasFinais,
+        cadernosVolumes: volumesFinais,
+        cadernoAtivoId: cadernoAtivoFinal,
+        checkinsSemanais: checkinsFinais,
+        diasLogs: diasLogsFinais,
+        checkoutsSemanais: checkoutsFinais,
+        paginasLivresCaderno: paginasLivresFinais,
+        agendaTabelaAusente,
+        supabaseStatus: 'conectado',
+        supabaseMensagem: msgStatus
+      });
+
+      salvarNoLocalStorage({
+        livros: get().livros,
+        relacoes: get().relacoes,
+        progressos: get().progressos,
+        sessoesRevisao: get().sessoesRevisao,
+        horasPorSemana: get().horasPorSemana,
+        modoEscuro: get().modoEscuro,
+        notasZettel: notasFinais,
+        notasTemporarias: temporariasFinais,
+        canvasZettel: get().canvasZettel,
+        cadernosVolumes: volumesFinais,
+        cadernoAtivoId: cadernoAtivoFinal,
+        checkinsSemanais: checkinsFinais,
+        diasLogs: diasLogsFinais,
+        checkoutsSemanais: checkoutsFinais,
+        paginasLivresCaderno: paginasLivresFinais
+      });
+      return true;
     } catch (e: any) {
       set({
         supabaseStatus: 'erro',
@@ -1579,6 +1795,13 @@ ${livro.sinopse_editorial || livro.tese}
       legendaSimbolosVisivel: get().legendaSimbolosVisivel,
       estiloDotGridAtivo: get().estiloDotGridAtivo
     });
+
+    if (isSupabaseConfigured()) {
+      void salvarVolumesNoSupabase(novosVolumes);
+      void salvarCheckinNoSupabase(cicloInicial.checkin);
+      void salvarDiasLogsNoSupabase(Object.values(cicloInicial.dias));
+      void salvarCheckoutNoSupabase(cicloInicial.checkout);
+    }
     return id;
   },
 
@@ -1598,6 +1821,10 @@ ${livro.sinopse_editorial || livro.tese}
       cadernosVolumes: novosVolumes,
       cadernoAtivoId: get().cadernoAtivoId
     });
+    const volAtualizado = novosVolumes.find((v) => v.id === cadernoId);
+    if (volAtualizado && isSupabaseConfigured()) {
+      void salvarVolumeNoSupabase(volAtualizado);
+    }
   },
 
   removerCadernoVolume: (cadernoId) => {
@@ -1640,6 +1867,10 @@ ${livro.sinopse_editorial || livro.tese}
       checkoutsSemanais: novosCheckouts,
       paginasLivresCaderno: novasPaginas
     });
+
+    if (isSupabaseConfigured()) {
+      void removerVolumeDoSupabase(cadernoId);
+    }
   },
 
   setCadernoAtivoId: (cadernoId) => {
@@ -1708,6 +1939,12 @@ ${livro.sinopse_editorial || livro.tese}
       checkoutsSemanais: novosCheckouts
     });
 
+    if (isSupabaseConfigured()) {
+      void salvarCheckinNoSupabase(novoCiclo.checkin);
+      void salvarDiasLogsNoSupabase(Object.values(novoCiclo.dias));
+      void salvarCheckoutNoSupabase(novoCiclo.checkout);
+    }
+
     return { semanaId: novoCiclo.semanaId, primeiroDia: novoCiclo.domingoStr };
   },
 
@@ -1727,6 +1964,9 @@ ${livro.sinopse_editorial || livro.tese}
       modoEscuro: get().modoEscuro,
       checkinsSemanais: novos
     });
+    if (isSupabaseConfigured()) {
+      void salvarCheckinNoSupabase(checkin);
+    }
   },
 
   salvarCheckoutSemanal: (checkout) => {
@@ -1745,6 +1985,9 @@ ${livro.sinopse_editorial || livro.tese}
       modoEscuro: get().modoEscuro,
       checkoutsSemanais: novos
     });
+    if (isSupabaseConfigured()) {
+      void salvarCheckoutNoSupabase(checkout);
+    }
   },
 
   adicionarItemDiaLog: (dataStr, item) => {
@@ -1790,6 +2033,9 @@ ${livro.sinopse_editorial || livro.tese}
       modoEscuro: get().modoEscuro,
       diasLogs: logs
     });
+    if (isSupabaseConfigured()) {
+      void salvarDiaLogNoSupabase(logs[chaveExistente]);
+    }
   },
 
   atualizarItemDiaLog: (dataStr, itemId, patch) => {
@@ -1816,6 +2062,9 @@ ${livro.sinopse_editorial || livro.tese}
       modoEscuro: get().modoEscuro,
       diasLogs: logs
     });
+    if (isSupabaseConfigured()) {
+      void salvarDiaLogNoSupabase(logs[chave]);
+    }
   },
 
   removerItemDiaLog: (dataStr, itemId) => {
@@ -1842,6 +2091,9 @@ ${livro.sinopse_editorial || livro.tese}
       modoEscuro: get().modoEscuro,
       diasLogs: logs
     });
+    if (isSupabaseConfigured()) {
+      void salvarDiaLogNoSupabase(logs[chave]);
+    }
   },
 
   reordenarItensDiaLog: (dataStr, novosItens) => {
@@ -1868,6 +2120,9 @@ ${livro.sinopse_editorial || livro.tese}
       modoEscuro: get().modoEscuro,
       diasLogs: logs
     });
+    if (isSupabaseConfigured()) {
+      void salvarDiaLogNoSupabase(logs[chave]);
+    }
   },
 
   atualizarTermometroDia: (dataStr, texto, humor) => {
@@ -1911,6 +2166,9 @@ ${livro.sinopse_editorial || livro.tese}
       modoEscuro: get().modoEscuro,
       diasLogs: logs
     });
+    if (isSupabaseConfigured()) {
+      void salvarDiaLogNoSupabase(logs[chave]);
+    }
   },
 
   revisarFecharDia: (dataStr, acoesPendentes) => {
@@ -1923,6 +2181,7 @@ ${livro.sinopse_editorial || livro.tese}
     if (!dia) return;
 
     let itensAtualizados = [...dia.itens];
+    const chavesModificadas = new Set<string>([chave]);
 
     if (acoesPendentes) {
       const dataAmanhaStr = somarDiasData(dataStr, 1);
@@ -1970,6 +2229,7 @@ ${livro.sinopse_editorial || livro.tese}
             ...diaDestino,
             itens: [...diaDestino.itens, novoItemMigrado]
           };
+          chavesModificadas.add(chaveDestino);
         }
       });
     }
@@ -1991,6 +2251,10 @@ ${livro.sinopse_editorial || livro.tese}
       modoEscuro: get().modoEscuro,
       diasLogs: logs
     });
+    if (isSupabaseConfigured()) {
+      const diasAtualizados = Array.from(chavesModificadas).map((k) => logs[k]).filter(Boolean);
+      void salvarDiasLogsNoSupabase(diasAtualizados);
+    }
   },
 
   salvarPaginaLivre: (pagina) => {
@@ -2019,6 +2283,9 @@ ${livro.sinopse_editorial || livro.tese}
       legendaSimbolosVisivel: get().legendaSimbolosVisivel,
       estiloDotGridAtivo: get().estiloDotGridAtivo
     });
+    if (isSupabaseConfigured()) {
+      void salvarPaginaLivreNoSupabase(pagina);
+    }
   },
 
   removerPaginaLivre: (id) => {
@@ -2043,6 +2310,9 @@ ${livro.sinopse_editorial || livro.tese}
       legendaSimbolosVisivel: get().legendaSimbolosVisivel,
       estiloDotGridAtivo: get().estiloDotGridAtivo
     });
+    if (isSupabaseConfigured()) {
+      void removerPaginaLivreDoSupabase(id);
+    }
   },
 
   toggleLegendaSimbolos: () => {

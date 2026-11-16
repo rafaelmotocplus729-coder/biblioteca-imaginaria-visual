@@ -77,3 +77,95 @@ VALUES
   ('4-RELIGIAO', '4 - RELIGIÃO', 'indice', '01 índice', ARRAY['nota índice'], '# Referências\n- \n\n# Notas Relacionadas\n- '),
   ('5-FILOSOFIA', '5 - FILOSOFIA', 'indice', '01 índice', ARRAY['nota índice'], '# Referências\n- \n\n# Notas Relacionadas\n- ')
 ON CONFLICT (id) DO NOTHING;
+
+-- =========================================================================
+-- 7. TABELAS DA AGENDA / CADERNO REAL (DIÁRIO INTELECTUAL)
+-- =========================================================================
+
+CREATE TABLE IF NOT EXISTS public.cadernos_volumes (
+  id TEXT PRIMARY KEY,
+  titulo TEXT NOT NULL,
+  data_inicio TEXT NOT NULL,
+  data_fim TEXT,
+  ativo BOOLEAN DEFAULT TRUE,
+  descricao TEXT,
+  criado_em TIMESTAMPTZ DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL,
+  data_atualizacao TIMESTAMPTZ DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS public.checkins_semanais (
+  id TEXT PRIMARY KEY,
+  semana_id TEXT NOT NULL,
+  caderno_id TEXT NOT NULL,
+  data_inicio TEXT NOT NULL,
+  data_fim TEXT NOT NULL,
+  pagina_numero INTEGER NOT NULL DEFAULT 1,
+  paragrafo_intencao TEXT DEFAULT '',
+  foco_tarefas JSONB DEFAULT '[]'::jsonb,
+  foco_compromissos JSONB DEFAULT '[]'::jsonb,
+  foco_metas JSONB DEFAULT '[]'::jsonb,
+  concluido BOOLEAN DEFAULT FALSE,
+  criado_em TIMESTAMPTZ DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL,
+  data_atualizacao TIMESTAMPTZ DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS public.dias_logs (
+  id TEXT PRIMARY KEY,
+  data TEXT NOT NULL,
+  semana_id TEXT NOT NULL,
+  caderno_id TEXT NOT NULL,
+  pagina_numero INTEGER NOT NULL DEFAULT 1,
+  revisado BOOLEAN DEFAULT FALSE,
+  data_revisao TEXT,
+  itens JSONB DEFAULT '[]'::jsonb,
+  termometro JSONB DEFAULT '{"texto":"","humor":"","atualizadoEm":""}'::jsonb,
+  data_atualizacao TIMESTAMPTZ DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS public.checkouts_semanais (
+  id TEXT PRIMARY KEY,
+  semana_id TEXT NOT NULL,
+  caderno_id TEXT NOT NULL,
+  pagina_numero INTEGER NOT NULL DEFAULT 1,
+  balanco_bom TEXT DEFAULT '',
+  balanco_ruim TEXT DEFAULT '',
+  concluido BOOLEAN DEFAULT FALSE,
+  data_fechamento TEXT,
+  data_atualizacao TIMESTAMPTZ DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS public.paginas_livres_caderno (
+  id TEXT PRIMARY KEY,
+  caderno_id TEXT NOT NULL,
+  pagina_numero INTEGER NOT NULL DEFAULT 1,
+  titulo TEXT NOT NULL,
+  conteudo TEXT DEFAULT '',
+  data_criacao TIMESTAMPTZ DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL,
+  data_atualizacao TIMESTAMPTZ DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
+);
+
+ALTER TABLE public.cadernos_volumes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.checkins_semanais ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.dias_logs ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.checkouts_semanais ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.paginas_livres_caderno ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Permitir tudo em cadernos_volumes" ON public.cadernos_volumes;
+CREATE POLICY "Permitir tudo em cadernos_volumes"
+  ON public.cadernos_volumes FOR ALL USING (true) WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Permitir tudo em checkins_semanais" ON public.checkins_semanais;
+CREATE POLICY "Permitir tudo em checkins_semanais"
+  ON public.checkins_semanais FOR ALL USING (true) WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Permitir tudo em dias_logs" ON public.dias_logs;
+CREATE POLICY "Permitir tudo em dias_logs"
+  ON public.dias_logs FOR ALL USING (true) WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Permitir tudo em checkouts_semanais" ON public.checkouts_semanais;
+CREATE POLICY "Permitir tudo em checkouts_semanais"
+  ON public.checkouts_semanais FOR ALL USING (true) WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Permitir tudo em paginas_livres_caderno" ON public.paginas_livres_caderno;
+CREATE POLICY "Permitir tudo em paginas_livres_caderno"
+  ON public.paginas_livres_caderno FOR ALL USING (true) WITH CHECK (true);
