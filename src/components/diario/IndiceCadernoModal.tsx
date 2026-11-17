@@ -46,75 +46,79 @@ export const IndiceCadernoModal: React.FC<IndiceCadernoModalProps> = ({
 }) => {
   const [busca, setBusca] = useState('');
 
-  // Montar lista completa e ordenada do índice com base nas páginas
+  React.useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
+  // Montar lista completa e ordenada do índice com base nas páginas reais do caderno
   const itensIndice = useMemo(() => {
     const itens: ItemIndiceNavegacao[] = [];
 
-    // 1. Identidade do Volume (Páginas 1-2)
-    itens.push({
-      id: 'vol-capa',
-      paginaNumero: 1,
-      titulo: `${volume.titulo} — Abertura e Termos`,
-      subtitulo: `Iniciado em ${volume.dataInicio} ${volume.dataFim ? `· Concluído em ${volume.dataFim}` : '· Em Aberto'}`,
-      tipo: 'volume'
-    });
-
-    // 2. Check-ins Semanais
+    // 1. Check-ins Semanais
     checkins.forEach((c) => {
       itens.push({
         id: `checkin-${c.id}`,
         paginaNumero: c.paginaNumero || 3,
         titulo: `Check-in Semanal (${c.dataInicio.split('-').reverse().slice(0, 2).join('/')} a ${c.dataFim.split('-').reverse().slice(0, 2).join('/')})`,
-        subtitulo: c.paragrafoIntencao ? `"${c.paragrafoIntencao.slice(0, 75)}..."` : 'Planejamento e foco semanal',
+        subtitulo: c.paragrafoIntencao ? `"${c.paragrafoIntencao.slice(0, 75)}"` : 'Planejamento e foco semanal',
         tipo: 'checkin',
         dataReferencia: c.dataInicio
       });
     });
 
-    // 3. Dias da Semana (Daily Logs)
+    // 2. Dias da Semana (Daily Logs)
     const diasOrdenados = Object.values(diasLogs).sort((a, b) => a.data.localeCompare(b.data));
     diasOrdenados.forEach((d) => {
       const [, mes, diaNum] = d.data.split('-');
       const dataObj = new Date(d.data + 'T12:00:00');
       const diaDaSemana = dataObj.toLocaleDateString('pt-BR', { weekday: 'long' });
       const diaCapitalizado = diaDaSemana.charAt(0).toUpperCase() + diaDaSemana.slice(1);
+      const qtd = d.itens.length;
+      const resumoItens =
+        qtd === 0 ? 'Sem registros' : qtd === 1 ? '1 registro' : `${qtd} registros`;
 
       itens.push({
         id: `dia-${d.data}`,
         paginaNumero: d.paginaNumero,
-        titulo: `${diaCapitalizado}, ${diaNum}/${mes} · Daily Log`,
-        subtitulo: d.revisado ? '✓ Dia Revisado & Concluído' : `${d.itens.length} registros anotados`,
+        titulo: `${diaCapitalizado}, ${diaNum}/${mes}`,
+        subtitulo: d.revisado ? `Dia revisado · ${resumoItens}` : resumoItens,
         tipo: 'dia',
         dataReferencia: d.data,
         revisado: d.revisado
       });
     });
 
-    // 4. Checkouts Semanais
+    // 3. Checkouts Semanais
     checkouts.forEach((co) => {
       itens.push({
         id: `checkout-${co.id}`,
         paginaNumero: co.paginaNumero || 11,
-        titulo: `Checkout Semanal — Balanço & Estatísticas`,
-        subtitulo: co.balancoBom ? `O que funcionou: "${co.balancoBom.slice(0, 70)}..."` : 'Fechamento do ciclo semanal',
+        titulo: `Checkout Semanal — Balanço`,
+        subtitulo: co.balancoBom ? `"${co.balancoBom.slice(0, 70)}"` : 'Fechamento do ciclo semanal',
         tipo: 'checkout'
       });
     });
 
-    // 5. Páginas Livres / Anotações
+    // 4. Páginas Livres / Anotações
     paginasLivres.forEach((p) => {
+      const preview = p.conteudo.slice(0, 80).replace(/[#*`_]/g, '').trim();
       itens.push({
         id: `pag-${p.id}`,
         paginaNumero: p.paginaNumero,
         titulo: p.titulo,
-        subtitulo: p.conteudo.slice(0, 80).replace(/[#*`_]/g, '') + '...',
+        subtitulo: preview || 'Página livre sem conteúdo',
         tipo: 'pagina_livre'
       });
     });
 
     // Ordenar estritamente por número de página
     return itens.sort((a, b) => a.paginaNumero - b.paginaNumero);
-  }, [volume, checkins, diasLogs, checkouts, paginasLivres]);
+  }, [checkins, diasLogs, checkouts, paginasLivres]);
 
   // Filtragem de busca
   const itensFiltrados = useMemo(() => {
@@ -131,78 +135,106 @@ export const IndiceCadernoModal: React.FC<IndiceCadernoModalProps> = ({
 
   if (!isOpen) return null;
 
+  const labelTipo = (tipo: ItemIndiceNavegacao['tipo']) => {
+    switch (tipo) {
+      case 'checkin':
+        return 'Check-in';
+      case 'checkout':
+        return 'Checkout';
+      case 'pagina_livre':
+        return 'Livre';
+      default:
+        return 'Diário';
+    }
+  };
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-stone-900/60 dark:bg-black/75 backdrop-blur-xs animate-fadeIn">
-      <div className="bg-white dark:bg-[#18191d] border border-stone-300 dark:border-stone-800 rounded-3xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-stone-950/60 dark:bg-black/75 backdrop-blur-xs animate-fadeIn"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Índice do Caderno"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      <div className="bg-[#fcfaf5] dark:bg-[#18191d] border border-stone-200 dark:border-stone-800 rounded-2xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
         {/* Cabeçalho */}
-        <div className="p-5 sm:p-6 border-b border-stone-200 dark:border-stone-800 flex items-center justify-between bg-stone-50/70 dark:bg-stone-900/40">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-stone-900 text-amber-200 flex items-center justify-center shadow-md">
-              <Bookmark className="w-5 h-5 text-amber-400" />
+        <div className="px-5 py-4 sm:px-6 sm:py-5 border-b border-stone-200 dark:border-stone-800 flex items-center justify-between bg-[#FBF8F3] dark:bg-stone-900/60">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="w-10 h-10 rounded-xl bg-stone-900 dark:bg-amber-800 text-amber-300 flex items-center justify-center shrink-0">
+              <Bookmark className="w-5 h-5" />
             </div>
-            <div>
-              <span className="text-[10px] font-cinzel font-bold uppercase tracking-wider text-amber-800 dark:text-amber-400">
-                Módulo 2 · Paginação Sequencial
+            <div className="min-w-0">
+              <span className="text-[10px] font-cinzel font-bold uppercase tracking-wider text-amber-800 dark:text-amber-400 block truncate">
+                {volume.titulo}
               </span>
-              <h3 className="text-lg sm:text-xl font-serif font-bold text-stone-900 dark:text-stone-100">
-                Índice Geral do Caderno Real
+              <h3 className="text-lg sm:text-xl font-serif font-bold text-stone-900 dark:text-stone-100 leading-tight">
+                Índice do Caderno
               </h3>
             </div>
           </div>
           <button
+            type="button"
             onClick={onClose}
-            className="p-2 rounded-xl text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 hover:bg-stone-200/50 dark:hover:bg-stone-800 transition"
+            aria-label="Fechar índice"
+            className="p-2 rounded-lg text-stone-400 hover:text-stone-800 dark:hover:text-stone-200 hover:bg-stone-200/60 dark:hover:bg-stone-800 transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Barra de Busca no Índice */}
-        <div className="p-4 border-b border-stone-200 dark:border-stone-800 bg-stone-50/40 dark:bg-stone-900/20">
+        <div className="px-5 py-3 border-b border-stone-200 dark:border-stone-800 bg-white/60 dark:bg-stone-900/30">
           <div className="relative">
             <Search className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               value={busca}
               onChange={(e) => setBusca(e.target.value)}
-              placeholder="Buscar por tópico, semana, dia ou número da página..."
-              className="w-full pl-10 pr-4 py-2 text-xs rounded-xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 text-stone-900 dark:text-stone-100 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
+              placeholder="Buscar por tópico, dia ou número da página..."
+              className="w-full pl-10 pr-4 py-2 text-xs rounded-xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 text-stone-900 dark:text-stone-100 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-600"
               autoFocus
             />
           </div>
         </div>
 
-        {/* Tabela do Índice */}
-        <div className="p-4 sm:p-6 overflow-y-auto flex-1 space-y-1.5 divide-y divide-stone-100 dark:divide-stone-800/60">
+        {/* Lista do Índice */}
+        <div className="px-4 py-3 sm:px-6 sm:py-4 overflow-y-auto flex-1 divide-y divide-stone-200/60 dark:divide-stone-800/60">
           {itensFiltrados.length === 0 ? (
-            <div className="p-8 text-center text-xs text-stone-400 italic">
-              Nenhuma página encontrada para "{busca}".
+            <div className="p-8 text-center text-xs text-stone-500 dark:text-stone-400 font-serif">
+              {busca.trim()
+                ? `Nenhuma página encontrada para "${busca}".`
+                : 'Nenhuma página indexada neste caderno.'}
             </div>
           ) : (
             itensFiltrados.map((item) => (
-              <div
+              <button
                 key={item.id}
+                type="button"
                 onClick={() => {
                   onSelecionarPagina(item);
                   onClose();
                 }}
-                className="pt-2 pb-2 px-3 rounded-xl hover:bg-amber-50/70 dark:hover:bg-amber-950/30 cursor-pointer flex items-center justify-between gap-3 group transition"
+                className="w-full text-left py-2.5 px-3 rounded-xl hover:bg-amber-50/70 dark:hover:bg-amber-950/25 cursor-pointer flex items-center justify-between gap-3 group transition-colors"
               >
-                <div className="flex items-start gap-3 min-w-0">
-                  {/* Número da Página estilo Caderno Real */}
-                  <span className="w-16 shrink-0 text-right font-mono text-xs font-bold text-amber-900 dark:text-amber-400 group-hover:text-amber-700">
+                <div className="flex items-center gap-3 min-w-0">
+                  <span className="w-14 shrink-0 text-right font-mono text-xs font-bold text-amber-900 dark:text-amber-400 tabular-nums">
                     Pág. {item.paginaNumero}
                   </span>
 
-                  <div className="h-4 w-px bg-stone-200 dark:bg-stone-800 shrink-0 self-center" />
+                  <div className="h-5 w-px bg-stone-200 dark:bg-stone-800 shrink-0" />
 
                   <div className="min-w-0">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 flex-wrap">
                       <span className="font-serif font-bold text-xs sm:text-sm text-stone-900 dark:text-stone-100 group-hover:text-amber-900 dark:group-hover:text-amber-300 truncate">
                         {item.titulo}
                       </span>
+                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-stone-100 dark:bg-stone-800 text-stone-500 dark:text-stone-400 shrink-0">
+                        {labelTipo(item.tipo)}
+                      </span>
                       {item.revisado && (
-                        <span className="text-[9px] px-1.5 py-0.2 rounded font-cinzel font-bold bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 shrink-0">
+                        <span className="text-[10px] px-1.5 py-0.5 rounded font-semibold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800 shrink-0">
                           ✓ Revisado
                         </span>
                       )}
@@ -216,20 +248,21 @@ export const IndiceCadernoModal: React.FC<IndiceCadernoModalProps> = ({
                   </div>
                 </div>
 
-                <ChevronRight className="w-4 h-4 text-stone-400 group-hover:text-amber-700 group-hover:translate-x-0.5 transition shrink-0" />
-              </div>
+                <ChevronRight className="w-4 h-4 text-stone-400 group-hover:text-amber-700 group-hover:translate-x-0.5 transition-all shrink-0" />
+              </button>
             ))
           )}
         </div>
 
         {/* Rodapé Informativo */}
-        <div className="p-4 border-t border-stone-200 dark:border-stone-800 bg-stone-50 dark:bg-stone-900/60 text-xs text-stone-500 flex items-center justify-between">
-          <span className="font-serif">
-            Total de {itensIndice.length} páginas indexadas no {volume.titulo}
+        <div className="px-5 py-3.5 border-t border-stone-200 dark:border-stone-800 bg-[#FBF8F3] dark:bg-stone-900/60 text-xs text-stone-500 dark:text-stone-400 flex items-center justify-between">
+          <span className="font-mono tabular-nums">
+            {itensIndice.length} {itensIndice.length === 1 ? 'página indexada' : 'páginas indexadas'}
           </span>
           <button
+            type="button"
             onClick={onClose}
-            className="px-3 py-1.5 rounded-lg text-xs font-cinzel font-bold text-stone-700 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-stone-800 transition"
+            className="px-3 py-1.5 rounded-lg text-xs font-semibold text-stone-700 dark:text-stone-300 hover:bg-stone-200/70 dark:hover:bg-stone-800 transition-colors cursor-pointer"
           >
             Fechar
           </button>

@@ -6,6 +6,7 @@ import {
   EstadoItemDaily
 } from '../../types';
 import { useBibliotecaStore } from '../../store/useBibliotecaStore';
+import { somarDiasData } from '../../data/diarioPadrao';
 import { TermometroDiario } from './TermometroDiario';
 import { ModalFechamentoDia } from './ModalFechamentoDia';
 import {
@@ -13,22 +14,27 @@ import {
   Trash2,
   Edit2,
   Check,
-  Plus
+  Plus,
+  ArrowRight,
+  CalendarArrowUp
 } from 'lucide-react';
 
 interface DailyLogViewProps {
   dia: DiaLog;
   diaNumeroNoCiclo?: number;
+  onIrParaDia?: (dataStr: string) => void;
 }
 
 export const DailyLogView: React.FC<DailyLogViewProps> = ({
   dia,
-  diaNumeroNoCiclo
+  diaNumeroNoCiclo,
+  onIrParaDia
 }) => {
   const {
     adicionarItemDiaLog,
     atualizarItemDiaLog,
-    removerItemDiaLog
+    removerItemDiaLog,
+    migrarTodasTarefasDia
   } = useBibliotecaStore();
 
   const [modalRevisaoAberto, setModalRevisaoAberto] = useState(false);
@@ -38,6 +44,23 @@ export const DailyLogView: React.FC<DailyLogViewProps> = ({
   const [novoTipo, setNovoTipo] = useState<TipoItemDaily>('tarefa');
   const [novaHora, setNovaHora] = useState('');
   const [novoUrgente, setNovoUrgente] = useState(false);
+
+  // Filtro visual de registros
+  const [filtroEstado, setFiltroEstado] = useState<'todos' | 'pendentes' | 'concluidos'>('todos');
+
+  // Painel de "Passar tarefas para outro dia"
+  const [painelMigrarAberto, setPainelMigrarAberto] = useState(false);
+  const [dataDestinoLote, setDataDestinoLote] = useState(() => somarDiasData(dia.data, 1));
+  const [modoLote, setModoLote] = useState<'migrar' | 'mover'>('migrar');
+  const [escopoLote, setEscopoLote] = useState<'pendentes' | 'todas'>('pendentes');
+  const [feedbackLote, setFeedbackLote] = useState<{ qtd: number; destino: string } | null>(null);
+
+  // Sincronizar sugestão de destino quando muda o dia ativo
+  React.useEffect(() => {
+    setDataDestinoLote(somarDiasData(dia.data, 1));
+    setPainelMigrarAberto(false);
+    setFeedbackLote(null);
+  }, [dia.data]);
 
   // Edição inline de item
   const [editandoItemId, setEditandoItemId] = useState<string | null>(null);
@@ -84,6 +107,19 @@ export const DailyLogView: React.FC<DailyLogViewProps> = ({
       atualizarItemDiaLog(dia.data, itemId, { texto: editandoTexto.trim() });
     }
     setEditandoItemId(null);
+  };
+
+  const handlePassarTodasTarefas = () => {
+    if (!dataDestinoLote || dataDestinoLote === dia.data) return;
+    const qtd = migrarTodasTarefasDia(dia.data, dataDestinoLote, {
+      apenasPendentes: escopoLote === 'pendentes',
+      modo: modoLote,
+      incluirEventos: true
+    });
+    if (qtd > 0) {
+      setFeedbackLote({ qtd, destino: dataDestinoLote });
+      setPainelMigrarAberto(false);
+    }
   };
 
   // Formatação da data por extenso
@@ -158,7 +194,20 @@ export const DailyLogView: React.FC<DailyLogViewProps> = ({
 
   const itensConcluidos = dia.itens.filter((i) => i.estado === 'concluido').length;
   const itensPendentes = dia.itens.filter((i) => i.estado === 'pendente').length;
+  const itensTransferiveisPendentes = dia.itens.filter(
+    (i) => i.tipo !== 'nota' && i.estado === 'pendente'
+  ).length;
+  const itensTransferiveisTotal = dia.itens.filter(
+    (i) => i.tipo !== 'nota' && i.estado !== 'cancelado' && i.estado !== 'migrado'
+  ).length;
+  const qtdLoteAlvo = escopoLote === 'pendentes' ? itensTransferiveisPendentes : itensTransferiveisTotal;
   const percentualConcluido = dia.itens.length > 0 ? Math.round((itensConcluidos / dia.itens.length) * 100) : 0;
+
+  const itensFiltrados = dia.itens.filter((item) => {
+    if (filtroEstado === 'pendentes') return item.estado === 'pendente';
+    if (filtroEstado === 'concluidos') return item.estado === 'concluido';
+    return true;
+  });
 
   return (
     <div className="w-full space-y-6">
@@ -301,25 +350,210 @@ export const DailyLogView: React.FC<DailyLogViewProps> = ({
 
           {/* LISTA DE REGISTROS DO DIA */}
           <div className="space-y-3">
-            <div className="flex items-center justify-between text-xs text-stone-600 dark:text-stone-400">
-              <span className="font-cinzel font-bold text-stone-800 dark:text-stone-200 flex items-center gap-2">
-                <span>Registros</span>
-                <span className="px-2 py-0.5 rounded-md bg-stone-100 dark:bg-stone-800 text-xs font-mono tabular-nums text-stone-700 dark:text-stone-300">
-                  {dia.itens.length}
+            <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-stone-600 dark:text-stone-400">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="font-cinzel font-bold text-stone-800 dark:text-stone-200 flex items-center gap-2">
+                  <span>Registros</span>
+                  <span className="px-2 py-0.5 rounded-md bg-stone-100 dark:bg-stone-800 text-xs font-mono tabular-nums text-stone-700 dark:text-stone-300">
+                    {dia.itens.length}
+                  </span>
                 </span>
-              </span>
-              <span className="text-xs font-serif hidden sm:inline">
-                Clique no símbolo à esquerda para alternar o estado
-              </span>
+
+                {dia.itens.length > 0 && (
+                  <div className="flex items-center bg-stone-100 dark:bg-stone-900 p-0.5 rounded-lg border border-stone-200 dark:border-stone-800 text-[11px]">
+                    <button
+                      type="button"
+                      onClick={() => setFiltroEstado('todos')}
+                      className={`px-2 py-0.5 rounded-md transition-colors cursor-pointer ${
+                        filtroEstado === 'todos'
+                          ? 'bg-white dark:bg-stone-800 text-stone-900 dark:text-stone-100 font-semibold'
+                          : 'text-stone-500 hover:text-stone-800 dark:hover:text-stone-200'
+                      }`}
+                    >
+                      Todas
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setFiltroEstado('pendentes')}
+                      className={`px-2 py-0.5 rounded-md transition-colors cursor-pointer tabular-nums ${
+                        filtroEstado === 'pendentes'
+                          ? 'bg-white dark:bg-stone-800 text-stone-900 dark:text-stone-100 font-semibold'
+                          : 'text-stone-500 hover:text-stone-800 dark:hover:text-stone-200'
+                      }`}
+                    >
+                      Pendentes ({itensPendentes})
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setFiltroEstado('concluidos')}
+                      className={`px-2 py-0.5 rounded-md transition-colors cursor-pointer tabular-nums ${
+                        filtroEstado === 'concluidos'
+                          ? 'bg-white dark:bg-stone-800 text-stone-900 dark:text-stone-100 font-semibold'
+                          : 'text-stone-500 hover:text-stone-800 dark:hover:text-stone-200'
+                      }`}
+                    >
+                      Concluídas ({itensConcluidos})
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {itensTransferiveisTotal > 0 && (
+                <button
+                  type="button"
+                  onClick={() => setPainelMigrarAberto((prev) => !prev)}
+                  className={`px-2.5 py-1 rounded-lg border text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer ${
+                    painelMigrarAberto
+                      ? 'bg-amber-800 text-white border-amber-800'
+                      : 'bg-white dark:bg-stone-900 text-stone-700 dark:text-stone-200 border-stone-200 dark:border-stone-700 hover:border-amber-600 hover:text-amber-800 dark:hover:text-amber-300'
+                  }`}
+                  title="Passar todas as tarefas deste dia para outra data"
+                >
+                  <CalendarArrowUp className="w-3.5 h-3.5" />
+                  <span>Passar tarefas</span>
+                </button>
+              )}
             </div>
+
+            {/* Feedback após passar tarefas */}
+            {feedbackLote && (
+              <div className="px-3.5 py-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-xs text-emerald-900 dark:text-emerald-200 flex items-center justify-between gap-2 animate-fadeIn">
+                <span className="font-medium">
+                  ✓ {feedbackLote.qtd} {feedbackLote.qtd === 1 ? 'tarefa passada' : 'tarefas passadas'} para{' '}
+                  <strong className="font-mono tabular-nums">
+                    {feedbackLote.destino.split('-').reverse().slice(0, 2).join('/')}
+                  </strong>
+                </span>
+                {onIrParaDia && (
+                  <button
+                    type="button"
+                    onClick={() => onIrParaDia(feedbackLote.destino)}
+                    className="px-2.5 py-1 rounded-lg bg-emerald-700 hover:bg-emerald-600 text-white font-semibold flex items-center gap-1 transition-colors cursor-pointer shrink-0"
+                  >
+                    <span>Abrir dia</span>
+                    <ArrowRight className="w-3 h-3" />
+                  </button>
+                )}
+              </div>
+            )}
+
+            {/* Painel de Transferência em Lote para Outro Dia */}
+            {painelMigrarAberto && (
+              <div className="p-4 rounded-xl bg-[#FBF8F3] dark:bg-stone-900/90 border border-amber-300/80 dark:border-amber-800/70 space-y-3 text-xs animate-fadeIn">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="font-serif font-bold text-sm text-stone-900 dark:text-stone-100">
+                    Passar tarefas para outro dia
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setPainelMigrarAberto(false)}
+                    className="text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 text-xs cursor-pointer"
+                  >
+                    Fechar
+                  </button>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-stone-600 dark:text-stone-400 font-medium">Destino:</span>
+                  {[
+                    { label: 'Amanhã (+1d)', dias: 1 },
+                    { label: '+2 dias', dias: 2 },
+                    { label: '+1 semana', dias: 7 }
+                  ].map((preset) => {
+                    const dataPreset = somarDiasData(dia.data, preset.dias);
+                    const ativo = dataDestinoLote === dataPreset;
+                    return (
+                      <button
+                        key={preset.dias}
+                        type="button"
+                        onClick={() => setDataDestinoLote(dataPreset)}
+                        className={`px-2.5 py-1 rounded-lg border text-xs font-medium transition-colors cursor-pointer ${
+                          ativo
+                            ? 'bg-stone-900 dark:bg-amber-700 text-white border-stone-900 dark:border-amber-700'
+                            : 'bg-white dark:bg-stone-800 text-stone-700 dark:text-stone-300 border-stone-200 dark:border-stone-700 hover:border-amber-500'
+                        }`}
+                      >
+                        {preset.label}
+                      </button>
+                    );
+                  })}
+
+                  <input
+                    type="date"
+                    value={dataDestinoLote}
+                    onChange={(e) => setDataDestinoLote(e.target.value)}
+                    aria-label="Data de destino"
+                    className="ml-auto px-2.5 py-1 rounded-lg bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 text-xs font-mono text-stone-900 dark:text-stone-100"
+                  />
+                </div>
+
+                <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-stone-200/80 dark:border-stone-800">
+                  <div className="flex flex-wrap items-center gap-3">
+                    <label className="inline-flex items-center gap-1.5 cursor-pointer text-stone-700 dark:text-stone-300">
+                      <input
+                        type="checkbox"
+                        checked={escopoLote === 'pendentes'}
+                        onChange={(e) => setEscopoLote(e.target.checked ? 'pendentes' : 'todas')}
+                        className="rounded border-stone-300 text-amber-700 focus:ring-amber-600"
+                      />
+                      <span>Apenas pendentes ({itensTransferiveisPendentes})</span>
+                    </label>
+
+                    <div className="flex items-center bg-white dark:bg-stone-800 p-0.5 rounded-lg border border-stone-200 dark:border-stone-700">
+                      <button
+                        type="button"
+                        onClick={() => setModoLote('migrar')}
+                        className={`px-2 py-0.5 rounded-md text-[11px] font-medium cursor-pointer transition-colors ${
+                          modoLote === 'migrar'
+                            ? 'bg-amber-100 dark:bg-amber-950 text-amber-900 dark:text-amber-300 font-semibold'
+                            : 'text-stone-500 dark:text-stone-400'
+                        }`}
+                        title="Mantém o registro aqui marcado com → e cria pendente no dia escolhido"
+                      >
+                        Migrar (→)
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setModoLote('mover')}
+                        className={`px-2 py-0.5 rounded-md text-[11px] font-medium cursor-pointer transition-colors ${
+                          modoLote === 'mover'
+                            ? 'bg-amber-100 dark:bg-amber-950 text-amber-900 dark:text-amber-300 font-semibold'
+                            : 'text-stone-500 dark:text-stone-400'
+                        }`}
+                        title="Remove deste dia e transfere diretamente para o dia escolhido"
+                      >
+                        Mover
+                      </button>
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    disabled={qtdLoteAlvo === 0 || !dataDestinoLote || dataDestinoLote === dia.data}
+                    onClick={handlePassarTodasTarefas}
+                    className="px-3.5 py-1.5 rounded-xl bg-amber-800 hover:bg-amber-700 disabled:opacity-40 disabled:pointer-events-none text-white font-semibold text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
+                  >
+                    <span>
+                      Passar {qtdLoteAlvo} {qtdLoteAlvo === 1 ? 'tarefa' : 'tarefas'} para{' '}
+                      {dataDestinoLote ? dataDestinoLote.split('-').reverse().slice(0, 2).join('/') : '...'}
+                    </span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </div>
+            )}
 
             {dia.itens.length === 0 ? (
               <div className="p-8 text-center text-stone-500 dark:text-stone-400 text-sm font-serif bg-[#FBF8F3] dark:bg-stone-900/40 rounded-xl border border-dashed border-stone-300 dark:border-stone-700">
                 Dia em branco. Use a caixa acima para registrar tarefas (•), eventos (○) ou notas (-).
               </div>
+            ) : itensFiltrados.length === 0 ? (
+              <div className="p-6 text-center text-stone-500 dark:text-stone-400 text-xs font-serif bg-[#FBF8F3] dark:bg-stone-900/40 rounded-xl border border-stone-200 dark:border-stone-800">
+                Nenhum registro neste filtro.
+              </div>
             ) : (
               <ul className="rounded-xl border border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900/60 divide-y divide-stone-200/80 dark:divide-stone-800 max-h-[540px] overflow-y-auto custom-scrollbar">
-                {dia.itens.map((item) => {
+                {itensFiltrados.map((item) => {
                   const isEditando = editandoItemId === item.id;
 
                   return (

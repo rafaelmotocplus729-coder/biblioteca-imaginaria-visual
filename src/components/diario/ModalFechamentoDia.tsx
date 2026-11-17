@@ -114,15 +114,44 @@ export const ModalFechamentoDia: React.FC<ModalFechamentoDiaProps> = ({
 
           {/* Triagem de Pendências */}
           <div className="space-y-3.5">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-wrap items-center justify-between gap-2">
               <span className="text-xs font-cinzel font-bold uppercase tracking-wide text-stone-800 dark:text-stone-200 flex items-center gap-2">
                 <Clock className="w-4 h-4 text-amber-700 dark:text-amber-400" />
                 Pendências do Dia ({itensPendentes.length})
               </span>
-              {itensPendentes.length === 0 && (
+              {itensPendentes.length === 0 ? (
                 <span className="text-xs text-emerald-600 dark:text-emerald-400 font-medium bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800">
                   ✓ Tudo resolvido no dia!
                 </span>
+              ) : (
+                <div className="flex flex-wrap items-center gap-1.5">
+                  <span className="text-[11px] text-stone-500 dark:text-stone-400 font-medium">
+                    Passar todas para:
+                  </span>
+                  {[
+                    { label: 'Amanhã', dias: 1 },
+                    { label: '+2d', dias: 2 },
+                    { label: '+1 sem', dias: 7 }
+                  ].map((preset) => {
+                    const destino = calcularDataFutura(preset.dias);
+                    return (
+                      <button
+                        key={preset.dias}
+                        type="button"
+                        onClick={() => {
+                          const atualizado: typeof acoesPendentes = {};
+                          itensPendentes.forEach((it) => {
+                            atualizado[it.id] = { acao: 'migrar', dataDestino: destino };
+                          });
+                          setAcoesPendentes(atualizado);
+                        }}
+                        className="px-2 py-1 rounded-lg text-[11px] font-semibold bg-amber-100/80 dark:bg-amber-950/60 hover:bg-amber-200 dark:hover:bg-amber-900 text-amber-900 dark:text-amber-200 border border-amber-300/70 dark:border-amber-800 transition-colors cursor-pointer"
+                      >
+                        {preset.label}
+                      </button>
+                    );
+                  })}
+                </div>
               )}
             </div>
 

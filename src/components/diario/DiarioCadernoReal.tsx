@@ -393,8 +393,7 @@ export const DiarioCadernoReal: React.FC = () => {
     checkinsDoVolume.length +
     todosDiasDoVolume.length +
     checkoutsDoVolume.length +
-    paginasLivresDoVolume.length +
-    2;
+    paginasLivresDoVolume.length;
 
   const hojeStr = formatarDataISO(new Date());
 
@@ -408,7 +407,7 @@ export const DiarioCadernoReal: React.FC = () => {
         {/* CABEÇALHO DO CADERNO */}
         <header className="surface-editorial rounded-2xl px-5 py-4 sm:px-6 sm:py-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-center gap-3.5 min-w-0">
-            <div className="w-10 h-10 rounded-xl bg-stone-900 dark:bg-amber-800 text-amber-200 flex items-center justify-center shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-stone-900 dark:bg-amber-800 text-amber-300 flex items-center justify-center shrink-0">
               <BookMarked className="w-5 h-5" />
             </div>
 
@@ -440,7 +439,7 @@ export const DiarioCadernoReal: React.FC = () => {
                 setAbrirCriacaoNoModal(true);
                 setModalHistoricoAberto(true);
               }}
-              className="px-3.5 py-2 rounded-xl bg-amber-800 hover:bg-amber-700 text-white font-cinzel font-bold text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
+              className="h-9 px-3.5 rounded-xl bg-amber-800 hover:bg-amber-700 text-white font-semibold text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Novo Caderno</span>
@@ -448,21 +447,8 @@ export const DiarioCadernoReal: React.FC = () => {
 
             <button
               type="button"
-              onClick={() => {
-                setAbrirCriacaoNoModal(false);
-                setModalHistoricoAberto(true);
-              }}
-              className="px-3 py-2 rounded-xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 hover:border-stone-400 text-stone-700 dark:text-stone-200 text-xs font-cinzel font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
-              title="Alternar ou gerenciar cadernos"
-            >
-              <Archive className="w-3.5 h-3.5 text-stone-500 dark:text-stone-400" />
-              <span>Cadernos ({cadernosVolumes.length})</span>
-            </button>
-
-            <button
-              type="button"
               onClick={() => setModalIndiceAberto(true)}
-              className="px-3 py-2 rounded-xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 hover:border-stone-400 text-stone-700 dark:text-stone-200 font-cinzel font-bold text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
+              className="h-9 px-3 rounded-xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 hover:border-amber-500/60 text-stone-700 dark:text-stone-200 font-semibold text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
               title="Abrir Índice com Paginação Sequencial"
             >
               <Bookmark className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
@@ -472,10 +458,25 @@ export const DiarioCadernoReal: React.FC = () => {
               </span>
             </button>
 
+            <div className="hidden sm:block w-px h-5 bg-stone-200 dark:bg-stone-800 mx-0.5" />
+
+            <button
+              type="button"
+              onClick={() => {
+                setAbrirCriacaoNoModal(false);
+                setModalHistoricoAberto(true);
+              }}
+              className="h-9 px-3 rounded-xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 hover:border-stone-400 text-stone-700 dark:text-stone-200 text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer"
+              title="Alternar ou gerenciar cadernos"
+            >
+              <Archive className="w-3.5 h-3.5 text-stone-500 dark:text-stone-400" />
+              <span>Cadernos ({cadernosVolumes.length})</span>
+            </button>
+
             <button
               type="button"
               onClick={toggleEstiloDotGrid}
-              className={`px-3 py-2 rounded-xl border text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer ${
+              className={`h-9 px-3 rounded-xl border text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer ${
                 estiloDotGridAtivo
                   ? 'bg-stone-200/75 dark:bg-stone-800 text-stone-900 dark:text-stone-100 border-stone-300 dark:border-stone-600 font-semibold'
                   : 'bg-white dark:bg-stone-900 text-stone-600 dark:text-stone-400 border-stone-200 dark:border-stone-700 hover:border-stone-400'
@@ -489,7 +490,7 @@ export const DiarioCadernoReal: React.FC = () => {
             <button
               type="button"
               onClick={toggleLegendaSimbolos}
-              className={`px-3 py-2 rounded-xl border text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer ${
+              className={`h-9 px-3 rounded-xl border text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer ${
                 legendaSimbolosVisivel
                   ? 'bg-stone-200/75 dark:bg-stone-800 text-stone-900 dark:text-stone-100 border-stone-300 dark:border-stone-600 font-semibold'
                   : 'bg-white dark:bg-stone-900 text-stone-600 dark:text-stone-400 border-stone-200 dark:border-stone-700 hover:border-stone-400'
@@ -504,7 +505,7 @@ export const DiarioCadernoReal: React.FC = () => {
               type="button"
               onClick={() => void sincronizarSupabase()}
               disabled={supabaseStatus === 'sincronizando'}
-              className="px-3 py-2 rounded-xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 hover:border-amber-500 text-stone-700 dark:text-stone-200 text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer disabled:opacity-60"
+              className="h-9 px-3 rounded-xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 hover:border-amber-500 text-stone-700 dark:text-stone-200 text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer disabled:opacity-60"
               title="Sincronizar Agenda e Notas com o Supabase"
             >
               <RefreshCw className={`w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 ${supabaseStatus === 'sincronizando' ? 'animate-spin' : ''}`} />
@@ -704,19 +705,23 @@ export const DiarioCadernoReal: React.FC = () => {
                     .slice(0, 3);
                   const isHoje = d.data === hojeStr;
                   const numDiaCiclo = String(idx + 1).padStart(2, '0');
+                  const qtdPendentesDia = d.itens.filter((it) => it.estado === 'pendente' && it.tipo !== 'nota').length;
+                  const qtdTotalDia = d.itens.length;
 
                   return (
                     <button
                       key={d.data}
                       type="button"
                       onClick={() => handleSelecionarDia(d.data, d.semanaId)}
-                      className={`min-w-[58px] sm:min-w-0 shrink-0 px-2 py-1.5 rounded-xl text-xs transition-colors flex flex-col items-center cursor-pointer border ${
+                      className={`min-w-[60px] sm:min-w-0 shrink-0 px-2 py-2 rounded-xl text-xs transition-colors flex flex-col items-center gap-0.5 cursor-pointer border relative ${
                         isSelected
                           ? 'bg-stone-900 dark:bg-amber-800 text-white font-bold border-stone-900 dark:border-amber-700'
+                          : isHoje
+                          ? 'bg-amber-50/70 dark:bg-amber-950/25 text-stone-900 dark:text-stone-100 border-amber-400/70 dark:border-amber-700/70 hover:border-amber-500'
                           : 'bg-[#FBF8F3] dark:bg-stone-900 text-stone-700 dark:text-stone-300 border-stone-200/90 dark:border-stone-800 hover:border-stone-400'
                       }`}
                     >
-                      <span className="text-[10px] font-mono opacity-70 tabular-nums">
+                      <span className="text-[10px] font-mono opacity-65 tabular-nums">
                         D{numDiaCiclo}
                       </span>
                       <span className="text-[11px] uppercase font-cinzel tracking-tight flex items-center gap-0.5">
@@ -738,6 +743,24 @@ export const DiarioCadernoReal: React.FC = () => {
                           />
                         )}
                       </span>
+                      {qtdTotalDia > 0 && (
+                        <span
+                          className={`text-[9px] font-mono tabular-nums px-1.5 rounded-full ${
+                            isSelected
+                              ? 'bg-white/15 text-amber-100'
+                              : qtdPendentesDia > 0
+                              ? 'bg-amber-100 dark:bg-amber-950 text-amber-900 dark:text-amber-300'
+                              : 'bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300'
+                          }`}
+                          title={
+                            qtdPendentesDia > 0
+                              ? `${qtdPendentesDia} pendência(s)`
+                              : `${qtdTotalDia} registro(s)`
+                          }
+                        >
+                          {qtdPendentesDia > 0 ? `${qtdPendentesDia} pend.` : `${qtdTotalDia} reg.`}
+                        </span>
+                      )}
                     </button>
                   );
                 })}
@@ -784,6 +807,10 @@ export const DiarioCadernoReal: React.FC = () => {
               <DailyLogView
                 dia={diaAtivo}
                 diaNumeroNoCiclo={(indiceDiaNaSemana >= 0 ? indiceDiaNaSemana : 0) + 1}
+                onIrParaDia={(dataDest) => {
+                  const diaAlvo = todosDiasDoVolume.find((d) => d.data === dataDest);
+                  handleSelecionarDia(dataDest, diaAlvo?.semanaId);
+                }}
               />
             ) : (
               <div className="surface-editorial rounded-2xl p-8 text-center space-y-3">

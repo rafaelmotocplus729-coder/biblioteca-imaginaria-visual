@@ -50,15 +50,15 @@ export const PaginasLivresView: React.FC<PaginasLivresViewProps> = ({
       id: `pag-livre-${Date.now()}`,
       cadernoId: cadernoAtivoId,
       paginaNumero: proximoNumeroPagina,
-      titulo: 'Novo Tópico de Anotações',
-      conteudo: '# Título da Anotação Livre\n\nComece a escrever seus pensamentos, esquemas conceituais ou reflexões temáticas...',
+      titulo: `Página ${proximoNumeroPagina}`,
+      conteudo: '',
       dataCriacao: new Date().toISOString(),
       dataAtualizacao: new Date().toISOString()
     };
     salvarPaginaLivre(nova);
     setIdAtiva(nova.id);
     setTitulo(nova.titulo);
-    setConteudo(nova.conteudo);
+    setConteudo('');
     setEditando(true);
   };
 

@@ -2026,29 +2026,29 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
         <div className="absolute inset-0 pointer-events-none bg-white/75 dark:bg-[#141518]/85 backdrop-blur-[0.5px] z-0" />
       )}
 
-      {/* BARRA DE FERRAMENTAS SUPERIOR (Redesign Editorial & Luhmann) */}
-      <div className="relative z-10 flex flex-wrap items-center justify-between border-b border-stone-200/90 dark:border-stone-800/90 bg-[#FBF8F3]/95 dark:bg-[#131417]/95 backdrop-blur-md px-3 sm:px-5 py-2.5 text-xs gap-2.5">
+      {/* BARRA DE FERRAMENTAS SUPERIOR (Design Editorial Refinado) */}
+      <div className="relative z-10 flex flex-wrap items-center justify-between border-b border-stone-200/80 dark:border-stone-800/80 bg-[#FBF8F3]/95 dark:bg-[#131417]/95 backdrop-blur-md px-3 sm:px-5 py-2 text-xs gap-2.5">
         {/* Lado Esquerdo: Sidebar Toggle, Abas Principais e Botão Nova Nota */}
-        <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap">
+        <div className="flex items-center gap-2 flex-wrap">
           <button
             type="button"
             onClick={() => setSidebarAberta((prev) => !prev)}
-            className="h-9 px-2.5 rounded-xl border border-stone-300/80 dark:border-stone-800 bg-white/80 dark:bg-stone-900/90 text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 hover:border-amber-500/50 transition cursor-pointer flex items-center gap-1.5"
+            className="h-9 px-2.5 rounded-xl border border-stone-200/90 dark:border-stone-800 bg-white dark:bg-stone-900 text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 hover:border-amber-500/50 transition-colors cursor-pointer flex items-center gap-1.5"
             title={sidebarAberta ? 'Recolher Árvore do Cofre' : 'Expandir Árvore do Cofre'}
           >
             {sidebarAberta ? <PanelLeftClose className="w-4 h-4" /> : <PanelLeft className="w-4 h-4" />}
-            <span className="hidden xl:inline font-cinzel font-semibold text-[11px]">Cofre</span>
+            <span className="hidden xl:inline font-medium text-xs">Cofre</span>
           </button>
 
           {/* Abas Principais Segmentadas */}
-          <div className="flex items-center bg-stone-200/65 dark:bg-stone-900/90 p-1 rounded-xl border border-stone-300/70 dark:border-stone-800 text-xs">
+          <div className="flex items-center bg-stone-200/55 dark:bg-stone-900/90 p-1 rounded-xl border border-stone-200/90 dark:border-stone-800 text-xs gap-0.5">
             <button
               type="button"
               onClick={() => setVisaoAtiva('acervo')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-cinzel font-bold transition cursor-pointer ${
+              className={`flex items-center gap-1.5 h-7 px-3 rounded-lg font-medium transition-colors cursor-pointer ${
                 visaoAtiva === 'acervo'
-                  ? 'bg-white dark:bg-stone-800 text-stone-900 dark:text-stone-100 shadow-2xs border border-stone-300/70 dark:border-stone-700'
-                  : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
+                  ? 'bg-white dark:bg-stone-800 text-stone-900 dark:text-stone-100 font-semibold border border-stone-200/90 dark:border-stone-700'
+                  : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200 border border-transparent'
               }`}
             >
               <FileText className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
@@ -2060,10 +2060,10 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
             <button
               type="button"
               onClick={() => setVisaoAtiva('inbox')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-cinzel font-bold transition cursor-pointer relative ${
+              className={`flex items-center gap-1.5 h-7 px-3 rounded-lg font-medium transition-colors cursor-pointer relative ${
                 visaoAtiva === 'inbox'
-                  ? 'bg-white dark:bg-stone-800 text-amber-900 dark:text-amber-200 shadow-2xs border border-stone-300/70 dark:border-stone-700'
-                  : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
+                  ? 'bg-white dark:bg-stone-800 text-amber-900 dark:text-amber-200 font-semibold border border-stone-200/90 dark:border-stone-700'
+                  : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200 border border-transparent'
               }`}
               title="04 - Caixa de Entrada & Captura Rápida (Regra de 48h)"
             >
@@ -2078,10 +2078,10 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
             <button
               type="button"
               onClick={() => setVisaoAtiva('diario')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-cinzel font-bold transition cursor-pointer relative ${
+              className={`flex items-center gap-1.5 h-7 px-3 rounded-lg font-medium transition-colors cursor-pointer relative ${
                 visaoAtiva === 'diario'
-                  ? 'bg-white dark:bg-stone-800 text-amber-900 dark:text-amber-200 shadow-2xs border border-stone-300/70 dark:border-stone-700'
-                  : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
+                  ? 'bg-white dark:bg-stone-800 text-amber-900 dark:text-amber-200 font-semibold border border-stone-200/90 dark:border-stone-700'
+                  : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200 border border-transparent'
               }`}
               title="05 - O Diário Intelectual (Caderno Real)"
             >
@@ -2091,10 +2091,10 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
             <button
               type="button"
               onClick={() => setVisaoAtiva('canvas')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-cinzel font-bold transition cursor-pointer ${
+              className={`flex items-center gap-1.5 h-7 px-3 rounded-lg font-medium transition-colors cursor-pointer ${
                 visaoAtiva === 'canvas'
-                  ? 'bg-white dark:bg-stone-800 text-purple-900 dark:text-purple-200 shadow-2xs border border-stone-300/70 dark:border-stone-700'
-                  : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
+                  ? 'bg-white dark:bg-stone-800 text-purple-900 dark:text-purple-200 font-semibold border border-stone-200/90 dark:border-stone-700'
+                  : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200 border border-transparent'
               }`}
               title="Mesa de Articulação Conceitual (Índices, Fontes e Permanentes)"
             >
@@ -2107,7 +2107,7 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
           <button
             type="button"
             onClick={() => abrirCriadorPermanente()}
-            className="flex items-center gap-1.5 h-9 px-3.5 rounded-xl bg-emerald-800 hover:bg-emerald-700 dark:bg-emerald-700 dark:hover:bg-emerald-600 text-white font-cinzel font-bold text-xs shadow-2xs transition cursor-pointer border border-emerald-900/20"
+            className="flex items-center gap-1.5 h-9 px-3.5 rounded-xl bg-emerald-800 hover:bg-emerald-700 dark:bg-emerald-700 dark:hover:bg-emerald-600 text-white font-semibold text-xs transition-colors cursor-pointer border border-emerald-900/20"
             title="Criar nova nota no cofre Zettelkasten"
           >
             <Plus className="w-3.5 h-3.5" />
@@ -2115,55 +2115,57 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
           </button>
         </div>
 
-        {/* Lado Direito: Layout / Visualização, Ações da Nota e Ambiente */}
-        <div className="flex items-center gap-2 shrink-0 flex-wrap">
+        {/* Lado Direito: Layout / Visualização (apenas em Notas), Ações da Nota e Ambiente */}
+        <div className="flex items-center gap-1.5 shrink-0 flex-wrap">
           {/* Controles de Layout (Painel Duplo e Largura) */}
-          <div className="flex items-center h-9 bg-stone-200/60 dark:bg-stone-900/90 p-1 rounded-xl border border-stone-300/70 dark:border-stone-800 text-xs">
-            <button
-              type="button"
-              onClick={() => setSplitViewAtivo((prev) => !prev)}
-              className={`flex items-center gap-1.5 px-2.5 h-full rounded-lg transition cursor-pointer font-cinzel text-xs ${
-                splitViewAtivo
-                  ? 'bg-white dark:bg-stone-800 text-amber-900 dark:text-amber-200 font-bold shadow-2xs border border-stone-300/70 dark:border-stone-700'
-                  : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200'
-              }`}
-              title={
-                splitViewAtivo
-                  ? 'Desativar Painel Duplo (Retornar para visão única)'
-                  : 'Ativar Painel Duplo (Fonte/Referência à esquerda + Rascunho/Permanente à direita)'
-              }
-            >
-              <Columns className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
-              <span className="hidden md:inline">Painel Duplo</span>
-            </button>
+          {visaoAtiva === 'acervo' && (
+            <div className="flex items-center h-9 bg-stone-200/55 dark:bg-stone-900/90 p-1 rounded-xl border border-stone-200/90 dark:border-stone-800 text-xs">
+              <button
+                type="button"
+                onClick={() => setSplitViewAtivo((prev) => !prev)}
+                className={`flex items-center gap-1.5 px-2.5 h-full rounded-lg transition-colors cursor-pointer text-xs font-medium ${
+                  splitViewAtivo
+                    ? 'bg-white dark:bg-stone-800 text-amber-900 dark:text-amber-200 font-semibold border border-stone-200/90 dark:border-stone-700'
+                    : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200 border border-transparent'
+                }`}
+                title={
+                  splitViewAtivo
+                    ? 'Desativar Painel Duplo (Retornar para visão única)'
+                    : 'Ativar Painel Duplo (Fonte/Referência à esquerda + Rascunho/Permanente à direita)'
+                }
+              >
+                <Columns className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
+                <span className="hidden md:inline">Painel Duplo</span>
+              </button>
 
-            <div className="w-px h-3.5 bg-stone-300/70 dark:bg-stone-800 mx-0.5" />
+              <div className="w-px h-3.5 bg-stone-300/70 dark:bg-stone-800 mx-0.5" />
 
-            <button
-              type="button"
-              onClick={() => {
-                const prox = larguraLeitura === 'focada' ? 'padrao' : larguraLeitura === 'padrao' ? 'ampla' : 'focada';
-                mudarLarguraLeitura(prox);
-              }}
-              className="flex items-center gap-1.5 px-2.5 h-full rounded-lg text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200 transition cursor-pointer font-cinzel text-xs"
-              title={`Largura da Página: ${
-                larguraLeitura === 'focada'
-                  ? 'Leitura Focada (72ch)'
-                  : larguraLeitura === 'padrao'
-                  ? 'Padrão Editorial (85ch)'
-                  : 'Ampla (Tela Cheia)'
-              } (Clique para alternar)`}
-            >
-              {larguraLeitura === 'focada' ? (
-                <Minimize2 className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
-              ) : larguraLeitura === 'padrao' ? (
-                <AlignLeft className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
-              ) : (
-                <Maximize2 className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
-              )}
-              <span className="hidden lg:inline capitalize">{larguraLeitura}</span>
-            </button>
-          </div>
+              <button
+                type="button"
+                onClick={() => {
+                  const prox = larguraLeitura === 'focada' ? 'padrao' : larguraLeitura === 'padrao' ? 'ampla' : 'focada';
+                  mudarLarguraLeitura(prox);
+                }}
+                className="flex items-center gap-1.5 px-2.5 h-full rounded-lg text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200 transition-colors cursor-pointer text-xs font-medium"
+                title={`Largura da Página: ${
+                  larguraLeitura === 'focada'
+                    ? 'Leitura Focada (72ch)'
+                    : larguraLeitura === 'padrao'
+                    ? 'Padrão Editorial (85ch)'
+                    : 'Ampla (Tela Cheia)'
+                } (Clique para alternar)`}
+              >
+                {larguraLeitura === 'focada' ? (
+                  <Minimize2 className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
+                ) : larguraLeitura === 'padrao' ? (
+                  <AlignLeft className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
+                ) : (
+                  <Maximize2 className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
+                )}
+                <span className="hidden lg:inline capitalize">{larguraLeitura}</span>
+              </button>
+            </div>
+          )}
 
           {/* Ações da Nota Ativa */}
           {notaAtiva && visaoAtiva === 'acervo' && (
@@ -2242,11 +2244,11 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
           )}
 
           {/* Ambiente e Sincronização */}
-          <div className="flex items-center h-9 bg-stone-200/60 dark:bg-stone-900/90 p-1 rounded-xl border border-stone-300/70 dark:border-stone-800 text-xs">
+          <div className="flex items-center gap-0.5 pl-1.5 border-l border-stone-200/80 dark:border-stone-800">
             <button
               type="button"
               onClick={() => setModalFundoAberto(true)}
-              className="px-2 h-full rounded-lg text-stone-600 dark:text-stone-400 hover:bg-white dark:hover:bg-stone-800 hover:text-amber-700 dark:hover:text-amber-300 transition cursor-pointer flex items-center"
+              className="h-9 px-2 rounded-lg text-stone-600 dark:text-stone-400 hover:bg-stone-200/60 dark:hover:bg-stone-800 hover:text-amber-700 dark:hover:text-amber-300 transition-colors cursor-pointer flex items-center"
               title="Atmosfera & Pintura Clássica de Fundo"
             >
               <ImageIcon className="w-3.5 h-3.5" />
@@ -2255,7 +2257,7 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
             <button
               type="button"
               onClick={() => setModalSupabaseAberto(true)}
-              className="px-2 h-full rounded-lg text-stone-600 dark:text-stone-400 hover:bg-white dark:hover:bg-stone-800 hover:text-stone-900 dark:hover:text-stone-100 transition relative cursor-pointer flex items-center"
+              className="h-9 px-2 rounded-lg text-stone-600 dark:text-stone-400 hover:bg-stone-200/60 dark:hover:bg-stone-800 hover:text-stone-900 dark:hover:text-stone-100 transition-colors relative cursor-pointer flex items-center"
               title={
                 supabaseMensagem
                   ? `Supabase: ${supabaseMensagem}`
@@ -2280,7 +2282,7 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
                 <Database className="w-3.5 h-3.5 text-stone-500" />
               )}
               <span
-                className={`absolute top-1 right-1 w-1.5 h-1.5 rounded-full ring-1 ring-white dark:ring-stone-900 ${
+                className={`absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full ring-1 ring-white dark:ring-stone-900 ${
                   supabaseStatus === 'conectado'
                     ? 'bg-emerald-500'
                     : supabaseStatus === 'sincronizando'
@@ -2296,7 +2298,7 @@ CREATE POLICY "Acesso Livre Temp" ON public.notas_temporarias FOR ALL USING (tru
               <button
                 type="button"
                 onClick={() => sincronizarSupabase()}
-                className="px-2 h-full rounded-lg text-stone-600 dark:text-stone-400 hover:bg-white dark:hover:bg-stone-800 hover:text-stone-900 dark:hover:text-stone-200 transition cursor-pointer flex items-center"
+                className="h-9 px-2 rounded-lg text-stone-600 dark:text-stone-400 hover:bg-stone-200/60 dark:hover:bg-stone-800 hover:text-emerald-700 dark:hover:text-emerald-400 transition-colors cursor-pointer flex items-center"
                 title="Sincronizar com o Supabase agora"
               >
                 <RefreshCw className="w-3.5 h-3.5" />

@@ -163,6 +163,11 @@ interface BibliotecaState {
     dataStr: string,
     acoesPendentes?: Record<string, { acao: 'concluir' | 'migrar' | 'cancelar'; dataDestino?: string }>
   ) => void;
+  migrarTodasTarefasDia: (
+    dataOrigem: string,
+    dataDestino: string,
+    opcoes?: { apenasPendentes?: boolean; modo?: 'migrar' | 'mover'; incluirEventos?: boolean }
+  ) => number;
   salvarPaginaLivre: (pagina: PaginaLivreCaderno) => void;
   removerPaginaLivre: (id: string) => void;
   toggleLegendaSimbolos: () => void;
@@ -517,13 +522,45 @@ function limparDadosMockadosDiario(salvoRaw: ReturnType<typeof carregarDoLocalSt
     }
   });
 
-  // Remover vol-1 se ele era apenas o volume mockado sem dados reais
+  // Remover vol-1 ou volume mock "Semana 00" sem dados reais do usuário
+  const idsVolumesMock = new Set(['vol-1']);
+  volumesRaw.forEach((v) => {
+    if (v.titulo.trim().toLowerCase() === 'semana 00') {
+      const temItensReais = Object.values(diasLimpos).some(
+        (d) =>
+          d.cadernoId === v.id &&
+          ((d.itens && d.itens.length > 0) || (d.termometro?.texto && d.termometro.texto.trim().length > 0))
+      );
+      const temCheckinReal = checkinsLimpos.some(
+        (c) =>
+          c.cadernoId === v.id &&
+          (c.paragrafoIntencao.trim().length > 0 ||
+            c.focoTarefas.length > 0 ||
+            c.focoCompromissos.length > 0 ||
+            c.focoMetas.length > 0)
+      );
+      const temPaginasLivres = paginasLimpas.some((p) => p.cadernoId === v.id);
+      if (!temItensReais && !temCheckinReal && !temPaginasLivres) {
+        idsVolumesMock.add(v.id);
+      }
+    }
+  });
+
   const vol1TemDadosReais =
     checkinsLimpos.some((c) => c.cadernoId === 'vol-1') ||
     Object.values(diasLimpos).some((d) => d.cadernoId === 'vol-1') ||
     paginasLimpas.some((p) => p.cadernoId === 'vol-1');
 
-  const volumesLimpos = volumesRaw.filter((v) => !(v.id === 'vol-1' && !vol1TemDadosReais));
+  const volumesLimpos = volumesRaw.filter(
+    (v) => !(v.id === 'vol-1' && !vol1TemDadosReais) && !idsVolumesMock.has(v.id)
+  );
+  const idsLimpos = new Set(volumesLimpos.map((v) => v.id));
+  const checkinsSemMock = checkinsLimpos.filter((c) => idsLimpos.has(c.cadernoId));
+  const checkoutsSemMock = checkoutsLimpos.filter((c) => idsLimpos.has(c.cadernoId));
+  const diasSemMock: Record<string, DiaLog> = {};
+  Object.entries(diasLimpos).forEach(([k, d]) => {
+    if (idsLimpos.has(d.cadernoId)) diasSemMock[k] = d;
+  });
 
   let cadernoAtivoId = typeof salvoRaw.cadernoAtivoId === 'string' ? salvoRaw.cadernoAtivoId : '';
   if (!volumesLimpos.some((v) => v.id === cadernoAtivoId)) {
@@ -533,9 +570,9 @@ function limparDadosMockadosDiario(salvoRaw: ReturnType<typeof carregarDoLocalSt
   return {
     cadernosVolumes: volumesLimpos,
     cadernoAtivoId,
-    checkinsSemanais: checkinsLimpos,
-    diasLogs: diasLimpos,
-    checkoutsSemanais: checkoutsLimpos,
+    checkinsSemanais: checkinsSemMock,
+    diasLogs: diasSemMock,
+    checkoutsSemanais: checkoutsSemMock,
     paginasLivresCaderno: paginasLimpas
   };
 }
@@ -2255,6 +2292,105 @@ ${livro.sinopse_editorial || livro.tese}
       const diasAtualizados = Array.from(chavesModificadas).map((k) => logs[k]).filter(Boolean);
       void salvarDiasLogsNoSupabase(diasAtualizados);
     }
+  },
+
+  migrarTodasTarefasDia: (dataOrigem, dataDestino, opcoes) => {
+    if (!dataOrigem || !dataDestino || dataOrigem === dataDestino) return 0;
+
+    const cadernoId = get().cadernoAtivoId || get().cadernosVolumes[0]?.id || '';
+    if (!cadernoId) return 0;
+
+    const apenasPendentes = opcoes?.apenasPendentes !== false;
+    const modo = opcoes?.modo || 'migrar';
+    const incluirEventos = opcoes?.incluirEventos !== false;
+
+    const logs = { ...get().diasLogs };
+    const chaveOrigem =
+      Object.keys(logs).find((k) => logs[k].cadernoId === cadernoId && logs[k].data === dataOrigem) ||
+      chaveDiaCaderno(cadernoId, dataOrigem);
+    const diaOrigem = logs[chaveOrigem];
+    if (!diaOrigem || diaOrigem.itens.length === 0) return 0;
+
+    const ehElegivel = (it: ItemDailyLog) => {
+      if (it.tipo === 'nota') return false;
+      if (!incluirEventos && it.tipo === 'compromisso') return false;
+      if (apenasPendentes) return it.estado === 'pendente';
+      return it.estado !== 'cancelado' && it.estado !== 'migrado';
+    };
+
+    const itensParaTransferir = diaOrigem.itens.filter(ehElegivel);
+    if (itensParaTransferir.length === 0) return 0;
+
+    const chaveDestino =
+      Object.keys(logs).find((k) => logs[k].cadernoId === cadernoId && logs[k].data === dataDestino) ||
+      chaveDiaCaderno(cadernoId, dataDestino);
+
+    const checkinDestino = get().checkinsSemanais.find(
+      (c) => c.cadernoId === cadernoId && dataDestino >= c.dataInicio && dataDestino <= c.dataFim
+    );
+
+    const diaDestinoExistente = logs[chaveDestino];
+    const diaDestino: DiaLog = diaDestinoExistente || {
+      id: chaveDestino,
+      data: dataDestino,
+      semanaId: checkinDestino?.semanaId || diaOrigem.semanaId,
+      cadernoId,
+      paginaNumero: Object.values(logs).filter((d) => d.cadernoId === cadernoId).length + 3,
+      revisado: false,
+      dataRevisao: null,
+      itens: [],
+      termometro: { texto: '', humor: '', atualizadoEm: '' }
+    };
+
+    const origemFormatada = dataOrigem.split('-').reverse().slice(0, 2).join('/');
+    const novosItensDestino: ItemDailyLog[] = itensParaTransferir.map((it, idx) => {
+      const textoLimpo = it.texto.replace(/\s*\(migrado de \d{2}\/\d{2}\)$/, '');
+      return {
+        id: `item-${Date.now()}-${idx}-${Math.random().toString(36).substring(2, 6)}`,
+        tipo: it.tipo,
+        texto: modo === 'migrar' ? `${textoLimpo} (migrado de ${origemFormatada})` : textoLimpo,
+        hora: it.hora,
+        estado: 'pendente',
+        urgente: it.urgente,
+        criadoEm: new Date().toISOString()
+      };
+    });
+
+    const idsTransferidos = new Set(itensParaTransferir.map((it) => it.id));
+    const itensOrigemAtualizados =
+      modo === 'mover'
+        ? diaOrigem.itens.filter((it) => !idsTransferidos.has(it.id))
+        : diaOrigem.itens.map((it) =>
+            idsTransferidos.has(it.id)
+              ? { ...it, estado: 'migrado' as const, migradoPara: dataDestino }
+              : it
+          );
+
+    logs[chaveOrigem] = {
+      ...diaOrigem,
+      itens: itensOrigemAtualizados
+    };
+    logs[chaveDestino] = {
+      ...diaDestino,
+      itens: [...diaDestino.itens, ...novosItensDestino]
+    };
+
+    set({ diasLogs: logs });
+    salvarNoLocalStorage({
+      livros: get().livros,
+      relacoes: get().relacoes,
+      progressos: get().progressos,
+      sessoesRevisao: get().sessoesRevisao,
+      horasPorSemana: get().horasPorSemana,
+      modoEscuro: get().modoEscuro,
+      diasLogs: logs
+    });
+
+    if (isSupabaseConfigured()) {
+      void salvarDiasLogsNoSupabase([logs[chaveOrigem], logs[chaveDestino]]);
+    }
+
+    return itensParaTransferir.length;
   },
 
   salvarPaginaLivre: (pagina) => {
